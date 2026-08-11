@@ -15,7 +15,7 @@ Example valid usage:
 
 ## Windows Compatibility
 
-nanobot explicitly supports Windows. Key differences to keep in mind:
+GitHubResearchAgent explicitly supports Windows. Key differences to keep in mind:
 - `ExecTool` defaults to PowerShell on Windows (`pwsh` when available, otherwise Windows PowerShell); pass `shell="cmd"` for cmd.exe syntax or cmd built-ins (`shell.py`).
 - `cli/commands.py` forces `sys.stdout`/`stderr` to UTF-8 on startup to handle emoji and multilingual input.
 - MCP stdio server commands are normalized for Windows path separators (`mcp.py`).

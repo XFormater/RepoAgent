@@ -494,15 +494,15 @@ def _make_callback_server(
             if code and received_state and hmac.compare_digest(received_state, expected_state):
                 result = _CallbackResult(code=code, state=received_state)
                 title = "Signed in to xAI"
-                message = "You can close this tab and return to nanobot."
+                message = "You can close this tab and return to GitHubResearchAgent."
             elif code:
                 result = _CallbackResult(error="OAuth state mismatch")
                 title = "Sign-in failed"
-                message = "The sign-in response could not be verified. Return to nanobot and retry."
+                message = "The sign-in response could not be verified. Return to GitHubResearchAgent and retry."
             else:
                 result = _CallbackResult(error=error or "access denied")
                 title = "Access denied"
-                message = "Return to nanobot and try signing in again."
+                message = "Return to GitHubResearchAgent and try signing in again."
             with suppress(queue.Full):
                 result_queue.put_nowait(result)
             body = _callback_page(title, message)

@@ -24,6 +24,7 @@ from rich.markup import escape
 from rich.panel import Panel
 from rich.text import Text
 
+from nanobot.branding import AGENT_DISPLAY_NAME
 from nanobot.bus.events import OutboundMessage
 from nanobot.bus.outbound_events import ProgressEvent
 from nanobot.bus.queue import MessageBus
@@ -766,9 +767,9 @@ def save_registration_result(
             domain,
         )
     default_name = (
-        "nanobot"
+        AGENT_DISPLAY_NAME
         if effective_instance_id == DEFAULT_INSTANCE_ID
-        else f"nanobot {effective_instance_id}"
+        else f"{AGENT_DISPLAY_NAME} {effective_instance_id}"
     )
     existing_name = existing.config.get("name") if existing is not None else None
     saved_name = (
@@ -1024,7 +1025,9 @@ class FeishuChannel(BaseChannel):
             _LOGIN_CONSOLE.print("Use --force to re-authenticate with a new bot.\n")
             return True
 
-        _LOGIN_CONSOLE.print("Authorize with the mobile app. nanobot will save the new bot credentials.\n")
+        _LOGIN_CONSOLE.print(
+            "Authorize with the mobile app. GitHubResearchAgent will save the new bot credentials.\n"
+        )
 
         result = qr_register(initial_domain=self.config.domain or "feishu")
         if not result:

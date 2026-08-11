@@ -81,7 +81,29 @@ def _bwrap(
         "/etc/ld.so.cache",
     ]
 
-    args = ["bwrap", "--new-session", "--die-with-parent", "--setenv", "HOME", str(ws)]
+    # Isolate process visibility as well as the filesystem.  Without a PID
+    # namespace, a command could inspect another process' /proc/<pid>/environ
+    # and recover provider/database credentials even though ExecTool passes a
+    # deliberately minimal environment to the command itself.
+    args = [
+        "bwrap",
+        "--unshare-pid",
+        "--unshare-ipc",
+        "--unshare-uts",
+        "--hostname",
+        "github-research-agent",
+        "--new-session",
+        "--die-with-parent",
+        "--clearenv",
+        "--setenv",
+        "HOME",
+        str(ws),
+        "--setenv",
+        "PATH",
+        "/usr/local/node/bin:/usr/local/bin:/usr/bin:/bin",
+        "--cap-drop",
+        "ALL",
+    ]
     for p in required:
         args += ["--ro-bind", p, p]
     for p in optional:
@@ -93,6 +115,13 @@ def _bwrap(
         "--bind", str(ws), str(ws),
         "--ro-bind-try", str(media), str(media),  # read-only access to media
     ]
+    # Workspace roots commonly contain deployment credentials.  Keep the
+    # repository writable while making exact credential files unreadable to
+    # shell commands.  Example/template env files remain available.
+    for name in (".env", ".env.local", ".env.production", ".npmrc", ".pypirc", ".netrc", ".git-credentials"):
+        target = ws / name
+        if target.exists():
+            args += ["--ro-bind", "/dev/null", str(target)]
     for p in _normalize_bind_paths(sandbox_ro_binds, workspace=ws):
         args += ["--ro-bind-try", p, p]
     for p in _normalize_bind_paths(sandbox_rw_binds, workspace=ws):

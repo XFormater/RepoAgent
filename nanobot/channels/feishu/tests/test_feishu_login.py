@@ -152,7 +152,7 @@ def test_save_registration_result_reuses_existing_app_instance(monkeypatch, tmp_
     assert effective_id == "default"
     assert len(instances) == 1
     assert instances[0]["id"] == "default"
-    assert instances[0]["name"] == "nanobot"
+    assert instances[0]["name"] == "GitHubResearchAgent"
     assert instances[0]["appSecret"] == "rotated-secret"
     assert instances[0]["allowFrom"] == ["approved-user"]
 

@@ -1,0 +1,66 @@
+{
+  "providers": {
+    "deepseek": {
+      "apiKey": "${DEEPSEEK_API_KEY}"
+    }
+  },
+  "modelPresets": {
+    "repositoryAgent": {
+      "provider": "deepseek",
+      "model": "deepseek-v4-pro",
+      "maxTokens": 8192,
+      "contextWindowTokens": 262144,
+      "temperature": 0.1
+    }
+  },
+  "agents": {
+    "defaults": {
+      "modelPreset": "repositoryAgent"
+    }
+  },
+  "repositoryAgent": {
+    "enabled": true,
+    "cacheDir": ".nanobot/repositories",
+    "stateDir": ".nanobot/repository-agent",
+    "allowedHosts": [
+      "github.com"
+    ],
+    "maxRepositorySizeMb": 500,
+    "maxFiles": 50000,
+    "cloneDepth": 1,
+    "intentStrategy": "hybrid",
+    "maxPlanSteps": 8,
+    "simpleMaxIterations": 6,
+    "deletionApprovalTtlSeconds": 600,
+    "testExecution": "disabled",
+    "research": {
+      "enabled": true,
+      "searchResultsPerQuery": 10,
+      "maxCandidates": 20,
+      "maxRepositories": 5,
+      "maxConcurrentDownloads": 3,
+      "maxConcurrentAnalyses": 2,
+      "analysisIterations": 5,
+      "minimumStars": 0,
+      "requireLicense": false,
+      "githubTokenEnv": "GITHUB_TOKEN",
+      "requestTimeoutSeconds": 30
+    },
+    "github": {
+      "authMode": "gh",
+      "forkOwner": null,
+      "defaultBranchOnly": true,
+      "draftPrOnly": true,
+      "allowMerge": false,
+      "allowRelease": false,
+      "allowForcePush": false,
+      "approvalTtlSeconds": 600,
+      "commitAuthorName": "GitHubResearchAgent",
+      "commitAuthorEmail": "github-research-agent@users.noreply.github.com",
+      "branchPrefix": "github-research-agent"
+    }
+  },
+  "tools": {
+    "restrictToWorkspace": true
+  }
+}

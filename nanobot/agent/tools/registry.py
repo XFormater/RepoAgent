@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import fnmatch
 import json
 from typing import TYPE_CHECKING, Any, cast
 
@@ -40,6 +41,19 @@ class ToolRegistry:
     def get(self, name: str) -> Tool | None:
         """Get a tool by name."""
         return self._tools.get(name)
+
+    def subset(self, patterns: list[str] | tuple[str, ...]) -> "ToolRegistry":
+        """Return a registry view containing tools matched by exact names or globs.
+
+        The underlying tool objects are shared so request-scoped state and
+        connector sessions keep their established ownership. The returned
+        registry has an independent schema cache.
+        """
+        selected = ToolRegistry()
+        for name, tool in self._tools.items():
+            if any(fnmatch.fnmatchcase(name, pattern) for pattern in patterns):
+                selected.register(tool)
+        return selected
 
     def get_runtime_context_providers(self) -> list[RuntimeContextProvider]:
         """Return tool-owned providers in stable tool-name order."""

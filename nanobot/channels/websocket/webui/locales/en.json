@@ -1,5 +1,5 @@
 {
-  "description": "Use nanobot from the local browser workbench.",
+  "description": "Use GitHubResearchAgent from the local browser workbench.",
   "requirements": "Local gateway, WebSocket token",
   "setup": {
     "docsLabel": "Open WebSocket setup",
@@ -7,7 +7,7 @@
     "tryIt": "Open the WebUI and send a short message.",
     "summary": "WebSocket is required by the browser workbench and is prepared by the nanobot webui command.",
     "steps": [
-      "Start nanobot with the webui command.",
+      "Start GitHubResearchAgent with the webui command.",
       "Open the local URL printed in the terminal.",
       "Keep WebSocket enabled while using the browser workbench."
     ]

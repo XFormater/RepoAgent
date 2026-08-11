@@ -12,7 +12,11 @@ from pathlib import Path, PurePosixPath
 from typing import Any, Iterable, TypeVar
 
 from nanobot.agent.tools.base import ToolResult
-from nanobot.agent.tools.filesystem import ListDirTool, _FsTool
+from nanobot.agent.tools.filesystem import (
+    ListDirTool,
+    _FsTool,
+    _is_sensitive_workspace_path,
+)
 
 _DEFAULT_HEAD_LIMIT = 250
 _DEFAULT_FILE_HEAD_LIMIT = 200
@@ -119,7 +123,9 @@ class _SearchTool(_FsTool):
             dirnames[:] = sorted(d for d in dirnames if d not in self._IGNORE_DIRS)
             current = Path(dirpath)
             for filename in sorted(filenames):
-                yield current / filename
+                candidate = current / filename
+                if not _is_sensitive_workspace_path(candidate):
+                    yield candidate
 
 
 class FindFilesTool(_SearchTool):
@@ -204,7 +210,9 @@ class FindFilesTool(_SearchTool):
             if include_dirs and current != root:
                 yield current
             for filename in sorted(filenames):
-                yield current / filename
+                candidate = current / filename
+                if not _is_sensitive_workspace_path(candidate):
+                    yield candidate
 
     async def execute(
         self,

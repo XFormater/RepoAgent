@@ -49,6 +49,7 @@ from nanobot import __logo__, __version__  # noqa: E402
 from nanobot import optional_features as feature_support  # noqa: E402
 from nanobot.agent.hooks import create_file_edit_activity_hook  # noqa: E402
 from nanobot.agent.loop import AgentLoop  # noqa: E402
+from nanobot.branding import AGENT_DISPLAY_NAME  # noqa: E402
 from nanobot.cli import terminal as cli_terminal  # noqa: E402
 from nanobot.cli.agent import agent  # noqa: E402
 from nanobot.cli.gateway import create_gateway_app  # noqa: E402
@@ -83,7 +84,7 @@ SafeFileHistory = cli_terminal.SafeFileHistory
 app = typer.Typer(
     name="nanobot",
     context_settings={"help_option_names": ["-h", "--help"]},
-    help=f"{__logo__} nanobot - Personal AI Assistant",
+    help=f"{__logo__} {AGENT_DISPLAY_NAME} - Personal AI Assistant",
     no_args_is_help=True,
 )
 
@@ -91,7 +92,7 @@ console = Console()
 
 def version_callback(value: bool):
     if value:
-        console.print(f"{__logo__} nanobot v{__version__}")
+        console.print(f"{__logo__} {AGENT_DISPLAY_NAME} v{__version__}")
         raise typer.Exit()
 
 
@@ -101,7 +102,7 @@ def main(
         None, "--version", "-v", callback=version_callback, is_eager=True
     ),
 ):
-    """nanobot - Personal AI Assistant."""
+    """GitHubResearchAgent - Personal AI Assistant."""
     pass
 
 
@@ -202,7 +203,7 @@ def onboard(
     if explicit_config:
         webui_cmd += f' -c "{config_path}"'
 
-    typer.echo(f"\n✓ nanobot is ready. Run: {webui_cmd}")
+    typer.echo(f"\n✓ GitHubResearchAgent is ready. Run: {webui_cmd}")
 
 
 def _onboard_plugins(config_path: Path) -> None:
@@ -311,6 +312,84 @@ def trigger(
 # ============================================================================
 # OpenAI-Compatible API Server
 # ============================================================================
+
+
+@app.command("harness-worker")
+def harness_worker(
+    tenant: str = typer.Option("default", "--tenant", help="Tenant queue to consume"),
+    worker_id: str | None = typer.Option(None, "--worker-id", help="Stable worker identity"),
+    capacity: int | None = typer.Option(None, "--capacity", help="Concurrent task capacity"),
+    poll_interval: float = typer.Option(1.0, "--poll-interval", min=0.1),
+    workspace: str | None = typer.Option(None, "--workspace", "-w", help="Workspace directory"),
+    config: str | None = typer.Option(None, "--config", "-c", help="Path to config file"),
+):
+    """Run a durable, capability-aware Harness worker process."""
+    import socket
+    import uuid
+
+    from nanobot.bus.queue import MessageBus
+    from nanobot.harness import (
+        AgentRole,
+        HarnessPoolWorker,
+        PostgresRedisHarnessStore,
+    )
+    from nanobot.harness.agent_executor import HarnessAgentExecutor
+    from nanobot.harness.sandbox_executor import HarnessProcessSandboxExecutor
+
+    runtime_config = _load_runtime_config(config, workspace)
+    loop = AgentLoop.from_config(runtime_config, MessageBus())
+    if not isinstance(loop.harness.store, PostgresRedisHarnessStore):
+        console.print(
+            "[red]Harness worker requires the postgres_redis backend and enabled "
+            "PostgreSQL/Redis memory configuration.[/red]"
+        )
+        raise typer.Exit(1)
+    resolved_worker_id = worker_id or f"{socket.gethostname()}-{uuid.uuid4().hex[:8]}"
+    resolved_capacity = capacity or runtime_config.harness.worker_capacity
+    executor = (
+        HarnessProcessSandboxExecutor(loop, runtime_config)
+        if runtime_config.harness.worker_execution_backend == "bwrap"
+        else HarnessAgentExecutor(loop)
+    )
+
+    async def run() -> None:
+        await loop._connect_mcp()
+        pool = HarnessPoolWorker(
+            service=loop.harness,
+            worker_id=resolved_worker_id,
+            tenant_id=tenant,
+            roles=frozenset({AgentRole.PLANNER, AgentRole.WORKER, AgentRole.REVIEWER}),
+            capabilities=frozenset(
+                {"plan", "repository", "research", "analyze", "code", "review", "verify"}
+            ),
+            executor=executor,
+            capacity=resolved_capacity,
+            heartbeat_ttl_seconds=runtime_config.harness.worker_heartbeat_ttl,
+        )
+
+        async def maintenance() -> None:
+            while True:
+                await loop.harness.maintenance(tenant_id=tenant)
+                await asyncio.sleep(30)
+
+        maintenance_task = asyncio.create_task(maintenance())
+        console.print(
+            f"{__logo__} Harness worker {resolved_worker_id} consuming tenant {tenant!r} "
+            f"with capacity {resolved_capacity} "
+            f"(execution={runtime_config.harness.worker_execution_backend})"
+        )
+        try:
+            await pool.run_forever(poll_interval=poll_interval)
+        finally:
+            await pool.drain()
+            maintenance_task.cancel()
+            await asyncio.gather(maintenance_task, return_exceptions=True)
+            await loop.close_mcp()
+
+    try:
+        asyncio.run(run())
+    except KeyboardInterrupt:
+        console.print("[yellow]Harness worker stopped.[/yellow]")
 
 
 @app.command()

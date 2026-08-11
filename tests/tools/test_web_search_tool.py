@@ -145,7 +145,7 @@ async def test_keenable_search(monkeypatch):
         assert "keenable" in url
         assert kw["headers"]["X-API-Key"] == "keen-key"
         assert kw["headers"]["User-Agent"] == "nanobot-search-test"
-        assert kw["headers"]["X-Keenable-Title"] == "nanobot"
+        assert kw["headers"]["X-Keenable-Title"] == "GitHubResearchAgent"
         return _response(json={
             "results": [{"title": "Keen", "url": "https://keenable.ai", "description": "short", "snippet": "longer excerpt"}]
         })
@@ -163,7 +163,7 @@ async def test_keenable_without_api_key_uses_public_endpoint(monkeypatch):
     async def mock_post(self, url, **kw):
         assert url == "https://api.keenable.ai/v1/search/public"
         assert "X-API-Key" not in kw["headers"]
-        assert kw["headers"]["X-Keenable-Title"] == "nanobot"
+        assert kw["headers"]["X-Keenable-Title"] == "GitHubResearchAgent"
         return _response(json={
             "results": [{"title": "Public", "url": "https://keenable.ai/pub", "description": "ok"}]
         })

@@ -14,6 +14,7 @@ from typing import Any
 
 import httpx
 
+from nanobot.branding import AGENT_DISPLAY_NAME
 from nanobot.channels.connect import ChannelConnectError, QueryParams, query_first
 from nanobot.channels.feishu import runtime as feishu
 from nanobot.channels.feishu.instances import DEFAULT_INSTANCE_ID, validate_instance_id
@@ -202,7 +203,11 @@ def _resolve_instance_id(instance_id: str, mode: str) -> str:
 
 
 def _default_instance_name(instance_id: str) -> str:
-    return "nanobot" if instance_id == DEFAULT_INSTANCE_ID else f"nanobot {instance_id}"
+    return (
+        AGENT_DISPLAY_NAME
+        if instance_id == DEFAULT_INSTANCE_ID
+        else f"{AGENT_DISPLAY_NAME} {instance_id}"
+    )
 
 
 def _start_payload(session: FeishuConnectSession) -> dict[str, Any]:

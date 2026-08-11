@@ -1,6 +1,7 @@
 """Subagent manager for background task execution."""
 
 import asyncio
+import hashlib
 import json
 import time
 import uuid
@@ -27,6 +28,18 @@ from nanobot.agent.tools.registry import ToolRegistry
 from nanobot.bus.events import InboundMessage
 from nanobot.bus.queue import MessageBus
 from nanobot.config.schema import AgentDefaults, ToolsConfig
+from nanobot.harness import (
+    AgentInstance,
+    AgentRole,
+    HarnessConflictError,
+    HarnessService,
+    ReviewResult,
+    RuntimeContext,
+    Task,
+    TaskExecutionMode,
+    TaskState,
+    WorkerLease,
+)
 from nanobot.providers.base import LLMProvider
 from nanobot.security.workspace_access import (
     WorkspaceScope,
@@ -51,29 +64,57 @@ class SubagentStatus:
     task_id: str
     label: str
     task_description: str
-    started_at: float          # time.monotonic()
+    started_at: float  # time.monotonic()
     phase: str = "initializing"  # initializing | awaiting_tools | tools_completed | final_response | done | error
     iteration: int = 0
     tool_events: list[dict[str, str]] = field(default_factory=list)
     usage: dict[str, int] = field(default_factory=dict)
     stop_reason: str | None = None
     error: str | None = None
+    harness_agent_id: str | None = None
+    harness_task_id: str | None = None
+    role: str = AgentRole.WORKER.value
+
+
+@dataclass(slots=True)
+class _HarnessRun:
+    task: Task
+    supervisor: AgentInstance
+    worker: AgentInstance
+    lease: WorkerLease
+    lease_ttl_seconds: int
+    context: RuntimeContext | None = None
 
 
 class _SubagentHook(AgentHook):
     """Hook for subagent execution — logs tool calls and updates status."""
 
-    def __init__(self, task_id: str, status: SubagentStatus | None = None) -> None:
+    def __init__(
+        self,
+        task_id: str,
+        status: SubagentStatus | None = None,
+        *,
+        max_tool_calls: int | None = None,
+    ) -> None:
         super().__init__()
         self._task_id = task_id
         self._status = status
+        self._max_tool_calls = max_tool_calls
+        self._tool_calls = 0
 
     async def before_execute_tools(self, context: AgentHookContext) -> None:
+        self._tool_calls += len(context.tool_calls)
+        if self._max_tool_calls is not None and self._tool_calls > self._max_tool_calls:
+            raise RuntimeError(
+                f"subagent tool-call budget exceeded ({self._tool_calls}/{self._max_tool_calls})"
+            )
         for tool_call in context.tool_calls:
             args_str = json.dumps(tool_call.arguments, ensure_ascii=False)
             logger.debug(
                 "Subagent [{}] executing: {} with arguments: {}",
-                self._task_id, tool_call.name, args_str,
+                self._task_id,
+                tool_call.name,
+                args_str,
             )
 
     async def after_iteration(self, context: AgentHookContext) -> None:
@@ -103,6 +144,7 @@ class SubagentManager:
         max_concurrent_subagents: int | None = None,
         fail_on_tool_error: bool | None = None,
         llm_wall_timeout_for_session: Callable[[str | None], float | None] | None = None,
+        harness: HarnessService | None = None,
     ):
         if workspace is None:
             raise TypeError("SubagentManager.__init__() missing required argument: 'workspace'")
@@ -136,9 +178,7 @@ class SubagentManager:
         self.restrict_to_workspace = restrict_to_workspace
         self.disabled_skills = set(disabled_skills or [])
         self.max_iterations = (
-            max_iterations
-            if max_iterations is not None
-            else defaults.max_tool_iterations
+            max_iterations if max_iterations is not None else defaults.max_tool_iterations
         )
         self.max_concurrent_subagents = (
             max_concurrent_subagents
@@ -146,9 +186,7 @@ class SubagentManager:
             else defaults.max_concurrent_subagents
         )
         self.fail_on_tool_error = (
-            fail_on_tool_error
-            if fail_on_tool_error is not None
-            else defaults.fail_on_tool_error
+            fail_on_tool_error if fail_on_tool_error is not None else defaults.fail_on_tool_error
         )
         self.runner = AgentRunner()
         self._exec_session_manager = ExecSessionManager()
@@ -156,6 +194,78 @@ class SubagentManager:
         self._running_tasks: dict[str, asyncio.Task[str]] = {}
         self._task_statuses: dict[str, SubagentStatus] = {}
         self._session_tasks: dict[str, set[str]] = {}  # session_key -> {task_id, ...}
+        self.harness = harness or HarnessService()
+        self._harness_runs: dict[str, _HarnessRun] = {}
+
+    async def _admit_harness_run(
+        self,
+        status: SubagentStatus,
+        task: str,
+        *,
+        scope_key: str,
+        role: AgentRole,
+        tenant_id: str = "default",
+        workspace_root: Path | None = None,
+        exclusive_workspace: bool = False,
+        origin_message_id: str | None = None,
+    ) -> tuple[bool, str | None]:
+        """Declare the supervisor/worker boundary before executing a subagent."""
+        await self.harness.flush_outbox()
+        workflow, supervisor, _ = await self.harness.get_or_create_workflow(
+            scope_key=scope_key,
+            goal=task,
+            tenant_id=tenant_id,
+        )
+        idempotency_key = None
+        if origin_message_id:
+            digest = hashlib.sha256(
+                f"{origin_message_id}\0{role.value}\0{task}".encode()
+            ).hexdigest()
+            idempotency_key = f"spawn:{digest}"
+        harness_task, created = await self.harness.ensure_task(
+            workflow,
+            title=status.label,
+            task_input=task,
+            execution_mode=TaskExecutionMode.INLINE,
+            required_role=role,
+            resource_keys=(
+                frozenset({f"workspace:{workspace_root.resolve()}"})
+                if role == AgentRole.WORKER
+                and workspace_root is not None
+                and exclusive_workspace
+                else frozenset()
+            ),
+            idempotency_key=idempotency_key,
+        )
+        status.harness_task_id = harness_task.task_id
+        status.role = role.value
+        if not created:
+            if harness_task.state in {TaskState.LEASED, TaskState.RUNNING}:
+                return False, f"Subagent [{status.label}] is already running."
+            if harness_task.state == TaskState.SUCCEEDED:
+                return False, harness_task.result or "Task already completed."
+            if harness_task.state in {TaskState.FAILED, TaskState.CANCELLED}:
+                return False, harness_task.error or f"Task is {harness_task.state.value}."
+        worker = await self.harness.spawn_agent(workflow, supervisor, role)
+        await self.harness.scheduler.ready_tasks(workflow.workflow_id)
+        spec = await self.harness.store.get_spec(worker.spec_id)
+        lease_ttl = max(60, spec.resource_budget.max_runtime_seconds)
+        lease = await self.harness.scheduler.assign(
+            task=harness_task,
+            agent=worker,
+            spec=spec,
+            worker_id=f"asyncio:{status.task_id}",
+            ttl_seconds=lease_ttl,
+        )
+        status.harness_agent_id = worker.instance_id
+        self._harness_runs[status.task_id] = _HarnessRun(
+            task=harness_task,
+            supervisor=supervisor,
+            worker=worker,
+            lease=lease,
+            lease_ttl_seconds=lease_ttl,
+        )
+        return True, None
 
     def set_provider(self, provider: LLMProvider, model: str) -> None:
         """Update the deprecated runtime source used by legacy ``spawn`` calls."""
@@ -198,7 +308,9 @@ class SubagentManager:
             exec=self.tools_config.exec,
             web=self.tools_config.web,
             file=self.tools_config.file,
-            restrict_to_workspace=self.restrict_to_workspace,
+            # Subagents are always capability-confined even when the main agent
+            # is intentionally running without a workspace restriction.
+            restrict_to_workspace=True,
         )
 
     def _build_tools(
@@ -219,6 +331,7 @@ class SubagentManager:
                 restrict_to_workspace=cfg.restrict_to_workspace,
                 workspace=root,
             ),
+            allow_history_read=False,
         )
         ToolLoader().load(ctx, registry, scope="subagent")
         return registry
@@ -232,6 +345,9 @@ class SubagentManager:
         session_key: str | None = None,
         origin_message_id: str | None = None,
         temperature: float | None = None,
+        role: str = AgentRole.WORKER.value,
+        tenant_id: str = "default",
+        exclusive_workspace: bool = False,
         workspace_scope: WorkspaceScope | None = None,
         *,
         runtime: LLMRuntime | None = None,
@@ -249,12 +365,27 @@ class SubagentManager:
             "session_key": session_key,
         }
 
+        agent_role = AgentRole(role)
         status = SubagentStatus(
             task_id=task_id,
             label=display_label,
             task_description=task,
             started_at=time.monotonic(),
         )
+        admitted, replay = await self._admit_harness_run(
+            status,
+            task,
+            scope_key=session_key or f"{origin_channel}:{origin_chat_id}",
+            role=agent_role,
+            tenant_id=tenant_id,
+            workspace_root=(
+                workspace_scope.project_path if workspace_scope is not None else self.workspace
+            ),
+            exclusive_workspace=exclusive_workspace,
+            origin_message_id=origin_message_id,
+        )
+        if not admitted:
+            return replay or f"Subagent [{display_label}] request was already accepted."
         self._task_statuses[task_id] = status
 
         bg_task = asyncio.create_task(
@@ -266,6 +397,8 @@ class SubagentManager:
                 status,
                 runtime,
                 origin_message_id,
+                tenant_id,
+                exclusive_workspace,
                 workspace_scope,
             )
         )
@@ -295,6 +428,9 @@ class SubagentManager:
         session_key: str | None = None,
         origin_message_id: str | None = None,
         temperature: float | None = None,
+        role: str = AgentRole.WORKER.value,
+        tenant_id: str = "default",
+        exclusive_workspace: bool = False,
         workspace_scope: WorkspaceScope | None = None,
         *,
         runtime: LLMRuntime | None = None,
@@ -311,12 +447,27 @@ class SubagentManager:
             "chat_id": origin_chat_id,
             "session_key": session_key,
         }
+        agent_role = AgentRole(role)
         status = SubagentStatus(
             task_id=task_id,
             label=display_label,
             task_description=task,
             started_at=time.monotonic(),
         )
+        admitted, replay = await self._admit_harness_run(
+            status,
+            task,
+            scope_key=session_key or f"{origin_channel}:{origin_chat_id}",
+            role=agent_role,
+            tenant_id=tenant_id,
+            workspace_root=(
+                workspace_scope.project_path if workspace_scope is not None else self.workspace
+            ),
+            exclusive_workspace=exclusive_workspace,
+            origin_message_id=origin_message_id,
+        )
+        if not admitted:
+            return replay or "Task request was already accepted."
         self._task_statuses[task_id] = status
         logger.info("Running inline subagent [{}]: {}", task_id, display_label)
         inline_task = asyncio.create_task(
@@ -328,6 +479,8 @@ class SubagentManager:
                 status,
                 runtime,
                 origin_message_id,
+                tenant_id,
+                exclusive_workspace,
                 workspace_scope,
                 announce=False,
             )
@@ -357,29 +510,81 @@ class SubagentManager:
         status: SubagentStatus,
         runtime: LLMRuntime,
         origin_message_id: str | None = None,
+        tenant_id: str = "default",
+        exclusive_workspace: bool = False,
         workspace_scope: WorkspaceScope | None = None,
         *,
         announce: bool = True,
     ) -> str:
         """Execute the subagent task and announce the result."""
         logger.info("Subagent [{}] starting task: {}", task_id, label)
+        harness_run = self._harness_runs.get(task_id)
+        if harness_run is None:
+            admitted, replay = await self._admit_harness_run(
+                status,
+                task,
+                scope_key=origin.get("session_key") or f"{origin['channel']}:{origin['chat_id']}",
+                role=AgentRole(status.role),
+                tenant_id=tenant_id,
+                workspace_root=(
+                    workspace_scope.project_path
+                    if workspace_scope is not None
+                    else self.workspace
+                ),
+                exclusive_workspace=exclusive_workspace,
+                origin_message_id=origin_message_id,
+            )
+            if not admitted:
+                return replay or "Task request was already accepted."
+            harness_run = self._harness_runs[task_id]
+        heartbeat_stop = asyncio.Event()
+        heartbeat_task: asyncio.Task[None] | None = None
+        terminal_recorded = False
 
         async def _on_checkpoint(payload: dict[str, Any]) -> None:
             status.phase = payload.get("phase", status.phase)
             status.iteration = payload.get("iteration", status.iteration)
+            if run := self._harness_runs.get(task_id):
+                previous = await self.harness.store.latest_checkpoint(run.worker.instance_id)
+                sequence = 0 if previous is None else previous.sequence + 1
+                await self.harness.scheduler.checkpoint(run.worker, payload, sequence)
+
+        async def _heartbeat(run: _HarnessRun) -> None:
+            interval = max(5.0, min(30.0, run.lease_ttl_seconds / 3))
+            while True:
+                try:
+                    await asyncio.wait_for(heartbeat_stop.wait(), timeout=interval)
+                    return
+                except TimeoutError:
+                    run.lease = await self.harness.scheduler.heartbeat(
+                        run.lease,
+                        ttl_seconds=run.lease_ttl_seconds,
+                    )
 
         try:
+            heartbeat_task = asyncio.create_task(_heartbeat(harness_run))
             root = workspace_scope.project_path if workspace_scope is not None else self.workspace
             cfg = None
             if workspace_scope is not None:
                 cfg = self._subagent_tools_config()
-                cfg.restrict_to_workspace = workspace_scope.restrict_to_workspace
             # Construct from the agent workspace; the bound scope below supplies the project cwd.
-            tools = self._build_tools(tools_config=cfg)
-            system_prompt = self._build_subagent_prompt(workspace=root)
+            spec = await self.harness.store.get_spec(harness_run.worker.spec_id)
+            tools = self._build_tools(tools_config=cfg).subset(tuple(spec.allowed_tools))
+            runtime_context = await self.harness.runtime_context(
+                harness_run.worker.instance_id,
+                harness_run.task.task_id,
+                consumer_id=f"asyncio:{task_id}",
+            )
+            harness_run.context = runtime_context
+            system_prompt = self._build_subagent_prompt(
+                workspace=root,
+                role=spec.role,
+                objective=spec.objective,
+                review_gate=harness_run.task.review_target_task_id is not None,
+            )
             messages: list[dict[str, Any]] = [
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": task},
+                {"role": "user", "content": runtime_context.render()},
             ]
 
             sess_key = origin.get("session_key")
@@ -388,31 +593,42 @@ class SubagentManager:
                 if self._llm_wall_timeout_for_session
                 else None
             )
-            request_token = bind_request_context(RequestContext(
-                channel=origin["channel"],
-                chat_id=origin["chat_id"],
-                message_id=origin_message_id,
-                session_key=sess_key,
-                runtime=runtime,
-            ))
+            request_token = bind_request_context(
+                RequestContext(
+                    channel=origin["channel"],
+                    chat_id=origin["chat_id"],
+                    message_id=origin_message_id,
+                    session_key=sess_key,
+                    runtime=runtime,
+                )
+            )
             token = bind_workspace_scope(workspace_scope) if workspace_scope is not None else None
             try:
-                result = await self.runner.run(AgentRunSpec(
-                    initial_messages=messages,
-                    tools=tools,
-                    runtime=runtime,
-                    max_iterations=self.max_iterations,
-                    max_tool_result_chars=self.max_tool_result_chars,
-                    hook=_SubagentHook(task_id, status),
-                    max_iterations_message="Task completed but no final response was generated.",
-                    finalize_on_max_iterations=False,
-                    error_message=None,
-                    fail_on_tool_error=self.fail_on_tool_error,
-                    checkpoint_callback=_on_checkpoint,
-                    session_key=sess_key,
-                    workspace=root,
-                    llm_timeout_s=llm_timeout,
-                ))
+                async with asyncio.timeout(spec.resource_budget.max_runtime_seconds):
+                    result = await self.runner.run(
+                        AgentRunSpec(
+                            initial_messages=messages,
+                            tools=tools,
+                            runtime=runtime,
+                            max_iterations=min(
+                                self.max_iterations, spec.resource_budget.max_iterations
+                            ),
+                            max_tool_result_chars=self.max_tool_result_chars,
+                            hook=_SubagentHook(
+                                task_id,
+                                status,
+                                max_tool_calls=spec.resource_budget.max_tool_calls,
+                            ),
+                            max_iterations_message="Task completed but no final response was generated.",
+                            finalize_on_max_iterations=False,
+                            error_message=None,
+                            fail_on_tool_error=self.fail_on_tool_error,
+                            checkpoint_callback=_on_checkpoint,
+                            session_key=sess_key,
+                            workspace=root,
+                            llm_timeout_s=llm_timeout,
+                        )
+                    )
             finally:
                 if token is not None:
                     reset_workspace_scope(token)
@@ -428,9 +644,38 @@ class SubagentManager:
                 final_result = result.error or "Error: subagent execution failed."
                 final_status = "error"
             else:
-                final_result = result.final_content or "Task completed but no final response was generated."
+                final_result = (
+                    result.final_content or "Task completed but no final response was generated."
+                )
                 final_status = "ok"
                 logger.info("Subagent [{}] completed successfully", task_id)
+                bounded_result = self._bounded_handoff(final_result)
+                if heartbeat_task.done() and (heartbeat_error := heartbeat_task.exception()):
+                    raise heartbeat_error
+                if harness_run.task.review_target_task_id is not None:
+                    decision = ReviewResult.model_validate_json(final_result)
+                    await self.harness.complete_review(
+                        task=harness_run.task,
+                        agent=harness_run.worker,
+                        lease=harness_run.lease,
+                        approved=decision.approved,
+                        notes=decision.notes,
+                    )
+                else:
+                    await self.harness.complete_task(
+                        task=harness_run.task,
+                        agent=harness_run.worker,
+                        lease=harness_run.lease,
+                        result=bounded_result,
+                    )
+                terminal_recorded = True
+            if final_status == "error":
+                await self.harness.scheduler.fail(
+                    harness_run.task,
+                    harness_run.worker,
+                    harness_run.lease,
+                    final_result,
+                )
             if announce:
                 await self._announce_result(
                     task_id,
@@ -443,11 +688,33 @@ class SubagentManager:
                 )
             return final_result
 
+        except asyncio.CancelledError:
+            status.phase = "error"
+            status.stop_reason = "cancelled"
+            try:
+                await self.harness.scheduler.cancel(
+                    harness_run.task,
+                    harness_run.worker,
+                    harness_run.lease,
+                )
+            except HarnessConflictError:
+                logger.warning("Subagent [{}] cancellation ignored after lease loss", task_id)
+            raise
         except Exception as e:
             status.phase = "error"
             status.error = str(e)
             logger.exception("Subagent [{}] failed", task_id)
             final_result = f"Error: {e}"
+            if not terminal_recorded:
+                try:
+                    await self.harness.scheduler.fail(
+                        harness_run.task,
+                        harness_run.worker,
+                        harness_run.lease,
+                        final_result,
+                    )
+                except HarnessConflictError:
+                    logger.warning("Subagent [{}] failure ignored after lease loss", task_id)
             if announce:
                 await self._announce_result(
                     task_id,
@@ -459,6 +726,13 @@ class SubagentManager:
                     origin_message_id,
                 )
             return final_result
+        finally:
+            heartbeat_stop.set()
+            if heartbeat_task is not None:
+                await asyncio.gather(heartbeat_task, return_exceptions=True)
+            if harness_run.context is not None:
+                await self.harness.ack_context(harness_run.context)
+            self._harness_runs.pop(task_id, None)
 
     async def _announce_result(
         self,
@@ -477,8 +751,8 @@ class SubagentManager:
             "agent/subagent_announce.md",
             label=label,
             status_text=status_text,
-            task=task,
-            result=result,
+            task=self._bounded_handoff(task),
+            result=self._bounded_handoff(result),
         )
 
         # Inject as system message to trigger main agent.
@@ -503,7 +777,16 @@ class SubagentManager:
         )
 
         await self.bus.publish_inbound(msg)
-        logger.debug("Subagent [{}] announced result to {}:{}", task_id, origin['channel'], origin['chat_id'])
+        logger.debug(
+            "Subagent [{}] announced result to {}:{}", task_id, origin["channel"], origin["chat_id"]
+        )
+
+    def _bounded_handoff(self, content: str) -> str:
+        """Bound cross-agent payloads independently from either agent's transcript."""
+        if len(content) <= self.max_tool_result_chars:
+            return content
+        omitted = len(content) - self.max_tool_result_chars
+        return f"{content[: self.max_tool_result_chars]}\n\n[handoff truncated: {omitted} chars omitted]"
 
     @staticmethod
     def _format_partial_progress(result: AgentRunResult) -> str:
@@ -526,7 +809,14 @@ class SubagentManager:
             lines.append(f"- {result.error}")
         return "\n".join(lines) or (result.error or "Error: subagent execution failed.")
 
-    def _build_subagent_prompt(self, workspace: Path | None = None) -> str:
+    def _build_subagent_prompt(
+        self,
+        workspace: Path | None = None,
+        *,
+        role: AgentRole = AgentRole.WORKER,
+        objective: str = "Complete the assigned task.",
+        review_gate: bool = False,
+    ) -> str:
         """Build a focused system prompt for the subagent."""
         from nanobot.agent.skills import SkillsLoader
 
@@ -538,16 +828,21 @@ class SubagentManager:
         ).build_skills_summary()
         return render_template(
             "agent/subagent_system.md",
+            role=role.value,
+            objective=objective,
+            review_gate=review_gate,
             workspace=str(project_workspace),
             agent_workspace=str(agent_workspace),
-            history_log=str(agent_workspace / "memory" / "history.jsonl"),
             skills_summary=skills_summary or "",
         )
 
     async def cancel_by_session(self, session_key: str) -> int:
         """Cancel all subagents for the given session. Returns count cancelled."""
-        tasks = [self._running_tasks[tid] for tid in self._session_tasks.get(session_key, [])
-                 if tid in self._running_tasks and not self._running_tasks[tid].done()]
+        tasks = [
+            self._running_tasks[tid]
+            for tid in self._session_tasks.get(session_key, [])
+            if tid in self._running_tasks and not self._running_tasks[tid].done()
+        ]
         for t in tasks:
             t.cancel()
         if tasks:
@@ -563,6 +858,7 @@ class SubagentManager:
         if tasks:
             await asyncio.gather(*tasks, return_exceptions=True)
         await self._exec_session_manager.close_all()
+        await self.harness.store.close()
 
     def get_running_count(self) -> int:
         """Return the number of currently running subagents."""
@@ -572,6 +868,5 @@ class SubagentManager:
         """Return the number of currently running subagents for a session."""
         tids = self._session_tasks.get(session_key, set())
         return sum(
-            1 for tid in tids
-            if tid in self._running_tasks and not self._running_tasks[tid].done()
+            1 for tid in tids if tid in self._running_tasks and not self._running_tasks[tid].done()
         )

@@ -7,6 +7,7 @@ from typing import Any, cast
 
 from loguru import logger
 
+from nanobot.branding import AGENT_DISPLAY_NAME
 from nanobot.channels.contracts import ChannelInstanceSpec, ChannelManagementSpec
 from nanobot.channels.feishu.config import feishu_default_config
 from nanobot.config.loader import merge_missing_defaults
@@ -58,7 +59,7 @@ def update_managed_feishu_instance(
 def _base_feishu_instance_config(defaults: dict[str, Any]) -> dict[str, Any]:
     config = dict(defaults)
     config["instanceId"] = DEFAULT_INSTANCE_ID
-    config["name"] = "nanobot"
+    config["name"] = AGENT_DISPLAY_NAME
     return config
 
 
@@ -76,7 +77,18 @@ def _normalize_feishu_instance(
     instance_id = validate_instance_id(str(raw_id))
     config["id"] = instance_id
     config["instanceId"] = instance_id
-    config.setdefault("name", "nanobot" if instance_id == DEFAULT_INSTANCE_ID else f"nanobot {instance_id}")
+    default_name = (
+        AGENT_DISPLAY_NAME
+        if instance_id == DEFAULT_INSTANCE_ID
+        else f"{AGENT_DISPLAY_NAME} {instance_id}"
+    )
+    legacy_default_name = (
+        "nanobot" if instance_id == DEFAULT_INSTANCE_ID else f"nanobot {instance_id}"
+    )
+    if str(config.get("name") or "").strip() == legacy_default_name:
+        config["name"] = default_name
+    else:
+        config.setdefault("name", default_name)
     return config
 
 
@@ -213,7 +225,12 @@ def upsert_feishu_instance(
             instance.update(values)
             instance["id"] = instance_id
             instance["instanceId"] = instance_id
-            instance.setdefault("name", "nanobot" if instance_id == DEFAULT_INSTANCE_ID else f"nanobot {instance_id}")
+            instance.setdefault(
+                "name",
+                AGENT_DISPLAY_NAME
+                if instance_id == DEFAULT_INSTANCE_ID
+                else f"{AGENT_DISPLAY_NAME} {instance_id}",
+            )
             return canonical
 
     config = _normalize_feishu_instance(

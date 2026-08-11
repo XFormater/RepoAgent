@@ -17,6 +17,8 @@ from typing import TYPE_CHECKING, Any, Awaitable, Callable, cast
 from aiohttp import web
 from loguru import logger
 
+from nanobot.agent.hook import AgentHook, AgentRunHookContext
+from nanobot.branding import AGENT_DISPLAY_NAME
 from nanobot.config.paths import get_media_dir
 from nanobot.utils.helpers import safe_filename
 from nanobot.utils.media_decode import (
@@ -49,6 +51,18 @@ _MODEL_NAME_KEY = web.AppKey[str]("model_name")
 _REQUEST_TIMEOUT_KEY = web.AppKey[float]("request_timeout")
 _SESSION_LOCKS_KEY = web.AppKey[dict[str, asyncio.Lock]]("session_locks")
 _MISSING = object()
+
+
+class _UsageCaptureHook(AgentHook):
+    """Collect usage for one API request without consulting loop-global state."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.usage: dict[str, int] = {}
+
+    async def after_run(self, context: AgentRunHookContext) -> None:
+        for key, value in context.usage.items():
+            self.usage[key] = self.usage.get(key, 0) + value
 
 
 def _app_value(
@@ -276,7 +290,9 @@ async def handle_chat_completions(request: web.Request) -> web.Response | web.St
         "request_timeout",
         120.0,
     )
-    model_name: str = _app_value(request.app, _MODEL_NAME_KEY, "model_name", "nanobot")
+    model_name: str = _app_value(
+        request.app, _MODEL_NAME_KEY, "model_name", AGENT_DISPLAY_NAME
+    )
 
     stream = False
     try:
@@ -387,6 +403,7 @@ async def handle_chat_completions(request: web.Request) -> web.Response | web.St
         return resp
 
     # -- non-streaming path (original logic) --
+    usage_capture = _UsageCaptureHook()
     try:
         async with session_lock:
             try:
@@ -397,6 +414,7 @@ async def handle_chat_completions(request: web.Request) -> web.Response | web.St
                         session_key=session_key,
                         channel="api",
                         chat_id=API_CHAT_ID,
+                        hooks=[usage_capture],
                     ),
                     timeout=timeout_s,
                 )
@@ -415,13 +433,15 @@ async def handle_chat_completions(request: web.Request) -> web.Response | web.St
         return _error_json(500, "Internal server error", err_type="server_error")
 
     return web.json_response(
-        _chat_completion_response(response_text, model_name, getattr(agent_loop, "_last_usage", None))
+        _chat_completion_response(response_text, model_name, usage_capture.usage)
     )
 
 
 async def handle_models(request: web.Request) -> web.Response:
     """GET /v1/models"""
-    model_name = _app_value(request.app, _MODEL_NAME_KEY, "model_name", "nanobot")
+    model_name = _app_value(
+        request.app, _MODEL_NAME_KEY, "model_name", AGENT_DISPLAY_NAME
+    )
     return web.json_response(
         {
             "object": "list",
@@ -430,7 +450,7 @@ async def handle_models(request: web.Request) -> web.Response:
                     "id": model_name,
                     "object": "model",
                     "created": 0,
-                    "owned_by": "nanobot",
+                    "owned_by": AGENT_DISPLAY_NAME,
                 }
             ],
         }
@@ -449,7 +469,7 @@ async def handle_health(request: web.Request) -> web.Response:
 
 def create_app(
     agent_loop: "AgentLoop",
-    model_name: str = "nanobot",
+    model_name: str = AGENT_DISPLAY_NAME,
     request_timeout: float = 120.0,
     api_key: str = "",
 ) -> web.Application:

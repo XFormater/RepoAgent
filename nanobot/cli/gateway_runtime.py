@@ -147,6 +147,20 @@ def _commit_dream_changes(memory: Any) -> str | None:
     return memory.git.auto_commit(message)
 
 
+def _commit_memory_file_sync(memory: Any) -> str | None:
+    """Audit a scheduled database-to-MEMORY.md projection."""
+    if not memory.git.is_initialized():
+        return None
+    diff_body = memory.dream_content_diff()
+    if not diff_body:
+        return None
+    message = memory.build_dream_commit_message(
+        "memory: weekly semantic database projection",
+        diff_body,
+    )
+    return memory.git.auto_commit(message)
+
+
 _HEARTBEAT_PREAMBLE = (
     "[Your response will be delivered directly to the user's messaging app. "
     "Output ONLY the final user-facing message. Never reference internal "
@@ -493,6 +507,25 @@ def _run_gateway(
         async def _silent(*_args: Any, **_kwargs: Any) -> None:
             pass
 
+        if job.name == "memory-file-sync":
+            service = getattr(agent, "long_term_memory", None)
+            if service is None or not service.settings.file_sync.enabled:
+                return None
+            try:
+                outcome = await service.sync_core_memory(agent.context.memory)
+                logger.info(
+                    "Memory file sync: records={}, changed={}",
+                    outcome.records,
+                    outcome.changed,
+                )
+                if outcome.changed:
+                    sha = _commit_memory_file_sync(agent.context.memory)
+                    if sha:
+                        logger.info("Memory file sync commit: {}", sha)
+            except Exception:
+                logger.exception("Memory file sync failed")
+            return None
+
         # Dream is an internal job — run directly, not through the agent loop.
         if job.name == "dream":
             from nanobot.agent.memory import DreamRunProgress, MemoryStore
@@ -734,6 +767,23 @@ def _run_gateway(
                         body = _json.dumps({"status": "ok"})
                         status = "200 OK"
                         content_type = "application/json"
+                    elif method == "GET" and path == "/ready":
+                        try:
+                            components = await asyncio.wait_for(
+                                agent.harness.health(),
+                                timeout=2.0,
+                            )
+                        except Exception:
+                            components = {"store": False}
+                        ready = bool(components.get("store"))
+                        body = _json.dumps(
+                            {
+                                "status": "ready" if ready else "unavailable",
+                                "harness": components,
+                            }
+                        )
+                        status = "200 OK" if ready else "503 Service Unavailable"
+                        content_type = "application/json"
                     else:
                         body = "Not Found"
                         status = "404 Not Found"
@@ -771,6 +821,26 @@ def _run_gateway(
     else:
         console.print("[yellow]○[/yellow] Dream: disabled")
         _advance_dream_cursor_if_behind(agent.context.memory)
+
+    memory_service = getattr(agent, "long_term_memory", None)
+    if (
+        memory_service is not None
+        and memory_service.settings.file_sync.enabled
+    ):
+        cron.register_system_job(CronJob(
+            id="memory-file-sync",
+            name="memory-file-sync",
+            schedule=CronSchedule(
+                kind="cron",
+                expr=memory_service.settings.file_sync.cron,
+                tz=config.agents.defaults.timezone,
+            ),
+            payload=CronPayload(kind="system_event"),
+        ))
+        console.print(
+            "[green]✓[/green] Memory file sync: "
+            f"cron {memory_service.settings.file_sync.cron}"
+        )
 
     # Register Heartbeat system job (idempotent on restart)
     if hb_cfg.enabled:

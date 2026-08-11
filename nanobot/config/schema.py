@@ -7,8 +7,12 @@ from typing import TYPE_CHECKING, Any, ClassVar, Literal
 from pydantic import AliasChoices, ConfigDict, Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from nanobot.branding import AGENT_DISPLAY_NAME
 from nanobot.config_base import Base
 from nanobot.cron.types import CronSchedule
+from nanobot.harness.config import HarnessConfig
+from nanobot.memory_system.config import MemorySettings
+from nanobot.repo_agent.config import RepositoryAgentConfig
 
 if TYPE_CHECKING:
     from nanobot.agent.tools.cli_apps import CliAppsToolConfig
@@ -116,6 +120,18 @@ class ModelPresetConfig(Base):
 class AgentDefaults(Base):
     """Default agent configuration."""
 
+    @model_validator(mode="before")
+    @classmethod
+    def migrate_legacy_agent_name(cls, value: Any) -> Any:
+        """Upgrade only the former built-in display name, preserving custom names."""
+        if not isinstance(value, dict):
+            return value
+        migrated = dict(value)
+        key = "botName" if "botName" in migrated else "bot_name"
+        if migrated.get(key) == "nanobot":
+            migrated[key] = AGENT_DISPLAY_NAME
+        return migrated
+
     workspace: str = "~/.nanobot/workspace"
     model_preset: str | None = None  # Active preset name — takes precedence over fields below
     model: str = "anthropic/claude-opus-4-5"
@@ -141,7 +157,7 @@ class AgentDefaults(Base):
     )  # Max characters for tool hint display (e.g. "$ cd …/project && npm test")
     reasoning_effort: str | None = None  # low / medium / high / xhigh / max / adaptive / none — LLM thinking effort; None preserves the provider default
     timezone: str = "UTC"  # IANA timezone, e.g. "Asia/Shanghai", "America/New_York"
-    bot_name: str = "nanobot"  # Display name shown in CLI prompts (e.g. "{name} is thinking...")
+    bot_name: str = AGENT_DISPLAY_NAME  # Display name shown in CLI prompts (e.g. "{name} is thinking...")
     bot_icon: str = "🐈"  # Short icon (emoji or text) shown next to the bot name in CLI; "" to omit
     unified_session: bool = False  # Share one session across all channels (single-user multi-device)
     disabled_skills: list[str] = Field(default_factory=list)  # Skill names to exclude from loading (e.g. ["summarize", "skill-creator"])
@@ -419,6 +435,13 @@ class Config(BaseSettings):
     api: ApiConfig = Field(default_factory=ApiConfig)
     gateway: GatewayConfig = Field(default_factory=GatewayConfig)
     tools: ToolsConfig = Field(default_factory=ToolsConfig)
+    memory: MemorySettings = Field(default_factory=MemorySettings)
+    harness: HarnessConfig = Field(default_factory=HarnessConfig)
+    repository_agent: RepositoryAgentConfig = Field(
+        default_factory=RepositoryAgentConfig,
+        validation_alias=AliasChoices("repositoryAgent", "repository_agent"),
+        serialization_alias="repositoryAgent",
+    )
     model_presets: dict[str, ModelPresetConfig] = Field(
         default_factory=dict,
         validation_alias=AliasChoices("modelPresets", "model_presets"),

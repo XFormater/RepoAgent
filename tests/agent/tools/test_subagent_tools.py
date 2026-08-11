@@ -131,6 +131,39 @@ async def test_subagent_exec_tool_receives_allowed_env_keys(tmp_path):
 
 
 @pytest.mark.asyncio
+async def test_real_subagent_run_uses_harness_context_and_spec_tool_allowlist(tmp_path):
+    from nanobot.agent.subagent import SubagentManager
+    from nanobot.bus.queue import MessageBus
+
+    manager = SubagentManager(
+        workspace=tmp_path,
+        bus=MessageBus(),
+        max_tool_result_chars=_MAX_TOOL_RESULT_CHARS,
+    )
+
+    async def inspect_spec(spec):
+        assert spec.initial_messages[1]["content"].startswith("<agent_runtime_context>")
+        assert "History log:" not in spec.initial_messages[0]["content"]
+        assert "spawn" not in spec.tools.tool_names
+        assert "message" not in spec.tools.tool_names
+        return SimpleNamespace(
+            stop_reason="completed",
+            final_content="done",
+            error=None,
+            tool_events=[],
+        )
+
+    manager.runner.run = AsyncMock(side_effect=inspect_spec)
+    result = await manager.run_inline(
+        task="bounded task",
+        session_key="tenant:session",
+        runtime=_runtime(MagicMock()),
+    )
+
+    assert result == "done"
+
+
+@pytest.mark.asyncio
 async def test_subagent_uses_configured_max_iterations(tmp_path):
     """Subagents should honor the configured tool-iteration limit."""
     from nanobot.agent.subagent import SubagentManager, SubagentStatus

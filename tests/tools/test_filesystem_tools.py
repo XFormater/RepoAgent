@@ -59,6 +59,17 @@ class TestReadFileTool:
         assert "Empty file" in result
 
     @pytest.mark.asyncio
+    async def test_credential_files_are_not_readable(self, tool, tmp_path):
+        (tmp_path / ".env").write_text("API_KEY=secret", encoding="utf-8")
+        (tmp_path / ".env.example").write_text("API_KEY=example", encoding="utf-8")
+
+        blocked = await tool.execute(path=".env")
+        example = await tool.execute(path=".env.example")
+
+        assert "credential file" in blocked
+        assert "API_KEY=example" in example
+
+    @pytest.mark.asyncio
     async def test_image_file_returns_multimodal_blocks(self, tool, tmp_path):
         f = tmp_path / "pixel.png"
         f.write_bytes(b"\x89PNG\r\n\x1a\nfake-png-data")

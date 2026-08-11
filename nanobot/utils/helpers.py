@@ -17,6 +17,8 @@ from typing import Any, TypeVar, cast, overload
 import tiktoken
 from loguru import logger
 
+from nanobot.branding import AGENT_DISPLAY_NAME
+
 _TOOLS_TOKEN_CACHE_MAX_ENTRIES = 64
 _TOOLS_TOKEN_CACHE: dict[int, tuple[tuple[int, ...], dict[bool, int]]] = {}
 _T = TypeVar("_T")
@@ -843,7 +845,7 @@ def build_status_content(
     if cached and last_in:
         token_line += f" ({cached * 100 // last_in}% cached)"
     lines = [
-        f"\U0001f408 nanobot v{version}",
+        f"\U0001f408 {AGENT_DISPLAY_NAME} v{version}",
         f"\U0001f9e0 Model: {model}",
         token_line,
         f"\U0001f4da Context: {ctx_used_str}/{ctx_total_str} ({ctx_pct}% of input budget)",

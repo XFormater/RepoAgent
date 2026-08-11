@@ -198,7 +198,7 @@ class TestDreamTools:
         }
 
     @pytest.mark.asyncio
-    async def test_dream_can_edit_canonical_memory_files(self, store):
+    async def test_dream_can_edit_profiles_but_not_database_managed_memory(self, store):
         tools = store.build_dream_tools()
 
         memory_result = await tools.execute(
@@ -230,10 +230,10 @@ class TestDreamTools:
             },
         )
 
-        assert "Patch applied" in memory_result
+        assert "outside allowed directory" in memory_result
         assert "Successfully edited" in soul_result
         assert "Successfully wrote" in user_result
-        assert "Project Y active" in store.memory_file.read_text(encoding="utf-8")
+        assert "Project X active" in store.memory_file.read_text(encoding="utf-8")
         assert "Precise" in store.soul_file.read_text(encoding="utf-8")
         assert "**Name**: Ada" in store.user_file.read_text(encoding="utf-8")
 

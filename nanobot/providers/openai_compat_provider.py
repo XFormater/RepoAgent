@@ -23,6 +23,7 @@ from urllib.parse import urlparse
 from loguru import logger
 from pydantic.alias_generators import to_snake
 
+from nanobot.branding import AGENT_DISPLAY_NAME
 from nanobot.providers.base import (
     LLMProvider,
     LLMResponse,
@@ -66,7 +67,7 @@ _STANDARD_TC_KEYS = frozenset({"id", "type", "index", "function"})
 _STANDARD_FN_KEYS = frozenset({"name", "arguments"})
 _DEFAULT_OPENROUTER_HEADERS = {
     "HTTP-Referer": "https://github.com/HKUDS/nanobot",
-    "X-OpenRouter-Title": "nanobot",
+    "X-OpenRouter-Title": AGENT_DISPLAY_NAME,
     "X-OpenRouter-Categories": "cli-agent,personal-agent",
 }
 _KIMI_K3_MODEL = "kimi-k3"

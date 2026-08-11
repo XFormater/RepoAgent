@@ -30,6 +30,7 @@ class RuntimeContextBlock:
 
     source: str
     content: str
+    on_persist: Callable[[], Awaitable[None]] | None = None
 
 
 def normalize_webui_quote(value: Any) -> str | None:
@@ -92,7 +93,13 @@ def normalize_runtime_context_blocks(result: RuntimeContextResult) -> list[Runti
         if not source:
             raise ValueError("runtime context block source must not be empty")
         if content:
-            blocks.append(RuntimeContextBlock(source=source, content=content))
+            blocks.append(
+                RuntimeContextBlock(
+                    source=source,
+                    content=content,
+                    on_persist=block.on_persist,
+                )
+            )
     return blocks
 
 

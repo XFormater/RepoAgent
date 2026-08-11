@@ -12,6 +12,7 @@ import { hasPendingAgentActivity } from "@/lib/activity-timeline";
 import type { StreamError } from "@/lib/nanobot-client";
 import { formatQuotedUserMessage } from "@/lib/user-message-quote";
 import type {
+  AgentUIBlob,
   InboundEvent,
   OutboundCliAppMention,
   OutboundMcpPresetMention,
@@ -557,6 +558,8 @@ export function useNanobotStream(
   runStartedAt: number | null;
   /** Latest sustained goal for this ``chatId`` (``goal_state`` WS events). */
   goalState: GoalStateWsPayload | undefined;
+  /** Latest rich UI request attached to a complete assistant response. */
+  agentUi: AgentUIBlob | null;
   send: (
     content: string,
     images?: SendAttachment[],
@@ -586,6 +589,7 @@ export function useNanobotStream(
   /** Unix epoch seconds when the current user turn started; cleared on ``idle``. */
   const [runStartedAt, setRunStartedAt] = useState<number | null>(initialRunStartedAt);
   const [goalState, setGoalState] = useState<GoalStateWsPayload | undefined>(undefined);
+  const [agentUi, setAgentUi] = useState<AgentUIBlob | null>(null);
   const [streamError, setStreamError] = useState<StreamError | null>(null);
   const buffer = useRef<StreamBuffer | null>(null);
   const activeAssistantRef = useRef<ActiveAssistantCursor | null>(null);
@@ -985,6 +989,7 @@ export function useNanobotStream(
     setStreamError(null);
     setRunStartedAt(restoredRunStartedAt);
     setGoalState(chatId ? client.getGoalState(chatId) : undefined);
+    setAgentUi(null);
     buffer.current = null;
     activeAssistantRef.current = null;
     closedAssistantStreamIdsRef.current.clear();
@@ -1268,6 +1273,7 @@ export function useNanobotStream(
         // Streaming state is closed by ``stream_end`` when present, or by
         // ``turn_end`` for non-streamed and tool-heavy turns.
         clearActivitySegment();
+        setAgentUi(ev.agent_ui ?? null);
         setMessages((prev) => {
           const activeId = buffer.current?.messageId;
           buffer.current = null;
@@ -1482,6 +1488,7 @@ export function useNanobotStream(
     isStreaming,
     runStartedAt,
     goalState,
+    agentUi,
     send,
     transcribeAudio,
     stop,

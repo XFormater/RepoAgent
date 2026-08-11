@@ -1,6 +1,6 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./images/readme-cover-dark.svg">
-  <img alt="nanobot README cover" src="./images/readme-cover-light.svg">
+  <img alt="GitHubResearchAgent README cover" src="./images/readme-cover-light.svg">
 </picture>
 
 <div align="center">
@@ -32,35 +32,42 @@
   </p>
 </div>
 
-# nanobot
+# GitHubResearchAgent
 
-🐈 **nanobot** is an ultra-lightweight, open-source, self-hosted personal AI agent framework written in Python. It runs in a WebUI, terminal, or chat apps and combines tools, long-term memory, MCP integrations, model routing, multi-agent delegation, scheduled automation, and an OpenAI-compatible API in a small, readable core.
+🐈 **GitHubResearchAgent** is an open-source, self-hosted, general-purpose AI agent built on the backward-compatible `nanobot` runtime. It runs in a WebUI, terminal, or chat apps and combines tools, long-term memory, MCP integrations, model routing, multi-agent delegation, scheduled automation, repository research, and an OpenAI-compatible API in a small, readable core.
 
 ## Start Here
 
 | You want to... | Go to |
 |---|---|
-| Install nanobot with no terminal/config background | [Start Without Technical Background](./docs/start-without-technical-background.md) |
+| Install GitHubResearchAgent with no terminal/config background | [Start Without Technical Background](./docs/start-without-technical-background.md) |
 | Install quickly and get one CLI reply | [Install](#-install) and [Quick Start](#-quick-start) |
 | Open the bundled browser UI | [WebUI](#-webui) |
 | Connect Telegram, Discord, WeChat, Slack, Email, Mattermost, or another chat app | [Chat Apps](./docs/chat-apps.md) |
 | Configure providers, fallback models, Langfuse, MCP, web tools, or security | [Docs](./docs/README.md) and [Configuration](./docs/configuration.md) |
 | Understand or extend the internals | [Architecture](./docs/architecture.md) and [Development](./docs/development.md) |
-| Deploy to the cloud or keep nanobot running as a service | [Deployment](./docs/deployment.md) |
+| Deploy to the cloud or keep GitHubResearchAgent running as a service | [Deployment](./docs/deployment.md) |
 
-## What can nanobot do?
+## What can GitHubResearchAgent do?
 
-nanobot is a self-hosted personal AI agent runtime. It can:
+GitHubResearchAgent is a self-hosted general-purpose AI agent. It can:
 
 - run in a browser WebUI or terminal
 - connect to Telegram, Discord, Slack, WeChat, Email, Mattermost, and other chat apps
 - use tools such as files, shell, web search, web fetch, MCP, cron, image generation, and subagents
 - keep session history and long-term memory through Dream
 - run long-horizon goals and scheduled automations
+- analyze and maintain supplied repositories, or discover and compare a bounded
+  set of open-source implementations for academic and technical research
 - expose a Python SDK and OpenAI-compatible API for integrations
 - deploy as a long-running local or server-side agent gateway
 
-## 💡 Why nanobot
+Repository discovery is optional and task-specific. GitHub search provides
+candidate projects; downloaded source analysis provides the technical evidence.
+General research continues to use the web, local files, connected services, and
+other sources appropriate to the question.
+
+## 💡 Why GitHubResearchAgent
 
 - **Persistent workflows**: goals, memory, tools, and chat context survive long-running work.
 - **Chat-native reach**: WebUI, API, Telegram, Feishu, Slack, Discord, Teams, email, and Mattermost.
@@ -155,7 +162,7 @@ If `nanobot` is not on `PATH`, invoke it through the method that installed it: r
 
 ## 🚀 Quick Start
 
-**Open nanobot in your browser**
+**Open GitHubResearchAgent in your browser**
 
 ```bash
 nanobot webui
@@ -171,7 +178,7 @@ This is the recommended first run. The launcher creates the config and workspace
 
 Any normal reply means the provider, model, workspace, and browser gateway are working together.
 
-**Keep nanobot running after you close the terminal**
+**Keep GitHubResearchAgent running after you close the terminal**
 
 ```bash
 nanobot webui --background
@@ -214,13 +221,13 @@ The one-shot form is useful for a quick provider check, shell scripts, and local
 
 Need manual JSON, another device on your LAN, or help with provider/model matching? Continue with [Install and Quick Start](./docs/quick-start.md), [WebUI](./docs/webui.md), or [Troubleshooting](./docs/troubleshooting.md).
 
-If nanobot worked for you, a star on GitHub is the simplest way to support the project.
+If GitHubResearchAgent worked for you, a star on GitHub is the simplest way to support the project.
 
 - Want a pasteable provider setup? See [Provider Cookbook](./docs/provider-cookbook.md)
 - Want to understand provider/model matching? See [Providers and Models](./docs/providers.md)
 - Want web search, MCP, security settings, or more config options? See [Configuration](./docs/configuration.md)
 - Want to run locally? See [Ollama](./docs/providers.md#ollama), [vLLM or another local OpenAI-compatible server](./docs/providers.md#vllm-or-other-local-openai-compatible-server), and the full [provider reference](./docs/configuration.md#providers).
-- Want to run nanobot in chat apps like Telegram, Discord, WeChat or Feishu? See [Chat Apps](./docs/chat-apps.md)
+- Want to run GitHubResearchAgent in chat apps like Telegram, Discord, WeChat or Feishu? See [Chat Apps](./docs/chat-apps.md)
 - Want Docker or Linux service deployment? See [Deployment](./docs/deployment.md)
 
 <a id="deploy-to-render"></a>
@@ -229,7 +236,7 @@ If nanobot worked for you, a star on GitHub is the simplest way to support the p
 
 **Render — one click**
 
-Deploy nanobot's gateway and bundled WebUI from the repository's ready-to-use Blueprint:
+Deploy GitHubResearchAgent's gateway and bundled WebUI from the repository's ready-to-use Blueprint:
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/HKUDS/nanobot)
 
@@ -262,7 +269,7 @@ See the [WebUI guide](./docs/webui.md) for LAN access, background operation, wor
   <img src="images/nanobot_arch.png" alt="nanobot architecture" width="800">
 </p>
 
-🐈 nanobot stays lightweight by centering everything around a small agent loop: messages come in from chat apps, the LLM decides when tools are needed, and memory or skills are pulled in only as context instead of becoming a heavy orchestration layer. That keeps the core path readable and easy to extend, while still letting you add channels, tools, memory, and deployment options without turning the system into a monolith.
+🐈 GitHubResearchAgent stays lightweight by centering everything around a small agent loop: messages come in from chat apps, the LLM decides when tools are needed, and memory or skills are pulled in only as context instead of becoming a heavy orchestration layer. That keeps the core path readable and easy to extend, while still letting you add channels, tools, memory, and deployment options without turning the system into a monolith.
 
 ## 📚 Docs
 
@@ -276,17 +283,19 @@ Browse the [repo docs](./docs/README.md) for the latest features and GitHub deve
 - Choose a provider/model: [Providers and Models](./docs/providers.md)
 - Copy provider setup recipes: [Provider Cookbook](./docs/provider-cookbook.md)
 - Debug setup and runtime failures: [Troubleshooting](./docs/troubleshooting.md)
-- Talk to your nanobot with familiar chat apps: [Chat App AI Agent](./docs/guides/chat-app-ai-agent.md) · [Chat Apps](./docs/chat-apps.md)
+- Talk to GitHubResearchAgent with familiar chat apps: [Chat App AI Agent](./docs/guides/chat-app-ai-agent.md) · [Chat Apps](./docs/chat-apps.md)
 - Schedule or trigger agent work: [Automations](./docs/automations.md)
 - Configure providers, web search, MCP, and runtime behavior: [Configuration](./docs/configuration.md)
-- Integrate nanobot with local tools and automations: [OpenAI-Compatible API](./docs/openai-api.md) · [Python SDK](./docs/python-sdk.md)
-- Run nanobot with Docker or as a Linux service: [Deployment](./docs/deployment.md)
+- Analyze and maintain real GitHub projects with the optional multi-agent workflow:
+  [Repository Agent](./docs/repository-agent.md)
+- Integrate GitHubResearchAgent with local tools and automations: [OpenAI-Compatible API](./docs/openai-api.md) · [Python SDK](./docs/python-sdk.md)
+- Run GitHubResearchAgent with Docker or as a Linux service: [Deployment](./docs/deployment.md)
 
 ## Releases
 
 **Latest release: [v0.3.0 - The Agency Release](https://github.com/HKUDS/nanobot/releases/tag/v0.3.0)**
 
-The Agency Release turns nanobot from a durable workbench into an agent runtime that can coordinate helpers, switch models per session, and carry authorized work through to completion.
+The Agency Release turns GitHubResearchAgent from a durable workbench into an agent runtime that can coordinate helpers, switch models per session, and carry authorized work through to completion.
 
 - Consult inline subagents without leaving the current task
 - Switch model presets per session directly from the composer
@@ -314,7 +323,7 @@ For older updates, see the [release archive](./docs/release-archive.md) or [GitH
 
 ## 🤝 Contribute
 
-Use nanobot for a real task, report what broke, and then pick a focused improvement.
+Use GitHubResearchAgent for a real task, report what broke, and then pick a focused improvement.
 
 - Read [CONTRIBUTING.md](./CONTRIBUTING.md) for the development workflow.
 - Browse [open issues](https://github.com/HKUDS/nanobot/issues) for problems to investigate.
@@ -331,6 +340,6 @@ Nanobot was started by [Xubin Ren](https://github.com/re-bin) as a personal open
 </a>
 
 <p align="center">
-  <em> Thanks for visiting ✨ nanobot!</em><br><br>
+  <em> Thanks for visiting ✨ GitHubResearchAgent!</em><br><br>
   <img src="https://visitor-badge.laobi.icu/badge?page_id=HKUDS.nanobot&style=for-the-badge&color=00d4ff" alt="Views">
 </p>

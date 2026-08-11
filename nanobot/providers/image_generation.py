@@ -15,6 +15,7 @@ from urllib.parse import urljoin
 import httpx
 from loguru import logger
 
+from nanobot.branding import AGENT_DISPLAY_NAME
 from nanobot.config.schema import Config, ProviderConfig
 from nanobot.providers.registry import find_by_name
 from nanobot.security.network import (
@@ -26,7 +27,7 @@ from nanobot.utils.helpers import detect_image_mime
 
 _OPENROUTER_ATTRIBUTION_HEADERS = {
     "HTTP-Referer": "https://github.com/HKUDS/nanobot",
-    "X-OpenRouter-Title": "nanobot",
+    "X-OpenRouter-Title": AGENT_DISPLAY_NAME,
     "X-OpenRouter-Categories": "cli-agent,personal-agent",
 }
 _DEFAULT_TIMEOUT_S = 120.0
@@ -1433,7 +1434,7 @@ class CodexImageGenerationClient(ImageGenerationProvider):
             "Authorization": f"Bearer {token.access}",
             "chatgpt-account-id": str(token.account_id),
             "OpenAI-Beta": "responses=experimental",
-            "originator": "nanobot",
+            "originator": AGENT_DISPLAY_NAME,
             "User-Agent": "nanobot (python)",
             "Content-Type": "application/json",
             **self.extra_headers,

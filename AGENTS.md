@@ -2,7 +2,18 @@ This file provides guidance to AI coding agents working with this repository.
 
 ## Project Overview
 
-nanobot is a lightweight, open-source AI agent framework written in Python with a React/TypeScript WebUI. It centers around a small agent loop that receives messages from chat channels, invokes an LLM provider, executes tools, and manages session memory.
+GitHubResearchAgent is a lightweight, open-source, general-purpose AI agent framework
+written in Python with a React/TypeScript WebUI. It centers around a small agent
+loop that receives messages from chat channels, invokes an LLM provider,
+executes tools, and manages session memory.
+
+The product is broader than repository discovery. Its capabilities include
+multi-channel conversation, multiple LLM providers, workspace and coding tools,
+web research, MCP and CLI apps, documents and media, durable memory, schedules
+and heartbeat tasks, sustained goals, subagents, automations, an OpenAI-compatible
+API, and optional repository analysis/maintenance/research workflows. GitHub
+search is one stage of the optional multi-repository research workflow, not the
+project's defining feature.
 
 ## Development Commands
 
@@ -53,6 +64,12 @@ Messages flow through an async `MessageBus` (`nanobot/bus/queue.py`) that decoup
 - **Pairing** (`nanobot/pairing/`): DM sender approval store with persistent pairing codes per channel.
 - **Skills** (`nanobot/skills/`): Built-in skill definitions (cron, github, image-generation, etc.) loaded into agent context.
 - **Security** (`nanobot/security/`): PTH file guard and other security measures activated at CLI entry.
+- **Repository Workflows** (`nanobot/repo_agent/`): Optional supplied-repository
+  analysis, isolated code maintenance, validation/review, controlled GitHub
+  publishing, and academic/technical open-source discovery with bounded
+  multi-repository source analysis. GitHub search is limited to candidate
+  discovery; final technical conclusions should come from cloned source
+  evidence.
 
 ### Entry Points
 

@@ -24,6 +24,26 @@ from nanobot.security.workspace_access import current_tool_workspace
 from nanobot.utils.helpers import build_image_content_blocks, detect_image_mime
 
 
+_SENSITIVE_WORKSPACE_FILENAMES = frozenset(
+    {
+        ".env",
+        ".env.local",
+        ".env.production",
+        ".env.development",
+        ".env.test",
+        ".npmrc",
+        ".pypirc",
+        ".netrc",
+        ".git-credentials",
+    }
+)
+
+
+def _is_sensitive_workspace_path(path: Path) -> bool:
+    """Return whether a workspace path is a conventional credential file."""
+    return path.name.lower() in _SENSITIVE_WORKSPACE_FILENAMES
+
+
 class FileToolsConfig(Base):
     """Filesystem tools configuration."""
 
@@ -93,11 +113,15 @@ class _FsTool(Tool):
         allowed_dir = agent_workspace if restrict else None
         # Agent-owned skills stay available from project scopes. History is a narrower
         # capability: expose only the append-only log, not the surrounding memory directory.
+        history_files = (
+            [resolved_agent_workspace / "memory" / "history.jsonl"]
+            if ctx.allow_history_read else []
+        )
         return cls(
             workspace=agent_workspace,
             allowed_dir=allowed_dir,
             extra_read_allowed_dirs=[BUILTIN_SKILLS_DIR, resolved_agent_workspace / "skills"],
-            extra_read_allowed_files=[resolved_agent_workspace / "memory" / "history.jsonl"],
+            extra_read_allowed_files=history_files,
             file_states=ctx.file_state_store,
             restrict_to_workspace=ctx.config.restrict_to_workspace,
             sandbox_restricts_workspace=sandbox_restricts,
@@ -148,21 +172,27 @@ class _FsTool(Tool):
         )
 
     def _resolve_read(self, path: str) -> Path:
-        return self._resolve_with_extra(
+        resolved = self._resolve_with_extra(
             path,
             self._extra_read_allowed_dirs,
             self._extra_read_allowed_files,
             include_media_dir=True,
             extra_files_require_allowed_root=True,
         )
+        if _is_sensitive_workspace_path(resolved):
+            raise PermissionError(f"Access to credential file {resolved.name!r} is blocked")
+        return resolved
 
     def _resolve_write(self, path: str) -> Path:
-        return self._resolve_with_extra(
+        resolved = self._resolve_with_extra(
             path,
             self._extra_write_allowed_dirs,
             self._extra_write_allowed_files,
             include_media_dir=False,
         )
+        if _is_sensitive_workspace_path(resolved):
+            raise PermissionError(f"Access to credential file {resolved.name!r} is blocked")
+        return resolved
 
     def _resolve(self, path: str) -> Path:
         return self._resolve_read(path)

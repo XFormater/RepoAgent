@@ -17,6 +17,7 @@ from nanobot.agent.context_governance import (
     ContextGovernanceConfig,
     ContextGovernor,
 )
+from nanobot.agent.context_orchestrator import ContextOrchestrator
 from nanobot.agent.hook import AgentHook, AgentHookContext, AgentRunHookContext
 from nanobot.agent.tools.registry import ToolRegistry, is_tool_error_result
 from nanobot.providers.base import (
@@ -137,8 +138,31 @@ class AgentRunResult:
 class AgentRunner:
     """Run a tool-capable LLM loop without product-layer concerns."""
 
-    def __init__(self) -> None:
-        self.context_governor = ContextGovernor()
+    def __init__(self, context_orchestrator: ContextOrchestrator | None = None) -> None:
+        self.context_orchestrator = context_orchestrator
+        self.context_governor = (
+            context_orchestrator.governor
+            if context_orchestrator is not None
+            else ContextGovernor()
+        )
+
+    def _prepare_for_model(
+        self,
+        config: ContextGovernanceConfig,
+        messages: list[dict[str, Any]],
+        compacted_tool_call_ids: set[str],
+    ) -> list[dict[str, Any]]:
+        if self.context_orchestrator is not None:
+            return self.context_orchestrator.prepare_for_model(
+                config,
+                messages,
+                compacted_tool_call_ids,
+            )
+        return self.context_governor.prepare_for_model(
+            config,
+            messages,
+            compacted_tool_call_ids,
+        )
 
     @staticmethod
     def _merge_message_content(left: Any, right: Any) -> str | list[dict[str, Any]]:
@@ -464,7 +488,7 @@ class AgentRunner:
             # those synthetic edits must not shift the append boundary used
             # later when the caller saves only the new turn. A governance
             # failure must stop the run instead of sending an ungoverned copy.
-            messages_for_model = self.context_governor.prepare_for_model(
+            messages_for_model = self._prepare_for_model(
                 governance_config,
                 messages,
                 compacted_tool_call_ids,
@@ -587,7 +611,7 @@ class AgentRunner:
                         continue
                     break
                 checkpoint_model_messages = (
-                    self.context_governor.prepare_for_model(
+                    self._prepare_for_model(
                         governance_config,
                         messages,
                         compacted_tool_call_ids,

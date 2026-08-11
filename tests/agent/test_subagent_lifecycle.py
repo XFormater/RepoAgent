@@ -221,6 +221,39 @@ class TestSpawn:
         assert len(sm._running_tasks) == 0
 
     @pytest.mark.asyncio
+    async def test_replayed_spawn_call_reuses_durable_task(self, tmp_path):
+        sm = _manager(tmp_path)
+        block = asyncio.Event()
+
+        async def _slow_run(spec):
+            await block.wait()
+            return AgentRunResult(final_content="done", messages=[], stop_reason="completed")
+
+        sm.runner.run = _slow_run
+        first = await sm.spawn(
+            "same task",
+            runtime=_runtime(),
+            session_key="s1",
+            origin_message_id="message-1",
+        )
+        replay = await sm.spawn(
+            "same task",
+            runtime=_runtime(),
+            session_key="s1",
+            origin_message_id="message-1",
+        )
+
+        assert "started" in first
+        assert "already running" in replay
+        workflow = await sm.harness.store.get_workflow_by_scope("default", "s1")
+        assert workflow is not None
+        assert len(await sm.harness.store.list_tasks(workflow.workflow_id)) == 1
+        assert len(sm._running_tasks) == 1
+
+        block.set()
+        await _drain_subagent_tasks(sm)
+
+    @pytest.mark.asyncio
     async def test_creates_status(self, tmp_path):
         sm = _manager(tmp_path)
         sm.runner.run = AsyncMock(return_value=AgentRunResult(

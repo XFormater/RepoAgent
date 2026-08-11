@@ -10,6 +10,40 @@ Good memory is not a pile of notes. It is a quiet system of attention. It notice
 
 That is the shape of memory in nanobot.
 
+## Optional Semantic Memory
+
+In addition to the default file-based Dream memory, nanobot can enable an
+opt-in semantic layer under the top-level `memory` configuration key. It
+records structured facts after a successful user turn and retrieves relevant
+facts on the first user turn of a session (or on every turn when configured).
+When older or multi-hop context is needed later in a conversation, the
+read-only `memory_retrieve` tool provides an on-demand deep retrieval path.
+
+The write path is best-effort by default: the user response is persisted first,
+then extraction and storage run as a tracked background task. A stable UUIDv7
+batch ID is retained across retries, and the idempotency key is derived from
+the sorted source-message IDs plus that batch ID. Hypotheses remain
+`pending_review`; they are not inserted into vector or graph recall.
+
+The read path embeds the current query and recent context, recalls from Qdrant,
+optionally expands one or two graph hops in Neo4j, and applies a CrossEncoder.
+Graph and reranker timeouts degrade to the available vector ordering. Recalled
+content is bounded and injected inside a data-only `<memory>` block.
+
+This layer is disabled by default and does not replace Dream or `MEMORY.md`.
+Install and start its optional services with:
+
+```bash
+pip install -e ".[memory,memory-reranker]"
+docker compose --profile memory up -d
+```
+
+See [`semantic-memory-config.example.yaml`](semantic-memory-config.example.yaml)
+for all settings. The same object can be placed in nanobot's JSON config using
+camelCase or snake_case field names. For a zero-service local test, select the
+`memory` vector/graph/metadata/idempotency backends, the `hash` embedding
+provider, and the `identity` reranker.
+
 ## The Design
 
 nanobot does not treat memory as one giant file.

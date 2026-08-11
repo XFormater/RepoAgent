@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import inspect
 from typing import TYPE_CHECKING, Any
 
 from nanobot.agent.tools.base import Tool, ToolResult, tool_parameters
@@ -25,6 +26,10 @@ if TYPE_CHECKING:
     tool_parameters_schema(
         task=StringSchema("The task for the subagent to complete"),
         label=StringSchema("Optional short label for the task (for display)"),
+        role=StringSchema(
+            "Subagent role: worker, planner, or reviewer",
+            enum=["worker", "planner", "reviewer"],
+        ),
         temperature=NumberSchema(
             description=(
                 "Optional sampling temperature for the subagent "
@@ -39,6 +44,13 @@ if TYPE_CHECKING:
                 "Wait for the subagent and return its result directly. Use this for a "
                 "blocking consultation that must inform the current turn. Defaults to "
                 "false for background execution."
+            ),
+            default=False,
+        ),
+        exclusive_workspace=BooleanSchema(
+            description=(
+                "Acquire an exclusive distributed lease for the project workspace. "
+                "Set true for tasks that may modify files."
             ),
             default=False,
         ),
@@ -78,7 +90,9 @@ class SpawnTool(Tool):
         task: str,
         label: str | None = None,
         temperature: float | None = None,
+        role: str = "worker",
         wait: bool = False,
+        exclusive_workspace: bool = False,
         **kwargs: Any,
     ) -> str:
         """Spawn a subagent to execute the given task."""
@@ -97,7 +111,7 @@ class SpawnTool(Tool):
         origin_chat_id = request_ctx.chat_id
         session_key = request_ctx.session_key or f"{origin_channel}:{origin_chat_id}"
         method = self._manager.run_inline if wait else self._manager.spawn
-        return await method(
+        call_kwargs: dict[str, Any] = dict(
             task=task,
             runtime=request_ctx.runtime,
             label=label,
@@ -108,3 +122,20 @@ class SpawnTool(Tool):
             temperature=temperature,
             workspace_scope=current_workspace_scope(),
         )
+        # Third-party and test managers written against the pre-role protocol
+        # remain valid adapters. Native Harness managers expose ``role`` and
+        # receive the requested specialization.
+        parameters = inspect.signature(method).parameters.values()
+        if any(p.name == "role" or p.kind is inspect.Parameter.VAR_KEYWORD for p in parameters):
+            call_kwargs["role"] = role
+        if any(
+            p.name == "tenant_id" or p.kind is inspect.Parameter.VAR_KEYWORD
+            for p in parameters
+        ):
+            call_kwargs["tenant_id"] = str(request_ctx.metadata.get("tenant_id", "default"))
+        if any(
+            p.name == "exclusive_workspace" or p.kind is inspect.Parameter.VAR_KEYWORD
+            for p in parameters
+        ):
+            call_kwargs["exclusive_workspace"] = exclusive_workspace
+        return await method(**call_kwargs)

@@ -1876,7 +1876,7 @@ def _enable_quick_start_websocket_defaults(config: Config) -> bool:
         f"[{_UI_ACCENT}]Quick Start will enable the WebSocket channel for the local WebUI.[/]"
     )
     console.print(
-        f"[{_UI_MUTED}]This lets the browser UI at http://127.0.0.1:8765 connect to nanobot.[/]"
+        f"[{_UI_MUTED}]This lets the browser UI at http://127.0.0.1:8765 connect to GitHubResearchAgent.[/]"
     )
     console.print()
     while True:

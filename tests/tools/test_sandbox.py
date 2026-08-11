@@ -19,6 +19,12 @@ class TestBwrapBackend:
         tokens = _parse(result)
 
         assert tokens[0] == "bwrap"
+        assert "--unshare-pid" in tokens
+        assert "--unshare-ipc" in tokens
+        assert "--unshare-uts" in tokens
+        assert "--clearenv" in tokens
+        cap_drop = tokens.index("--cap-drop")
+        assert tokens[cap_drop + 1] == "ALL"
         assert "--new-session" in tokens
         assert "--die-with-parent" in tokens
         assert "--ro-bind" in tokens
@@ -149,6 +155,19 @@ class TestBwrapBackend:
         try_indices = [i for i, t in enumerate(tokens) if t == "--ro-bind-try"]
         try_pairs = {(tokens[i + 1], tokens[i + 2]) for i in try_indices}
         assert (str(fake_media), str(fake_media)) in try_pairs
+
+    def test_workspace_credentials_are_masked(self, tmp_path):
+        ws = tmp_path / "project"
+        ws.mkdir()
+        (ws / ".env").write_text("SECRET=value")
+        (ws / ".env.example").write_text("SECRET=example")
+
+        tokens = _parse(wrap_command("bwrap", "ls", str(ws), str(ws)))
+        ro_indices = [i for i, token in enumerate(tokens) if token == "--ro-bind"]
+        ro_pairs = {(tokens[i + 1], tokens[i + 2]) for i in ro_indices}
+
+        assert ("/dev/null", str(ws / ".env")) in ro_pairs
+        assert ("/dev/null", str(ws / ".env.example")) not in ro_pairs
 
     def test_custom_read_only_binds_use_ro_bind_try(self, tmp_path):
         ws = tmp_path / "project"

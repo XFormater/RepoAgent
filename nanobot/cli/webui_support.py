@@ -383,7 +383,7 @@ def _print_foreground_port_conflict(
     gateway_port: int,
 ) -> None:
     console.print(
-        "[red]Error: nanobot cannot start because one of its local ports is already in use.[/red]"
+        "[red]Error: GitHubResearchAgent cannot start because one of its local ports is already in use.[/red]"
     )
     console.print(f"  WebUI: [cyan]{webui_url}[/cyan]")
     console.print(
@@ -418,9 +418,9 @@ def _print_webui_foreground_lifecycle(*, attached: bool) -> None:
     """Explain how the browser and gateway lifecycles differ."""
     console.print()
     if attached:
-        console.print("[green]nanobot is attached to the existing gateway.[/green]")
+        console.print("[green]GitHubResearchAgent is attached to the existing gateway.[/green]")
     else:
-        console.print("[green]nanobot is running in this terminal.[/green]")
+        console.print("[green]GitHubResearchAgent is running in this terminal.[/green]")
     console.print("[dim]Closing the browser does not stop channels or automations.[/dim]")
     console.print("[dim]Press Ctrl+C here to stop nanobot.[/dim]")
 

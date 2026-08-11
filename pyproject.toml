@@ -80,6 +80,17 @@ documents = [
 langfuse = [
     "langfuse>=3.0.0,<4.0.0",
 ]
+memory = [
+    "asyncpg>=0.30.0,<1.0.0",
+    "neo4j>=5.28.0,<7.0.0",
+    "opentelemetry-api>=1.30.0,<2.0.0",
+    "qdrant-client>=1.15.0,<1.17.0",
+    "redis>=5.2.0,<8.0.0",
+    "structlog>=25.1.0,<26.0.0",
+]
+memory-reranker = [
+    "sentence-transformers>=3.4.0,<6.0.0",
+]
 pdf = [
     # Compatibility extra: PDF reading is bundled since v0.2.3.
     "pypdf>=5.0.0,<6.0.0",

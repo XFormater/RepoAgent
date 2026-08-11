@@ -154,7 +154,7 @@ function FeishuInstanceAction({
 function defaultFeishuInstance(feature: NanobotFeatureInfo): NanobotChannelInstanceInfo {
   return {
     id: "default",
-    name: "nanobot",
+    name: "GitHubResearchAgent",
     enabled: feature.enabled,
     configured: Boolean(feature.configured),
     config_values: feature.config_values ?? {},

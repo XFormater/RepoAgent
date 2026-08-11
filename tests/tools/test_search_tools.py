@@ -124,6 +124,22 @@ async def test_grep_respects_glob_filter_and_context(tmp_path: Path) -> None:
 
 
 @pytest.mark.asyncio
+async def test_grep_skips_workspace_credential_files(tmp_path: Path) -> None:
+    (tmp_path / ".env").write_text("UNIQUE_SECRET=hidden\n", encoding="utf-8")
+    (tmp_path / ".env.example").write_text("UNIQUE_SECRET=example\n", encoding="utf-8")
+
+    tool = GrepTool(workspace=tmp_path, allowed_dir=tmp_path)
+    result = await tool.execute(
+        pattern="UNIQUE_SECRET",
+        path=".",
+        output_mode="content",
+    )
+
+    assert ".env.example" in result
+    assert ".env:" not in result
+
+
+@pytest.mark.asyncio
 async def test_grep_defaults_to_files_with_matches(tmp_path: Path) -> None:
     (tmp_path / "src").mkdir()
     (tmp_path / "src" / "main.py").write_text("match_here\n", encoding="utf-8")

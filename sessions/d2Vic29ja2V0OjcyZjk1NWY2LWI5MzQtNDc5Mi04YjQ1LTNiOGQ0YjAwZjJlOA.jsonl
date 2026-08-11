@@ -1,0 +1,2 @@
+{"_type": "metadata", "key": "websocket:72f955f6-b934-4792-8b45-3b8d4b00f2e8", "created_at": "2026-08-11T14:28:24.700781", "updated_at": "2026-08-11T14:28:24.893656", "metadata": {"pending_user_turn": true}, "last_consolidated": 0}
+{"role": "user", "content": "What is 2+2? Reply only with the number.", "timestamp": "2026-08-11T14:28:24.893631"}

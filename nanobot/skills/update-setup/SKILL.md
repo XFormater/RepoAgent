@@ -58,7 +58,7 @@ If the user selected `not sure`, explain the difference between the options and
 stop. Do not generate the upgrade skill.
 
 If the user selected `source (git clone)`, ask for the local checkout path:
-`question: "Where is your nanobot source checkout? Enter an absolute path or a path relative to this workspace:"`.
+`question: "Where is your GitHubResearchAgent source checkout? Enter an absolute path or a path relative to this workspace:"`.
 
 **Question 2 — Optional dependencies:**
 

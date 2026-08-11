@@ -13,7 +13,7 @@ nanobot has one small core loop and several ways to enter it:
 | Agent loop | Builds context, selects the session, calls the provider, runs tools, and publishes replies |
 | Providers | LLM backends such as OpenRouter, Anthropic, OpenAI, Bedrock, Ollama, vLLM, and other OpenAI-compatible APIs |
 | Channels | User-facing transports such as CLI, WebUI/WebSocket, Telegram, Discord, Slack, Feishu, WeChat, Email, Mattermost, and others |
-| Tools | Capabilities the model may call, including files, shell, web search/fetch, MCP, cron, image generation, and subagents |
+| Tools | Capabilities the model may call, including files, shell, web search/fetch, MCP, connected CLI apps, cron, media, repository tools, and subagents |
 | Memory | Workspace files and session history that keep useful context across turns |
 | Gateway | Long-running process that connects enabled channels and serves the health endpoint |
 
@@ -143,6 +143,15 @@ Tools are discovered automatically from built-in modules and plugin entry points
 - cron reminders, local triggers, and heartbeat tasks;
 - image generation;
 - subagents and runtime self-inspection.
+- supplied-repository analysis and isolated maintenance when
+  `repositoryAgent` is enabled;
+- bounded GitHub candidate discovery, multi-repository download, source
+  analysis, and comparison for explicit open-source project research requests.
+
+Repository research is one optional tool family rather than the runtime's
+default purpose. GitHub search discovers candidates; it does not replace
+general web research, literature and documentation sources, connected services,
+or source-code verification.
 
 Security-sensitive controls live in [`configuration.md#security`](./configuration.md#security). For production or shared chat apps, also configure channel access controls such as `allowFrom`, pairing, or WebSocket tokens.
 

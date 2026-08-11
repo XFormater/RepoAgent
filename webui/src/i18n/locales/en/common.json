@@ -1,12 +1,12 @@
 {
   "app": {
-    "brand": "nanobot",
+    "brand": "GitHubResearchAgent",
     "loading": {
-      "connecting": "Connecting to nanobot…",
-      "boot": "Loading nanobot…"
+      "connecting": "Connecting to GitHubResearchAgent…",
+      "boot": "Loading GitHubResearchAgent…"
     },
     "error": {
-      "title": "Couldn't reach nanobot",
+      "title": "Couldn't reach GitHubResearchAgent",
       "gatewayHint": "Make sure the gateway is running (`nanobot gateway`) and that this page is open on the same machine."
     },
     "auth": {
@@ -23,8 +23,8 @@
     },
     "system": {
       "section": "System",
-      "restartHint": "Restart nanobot to apply runtime changes.",
-      "restart": "Restart nanobot",
+      "restartHint": "Restart GitHubResearchAgent to apply runtime changes.",
+      "restart": "Restart GitHubResearchAgent",
       "restarting": "Restarting...",
       "restartEngine": "Restart engine",
       "restartingEngine": "Restarting engine..."
@@ -33,11 +33,11 @@
       "completed": "Restart completed in {{seconds}}s."
     },
     "documentTitle": {
-      "base": "nanobot",
-      "chat": "{{title}} · nanobot"
+      "base": "GitHubResearchAgent",
+      "chat": "{{title}} · GitHubResearchAgent"
     },
     "meta": {
-      "description": "nanobot web UI — chat with your nanobot workspace."
+      "description": "GitHubResearchAgent web UI — chat with your agent workspace."
     },
     "pairing": {
       "title": "Pair a chat user",
@@ -173,7 +173,7 @@
       "language": "Language",
       "provider": "Provider",
       "model": "Model",
-      "restart": "Restart nanobot",
+      "restart": "Restart GitHubResearchAgent",
       "configPath": "Config path",
       "activePreset": "Active preset",
       "gateway": "Gateway",
@@ -243,7 +243,7 @@
       "defaultImageSize": "Size hint sent to providers that support it.",
       "maxImagesPerTurn": "Upper bound for one generate_image request.",
       "timezone": "Used for schedules and time-aware replies.",
-      "cliAppsCatalog": "Install only the app-specific CLI adapters nanobot can run locally; native apps stay untouched.",
+      "cliAppsCatalog": "Install only the app-specific CLI adapters GitHubResearchAgent can run locally; native apps stay untouched.",
       "cliAppsFilter": "Search by app, category, or capability.",
       "localServiceAccess": "Allow Full Access shell commands to reach localhost services.",
       "webuiDefaultAccess": "Used by web chats without a project-specific permission.",
@@ -289,7 +289,7 @@
       "readyStatus": "Ready",
       "readyTry": "Try @{{name}}",
       "readyCopied": "Copied",
-      "readyPrompt": "Ask nanobot to use @{{name}} for this task.",
+      "readyPrompt": "Ask GitHubResearchAgent to use @{{name}} for this task.",
       "openChat": "Open chat",
       "unsupported": "Unsupported",
       "unavailable": "Unavailable",
@@ -328,7 +328,7 @@
       "saveCustom": "Save MCP",
       "configImport": "Import mcp.json",
       "importConfig": "Import",
-      "restartRequired": "Restart nanobot to connect updated MCP tools.",
+      "restartRequired": "Restart GitHubResearchAgent to connect updated MCP tools.",
       "toolsFound": "{{count}} tools",
       "loading": "Loading MCP presets...",
       "empty": "No MCP presets match this filter.",
@@ -392,11 +392,11 @@
       "loadError": "Could not load settings",
       "unsaved": "Unsaved changes.",
       "upToDate": "Up to date.",
-      "savedRestart": "Saved. Restart nanobot to apply.",
+      "savedRestart": "Saved. Restart GitHubResearchAgent to apply.",
       "restartAfterSaving": "Save changes, then restart when ready.",
       "savedRestartApply": "Saved. Restart when ready.",
       "imageProviderRestart": "Image provider changes saved. Restart when ready.",
-      "hostRestartAfterSaving": "Save changes and nanobot will restart its engine.",
+      "hostRestartAfterSaving": "Save changes and GitHubResearchAgent will restart its engine.",
       "hostRestartPending": "Saved. Restarting engine when ready.",
       "hostApiUnavailable": "Host actions are only available inside the native app.",
       "logsOpened": "Opened logs folder.",
@@ -420,7 +420,7 @@
       "exporting": "Exporting..."
     },
     "byok": {
-      "description": "Bring your own provider keys. Nanobot reads these values from the current config and only configured providers can be used in model presets.",
+      "description": "Bring your own provider keys. GitHubResearchAgent reads these values from the current config and only configured providers can be used in model presets.",
       "configured": "Configured",
       "notConfigured": "Not configured",
       "configuredSection": "Configured",
@@ -559,12 +559,12 @@
     },
     "observability": {
       "title": "Observability",
-      "configured": "Tracing credentials are available to nanobot.",
-      "environment": "Set LANGFUSE_SECRET_KEY and LANGFUSE_PUBLIC_KEY, then restart nanobot.",
+      "configured": "Tracing credentials are available to GitHubResearchAgent.",
+      "environment": "Set LANGFUSE_SECRET_KEY and LANGFUSE_PUBLIC_KEY, then restart GitHubResearchAgent.",
       "enable": "Enable tracing support"
     },
     "apps": {
-      "description": "Add tools to nanobot, then @ them in chat.",
+      "description": "Add tools to GitHubResearchAgent, then @ them in chat.",
       "cliLabel": "App",
       "mcpLabel": "Integration",
       "channelLabel": "Channel",
@@ -579,21 +579,21 @@
       "featured": "Tools",
       "loading": "Loading Apps...",
       "empty": "No tools match this view.",
-      "restartRequired": "Restart nanobot to apply updated apps and integrations."
+      "restartRequired": "Restart GitHubResearchAgent to apply updated apps and integrations."
     },
     "channels": {
-      "description": "Connect chat apps, email, and WebUI to nanobot.",
+      "description": "Connect chat apps, email, and WebUI to GitHubResearchAgent.",
       "caption": "{{enabled}} running · {{total}} channels",
       "searchPlaceholder": "Search channels",
       "backToChannels": "All channels",
       "catalog": "Channels",
       "loading": "Loading Channels...",
       "empty": "No channels match this filter.",
-      "restartRequired": "Restart nanobot to apply updated channel support.",
+      "restartRequired": "Restart GitHubResearchAgent to apply updated channel support.",
       "requires": "Requires: {{requirements}}",
       "setUp": "Set up",
       "setupGuide": "Setup guide",
-      "setupSummary": "Enable only turns on nanobot support. Add the platform credentials, then restart nanobot.",
+      "setupSummary": "Enable only turns on GitHubResearchAgent support. Add the platform credentials, then restart GitHubResearchAgent.",
       "configKeys": "Config keys",
       "enable": "Enable channel",
       "disable": "Disable channel",
@@ -656,7 +656,7 @@
       "missingDependency": "Support missing",
       "installSupport": "Install support",
       "installConfirmTitle": "Install support for {{name}}?",
-      "installConfirmDescription": "nanobot will add what {{name}} needs, then turn it on. Continue?",
+      "installConfirmDescription": "GitHubResearchAgent will add what {{name}} needs, then turn it on. Continue?",
       "installConfirmAction": "Install and enable",
       "websocketRequired": "Required for WebUI",
       "channelDisabled": "Channel is disabled",
@@ -681,7 +681,7 @@
       "loading": "Loading automations...",
       "noMatches": "No automations match this view.",
       "empty": "No automations yet.",
-      "emptyHint": "Create one from where it should run so nanobot keeps the right context.",
+      "emptyHint": "Create one from where it should run so GitHubResearchAgent keeps the right context.",
       "oneShot": "One-time",
       "systemTask": "System-managed automation",
       "localTrigger": "Local trigger",
@@ -798,7 +798,7 @@
       "signedInAs": "Signed in as {{account}}",
       "signInHelp": "Sign in from this device; no API key is stored in config.",
       "remoteSignInHelp": "Select Sign in to open xAI on your computer, then paste the authorization code shown after login.",
-      "codexRemoteSignInHelp": "Sign in through this browser, then paste the full localhost callback URL back into nanobot.",
+      "codexRemoteSignInHelp": "Sign in through this browser, then paste the full localhost callback URL back into GitHubResearchAgent.",
       "signInRequired": "Sign in required",
       "signInBeforeSaving": "Sign in before saving this provider in the preset.",
       "signedIn": "Signed in",
@@ -806,9 +806,9 @@
       "proxyLabel": "Network proxy",
       "proxySaveBeforeSignIn": "Save proxy changes before signing in.",
       "saveProxy": "Save proxy",
-      "localCodeHelp": "Complete sign-in in your browser. Nanobot usually finishes automatically; if it does not, paste the authorization code below.",
+      "localCodeHelp": "Complete sign-in in your browser. GitHubResearchAgent usually finishes automatically; if it does not, paste the authorization code below.",
       "remoteCodeHelp": "Select Sign in to open xAI on your computer. After signing in, paste the authorization code shown by xAI below.",
-      "localCallbackHelp": "Complete sign-in in your browser. Nanobot usually finishes automatically; if it does not, copy the full localhost callback URL from the address bar and paste it below.",
+      "localCallbackHelp": "Complete sign-in in your browser. GitHubResearchAgent usually finishes automatically; if it does not, copy the full localhost callback URL from the address bar and paste it below.",
       "remoteCallbackHelp": "Open ChatGPT in this browser and finish signing in. When the localhost page fails to load, copy the full URL from the address bar and paste it below.",
       "authorizationCode": "Authorization code",
       "callbackUrl": "Full callback URL",
@@ -851,7 +851,7 @@
       "deleteConfirmAction": "Delete skill",
       "instructionsTitle": "Skill instructions",
       "setupRequired": "Setup required",
-      "setupDescription": "Install the missing dependency on the machine running nanobot, then check again.",
+      "setupDescription": "Install the missing dependency on the machine running GitHubResearchAgent, then check again.",
       "copySetupCommand": "Copy setup command",
       "checkAgain": "Check again",
       "marketplaceSearchFailed": "Could not search skill marketplaces.",
@@ -973,6 +973,23 @@
       "none": "No next run"
     }
   },
+  "repositoryDeleteApproval": {
+    "riskLevel": "L3 · Human approval required",
+    "title": "Delete local repository?",
+    "description": "Review the exact target bound to this approval. The agent cannot change it after you confirm.",
+    "repository": "Repository",
+    "sourcePath": "Read-only source",
+    "deleteScope": "Entire delete scope",
+    "expiresAt": "Approval",
+    "expiresValue": "Expires {{time}} · {{seconds}}s remaining",
+    "expired": "Approval expired",
+    "warningTitle": "This local action cannot be undone",
+    "warningBody": "Source cache, isolated task workspaces, and local patches for this repository will be removed. GitHub repositories and forks are not affected.",
+    "keep": "Keep project",
+    "confirm": "Delete local project",
+    "submitting": "Submitting…",
+    "expiredAction": "Approval expired"
+  },
   "connection": {
     "idle": "Idle",
     "connecting": "Connecting…",
@@ -1019,7 +1036,7 @@
       "imageQuickActions": {
         "icon": {
           "title": "Design an app icon",
-          "prompt": "Generate a clean 1:1 app icon for nanobot: friendly robot, simple vector style, soft blue and white palette, no text."
+          "prompt": "Generate a clean 1:1 app icon for GitHubResearchAgent: friendly robot, simple vector style, soft blue and white palette, no text."
         },
         "sticker": {
           "title": "Make a sticker",
@@ -1165,7 +1182,7 @@
             "description": "Cancel the active agent turn for this chat."
           },
           "restart": {
-            "title": "Restart nanobot",
+            "title": "Restart GitHubResearchAgent",
             "description": "Restart the bot process in place."
           },
           "status": {
@@ -1219,14 +1236,14 @@
         "label": "Apps",
         "cliGroup": "CLI apps",
         "mcpGroup": "MCP services",
-        "sessionGroup": "Nanobot conversations",
+        "sessionGroup": "GitHubResearchAgent conversations",
         "cliBadge": "CLI",
         "mcpBadge": "MCP",
         "cliDescription": "Use @{{name}} as a local CLI app",
         "mcpDescription": "Use @{{name}} as an MCP server",
         "cliTitle": "CLI app: {{name}}",
         "mcpTitle": "MCP server: {{name}}",
-        "sessionBadge": "Nanobot conversation",
+        "sessionBadge": "GitHubResearchAgent conversation",
         "sessionDescription": "Reference @{{name}} as a previous chat"
       },
       "encoding": "Encoding…",
@@ -1363,7 +1380,7 @@
     },
     "workspaceScopeRejected": {
       "title": "Workspace was not changed",
-      "body": "Nanobot kept the previous workspace because the requested project or access mode was rejected by the gateway."
+      "body": "GitHubResearchAgent kept the previous workspace because the requested project or access mode was rejected by the gateway."
     },
     "turnRejected": {
       "title": "Message was not sent",

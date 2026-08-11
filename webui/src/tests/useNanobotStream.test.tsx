@@ -519,6 +519,43 @@ describe("useNanobotStream", () => {
     expect(result.current.messages[0].content).toContain("panel tick");
   });
 
+  it("exposes rich UI attached to a complete assistant message and clears it on the next", () => {
+    const fake = fakeClient();
+    const { result } = renderHook(() => useNanobotStream("chat-approval", EMPTY_MESSAGES), {
+      wrapper: wrap(fake.client),
+    });
+    const approval = {
+      kind: "repository_delete_approval",
+      data: {
+        approval_id: "delete_123",
+        repository_full_name: "owner/repo",
+        commit_sha: "abc123",
+        source_path: "C:\\cache\\source",
+        cache_path: "C:\\cache",
+        expires_at: "2030-01-01T00:00:00Z",
+      },
+    };
+
+    act(() => {
+      fake.emit("chat-approval", {
+        event: "message",
+        chat_id: "chat-approval",
+        text: "Approval required",
+        agent_ui: approval,
+      });
+    });
+    expect(result.current.agentUi).toEqual(approval);
+
+    act(() => {
+      fake.emit("chat-approval", {
+        event: "message",
+        chat_id: "chat-approval",
+        text: "Deletion rejected",
+      });
+    });
+    expect(result.current.agentUi).toBeNull();
+  });
+
   it("renders live tool traces from structured tool events", () => {
     const fake = fakeClient();
     const { result } = renderHook(() => useNanobotStream("chat-tool-events", EMPTY_MESSAGES), {

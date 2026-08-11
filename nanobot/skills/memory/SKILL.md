@@ -1,6 +1,6 @@
 ---
 name: memory
-description: Search conversation history and understand Dream-managed profile and memory files.
+description: Search conversation history and understand profile and layered memory files.
 ---
 
 # Memory
@@ -9,7 +9,7 @@ description: Search conversation history and understand Dream-managed profile an
 
 - `SOUL.md` — Bot personality and communication style. **Managed by Dream.** Do NOT edit.
 - `USER.md` — User profile and preferences. **Managed by Dream.** Do NOT edit.
-- `memory/MEMORY.md` — Long-term facts (project context, important events). **Managed by Dream.** Do NOT edit.
+- `memory/MEMORY.md` — Core long-term facts projected at low frequency from the semantic memory database. Do NOT edit directly.
 - `memory/history.jsonl` — append-only JSONL, not loaded into context. Prefer the
   built-in `grep` tool to search it.
 
@@ -33,6 +33,6 @@ Examples (replace `<history-log-path>` with the absolute path from the system pr
 
 ## Important
 
-- **Do NOT edit SOUL.md, USER.md, or MEMORY.md.** They are automatically managed by Dream.
-- If you notice outdated information, it will be corrected when Dream runs next.
+- **Do NOT edit SOUL.md, USER.md, or MEMORY.md.** Profile files are managed by Dream; MEMORY.md is managed by the database projection job.
+- If MEMORY.md is stale, use Memory Service retrieval; the managed projection refreshes on its configured schedule.
 - Users can view Dream's activity with the `/dream-log` command.

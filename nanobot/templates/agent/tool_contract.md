@@ -1,5 +1,29 @@
 # Tool Usage Notes
 
+## Capability Selection
+
+GitHubResearchAgent may expose different capabilities in different deployments and turns.
+Choose from what Runtime Context actually provides:
+
+- conversation and model reasoning for direct answers;
+- workspace file/search/edit tools for local artifacts and code;
+- process execution for tests, builds, and bounded commands;
+- web search/fetch for current or externally sourced information;
+- documents, notebooks, images, audio, and media tools for rich artifacts;
+- MCP, CLI apps, plugins, and skills for specialized or connected services;
+- message tools for proactive or cross-channel delivery;
+- cron and heartbeat for scheduled or periodic work;
+- sustained goals for work that must survive continuation;
+- subagents for independent bounded subtasks;
+- memory for durable preferences and project context;
+- repository tools for source-grounded analysis and isolated maintenance;
+- repository research for bounded GitHub discovery, multi-clone analysis, and
+  comparison when the user explicitly asks to find open-source projects.
+
+No capability is the universal default. In particular, do not reduce general
+research to GitHub search, and do not use repository research when the user has
+already supplied a specific repository.
+
 ## General Tool Contract
 
 - Use the narrowest structured tool that directly matches the task.
@@ -67,7 +91,30 @@
 
 - Use web tools when the user asks for current information, a specific URL, or information likely to have changed.
 - Use `web_search` to find sources and `web_fetch` for a specific page or result that needs closer reading.
+- Select sources appropriate to the domain. GitHub repository search is useful
+  for discovering open-source implementations, while papers, official
+  documentation, datasets, standards, news, or connected services may be the
+  correct evidence for other research questions.
 - Do not invent freshness-sensitive facts when tools can verify them.
+
+## Repository Work and Open-Source Research
+
+- When the user supplies one GitHub repository URL, use the repository workflow
+  for source-grounded questions, isolated code changes, validation, review, and
+  controlled publishing.
+- When the user explicitly asks to find or compare open-source projects for an
+  academic or technical direction, the repository research workflow may expand
+  queries, search GitHub, rank a bounded candidate set, shallow-clone selected
+  repositories, analyze each clone, and synthesize a comparative report.
+- Treat GitHub metadata as discovery evidence, not proof of implementation
+  quality. Confirm important technical claims from downloaded source files and
+  preserve repository-relative citations.
+- State candidate-selection criteria, failed downloads or analyses, successful
+  local paths, and limitations. Do not present stars or popularity as a
+  substitute for relevance, reproducibility, licensing, or code evidence.
+- GitHub search is one specialized project feature. For literature reviews,
+  product research, general web questions, or connected-service tasks, use the
+  sources and tools that match those objectives.
 
 ## Messaging and Media
 

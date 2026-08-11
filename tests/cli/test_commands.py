@@ -295,7 +295,7 @@ def test_onboard_fresh_install(mock_paths):
     assert result.exit_code == 0
     assert "Created config" in result.stdout
     assert "Created workspace" in result.stdout
-    assert "nanobot is ready" in result.stdout
+    assert "GitHubResearchAgent is ready" in result.stdout
     assert config_file.exists()
     assert (workspace_dir / "AGENTS.md").exists()
     assert (workspace_dir / "memory" / "MEMORY.md").exists()
@@ -308,7 +308,7 @@ def test_onboard_recommends_webui(mock_paths):
     result = runner.invoke(app, ["onboard"])
 
     assert result.exit_code == 0
-    assert "✓ nanobot is ready. Run: nanobot webui" in result.stdout
+    assert "✓ GitHubResearchAgent is ready. Run: nanobot webui" in result.stdout
 
 
 def test_onboard_existing_config_refresh(mock_paths):
@@ -2174,7 +2174,7 @@ def test_webui_yes_creates_config_and_enables_local_websocket(
     assert "bootstrap secret was generated" in compact_output
     assert "channels.websocket.tokenIssueSecret" in compact_output
     assert "rerun without --no-open" in compact_output
-    assert "nanobot is running in this terminal" in compact_output
+    assert "GitHubResearchAgent is running in this terminal" in compact_output
     assert "Press Ctrl+C here to stop nanobot" in compact_output
 
 
@@ -2732,7 +2732,8 @@ def test_webui_foreground_refuses_occupied_webui_port(monkeypatch, tmp_path: Pat
     result = runner.invoke(app, ["webui", "--config", str(config_file), "--yes"])
 
     assert result.exit_code == 1
-    assert "nanobot cannot start because one of its local ports is already in use" in result.stdout
+    compact_output = re.sub(r"\s+", " ", result.stdout)
+    assert "GitHubResearchAgent cannot start because one of its local ports is already in use" in compact_output
     assert "--port" in result.stdout
     assert "--gateway-port" in result.stdout
 

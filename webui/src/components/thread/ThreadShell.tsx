@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { FilePreviewAvailabilityProvider } from "@/components/FilePreviewAvailabilityContext";
 import { FilePreviewPanel } from "@/components/FilePreviewPanel";
+import { RepositoryDeleteConfirm } from "@/components/RepositoryDeleteConfirm";
 import { PromptNavigator } from "@/components/thread/PromptNavigator";
 import { SessionInfoPopover } from "@/components/thread/SessionInfoPopover";
 import { ThreadComposer } from "@/components/thread/ThreadComposer";
@@ -38,6 +39,8 @@ import type {
   SettingsPayload,
   SlashCommand,
   SkillSummary,
+  AgentUIBlob,
+  RepositoryDeleteApprovalData,
   UIMessage,
   WorkspaceScopePayload,
   WorkspacesPayload,
@@ -59,6 +62,27 @@ interface PendingCanonicalHydrate {
 interface PendingHistoryLineageCommit {
   lineage: number;
   messages: UIMessage[];
+}
+
+function repositoryDeleteApprovalFromAgentUi(
+  blob: AgentUIBlob | null,
+): RepositoryDeleteApprovalData | null {
+  if (blob?.kind !== "repository_delete_approval") return null;
+  const data = blob.data;
+  if (!data || typeof data !== "object" || Array.isArray(data)) return null;
+  const candidate = data as Record<string, unknown>;
+  const required = [
+    "approval_id",
+    "repository_full_name",
+    "commit_sha",
+    "source_path",
+    "cache_path",
+    "expires_at",
+  ] as const;
+  if (required.some((key) => typeof candidate[key] !== "string" || !candidate[key])) {
+    return null;
+  }
+  return candidate as unknown as RepositoryDeleteApprovalData;
 }
 
 interface PendingCanonicalCommit {
@@ -656,6 +680,9 @@ export function ThreadShell({
   const [filePreviewWidth, setFilePreviewWidth] = useState(FILE_PREVIEW_DEFAULT_WIDTH);
   const [quotedContext, setQuotedContext] = useState<string | null>(null);
   const [composerFocusSignal, setComposerFocusSignal] = useState(0);
+  const [dismissedDeleteApprovalId, setDismissedDeleteApprovalId] =
+    useState<string | null>(null);
+  const [deleteApprovalBusy, setDeleteApprovalBusy] = useState(false);
   const shellRef = useRef<HTMLElement | null>(null);
   const filePreviewWidthRef = useRef(FILE_PREVIEW_DEFAULT_WIDTH);
   const filePreviewCloseTimerRef = useRef<number | null>(null);
@@ -695,6 +722,7 @@ export function ThreadShell({
     isStreaming,
     runStartedAt,
     goalState,
+    agentUi,
     send,
     transcribeAudio,
     stop,
@@ -703,6 +731,14 @@ export function ThreadShell({
     streamError,
     dismissStreamError,
   } = useNanobotStream(chatId, initial, hasPendingToolCalls, handleTurnEnd);
+  const repositoryDeleteApproval = useMemo(
+    () => repositoryDeleteApprovalFromAgentUi(agentUi),
+    [agentUi],
+  );
+  const visibleDeleteApproval =
+    repositoryDeleteApproval?.approval_id === dismissedDeleteApprovalId
+      ? null
+      : repositoryDeleteApproval;
 
   useLayoutEffect(() => {
     if (currentUiMessagesRef.current === messages) return;
@@ -734,6 +770,8 @@ export function ThreadShell({
     setFilePreviewPath(null);
     setQuotedContext(null);
     setSubmittedViewportTurnId(null);
+    setDismissedDeleteApprovalId(null);
+    setDeleteApprovalBusy(false);
   }, [historyKey]);
 
   const handleQuoteSelection = useCallback((text: string) => {
@@ -1253,8 +1291,25 @@ export function ThreadShell({
         activeViewportTurnByChatIdRef.current.set(chatId, submitted.turnId);
         setSubmittedViewportTurnId(submitted.turnId);
       }
+      return submitted;
     },
     [chatId, send, withWorkspaceScope],
+  );
+
+  const handleRepositoryDeleteDecision = useCallback(
+    (approve: boolean) => {
+      if (!visibleDeleteApproval || deleteApprovalBusy) return;
+      setDeleteApprovalBusy(true);
+      const command = approve ? "/approve-delete" : "/reject-delete";
+      const submitted = handleThreadSend(
+        `${command} ${visibleDeleteApproval.approval_id}`,
+      );
+      if (submitted) {
+        setDismissedDeleteApprovalId(visibleDeleteApproval.approval_id);
+      }
+      setDeleteApprovalBusy(false);
+    },
+    [deleteApprovalBusy, handleThreadSend, visibleDeleteApproval],
   );
 
   const handleOpenFilePreview = useCallback((path: string) => {
@@ -1523,6 +1578,18 @@ export function ThreadShell({
           isClosing={filePreviewClosing}
           onResizeStart={handleFilePreviewResizeStart}
           onClose={handleCloseFilePreview}
+        />
+      ) : null}
+      {visibleDeleteApproval ? (
+        <RepositoryDeleteConfirm
+          approval={visibleDeleteApproval}
+          open
+          busy={deleteApprovalBusy}
+          onDismiss={() =>
+            setDismissedDeleteApprovalId(visibleDeleteApproval.approval_id)
+          }
+          onReject={() => handleRepositoryDeleteDecision(false)}
+          onConfirm={() => handleRepositoryDeleteDecision(true)}
         />
       ) : null}
     </section>

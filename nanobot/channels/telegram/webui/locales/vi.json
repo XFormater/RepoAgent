@@ -1,5 +1,5 @@
 {
-  "description": "Trò chuyện với nanobot từ Telegram.",
+  "description": "Trò chuyện với GitHubResearchAgent từ Telegram.",
   "requirements": "Token bot, người dùng được phép và gateway",
   "setup": {
     "docsLabel": "Mở hướng dẫn Telegram",

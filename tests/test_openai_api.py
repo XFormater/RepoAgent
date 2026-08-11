@@ -255,13 +255,14 @@ async def test_successful_request_uses_fixed_api_session(aiohttp_client, mock_ag
     body = await resp.json()
     assert body["choices"][0]["message"]["content"] == "mock response"
     assert body["model"] == "test-model"
-    mock_agent.process_direct.assert_called_once_with(
-        content="hello",
-        media=None,
-        session_key=API_SESSION_KEY,
-        channel="api",
-        chat_id=API_CHAT_ID,
-    )
+    mock_agent.process_direct.assert_called_once()
+    call_kwargs = mock_agent.process_direct.call_args.kwargs
+    assert call_kwargs["content"] == "hello"
+    assert call_kwargs["media"] is None
+    assert call_kwargs["session_key"] == API_SESSION_KEY
+    assert call_kwargs["channel"] == "api"
+    assert call_kwargs["chat_id"] == API_CHAT_ID
+    assert len(call_kwargs["hooks"]) == 1
 
 
 @pytest.mark.skipif(not HAS_AIOHTTP, reason="aiohttp not installed")
@@ -340,6 +341,64 @@ async def test_fixed_session_requests_are_serialized(aiohttp_client) -> None:
     assert r1.status == 200
     assert r2.status == 200
     assert order == ["start:first", "end:first", "start:second", "end:second"]
+
+
+@pytest.mark.skipif(not HAS_AIOHTTP, reason="aiohttp not installed")
+@pytest.mark.asyncio
+async def test_concurrent_sessions_report_request_local_usage(aiohttp_client) -> None:
+    first_started = asyncio.Event()
+    second_recorded = asyncio.Event()
+    agent = MagicMock()
+
+    async def process(content, **kwargs):
+        capture = kwargs["hooks"][0]
+        capture.usage = {
+            "prompt_tokens": 11 if content == "first" else 22,
+            "completion_tokens": 1 if content == "first" else 2,
+        }
+        if content == "first":
+            agent._last_usage = {"prompt_tokens": 11, "completion_tokens": 1}
+            first_started.set()
+            await second_recorded.wait()
+        else:
+            await first_started.wait()
+            agent._last_usage = {"prompt_tokens": 22, "completion_tokens": 2}
+            second_recorded.set()
+        return content
+
+    agent.process_direct = process
+    agent._connect_mcp = AsyncMock()
+    agent.close_mcp = AsyncMock()
+    agent._last_usage = {}
+    app = create_app(agent, model_name="m", api_key=API_KEY)
+    client = await aiohttp_client(app)
+
+    async def send(content: str, session_id: str):
+        response = await client.post(
+            "/v1/chat/completions",
+            headers=AUTH_HEADERS,
+            json={
+                "messages": [{"role": "user", "content": content}],
+                "session_id": session_id,
+            },
+        )
+        return await response.json()
+
+    first_body, second_body = await asyncio.gather(
+        send("first", "one"),
+        send("second", "two"),
+    )
+
+    assert first_body["usage"] == {
+        "prompt_tokens": 11,
+        "completion_tokens": 1,
+        "total_tokens": 12,
+    }
+    assert second_body["usage"] == {
+        "prompt_tokens": 22,
+        "completion_tokens": 2,
+        "total_tokens": 24,
+    }
 
 
 @pytest.mark.skipif(not HAS_AIOHTTP, reason="aiohttp not installed")

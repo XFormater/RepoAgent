@@ -579,7 +579,7 @@ class SlackChannel(BaseChannel):
     @staticmethod
     def _download_failure_marker(marker_type: str, name: str, reason: str) -> str:
         return (
-            f"[{marker_type}: {name}: {reason}; not available to nanobot. "
+            f"[{marker_type}: {name}: {reason}; not available to GitHubResearchAgent. "
             "Check Slack files:read scope, reinstall the Slack app, and ensure the bot can access the file.]"
         )
 

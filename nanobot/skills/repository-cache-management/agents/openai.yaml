@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repository Cache Management"
+  short_description: "Manage downloaded repositories with explicit deletion approval"
+  default_prompt: "Use $repository-cache-management to locate a downloaded repository and prepare a safe deletion approval."

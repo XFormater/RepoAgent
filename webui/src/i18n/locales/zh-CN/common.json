@@ -1,12 +1,12 @@
 {
   "app": {
-    "brand": "nanobot",
+    "brand": "GitHubResearchAgent",
     "loading": {
-      "connecting": "正在连接 nanobot…",
-      "boot": "正在加载 nanobot…"
+      "connecting": "正在连接 GitHubResearchAgent…",
+      "boot": "正在加载 GitHubResearchAgent…"
     },
     "error": {
-      "title": "无法连接到 nanobot",
+      "title": "无法连接到 GitHubResearchAgent",
       "gatewayHint": "请确认网关已启动（`nanobot gateway`），并且当前页面与网关运行在同一台机器上。"
     },
     "auth": {
@@ -23,8 +23,8 @@
     },
     "system": {
       "section": "系统",
-      "restartHint": "重启 nanobot 以应用运行时更改。",
-      "restart": "重启 nanobot",
+      "restartHint": "重启 GitHubResearchAgent 以应用运行时更改。",
+      "restart": "重启 GitHubResearchAgent",
       "restarting": "正在重启...",
       "restartEngine": "重启引擎",
       "restartingEngine": "正在重启引擎..."
@@ -33,11 +33,11 @@
       "completed": "重启已完成，用时 {{seconds}} 秒。"
     },
     "documentTitle": {
-      "base": "nanobot",
-      "chat": "{{title}} · nanobot"
+      "base": "GitHubResearchAgent",
+      "chat": "{{title}} · GitHubResearchAgent"
     },
     "meta": {
-      "description": "nanobot Web UI —— 与你的 nanobot 工作区对话。"
+      "description": "GitHubResearchAgent Web UI —— 与你的智能体工作区对话。"
     },
     "pairing": {
       "title": "配对聊天用户",
@@ -173,7 +173,7 @@
       "language": "语言",
       "provider": "提供商",
       "model": "模型",
-      "restart": "重启 nanobot",
+      "restart": "重启 GitHubResearchAgent",
       "configPath": "配置路径",
       "activePreset": "当前预设",
       "gateway": "网关",
@@ -243,7 +243,7 @@
       "defaultImageSize": "发送给支持此选项的提供商的尺寸提示。",
       "maxImagesPerTurn": "单次 generate_image 请求可生成的图片上限。",
       "timezone": "用于日程和需要时间感知的回复。",
-      "cliAppsCatalog": "只安装 nanobot 可本地运行的应用 CLI 适配器；不会改动原生应用。",
+      "cliAppsCatalog": "只安装 GitHubResearchAgent 可本地运行的应用 CLI 适配器；不会改动原生应用。",
       "cliAppsFilter": "按应用、类别或能力搜索。",
       "localServiceAccess": "允许完全访问权限下的 shell 命令访问 localhost 服务。",
       "webuiDefaultAccess": "用于没有单独项目权限的 Web 聊天。",
@@ -289,7 +289,7 @@
       "readyStatus": "就绪",
       "readyTry": "试试 @{{name}}",
       "readyCopied": "已复制",
-      "readyPrompt": "让 nanobot 在这个任务中使用 @{{name}}。",
+      "readyPrompt": "让 GitHubResearchAgent 在这个任务中使用 @{{name}}。",
       "openChat": "回到对话",
       "unsupported": "暂不支持",
       "unavailable": "不可用",
@@ -328,7 +328,7 @@
       "saveCustom": "保存 MCP",
       "configImport": "导入 mcp.json",
       "importConfig": "导入",
-      "restartRequired": "重启 nanobot 以连接更新后的 MCP 工具。",
+      "restartRequired": "重启 GitHubResearchAgent 以连接更新后的 MCP 工具。",
       "toolsFound": "{{count}} 个工具",
       "loading": "正在加载 MCP 预设...",
       "empty": "没有匹配的 MCP 预设。",
@@ -392,11 +392,11 @@
       "loadError": "无法加载设置",
       "unsaved": "有未保存的更改。",
       "upToDate": "已是最新。",
-      "savedRestart": "已保存。重启 nanobot 后生效。",
+      "savedRestart": "已保存。重启 GitHubResearchAgent 后生效。",
       "restartAfterSaving": "保存更改后，在合适时重启。",
       "savedRestartApply": "已保存。准备好后重启。",
       "imageProviderRestart": "图片提供商更改已保存。准备好后重启。",
-      "hostRestartAfterSaving": "保存后 nanobot 会重启引擎。",
+      "hostRestartAfterSaving": "保存后 GitHubResearchAgent 会重启引擎。",
       "hostRestartPending": "已保存。准备好后会重启引擎。",
       "hostApiUnavailable": "宿主操作仅在原生应用中可用。",
       "logsOpened": "已打开日志文件夹。",
@@ -420,7 +420,7 @@
       "exporting": "正在导出..."
     },
     "byok": {
-      "description": "使用自己的提供商密钥。nanobot 会从当前配置读取这些值，只有已配置的提供商才能用于模型预设。",
+      "description": "使用自己的提供商密钥。GitHubResearchAgent 会从当前配置读取这些值，只有已配置的提供商才能用于模型预设。",
       "configured": "已配置",
       "notConfigured": "未配置",
       "configuredSection": "已配置",
@@ -539,7 +539,7 @@
     "api": {
       "title": "API 服务",
       "openaiCompatible": "OpenAI 兼容 API",
-      "description": "让 SDK 和其他智能体通过本地 /v1 接口连接 nanobot。",
+      "description": "让 SDK 和其他智能体通过本地 /v1 接口连接 GitHubResearchAgent。",
       "start": "启动 API 服务",
       "starting": "正在启动...",
       "stop": "停止",
@@ -559,12 +559,12 @@
     },
     "observability": {
       "title": "可观测性",
-      "configured": "nanobot 已检测到追踪凭证。",
-      "environment": "设置 LANGFUSE_SECRET_KEY 和 LANGFUSE_PUBLIC_KEY 后重启 nanobot。",
+      "configured": "GitHubResearchAgent 已检测到追踪凭证。",
+      "environment": "设置 LANGFUSE_SECRET_KEY 和 LANGFUSE_PUBLIC_KEY 后重启 GitHubResearchAgent。",
       "enable": "启用追踪支持"
     },
     "apps": {
-      "description": "将工具接入 nanobot，然后在对话中通过 @ 调用。",
+      "description": "将工具接入 GitHubResearchAgent，然后在对话中通过 @ 调用。",
       "cliLabel": "应用",
       "mcpLabel": "集成",
       "channelLabel": "渠道",
@@ -579,21 +579,21 @@
       "featured": "工具",
       "loading": "正在加载应用...",
       "empty": "当前视图没有匹配的工具。",
-      "restartRequired": "重启 nanobot 以应用更新后的应用和集成。"
+      "restartRequired": "重启 GitHubResearchAgent 以应用更新后的应用和集成。"
     },
     "channels": {
-      "description": "把聊天应用、邮箱和 WebUI 连接到 nanobot。",
+      "description": "把聊天应用、邮箱和 WebUI 连接到 GitHubResearchAgent。",
       "caption": "{{enabled}} 个运行中 · 共 {{total}} 个渠道",
       "searchPlaceholder": "搜索渠道",
       "backToChannels": "所有渠道",
       "catalog": "渠道",
       "loading": "正在加载渠道...",
       "empty": "没有匹配的渠道。",
-      "restartRequired": "重启 nanobot 以应用更新后的渠道支持。",
+      "restartRequired": "重启 GitHubResearchAgent 以应用更新后的渠道支持。",
       "requires": "需要：{{requirements}}",
       "setUp": "设置",
       "setupGuide": "配置指南",
-      "setupSummary": "启用只会开启 nanobot 对该渠道的支持。请补充平台凭据，然后重启 nanobot。",
+      "setupSummary": "启用只会开启 GitHubResearchAgent 对该渠道的支持。请补充平台凭据，然后重启 GitHubResearchAgent。",
       "configKeys": "配置字段",
       "enable": "启用渠道",
       "disable": "禁用渠道",
@@ -681,7 +681,7 @@
       "loading": "正在加载自动任务...",
       "noMatches": "当前视图没有匹配的自动任务。",
       "empty": "暂无自动任务。",
-      "emptyHint": "请从它应该运行的来源处创建，这样 nanobot 才能保留正确上下文。",
+      "emptyHint": "请从它应该运行的来源处创建，这样 GitHubResearchAgent 才能保留正确上下文。",
       "oneShot": "一次性",
       "systemTask": "系统管理的自动任务",
       "localTrigger": "本地触发器",
@@ -798,7 +798,7 @@
       "signedInAs": "已登录为 {{account}}",
       "signInHelp": "从这台设备登录；不会在配置中保存 API 密钥。",
       "remoteSignInHelp": "点击“登录”在你的电脑上打开 xAI，完成登录后粘贴页面显示的授权码。",
-      "codexRemoteSignInHelp": "在此浏览器中登录，然后将完整的 localhost 回调 URL 粘贴回 nanobot。",
+      "codexRemoteSignInHelp": "在此浏览器中登录，然后将完整的 localhost 回调 URL 粘贴回 GitHubResearchAgent。",
       "signInRequired": "需要登录",
       "signInBeforeSaving": "请先登录此提供商，再保存模型预设。",
       "signedIn": "已登录",
@@ -806,9 +806,9 @@
       "proxyLabel": "网络代理",
       "proxySaveBeforeSignIn": "请先保存代理更改再登录。",
       "saveProxy": "保存代理",
-      "localCodeHelp": "请在浏览器中完成登录。nanobot 通常会自动完成；若未自动完成，请将授权码粘贴到下方。",
+      "localCodeHelp": "请在浏览器中完成登录。GitHubResearchAgent 通常会自动完成；若未自动完成，请将授权码粘贴到下方。",
       "remoteCodeHelp": "点击“登录”在你的电脑上打开 xAI。完成登录后，请将 xAI 显示的授权码粘贴到下方。",
-      "localCallbackHelp": "请在浏览器中完成登录。nanobot 通常会自动完成；若未自动完成，请复制地址栏中的完整 localhost 回调 URL 并粘贴到下方。",
+      "localCallbackHelp": "请在浏览器中完成登录。GitHubResearchAgent 通常会自动完成；若未自动完成，请复制地址栏中的完整 localhost 回调 URL 并粘贴到下方。",
       "remoteCallbackHelp": "在此浏览器中打开 ChatGPT 并完成登录。当 localhost 页面无法打开时，请复制地址栏中的完整 URL 并粘贴到下方。",
       "authorizationCode": "授权码",
       "callbackUrl": "完整回调 URL",
@@ -851,7 +851,7 @@
       "deleteConfirmAction": "删除技能",
       "instructionsTitle": "技能说明",
       "setupRequired": "需要设置",
-      "setupDescription": "请在运行 nanobot 的设备上安装缺少的依赖，然后重新检查。",
+      "setupDescription": "请在运行 GitHubResearchAgent 的设备上安装缺少的依赖，然后重新检查。",
       "copySetupCommand": "复制设置命令",
       "checkAgain": "重新检查",
       "marketplaceSearchFailed": "暂时无法搜索技能市场。",
@@ -973,6 +973,23 @@
       "none": "没有下次运行"
     }
   },
+  "repositoryDeleteApproval": {
+    "riskLevel": "L3 · 必须人工审批",
+    "title": "删除本地项目？",
+    "description": "请核对本次审批绑定的确切目标。确认后，Agent 无法更改删除对象。",
+    "repository": "开源项目",
+    "sourcePath": "只读源码路径",
+    "deleteScope": "完整删除范围",
+    "expiresAt": "审批有效期",
+    "expiresValue": "{{time}} 到期 · 剩余 {{seconds}} 秒",
+    "expired": "审批已过期",
+    "warningTitle": "本地删除后无法撤销",
+    "warningBody": "将删除该项目的源码缓存、隔离任务工作区和本地 Patch；GitHub 上的仓库及 Fork 不受影响。",
+    "keep": "保留项目",
+    "confirm": "确认删除本地项目",
+    "submitting": "正在提交…",
+    "expiredAction": "审批已过期"
+  },
   "connection": {
     "idle": "空闲",
     "connecting": "连接中…",
@@ -1019,7 +1036,7 @@
       "imageQuickActions": {
         "icon": {
           "title": "设计应用图标",
-          "prompt": "生成一个干净的 1:1 nanobot 应用图标：友好的机器人，简洁矢量风格，蓝白柔和配色，不要文字。"
+          "prompt": "生成一个干净的 1:1 GitHubResearchAgent 应用图标：友好的机器人，简洁矢量风格，蓝白柔和配色，不要文字。"
         },
         "sticker": {
           "title": "制作贴纸",
@@ -1164,7 +1181,7 @@
             "description": "取消这个对话中正在运行的智能体回合。"
           },
           "restart": {
-            "title": "重启 nanobot",
+            "title": "重启 GitHubResearchAgent",
             "description": "原地重启 bot 进程。"
           },
           "status": {
@@ -1218,14 +1235,14 @@
         "label": "应用",
         "cliGroup": "CLI 应用",
         "mcpGroup": "MCP 服务",
-        "sessionGroup": "Nanobot 对话",
+        "sessionGroup": "GitHubResearchAgent 对话",
         "cliBadge": "CLI",
         "mcpBadge": "MCP",
         "cliDescription": "使用 @{{name}} 调用本地 CLI",
         "mcpDescription": "使用 @{{name}} 调用 MCP 服务",
         "cliTitle": "CLI 应用：{{name}}",
         "mcpTitle": "MCP 服务：{{name}}",
-        "sessionBadge": "Nanobot 对话",
+        "sessionBadge": "GitHubResearchAgent 对话",
         "sessionDescription": "引用历史会话 @{{name}}"
       },
       "encoding": "处理中…",
@@ -1363,7 +1380,7 @@
     },
     "workspaceScopeRejected": {
       "title": "工作区未更改",
-      "body": "网关拒绝了请求的项目或访问权限，Nanobot 已继续使用之前的工作区。"
+      "body": "网关拒绝了请求的项目或访问权限，GitHubResearchAgent 已继续使用之前的工作区。"
     },
     "turnRejected": {
       "title": "消息未发送",

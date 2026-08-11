@@ -25,6 +25,7 @@ from nanobot.agent.tools.schema import (
     StringSchema,
     tool_parameters_schema,
 )
+from nanobot.branding import AGENT_DISPLAY_NAME
 from nanobot.config_base import Base
 from nanobot.utils.helpers import build_image_content_blocks
 
@@ -575,7 +576,7 @@ class WebSearchTool(Tool):
         headers = {
             "Content-Type": "application/json",
             "User-Agent": self.user_agent,
-            "X-Keenable-Title": "nanobot",
+            "X-Keenable-Title": AGENT_DISPLAY_NAME,
         }
         # Without a key, the token-less /public endpoint serves the free tier.
         url = _KEENABLE_SEARCH_API_URL

@@ -36,6 +36,8 @@ Pick the row that matches what you want to accomplish next:
 | Generate images | [Image Generation](./image-generation.md) |
 | Schedule work or create a local trigger | [Automations](./automations.md) |
 | Understand and manage long-term memory | [Memory](./memory.md) |
+| Operate supervised multi-agent workflows | [Production Multi-Agent Harness](./multi-agent-harness.md) |
+| Analyze and maintain a real GitHub repository | [Repository Agent](./repository-agent.md) |
 | Run nanobot continuously | [Deployment](./deployment.md) |
 | Run separate bots or workspaces | [Multiple Instances](./multiple-instances.md) |
 | Call nanobot from Python | [Python SDK](./python-sdk.md) |

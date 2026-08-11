@@ -49,6 +49,27 @@ async def test_resolve_runtime_context_preserves_provider_order() -> None:
     ]
 
 
+@pytest.mark.asyncio
+async def test_runtime_context_preserves_post_persist_callback() -> None:
+    committed: list[str] = []
+
+    async def commit() -> None:
+        committed.append("done")
+
+    async def provider(_request: RequestContext):
+        return RuntimeContextBlock(source="durable", content="payload", on_persist=commit)
+
+    blocks = await resolve_runtime_context(
+        [provider],
+        RequestContext(channel="cli", chat_id="direct"),
+    )
+
+    callback = blocks[0].on_persist
+    assert callback is commit
+    await callback()
+    assert committed == ["done"]
+
+
 def test_webui_quote_is_bounded_and_projected_as_model_only_context() -> None:
     raw_quote = "  selected\x00\x07 excerpt\r\n  " + ("x" * MAX_WEBUI_QUOTE_CHARS)
     normalized = normalize_webui_quote(raw_quote)

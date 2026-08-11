@@ -140,7 +140,7 @@ a comma-separated `NANOBOT_CHANNELS` build argument:
 NANOBOT_CHANNELS=telegram,slack docker compose build
 ```
 
-The image keeps nanobot in a virtual environment owned by its built-in non-root
+The image keeps GitHubResearchAgent in a virtual environment owned by its built-in non-root
 runtime user (UID 1000). If an enabled channel was not preinstalled, gateway
 startup can therefore install its manifest-declared dependencies. Rebuilding
 with `NANOBOT_CHANNELS` keeps that installation reproducible instead of relying
@@ -152,6 +152,15 @@ is not guaranteed write access to the virtual environment.
 docker compose run --rm nanobot-cli onboard   # first-time setup
 vim ~/.nanobot/config.json                     # add API keys
 docker compose up -d nanobot-gateway           # start gateway
+```
+
+For the durable multi-agent topology, enable both database and worker profiles.
+PostgreSQL/Redis health checks gate Worker startup; the Worker performs Outbox,
+deadline, retention and abandoned-lease maintenance in addition to consuming Tasks.
+
+```bash
+docker compose --profile memory --profile harness up -d
+docker compose logs -f harness-worker
 ```
 
 ```bash

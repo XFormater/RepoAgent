@@ -48,7 +48,7 @@ Generate a new image:
 
 ```text
 generate_image(
-  prompt="A minimal app icon for nanobot: friendly robot head, rounded square, soft blue and white palette, clean vector style, no text",
+  prompt="A minimal app icon for GitHubResearchAgent: friendly robot head, rounded square, soft blue and white palette, clean vector style, no text",
   aspect_ratio="1:1",
   image_size="1K"
 )

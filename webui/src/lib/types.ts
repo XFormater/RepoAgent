@@ -276,6 +276,15 @@ export interface AgentUIBlob {
   data?: unknown;
 }
 
+export interface RepositoryDeleteApprovalData {
+  approval_id: string;
+  repository_full_name: string;
+  commit_sha: string;
+  source_path: string;
+  cache_path: string;
+  expires_at: string;
+}
+
 /** WebSocket snapshot for sustained goals (`goal_state` events; keyed by ``chat_id``). */
 export interface GoalStateWsPayload {
   active: boolean;

@@ -906,7 +906,7 @@ export class NanobotClient {
       if (wsInboundDebugEnabled()) {
         const raw = typeof ev.data === "string" ? ev.data : String(ev.data);
         console.warn(
-          "[nanobot ws inbound] invalid JSON",
+          "[GitHubResearchAgent ws inbound] invalid JSON",
           raw.length > 400 ? `${raw.slice(0, 400)}… (${raw.length} chars)` : raw,
         );
       }
@@ -914,7 +914,7 @@ export class NanobotClient {
     }
 
     if (wsInboundDebugEnabled()) {
-      console.log("[nanobot ws inbound]", summarizeInboundWsPayload(parsed));
+      console.log("[GitHubResearchAgent ws inbound]", summarizeInboundWsPayload(parsed));
     }
 
     if (parsed.event === "error" && !parsed.turn_id) {

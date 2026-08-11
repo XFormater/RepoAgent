@@ -252,7 +252,7 @@ def test_identity_has_no_behavioral_instructions(tmp_path) -> None:
     builder = ContextBuilder(workspace)
 
     identity = builder._get_identity(channel=None)
-    assert "You are nanobot" not in identity
+    assert "You are GitHubResearchAgent" not in identity
     assert "Act, don't narrate" not in identity
     assert "Execution Rules" not in identity
 
@@ -380,7 +380,7 @@ def test_template_memory_md_is_skipped(tmp_path) -> None:
 
     # This block is produced only when populated long-term memory is injected.
     assert "# Memory\n\n## Long-term Memory" not in prompt
-    assert "This file is automatically updated by nanobot" not in prompt
+    assert "This file is automatically updated by GitHubResearchAgent" not in prompt
 
 
 def test_customized_memory_md_is_injected(tmp_path, monkeypatch) -> None:

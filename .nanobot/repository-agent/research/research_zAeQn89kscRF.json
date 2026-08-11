@@ -1,0 +1,14 @@
+{
+  "research_id": "research_zAeQn89kscRF",
+  "session_key": "cli:direct",
+  "actor": "user",
+  "direction": "仅回复：GitHubResearchAgent READY",
+  "queries": [],
+  "candidates": [],
+  "selected": [],
+  "analyses": [],
+  "status": "failed",
+  "report": null,
+  "created_at": "2026-08-11T06:16:12.019484Z",
+  "updated_at": "2026-08-11T06:16:16.766929Z"
+}

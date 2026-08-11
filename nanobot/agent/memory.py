@@ -654,7 +654,10 @@ class MemoryStore:
         skills_dir.mkdir(parents=True, exist_ok=True)
 
         extra_read = [BUILTIN_SKILLS_DIR] if BUILTIN_SKILLS_DIR.exists() else None
-        editable_files = [self.memory_file, self.soul_file, self.user_file]
+        # MEMORY.md is projected from the semantic database by the weekly
+        # memory-file-sync job. Dream may read it for classification context,
+        # but only maintains personality/profile files and skills.
+        editable_files = [self.soul_file, self.user_file]
 
         tools.register(ReadFileTool(
             workspace=workspace,

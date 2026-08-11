@@ -45,12 +45,12 @@ export function channelSetup(
     officialLabel: setupMessages?.officialLabel,
     summary:
       setupMessages?.summary
-      ?? "Enable turns on this channel in nanobot, but this integration still needs platform-specific setup before it can receive messages.",
+      ?? "Enable turns on this channel in GitHubResearchAgent, but this integration still needs platform-specific setup before it can receive messages.",
     tryIt: setupMessages?.tryIt,
     steps: setupMessages?.steps ?? [
       `Open ~/.nanobot/config.json and find channels.${feature.name}.`,
       "Add the credentials required by that platform, using the channel documentation as the source of truth.",
-      "Restart nanobot, then send a small test message from that platform.",
+      "Restart GitHubResearchAgent, then send a small test message from that platform.",
     ],
     fields: definition?.fields?.map((field) => localizeField(field.key)),
     manualFields: definition?.manualFields?.map((field) => localizeField(field.key)),
@@ -188,7 +188,7 @@ export function localizedChannelDisplayName(
 
 export function channelDescription(feature: NanobotFeatureInfo, t: ReturnType<typeof useTranslation>["t"]): string {
   const fallback =
-    `Use nanobot from ${channelDisplayName(feature)}.`;
+    `Use GitHubResearchAgent from ${channelDisplayName(feature)}.`;
   return channelTranslator(t, channelUiOwner(feature.name))("description", fallback);
 }
 

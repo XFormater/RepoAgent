@@ -2274,6 +2274,39 @@ Disabled skills are excluded from the main agent's skill summary, from always-on
 |--------|---------|-------------|
 | `agents.defaults.disabledSkills` | `[]` | List of skill directory names to exclude from loading. Applies to both built-in skills and workspace skills. |
 
+## Multi-Agent Harness
+
+The Harness controls supervised Planner, Worker, and Reviewer agents. It is enabled by
+default. In production, use PostgreSQL for durable workflow state and Redis for Streams,
+idempotency, and Worker leases:
+
+```json
+{
+  "harness": {
+    "enabled": true,
+    "backend": "postgres_redis",
+    "keyPrefix": "nanobot:harness",
+    "mailboxTtl": 86400,
+    "idempotencyTtl": 86400,
+    "messageClaimIdleMs": 60000
+  }
+}
+```
+
+| Option | Default | Description |
+|---|---:|---|
+| `harness.enabled` | `true` | Enables the configured durable backend. `false` forces the in-process compatibility store; it does not remove role/context safety checks. |
+| `harness.backend` | `auto` | `auto`, `memory`, or `postgres_redis`. `memory` is for tests/development only. |
+| `harness.keyPrefix` | `nanobot:harness` | Redis namespace; use a distinct value per isolated deployment. |
+| `harness.mailboxTtl` | `86400` | Redis Stream retention in seconds. |
+| `harness.idempotencyTtl` | `86400` | Redis delivery-deduplication TTL in seconds. PostgreSQL remains the durable Task/Outbox dedupe authority. |
+| `harness.messageClaimIdleMs` | `60000` | Pending Stream idle time before another consumer can reclaim delivery. |
+
+`postgres_redis` reuses `memory.storage.metadataDb.dsn` and
+`memory.storage.redis.url`; both must be configured. See
+[Production Multi-Agent Harness](./multi-agent-harness.md) for roles, state transitions,
+context isolation, failure recovery, metrics, and the deployment checklist.
+
 ## Tool Hint Max Length
 
 Tool hints are the short progress messages shown when the agent calls tools (e.g. `$ cd …/project && npm test`). By default, these are truncated at 40 characters, which can make long commands hard to read.

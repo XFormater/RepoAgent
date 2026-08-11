@@ -25,6 +25,7 @@ from nanobot.agent import model_presets as preset_helpers
 from nanobot.agent.autocompact import AutoCompact
 from nanobot.agent.automation_turns import publish_next_deferred_turn
 from nanobot.agent.context import ContextBuilder
+from nanobot.agent.context_orchestrator import ContextOrchestrator
 from nanobot.agent.cron_turns import CronTurnCoordinator
 from nanobot.agent.hook import AgentHook, AgentTurnHookFactory
 from nanobot.agent.memory import Consolidator
@@ -43,12 +44,13 @@ from nanobot.agent.turn_delivery import (
 )
 from nanobot.agent.turn_delivery import TurnRoute as TurnRoute
 from nanobot.agent.turn_hooks import AgentTurnHookSpec, build_agent_turn_hook
-from nanobot.bus.events import InboundMessage, OutboundMessage
+from nanobot.bus.events import OUTBOUND_META_AGENT_UI, InboundMessage, OutboundMessage
 from nanobot.bus.outbound_events import StreamedResponseEvent
 from nanobot.bus.queue import MessageBus
 from nanobot.bus.runtime_events import RuntimeEventBus
 from nanobot.command import CommandContext, CommandRouter, register_builtin_commands
 from nanobot.config.schema import AgentDefaults, ModelPresetConfig
+from nanobot.memory_system.integration import record_for_turn, retrieve_for_turn
 from nanobot.providers.base import LLMProvider, ProviderConversationState
 from nanobot.providers.factory import ProviderSnapshot
 from nanobot.runtime_context import (
@@ -57,12 +59,12 @@ from nanobot.runtime_context import (
     RuntimeContextBlock,
     RuntimeContextProvider,
     append_runtime_context,
-    resolve_runtime_context,
     runtime_context_blocks_from_metadata,
 )
 from nanobot.security.workspace_access import (
     WorkspaceScopeResolver,
     bind_workspace_scope,
+    build_workspace_scope,
     reset_workspace_scope,
 )
 from nanobot.session import turn_continuation
@@ -100,9 +102,13 @@ if TYPE_CHECKING:
         Config,
         MCPServerConfig,
         ProviderConfig,
+        RepositoryAgentConfig,
         ToolsConfig,
     )
     from nanobot.cron.service import CronService
+    from nanobot.harness.config import HarnessConfig
+    from nanobot.memory_system.config import MemorySettings
+    from nanobot.memory_system.service import LongTermMemoryService
     from nanobot.triggers.local_store import LocalTriggerStore
 
 _T = TypeVar("_T")
@@ -137,6 +143,7 @@ class TurnContext:
     stop_reason: str = ""
     had_injections: bool = False
     streamed_content: bool = False
+    agent_ui: dict[str, Any] | None = None
 
     input_persisted_early: bool = False
     save_skip: int = 0
@@ -196,6 +203,10 @@ class AgentLoop:
     @property
     def tool_names(self) -> list[str]:
         return self.tools.tool_names
+
+    @property
+    def unified_session(self) -> bool:
+        return self._unified_session
 
     @property
     def provider(self) -> LLMProvider:
@@ -290,6 +301,10 @@ class AgentLoop:
         restart_mode: str = "auto",
         local_trigger_store: LocalTriggerStore | None = None,
         idle_compact_check_interval_seconds: int = 0,
+        repository_agent_config: RepositoryAgentConfig | None = None,
+        memory_config: MemorySettings | None = None,
+        harness_config: HarnessConfig | None = None,
+        long_term_memory: LongTermMemoryService | None = None,
     ):
         from nanobot.config.schema import ToolsConfig
 
@@ -373,12 +388,82 @@ class AgentLoop:
         self.context = ContextBuilder(workspace, timezone=timezone, disabled_skills=disabled_skills)
         self.sessions = session_manager or SessionManager(workspace)
         self.sessions.set_file_cap_archiver(self.context.memory.raw_archive)
+        self.long_term_memory = long_term_memory
+        if self.long_term_memory is None and memory_config is not None and memory_config.enabled:
+            from nanobot.memory_system.service import build_memory_service
+
+            self.long_term_memory = build_memory_service(
+                memory_config,
+                provider=provider,
+                default_model=initial_model,
+            )
         self.tools = ToolRegistry()
         # One file-read/write tracker per logical session. The tool registry is
         # shared by this loop, so tools resolve the active state via contextvars.
         self._file_state_store = FileStateStore()
         self._exec_session_manager = ExecSessionManager()
-        self.runner = AgentRunner()
+        from nanobot.harness import HarnessService
+
+        harness_settings = harness_config
+        persistent_harness = (harness_settings is None or harness_settings.enabled) and (
+            (
+            harness_settings is not None
+            and harness_settings.backend == "postgres_redis"
+            ) or (
+            (harness_settings is None or harness_settings.backend == "auto")
+            and memory_config is not None
+            and memory_config.enabled
+            and memory_config.storage.metadata_db.type == "postgresql"
+            )
+        )
+        if persistent_harness:
+            if memory_config is None or memory_config.storage.metadata_db.type != "postgresql":
+                raise ValueError(
+                    "postgres_redis harness requires PostgreSQL/Redis memory storage configuration"
+                )
+            from nanobot.harness import PostgresRedisHarnessStore
+
+            harness_store = PostgresRedisHarnessStore(
+                postgres_dsn=memory_config.storage.metadata_db.dsn,
+                redis_url=memory_config.storage.redis.url,
+                key_prefix=(harness_settings.key_prefix if harness_settings else "nanobot:harness"),
+                mailbox_ttl=(harness_settings.mailbox_ttl if harness_settings else 86_400),
+                idempotency_ttl=(
+                    harness_settings.idempotency_ttl if harness_settings else 86_400
+                ),
+                message_claim_idle_ms=(
+                    harness_settings.message_claim_idle_ms if harness_settings else 60_000
+                ),
+            )
+            harness = HarnessService(
+                harness_store,
+                max_queued_tasks_per_tenant=(
+                    harness_settings.max_queued_tasks_per_tenant
+                    if harness_settings
+                    else 1_000
+                ),
+                checkpoint_max_bytes=(
+                    harness_settings.checkpoint_max_bytes
+                    if harness_settings
+                    else 262_144
+                ),
+                retention_days=(harness_settings.retention_days if harness_settings else 30),
+            )
+        else:
+            harness = HarnessService(
+                max_queued_tasks_per_tenant=(
+                    harness_settings.max_queued_tasks_per_tenant
+                    if harness_settings
+                    else 1_000
+                ),
+                checkpoint_max_bytes=(
+                    harness_settings.checkpoint_max_bytes
+                    if harness_settings
+                    else 262_144
+                ),
+                retention_days=(harness_settings.retention_days if harness_settings else 30),
+            )
+        self.harness = harness
         self.subagents = SubagentManager(
             workspace=workspace,
             bus=bus,
@@ -388,8 +473,11 @@ class AgentLoop:
             disabled_skills=disabled_skills,
             max_iterations=self.max_iterations,
             max_concurrent_subagents=max_concurrent_subagents,
+            # This setting intentionally governs spawned agents only. The main
+            # agent receives tool errors so it can revise the call and recover.
             fail_on_tool_error=fail_on_tool_error,
             llm_wall_timeout_for_session=lambda sk: runner_wall_llm_timeout_s(self.sessions, sk),
+            harness=harness,
         )
         self._unified_session = unified_session
         self._running = False
@@ -397,6 +485,11 @@ class AgentLoop:
         self._mcp_stacks: dict[str, MCPConnection] = {}
         self._mcp_connecting = False
         self._runtime_context_providers: list[RuntimeContextProvider] = []
+        from nanobot.harness.context_provider import HarnessSupervisorContextProvider
+
+        self._runtime_context_providers.append(
+            HarnessSupervisorContextProvider(harness)
+        )
         self._active_tasks: dict[str, set[asyncio.Task[Any]]] = {}
         self._background_tasks: set[asyncio.Task[Any]] = set()
         self._close_mcp_lock = asyncio.Lock()
@@ -442,11 +535,41 @@ class AgentLoop:
             consolidator=self.consolidator,
             session_ttl_minutes=session_ttl_minutes,
         )
+        self.context_orchestrator = ContextOrchestrator(
+            builder=self.context,
+            consolidator=self.consolidator,
+            auto_compact=self.auto_compact,
+        )
+        self.runner = AgentRunner(self.context_orchestrator)
         self._idle_compact_check_interval_s = idle_compact_check_interval_seconds
         self._next_idle_compact_check_at = time.monotonic()
         if model_preset:
             self.set_model_preset(model_preset, publish_update=False)
         self._register_default_tools(provider_snapshot_loader=provider_snapshot_loader)
+        if self.long_term_memory is not None:
+            from nanobot.memory_system.tool import MemoryRetrieveTool
+
+            self.tools.register(
+                MemoryRetrieveTool(
+                    self.long_term_memory,
+                    unified_session=self._unified_session,
+                )
+            )
+        self.repository_orchestrator = None
+        if repository_agent_config is not None and repository_agent_config.enabled:
+            from nanobot.repo_agent.orchestrator import RepositoryOrchestrator
+            from nanobot.repo_agent.repository import RepositoryManager
+            from nanobot.repo_agent.tools import repository_tools
+
+            repository_manager = RepositoryManager(workspace, repository_agent_config)
+            for tool in repository_tools(repository_manager.cache_root):
+                self.tools.register(tool)
+            self.repository_orchestrator = RepositoryOrchestrator(
+                config=repository_agent_config,
+                workspace=workspace,
+                tools=self.tools,
+                harness=harness,
+            )
         self._runtime_vars: dict[str, Any] = {}
         self._current_iteration: int = 0
         self.commands = CommandRouter()
@@ -508,6 +631,9 @@ class AgentLoop:
             restart_mode=config.gateway.restart_mode,
             provider_snapshot_loader=provider_snapshot_loader,
             preset_snapshot_loader=preset_snapshot_loader,
+            repository_agent_config=config.repository_agent,
+            memory_config=config.memory,
+            harness_config=config.harness,
             **extra,
         )
 
@@ -713,7 +839,7 @@ class AgentLoop:
         """Build the initial message list for the LLM turn."""
         assert ctx.session is not None
         scope = self.workspace_scopes.for_message(ctx.msg, ctx.session.metadata)
-        return self.context.build_messages(
+        return self.context_orchestrator.build_messages(
             history=ctx.history,
             current_message=ctx.msg.content,
             media=ctx.msg.media if ctx.kind is TurnKind.USER and ctx.msg.media else None,
@@ -766,9 +892,11 @@ class AgentLoop:
             *tools.get_runtime_context_providers(),
             *self._runtime_context_providers,
         ]
-        blocks = runtime_context_blocks_from_metadata(request.metadata)
-        blocks.extend(await resolve_runtime_context(providers, request))
-        return blocks
+        return await self.context_orchestrator.resolve_blocks(
+            request=request,
+            initial=runtime_context_blocks_from_metadata(request.metadata),
+            providers=providers,
+        )
 
     async def _dispatch_command_inline(
         self,
@@ -863,6 +991,8 @@ class AgentLoop:
         tools: ToolRegistry | None = None,
         request_context: RequestContext | None = None,
         provider_state: ProviderConversationState | None = None,
+        max_iterations: int | None = None,
+        workspace_override: Path | None = None,
     ) -> tuple[str | None, list[str], list[dict[str, Any]], str, bool]:
         """Run the agent iteration loop.
 
@@ -998,10 +1128,18 @@ class AgentLoop:
             return items
 
         active_session_key = session.key if session else session_key
-        effective_scope = self.workspace_scopes.for_turn(
-            channel=channel,
-            message_metadata=metadata,
-            session_metadata=session.metadata if session is not None else None,
+        effective_scope = (
+            build_workspace_scope(
+                workspace_override,
+                "restricted",
+                source_channel=channel,
+            )
+            if workspace_override is not None
+            else self.workspace_scopes.for_turn(
+                channel=channel,
+                message_metadata=metadata,
+                session_metadata=session.metadata if session is not None else None,
+            )
         )
         effective_tools = tools or self.tools
         request_ctx = request_context or RequestContext(
@@ -1058,7 +1196,9 @@ class AgentLoop:
                 initial_messages=initial_messages,
                 tools=effective_tools,
                 runtime=runtime,
-                max_iterations=self.max_iterations,
+                max_iterations=(
+                    self.max_iterations if max_iterations is None else max_iterations
+                ),
                 max_tool_result_chars=self.max_tool_result_chars,
                 hook=hook,
                 error_message="Sorry, I encountered an error calling the AI model.",
@@ -1098,7 +1238,10 @@ class AgentLoop:
         if session is not None and not ephemeral:
             session.provider_state = result.provider_state
         if result.stop_reason == "max_iterations":
-            logger.warning("Max iterations ({}) reached", self.max_iterations)
+            logger.warning(
+                "Max iterations ({}) reached",
+                self.max_iterations if max_iterations is None else max_iterations,
+            )
             should_stream = turn_continuation.should_stream_budget_response(
                 stop_reason=result.stop_reason,
                 pending_queue_available=pending_queue is not None and session is not None,
@@ -1189,7 +1332,10 @@ class AgentLoop:
                 if effective_key in self._pending_queues:
                     # Non-priority commands must not be queued for injection;
                     # dispatch them directly (same pattern as priority commands).
-                    if self.commands.is_dispatchable_command(raw):
+                    if (
+                        self.commands.is_dispatchable_command(raw)
+                        and not self._is_repository_command(raw)
+                    ):
                         await self._dispatch_command_inline(
                             msg, effective_key, raw,
                             self.commands.dispatch,
@@ -1375,11 +1521,14 @@ class AgentLoop:
         finally:
             self._background_tasks.clear()
 
-        cleanup_steps = (
+        cleanup_steps = [
             self.subagents.close,
             self._exec_session_manager.close_all,
             lambda: agent_context.close_mcp(self),
-        )
+        ]
+        long_term_memory = getattr(self, "long_term_memory", None)
+        if long_term_memory is not None:
+            cleanup_steps.append(long_term_memory.close)
         for cleanup in cleanup_steps:
             try:
                 await cleanup()
@@ -1621,7 +1770,7 @@ class AgentLoop:
 
     async def _compact_session(self, ctx: TurnContext) -> None:
         session = ctx.require_session()
-        ctx.session, pending = self.auto_compact.prepare_session(
+        ctx.session, pending = self.context_orchestrator.prepare_session(
             session,
             ctx.session_key,
         )
@@ -1632,6 +1781,11 @@ class AgentLoop:
             return False
         session = ctx.require_session()
         raw = ctx.msg.content.strip()
+        # Repository workflow commands carry expiring approval IDs and must
+        # reach the repository risk-control layer rather than the generic
+        # invalid-slash-command response.
+        if self._is_repository_command(raw):
+            return False
         _, automation_metadata = automation_history_overrides(ctx.msg.metadata)
         is_user_turn = (
             ctx.original_user_text is not None
@@ -1676,6 +1830,10 @@ class AgentLoop:
             return True
         return False
 
+    def _is_repository_command(self, request: str) -> bool:
+        orchestrator = self.repository_orchestrator
+        return orchestrator is not None and orchestrator.is_command_request(request)
+
     async def _build_turn(self, ctx: TurnContext) -> None:
         session = ctx.require_session()
         runtime = ctx.runtime
@@ -1693,24 +1851,20 @@ class AgentLoop:
         replay_max_messages = replay_max_messages_for_context(
             runtime.context_window_tokens
         )
-        if not ctx.ephemeral:
-            await self.consolidator.maybe_consolidate_by_tokens(
-                session,
-                runtime=runtime,
-                replay_max_messages=replay_max_messages,
-            )
         is_subagent = ctx.kind is TurnKind.SYSTEM and ctx.msg.sender_id == "subagent"
 
         if ctx.kind is TurnKind.USER and (message_tool := self.tools.get("message")):
             if isinstance(message_tool, MessageTool):
                 message_tool.start_turn()
 
-        _hist_kwargs: dict[str, Any] = {
-            "max_messages": replay_max_messages,
-            "max_tokens": self._replay_token_budget(runtime),
-            "extend_to_user": is_subagent,
-        }
-        ctx.history = session.get_history(**_hist_kwargs)
+        ctx.history = await self.context_orchestrator.prepare_history(
+            session,
+            runtime=runtime,
+            replay_max_messages=replay_max_messages,
+            replay_max_tokens=self._replay_token_budget(runtime),
+            ephemeral=ctx.ephemeral,
+            extend_to_user=is_subagent,
+        )
         stored_state = session.provider_state
         subagent_followup_persisted = False
         if is_subagent:
@@ -1734,8 +1888,17 @@ class AgentLoop:
         ctx.delivery.record_runtime(runtime)
 
         ctx.request_context = self._request_context_for_turn(ctx)
-        if ctx.kind is TurnKind.USER:
+        if ctx.kind is TurnKind.USER or is_subagent:
             ctx.runtime_context_blocks = await self._resolve_runtime_context_for_turn(ctx)
+        if ctx.kind is TurnKind.USER:
+            memory_block = await retrieve_for_turn(self, ctx)
+            if memory_block is not None:
+                ctx.runtime_context_blocks.append(memory_block)
+                self.context_orchestrator.metrics.blocks([memory_block])
+        core_memory = self.context_orchestrator.core_memory_block()
+        if core_memory is not None:
+            ctx.runtime_context_blocks.append(core_memory)
+            self.context_orchestrator.metrics.blocks([core_memory])
         staged_provider_state = False
         if stored_state is not None and runtime.provider.can_resume_conversation_state(
             stored_state,
@@ -1786,7 +1949,11 @@ class AgentLoop:
             ctx.input_persisted_early = self._persist_user_message_early(
                 ctx.msg,
                 session,
-                runtime_context_blocks=ctx.runtime_context_blocks,
+                runtime_context_blocks=[
+                    block
+                    for block in ctx.runtime_context_blocks
+                    if block.source != "core_memory"
+                ],
             )
             if staged_provider_state and not ctx.input_persisted_early:
                 session.provider_state = stored_state
@@ -1806,6 +1973,18 @@ class AgentLoop:
         if ctx.visible_run_started_at is None:
             ctx.visible_run_started_at = time.time()
         await ctx.delivery.running(started_at=ctx.visible_run_started_at)
+        if (
+            self.repository_orchestrator is not None
+            and ctx.kind is TurnKind.USER
+            and self.repository_orchestrator.can_handle(
+                ctx.original_user_text or ctx.msg.content,
+                ctx.session_key,
+            )
+        ):
+            from nanobot.repo_agent.loop_adapter import run_repository_turn
+
+            await run_repository_turn(self, ctx)
+            return
         result = await self._run_agent_loop(
             ctx.initial_messages,
             runtime=runtime,
@@ -1881,6 +2060,22 @@ class AgentLoop:
         self._clear_pending_user_turn(session)
         self._clear_runtime_checkpoint(session)
         self.sessions.save(session)
+        for block in ctx.runtime_context_blocks:
+            if block.on_persist is None:
+                continue
+            try:
+                await block.on_persist()
+            except Exception as exc:
+                # The turn is already durable. Leaving the source unacknowledged
+                # intentionally causes at-least-once redelivery after its claim
+                # timeout; provider-level idempotency removes duplicates.
+                logger.warning(
+                    "Runtime context commit deferred for source {}: {}",
+                    block.source,
+                    exc,
+                )
+        if not ctx.ephemeral and ctx.kind is TurnKind.USER:
+            await record_for_turn(self, ctx)
         if not ctx.ephemeral:
             await self.runtime_event_publisher.session_turn_persisted(
                 ctx.msg,
@@ -1909,6 +2104,8 @@ class AgentLoop:
             ctx.streamed_content,
             turn_latency_ms=ctx.turn_latency_ms,
         )
+        if ctx.outbound is not None and ctx.agent_ui is not None:
+            ctx.outbound.metadata[OUTBOUND_META_AGENT_UI] = ctx.agent_ui
         if ctx.ephemeral and ctx.outbound is not None:
             ctx.outbound.metadata["_stop_reason"] = ctx.stop_reason
 

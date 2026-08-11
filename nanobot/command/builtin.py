@@ -512,14 +512,14 @@ async def cmd_dream_prompt(ctx: CommandContext) -> OutboundMessage:
         if not initialize_workspace_prompt(path, store.default_dream_prompt()):
             content = (
                 f"Dream memory instructions already exist at `{display_path}`.\n\n"
-                "Edit that file, or delete/empty it to return to nanobot's default."
+                "Edit that file, or delete/empty it to return to GitHubResearchAgent's default."
             )
         else:
             content = (
                 f"Created Dream memory instructions at `{display_path}`.\n\n"
                 "Edit that file to teach Dream how to organize memory. "
                 "This fully replaces nanobot's default Dream guide for this workspace. "
-                "Delete or empty it to return to nanobot's default."
+                "Delete or empty it to return to GitHubResearchAgent's default."
             )
     elif args:
         content = "Usage: /dream-prompt [init]"
@@ -527,7 +527,7 @@ async def cmd_dream_prompt(ctx: CommandContext) -> OutboundMessage:
         content = (
             "Dream memory instructions: custom for this workspace\n\n"
             f"- Path: `{display_path}`\n"
-            "- Delete or empty this file to return to nanobot's default."
+            "- Delete or empty this file to return to GitHubResearchAgent's default."
         )
     else:
         content = (
@@ -561,7 +561,7 @@ async def cmd_evaluator_prompt(ctx: CommandContext) -> OutboundMessage:
         if not initialize_workspace_prompt(path, default_evaluator_prompt()):
             content = (
                 f"Heartbeat evaluator prompt already exists at `{display_path}`.\n\n"
-                "Edit that file, or delete/empty it to return to nanobot's default."
+                "Edit that file, or delete/empty it to return to GitHubResearchAgent's default."
             )
         else:
             content = (
@@ -569,7 +569,7 @@ async def cmd_evaluator_prompt(ctx: CommandContext) -> OutboundMessage:
                 "Edit that file to control when the heartbeat notification gate speaks. "
                 "It must still instruct the model to call the `evaluate_notification` tool, "
                 "otherwise the gate fails closed and stays silent. "
-                "Delete or empty it to return to nanobot's default."
+                "Delete or empty it to return to GitHubResearchAgent's default."
             )
     elif args:
         content = "Usage: /evaluator-prompt [init]"
@@ -577,7 +577,7 @@ async def cmd_evaluator_prompt(ctx: CommandContext) -> OutboundMessage:
         content = (
             "Heartbeat evaluator prompt: custom for this workspace\n\n"
             f"- Path: `{display_path}`\n"
-            "- Delete or empty this file to return to nanobot's default."
+            "- Delete or empty this file to return to GitHubResearchAgent's default."
         )
     else:
         content = (

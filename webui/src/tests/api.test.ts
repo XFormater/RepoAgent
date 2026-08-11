@@ -1077,7 +1077,7 @@ describe("webui API helpers", () => {
           },
           {
             command: "/restart",
-            title: "Restart nanobot",
+            title: "Restart GitHubResearchAgent",
             description: "Restart the bot process.",
             icon: "rotate-cw",
             lifecycle: "side_channel",
@@ -1114,7 +1114,7 @@ describe("webui API helpers", () => {
       },
       {
         command: "/restart",
-        title: "Restart nanobot",
+        title: "Restart GitHubResearchAgent",
         description: "Restart the bot process.",
         icon: "rotate-cw",
         argHint: "",

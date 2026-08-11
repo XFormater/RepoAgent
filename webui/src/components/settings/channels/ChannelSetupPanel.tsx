@@ -294,7 +294,7 @@ function ChannelSetupSurface({
   const requirements = channelRequirements(feature, t);
   const summary = setup.summary ?? tx(
     "settings.channels.setupSummary",
-    "Enable only turns on nanobot support. Add the platform credentials, then restart nanobot.",
+    "Enable only turns on GitHubResearchAgent support. Add the platform credentials, then restart nanobot.",
   );
   const [fieldValues, setFieldValues] = useState<Record<string, string>>(() =>
     defaultChannelFieldValues(editableFields, feature.config_values),

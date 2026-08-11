@@ -2303,7 +2303,7 @@ def test_optional_features_payload_lists_feishu_instances(monkeypatch):
     assert feishu["instances"] == [
         {
             "id": "default",
-            "name": "nanobot",
+            "name": "GitHubResearchAgent",
             "display_name": "Voraflare Bot",
             "avatar_url": "https://example.com/bot.png",
             "enabled": True,
@@ -2381,7 +2381,7 @@ def test_optional_features_payload_does_not_refresh_saved_feishu_identity(monkey
     payload = optional_features_payload()
 
     instance = payload["features"][0]["instances"][0]
-    assert instance["display_name"] == "nanobot"
+    assert instance["display_name"] == "GitHubResearchAgent"
     assert instance["avatar_url"] == ""
     assert config_path.read_text(encoding="utf-8") == before
 
@@ -2469,7 +2469,7 @@ def test_optional_features_payload_preserves_legacy_flat_feishu_config(monkeypat
 
     payload = optional_features_payload()
 
-    assert payload["features"][0]["instances"][0]["display_name"] == "nanobot"
+    assert payload["features"][0]["instances"][0]["display_name"] == "GitHubResearchAgent"
     assert config_path.read_text(encoding="utf-8") == before
     saved = json.loads(config_path.read_text(encoding="utf-8"))["channels"]["feishu"]
     assert saved["appId"] == "cli_legacy"

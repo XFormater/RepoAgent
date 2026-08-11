@@ -610,7 +610,7 @@ describe("SettingsView Apps catalog", () => {
 
     renderSettingsView({ initialSection: "apps" });
 
-    expect(await screen.findByText("Add tools to nanobot, then @ them in chat.")).toBeInTheDocument();
+    expect(await screen.findByText("Add tools to GitHubResearchAgent, then @ them in chat.")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Ready" })).toHaveAttribute("aria-pressed", "false");
     expect(screen.getByRole("button", { name: "Apps" })).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByRole("button", { name: "Integrations" })).toBeInTheDocument();
@@ -691,11 +691,11 @@ describe("SettingsView Apps catalog", () => {
     const matrixRow = await screen.findByRole("button", { name: "View Matrix settings" });
     expect(matrixRow).toHaveAttribute("aria-pressed", "true");
     expect(screen.getAllByText("Matrix")).toHaveLength(2);
-    expect(screen.getAllByText("Use nanobot from Matrix rooms.")).toHaveLength(2);
+    expect(screen.getAllByText("Use GitHubResearchAgent from Matrix rooms.")).toHaveLength(2);
     expect(screen.queryByText(/Enabling Nanobot features may install Python packages/)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("switch", { name: "Matrix channel" }));
     expect(screen.getByRole("dialog", { name: "Install support for Matrix?" })).toBeInTheDocument();
-    expect(screen.getByText("nanobot will add what Matrix needs, then turn it on. Continue?")).toBeInTheDocument();
+    expect(screen.getByText("GitHubResearchAgent will add what Matrix needs, then turn it on. Continue?")).toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalledWith(
       "/api/settings/nanobot-features/enable?name=matrix",
       expect.anything(),
@@ -714,7 +714,7 @@ describe("SettingsView Apps catalog", () => {
       expect(screen.getByRole("switch", { name: "Matrix channel" })).toHaveAttribute("aria-checked", "true"),
     );
     expect(screen.queryByText("Enabled channel 'matrix'")).not.toBeInTheDocument();
-    expect(screen.queryByText("Restart nanobot to apply updated channel support.")).not.toBeInTheDocument();
+    expect(screen.queryByText("Restart GitHubResearchAgent to apply updated channel support.")).not.toBeInTheDocument();
     expect(screen.getAllByText("On").length).toBeGreaterThan(0);
 
     expect(screen.getByLabelText("Homeserver")).toBeInTheDocument();
@@ -893,7 +893,7 @@ describe("SettingsView Apps catalog", () => {
 
     expect(await screen.findByRole("button", { name: "View Feishu settings" })).toBeInTheDocument();
     expect(screen.queryByText("nanobot channels login feishu")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "nanobot" }));
+    fireEvent.click(screen.getByRole("button", { name: "GitHubResearchAgent" }));
     fireEvent.click(screen.getByRole("button", { name: "Connect" }));
 
     await waitFor(() =>
@@ -950,7 +950,7 @@ describe("SettingsView Apps catalog", () => {
     renderSettingsView({ initialSection: "channels" });
 
     expect(await screen.findByRole("button", { name: "View Feishu settings" })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "nanobot" }));
+    fireEvent.click(screen.getByRole("button", { name: "GitHubResearchAgent" }));
     fireEvent.click(screen.getByRole("button", { name: "Connect" }));
 
     await waitFor(() =>
@@ -1032,8 +1032,8 @@ describe("SettingsView Apps catalog", () => {
 
     renderSettingsView({ initialSection: "channels" });
 
-    fireEvent.click(await screen.findByRole("button", { name: "nanobot" }));
-    fireEvent.click(await screen.findByRole("switch", { name: "nanobot assistant" }));
+    fireEvent.click(await screen.findByRole("button", { name: "GitHubResearchAgent" }));
+    fireEvent.click(await screen.findByRole("switch", { name: "GitHubResearchAgent assistant" }));
 
     await waitFor(() =>
       expect(fetchMock).toHaveBeenCalledWith(
@@ -1046,7 +1046,7 @@ describe("SettingsView Apps catalog", () => {
     expect(fetchMock.mock.calls.some(([input]) =>
       String(input) === "/api/settings/channels/feishu/connect/start?domain=feishu&instance_id=default&mode=replace",
     )).toBe(false);
-    expect(screen.getByRole("switch", { name: "nanobot assistant" })).toHaveAttribute(
+    expect(screen.getByRole("switch", { name: "GitHubResearchAgent assistant" })).toHaveAttribute(
       "aria-checked",
       "true",
     );
@@ -2628,7 +2628,7 @@ describe("SettingsView Apps catalog", () => {
 
     expect(
       screen.getByText(
-        "Complete sign-in in your browser. Nanobot usually finishes automatically; if it does not, paste the authorization code below.",
+        "Complete sign-in in your browser. GitHubResearchAgent usually finishes automatically; if it does not, paste the authorization code below.",
       ),
     ).toBeInTheDocument();
     const callbackInput = await screen.findByRole("textbox", {
@@ -2823,7 +2823,7 @@ describe("SettingsView Apps catalog", () => {
     expect(openMock).not.toHaveBeenCalled();
     expect(
       within(dialog).getByText(
-        "Complete sign-in in your browser. Nanobot usually finishes automatically; if it does not, copy the full localhost callback URL from the address bar and paste it below.",
+        "Complete sign-in in your browser. GitHubResearchAgent usually finishes automatically; if it does not, copy the full localhost callback URL from the address bar and paste it below.",
       ),
     ).toBeInTheDocument();
     expect(within(dialog).getByText("Waiting for the browser callback…")).toBeInTheDocument();
@@ -2920,7 +2920,7 @@ describe("SettingsView Apps catalog", () => {
       await chooseProviderToConfigure("OpenAI Codex");
       expect(
         screen.getByText(
-          "Sign in through this browser, then paste the full localhost callback URL back into nanobot.",
+          "Sign in through this browser, then paste the full localhost callback URL back into GitHubResearchAgent.",
         ),
       ).toBeInTheDocument();
 

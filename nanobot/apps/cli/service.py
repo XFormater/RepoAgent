@@ -1197,7 +1197,7 @@ Use the `run_cli_app` tool with `name="{name}"` for command execution. Do not in
                 )
                 message = (
                     f"Uninstall for {app['display_name']} completed, but {reason}, "
-                    "so nanobot kept it installed."
+                    "so GitHubResearchAgent kept it installed."
                 )
                 return self.payload() | {
                     "last_action": {

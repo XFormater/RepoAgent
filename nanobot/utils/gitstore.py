@@ -11,6 +11,8 @@ from typing import TYPE_CHECKING, Iterable, cast
 
 from loguru import logger
 
+from nanobot.branding import AGENT_DISPLAY_NAME
+
 if TYPE_CHECKING:
     from dulwich.objects import Blob, Commit, ObjectID, Tree, TreeEntry
     from dulwich.refs import Ref
@@ -131,9 +133,9 @@ class GitStore:
             )
             porcelain.commit(
                 str(self._workspace),
-                message=b"init: nanobot memory store",
-                author=b"nanobot <nanobot@dream>",
-                committer=b"nanobot <nanobot@dream>",
+                message=b"init: GitHubResearchAgent memory store",
+                author=f"{AGENT_DISPLAY_NAME} <github-research-agent@memory>".encode(),
+                committer=f"{AGENT_DISPLAY_NAME} <github-research-agent@memory>".encode(),
             )
             logger.info("Git store initialized at {}", self._workspace)
             return True
@@ -171,8 +173,8 @@ class GitStore:
             sha_bytes = porcelain.commit(
                 str(self._workspace),
                 message=msg_bytes,
-                author=b"nanobot <nanobot@dream>",
-                committer=b"nanobot <nanobot@dream>",
+                author=f"{AGENT_DISPLAY_NAME} <github-research-agent@memory>".encode(),
+                committer=f"{AGENT_DISPLAY_NAME} <github-research-agent@memory>".encode(),
             )
             if cast(object, sha_bytes) is None:
                 return None

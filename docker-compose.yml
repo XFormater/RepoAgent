@@ -8,6 +8,16 @@ x-common-config: &common-config
     - ~/.nanobot:/home/nanobot/.nanobot
   cap_drop:
     - ALL
+  environment:
+    NANOBOT_MEMORY__ENABLED: "true"
+    NANOBOT_MEMORY__SHORT_TERM__ENABLED: "true"
+    NANOBOT_MEMORY__STORAGE__METADATA_DB__DSN: postgresql://${POSTGRES_USER:-nanobot}:${POSTGRES_PASSWORD:-nanobot-memory}@memory-postgres:5432/${POSTGRES_DB:-nanobot}
+    NANOBOT_MEMORY__STORAGE__REDIS__URL: redis://:${REDIS_PASSWORD:-nanobot-memory}@memory-redis:6379/0
+    NANOBOT_MEMORY__STORAGE__GRAPH_DB__URI: bolt://memory-neo4j:7687
+    NANOBOT_MEMORY__STORAGE__GRAPH_DB__USERNAME: neo4j
+    NANOBOT_MEMORY__STORAGE__GRAPH_DB__PASSWORD: ${NEO4J_PASSWORD:-nanobot-memory}
+    NANOBOT_MEMORY__STORAGE__VECTOR_DB__HOST: memory-qdrant
+    NANOBOT_MEMORY__STORAGE__VECTOR_DB__API_KEY: ${QDRANT_API_KEY:-change-me}
 
 services:
   nanobot-gateway:
@@ -44,6 +54,26 @@ services:
           cpus: "0.25"
           memory: 256M
 
+  harness-worker:
+    container_name: github-research-agent-harness-worker
+    <<: *common-config
+    profiles: ["harness"]
+    command: ["harness-worker", "--tenant", "default"]
+    restart: unless-stopped
+    depends_on:
+      memory-postgres:
+        condition: service_healthy
+      memory-redis:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2G
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+
   nanobot-cli:
     <<: *common-config
     profiles:
@@ -51,3 +81,69 @@ services:
     command: ["status"]
     stdin_open: true
     tty: true
+
+  memory-qdrant:
+    image: qdrant/qdrant:v1.15.4
+    profiles: ["memory"]
+    restart: unless-stopped
+    environment:
+      QDRANT__SERVICE__API_KEY: ${QDRANT_API_KEY:-change-me}
+    ports:
+      - 127.0.0.1:6333:6333
+      - 127.0.0.1:6334:6334
+    volumes:
+      - memory-qdrant-data:/qdrant/storage
+
+  memory-neo4j:
+    image: neo4j:2025.06.2-community
+    profiles: ["memory"]
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: ${NEO4J_AUTH:-neo4j/nanobot-memory}
+    ports:
+      - 127.0.0.1:7474:7474
+      - 127.0.0.1:7687:7687
+    volumes:
+      - memory-neo4j-data:/data
+
+  memory-redis:
+    image: redis:7.4-alpine
+    profiles: ["memory"]
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-nanobot-memory}
+    command:
+      ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:-nanobot-memory}"]
+    ports:
+      - 127.0.0.1:6379:6379
+    volumes:
+      - memory-redis-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$${REDIS_PASSWORD:-nanobot-memory}\" ping | grep PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  memory-postgres:
+    image: postgres:17-alpine
+    profiles: ["memory"]
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-nanobot}
+      POSTGRES_USER: ${POSTGRES_USER:-nanobot}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nanobot-memory}
+    ports:
+      - 127.0.0.1:5432:5432
+    volumes:
+      - memory-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER:-nanobot}\" -d \"$${POSTGRES_DB:-nanobot}\""]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  memory-qdrant-data:
+  memory-neo4j-data:
+  memory-redis-data:
+  memory-postgres-data:

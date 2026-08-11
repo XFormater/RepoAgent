@@ -46,4 +46,6 @@ Information about the user to help personalize interactions.
 
 ---
 
-*Edit this file to customize nanobot's behavior for your needs.*
+*This profile is managed by GitHubResearchAgent's memory system. It may be filled during
+initial workspace setup; during normal conversations, provide corrections to
+the agent instead of asking the task agent to edit it directly.*
