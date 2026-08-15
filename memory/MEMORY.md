@@ -21,3 +21,9 @@ This file stores important information that should persist across sessions.
 ---
 
 *This file is automatically updated by GitHubResearchAgent when important information should be remembered.*
+
+<!-- BEGIN DATABASE MEMORY PROJECTION -->
+## Database Memory Projection (managed)
+
+High-confidence semantic memories synchronized on the configured schedule.
+<!-- END DATABASE MEMORY PROJECTION -->
