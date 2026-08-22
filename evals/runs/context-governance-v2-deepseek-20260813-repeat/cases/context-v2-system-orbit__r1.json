@@ -1,0 +1,49 @@
+{
+  "caseId": "context-v2-system-orbit",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 2038,
+  "error": null,
+  "passed": true,
+  "expected": "RING-205",
+  "contextCaseType": "system_anchor",
+  "contextBlockLimit": 1200,
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "RING-205",
+    "normalizedAnswer": "RING-205",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 4137,
+      "completion_tokens": 4,
+      "total_tokens": 4141,
+      "cached_tokens": 4096,
+      "provider_tokens": 4141
+    },
+    "modelInputMessages": 42,
+    "estimatedInputTokens": 4220,
+    "providerPromptTokens": 4137
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": true,
+    "answer": "RING-205",
+    "normalizedAnswer": "RING-205",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1092,
+      "completion_tokens": 4,
+      "total_tokens": 1096,
+      "cached_tokens": 1024,
+      "provider_tokens": 1096
+    },
+    "modelInputMessages": 12,
+    "estimatedInputTokens": 1130,
+    "providerPromptTokens": 1092
+  },
+  "qualityDelta": 0,
+  "estimatedTokenReduction": 0.7322274881516588,
+  "providerPromptTokenReduction": 0.7360406091370558
+}

@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-41__q0077",
+  "sampleId": "conv-41",
+  "questionIndex": 77,
+  "question": "What activity did John's colleague, Rob, invite him to?",
+  "answer": "beginner's yoga class",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D7:16"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D17:9",
+      "D17:7",
+      "D21:4",
+      "D13:37",
+      "D15:12",
+      "D2:13",
+      "D2:15",
+      "D18:13",
+      "D7:15",
+      "D11:15"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1179.423,
+    "injectedChars": 2095,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 85,
+      "completion_tokens": 3,
+      "total_tokens": 88
+    },
+    "latencyMs": 1309,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 669,
+      "completion_tokens": 3,
+      "total_tokens": 672
+    },
+    "latencyMs": 969,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2095
+  },
+  "f1Delta": 0.0
+}

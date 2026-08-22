@@ -163,6 +163,33 @@ docker compose --profile memory --profile harness up -d
 docker compose logs -f harness-worker
 ```
 
+In production, configure the Harness Worker to execute each Task in an
+isolated bubblewrap process:
+
+```json
+{
+  "tools": {
+    "restrictToWorkspace": true,
+    "exec": {"sandbox": "bwrap"}
+  },
+  "harness": {
+    "workerExecutionBackend": "bwrap",
+    "sandboxNetwork": "host",
+    "sandboxMemoryMb": 1536,
+    "sandboxProcessLimit": 128,
+    "sandboxOpenFilesLimit": 256,
+    "sandboxFileSizeMb": 512
+  }
+}
+```
+
+The Worker process is the control plane and retains PostgreSQL/Redis access.
+Each Task child receives only its bounded RuntimeContext, role allowlist and
+task workspace. `.env`, `.npmrc`, `.pypirc`, `.netrc` and Git credential files
+are masked inside shell and filesystem tools. `sandboxNetwork: "host"` keeps
+the current `127.0.0.1:7890` VPN proxy reachable; choose `"none"` only when an
+external egress sidecar is available.
+
 ```bash
 docker compose run --rm nanobot-cli agent -m "Hello!"   # run CLI
 docker compose logs -f nanobot-gateway                   # view logs
@@ -179,9 +206,9 @@ docker compose -f docker-compose.yml -f docker-compose.bwrap.yml up -d nanobot-g
 docker compose -f docker-compose.yml -f docker-compose.bwrap.yml run --rm nanobot-cli agent -m "Hello!"
 ```
 
-The override grants `CAP_SYS_ADMIN` and disables AppArmor/seccomp confinement for
-the container so bubblewrap can create its nested namespaces. Use it only when the
-bwrap sandbox is enabled.
+The override grants the namespace capability required by bubblewrap inside the
+container. Use it only when the bwrap sandbox is enabled. The host systemd
+deployment does not need this Compose override.
 
 ### Docker
 
@@ -260,6 +287,25 @@ systemctl --user restart nanobot-gateway       # restart after config changes
 journalctl --user -u nanobot-gateway -f        # follow logs
 nanobot gateway uninstall-service --manager systemd
 ```
+
+For a system-level production deployment with an independent Harness Worker,
+copy the versioned hardening drop-ins from `deploy/systemd/` into
+`/etc/systemd/system/`, then reload and restart both units:
+
+```bash
+install -d /etc/systemd/system/github-research-agent-gateway.service.d \
+  /etc/systemd/system/github-research-agent-worker.service.d
+install deploy/systemd/github-research-agent-gateway.service.d/hardening.conf \
+  /etc/systemd/system/github-research-agent-gateway.service.d/hardening.conf
+install deploy/systemd/github-research-agent-worker.service.d/hardening.conf \
+  /etc/systemd/system/github-research-agent-worker.service.d/hardening.conf
+systemctl daemon-reload
+systemctl restart github-research-agent-gateway.service \
+  github-research-agent-worker.service
+```
+
+The drop-ins enforce `NoNewPrivileges`, private devices, kernel protection,
+resource ceilings, a PID/task ceiling and a restricted address-family set.
 
 The installer writes `~/.config/systemd/user/nanobot-gateway.service`, runs
 `systemctl --user daemon-reload`, enables the unit, and restarts it. It uses the

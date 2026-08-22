@@ -1,0 +1,67 @@
+{
+  "caseId": "conv-41__q0042",
+  "sampleId": "conv-41",
+  "questionIndex": 42,
+  "question": "What area was hit by a flood?",
+  "answer": "West County",
+  "adversarialAnswer": null,
+  "category": 1,
+  "categoryName": "multi_hop",
+  "evidence": [
+    "D14:21",
+    "D23:1"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D10:12",
+      "D29:4",
+      "D10:13",
+      "D30:8",
+      "D18:1",
+      "D23:1",
+      "D18:5",
+      "D21:15",
+      "D25:2",
+      "D4:13"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 0.5,
+    "evidenceHit": true,
+    "latencyMs": 1821.241,
+    "injectedChars": 3280,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_off",
+    "memory_on"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 80,
+      "completion_tokens": 4,
+      "total_tokens": 84
+    },
+    "latencyMs": 1141,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "John's old area",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 936,
+      "completion_tokens": 4,
+      "total_tokens": 940
+    },
+    "latencyMs": 1352,
+    "answer": "John's old area",
+    "f1": 0.0,
+    "injectedChars": 3280
+  },
+  "f1Delta": 0.0
+}

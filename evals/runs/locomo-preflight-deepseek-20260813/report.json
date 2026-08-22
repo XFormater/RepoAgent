@@ -1,0 +1,160 @@
+{
+  "benchmark": "LoCoMo QA through the nanobot long-term-memory retrieval path",
+  "version": "1.0.0",
+  "runId": "locomo-preflight-deepseek-20260813",
+  "model": "deepseek-v4-pro",
+  "executionMode": "online-model-in-the-loop",
+  "scope": {
+    "selection": "locomo-100-fixed-smoke",
+    "evaluatedQuestions": 1,
+    "officialQuestions": 1986,
+    "questionCoverage": 0.0005035246727089627,
+    "evaluatedConversations": 1,
+    "officialConversations": 10,
+    "isFullOfficialRun": false
+  },
+  "scores": {
+    "memoryOffMeanF1": 0.0,
+    "memoryOnMeanF1": 0.0,
+    "meanF1Delta": 0.0,
+    "memoryOffNonAdversarialMeanF1": 0.0,
+    "memoryOnNonAdversarialMeanF1": 0.0,
+    "nonAdversarialMeanF1Delta": 0.0,
+    "pairedWins": 0,
+    "pairedTies": 1,
+    "pairedLosses": 0,
+    "byCategory": {
+      "1": {
+        "name": "multi_hop",
+        "count": 1,
+        "memoryOffMeanF1": 0.0,
+        "memoryOnMeanF1": 0.0,
+        "meanF1Delta": 0.0
+      },
+      "2": {
+        "name": "temporal",
+        "count": 0,
+        "memoryOffMeanF1": 0.0,
+        "memoryOnMeanF1": 0.0,
+        "meanF1Delta": 0.0
+      },
+      "3": {
+        "name": "open_domain",
+        "count": 0,
+        "memoryOffMeanF1": 0.0,
+        "memoryOnMeanF1": 0.0,
+        "meanF1Delta": 0.0
+      },
+      "4": {
+        "name": "single_hop",
+        "count": 0,
+        "memoryOffMeanF1": 0.0,
+        "memoryOnMeanF1": 0.0,
+        "meanF1Delta": 0.0
+      },
+      "5": {
+        "name": "adversarial",
+        "count": 0,
+        "memoryOffMeanF1": 0.0,
+        "memoryOnMeanF1": 0.0,
+        "meanF1Delta": 0.0
+      }
+    }
+  },
+  "retrieval": {
+    "evidenceRecallAt10": 0.0,
+    "evidenceHitRateAt10": 0.0,
+    "questionsWithEvidence": 1,
+    "meanLatencyMs": 201.034,
+    "meanInjectedChars": 1692.0,
+    "degradedQueries": 0
+  },
+  "usage": {
+    "memoryOff": {
+      "promptTokens": 79,
+      "completionTokens": 3,
+      "totalTokens": 82
+    },
+    "memoryOn": {
+      "promptTokens": 584,
+      "completionTokens": 4,
+      "totalTokens": 588
+    }
+  },
+  "limitations": [
+    "The default 100-question subset is not a full official LoCoMo score.",
+    "Dialogue turns are pre-indexed, so LLM memory extraction and persistence are not tested.",
+    "The run uses deterministic hash embeddings and an identity reranker.",
+    "Official category-5 scoring can inflate aggregate results; non-adversarial F1 is separate."
+  ],
+  "results": [
+    {
+      "caseId": "conv-26__q0015",
+      "sampleId": "conv-26",
+      "questionIndex": 15,
+      "question": "What activities does Melanie partake in?",
+      "answer": "pottery, camping, painting, swimming",
+      "category": 1,
+      "categoryName": "multi_hop",
+      "evidence": [
+        "D5:4",
+        "D9:1",
+        "D1:12",
+        "D1:18"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D1:8",
+          "D17:22",
+          "D6:8",
+          "D2:9",
+          "D7:12",
+          "D13:2",
+          "D9:7",
+          "D8:18",
+          "D15:18",
+          "D13:14"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 201.034,
+        "injectedChars": 1692,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 79,
+          "completion_tokens": 3,
+          "total_tokens": 82
+        },
+        "latencyMs": 1184,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 584,
+          "completion_tokens": 4,
+          "total_tokens": 588
+        },
+        "latencyMs": 2811,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 1692
+      },
+      "f1Delta": 0.0
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "caseId": "context-v2-split-atlas",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 2087,
+  "error": null,
+  "passed": true,
+  "expected": "FRIDAY#STONE-612",
+  "contextCaseType": "split_dependency",
+  "contextBlockLimit": 2200,
+  "sourceInputSha256": "08d8c3c3038c2fc223e08b76707ef79a8b21314f30795dec1a485810613c0760",
+  "sourceInputMessages": 54,
+  "variantOrder": [
+    "governance_on",
+    "governance_off"
+  ],
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "FRIDAY#STONE-612",
+    "normalizedAnswer": "FRIDAY#STONE-612",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 4979,
+      "completion_tokens": 8,
+      "total_tokens": 4987,
+      "cached_tokens": 4864,
+      "provider_tokens": 4987
+    },
+    "modelInputMessages": 54,
+    "estimatedInputTokens": 5071,
+    "providerPromptTokens": 4979
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": true,
+    "answer": "FRIDAY#STONE-612",
+    "normalizedAnswer": "FRIDAY#STONE-612",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 2137,
+      "completion_tokens": 8,
+      "total_tokens": 2145,
+      "cached_tokens": 2048,
+      "provider_tokens": 2145
+    },
+    "modelInputMessages": 26,
+    "estimatedInputTokens": 2187,
+    "providerPromptTokens": 2137
+  },
+  "qualityDelta": 0,
+  "estimatedTokenReduction": 0.5687241175310589,
+  "providerPromptTokenReduction": 0.570797348865234
+}

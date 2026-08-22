@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-42__q0064",
+  "sampleId": "conv-42",
+  "questionIndex": 64,
+  "question": "When did Nate win a big Valorant tourney?",
+  "answer": "The Saturday before 7November, 2022",
+  "adversarialAnswer": null,
+  "category": 2,
+  "categoryName": "temporal",
+  "evidence": [
+    "D27:1"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D18:8",
+      "D4:3",
+      "D17:14",
+      "D12:1",
+      "D27:25",
+      "D19:17",
+      "D20:1",
+      "D23:1",
+      "D25:3",
+      "D20:13"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1074.133,
+    "injectedChars": 2999,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 83,
+      "completion_tokens": 4,
+      "total_tokens": 87
+    },
+    "latencyMs": 782,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 870,
+      "completion_tokens": 3,
+      "total_tokens": 873
+    },
+    "latencyMs": 1335,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2999
+  },
+  "f1Delta": 0.0
+}

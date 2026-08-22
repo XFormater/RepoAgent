@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-47__q0102",
+  "sampleId": "conv-47",
+  "questionIndex": 102,
+  "question": "What did James enjoy doing on cold winter days?",
+  "answer": "Reading while snuggled under the covers",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D16:9"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D14:7",
+      "D12:10",
+      "D14:30",
+      "D30:3",
+      "D23:9",
+      "D30:5",
+      "D11:6",
+      "D20:14",
+      "D28:7",
+      "D30:7"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 530.906,
+    "injectedChars": 1570,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_off",
+    "memory_on"
+  ],
+  "memoryOff": {
+    "rawAnswer": "Sledding",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 82,
+      "completion_tokens": 3,
+      "total_tokens": 85
+    },
+    "latencyMs": 869,
+    "answer": "Sledding",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 550,
+      "completion_tokens": 3,
+      "total_tokens": 553
+    },
+    "latencyMs": 1288,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 1570
+  },
+  "f1Delta": 0.0
+}

@@ -1,0 +1,43 @@
+{
+  "benchmark": "LoCoMo QA through the nanobot long-term-memory retrieval path",
+  "version": "1.0.0",
+  "source": {
+    "repository": "https://github.com/snap-research/locomo",
+    "commit": "3eb6f2c585f5e1699204e3c3bdf7adc5c28cb376",
+    "dataset": "evals/vendor/locomo/locomo10.json",
+    "datasetSha256": "79fa87e90f04081343b8c8debecb80a9a6842b76a7aa537dc9fdf651ea698ff4",
+    "totalConversations": 10,
+    "totalQuestions": 1986
+  },
+  "selection": {
+    "name": "locomo-100-fixed-smoke",
+    "method": "proportional category quotas with 10 questions per conversation; lowest SHA-256 rank within each sample/category cell",
+    "questionsPerConversation": 10,
+    "expectedQuestions": 100
+  },
+  "memory": {
+    "ingestion": "pre-index each raw dated dialogue turn as one MemoryRecord",
+    "storage": "in-memory production adapters",
+    "embedding": "hash",
+    "embeddingDimension": 384,
+    "vectorTopK": 20,
+    "reranker": "identity",
+    "rerankerTopN": 10,
+    "maxInjectedChars": 6000,
+    "graphEnabled": false
+  },
+  "experiment": {
+    "variants": ["memory_off", "memory_on"],
+    "temperature": 0.0,
+    "maxOutputTokens": 64,
+    "scoring": "official LoCoMo token F1/category rules",
+    "primaryMetric": "memory_on_mean_f1",
+    "diagnostics": [
+      "memory_off_mean_f1",
+      "paired_f1_delta",
+      "non_adversarial_mean_f1",
+      "evidence_recall_at_10",
+      "evidence_hit_rate_at_10"
+    ]
+  }
+}

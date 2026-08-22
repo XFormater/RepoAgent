@@ -1,0 +1,43 @@
+{
+  "benchmark": "GitHubResearch Agent Controlled Context Governance Benchmark",
+  "version": "2.0.0",
+  "runId": "context-governance-v2-relevance-fix-20260813",
+  "startedAt": "2026-08-13T05:05:37.378558+00:00",
+  "executionMode": "online-model-in-the-loop",
+  "model": "deepseek-v4-pro",
+  "providerType": "OpenAICompatProvider",
+  "contextWindowTokens": 262144,
+  "generation": {
+    "temperature": 0.0,
+    "maxTokens": 256,
+    "reasoningEffort": "none"
+  },
+  "suite": "/root/GitHubResearch_Agent/evals/suites/context_governance_v2.json",
+  "suiteSha256": "3edd4279df4a6f60eac1b529135ef37eccdb40fe937f96feaf56bea9e210c5e5",
+  "configSha256": "d3979cd94b719d7d9617ff758800321d356921c47949106d43f303ddd0ec7408",
+  "gitCommit": "2f1fb94f78e1db6dba5230d0a522d7e5da3bd16b",
+  "python": "3.12.3",
+  "platform": "Linux-6.8.0-63-generic-x86_64-with-glibc2.39",
+  "repetitions": 1,
+  "selectedLayers": [
+    "context_governance"
+  ],
+  "selectedCases": [
+    "context-v2-latest-short",
+    "context-v2-latest-long",
+    "context-v2-recent-harbor",
+    "context-v2-recent-quartz",
+    "context-v2-recent-pine",
+    "context-v2-system-orbit",
+    "context-v2-system-violet",
+    "context-v2-conflict-borealis",
+    "context-v2-conflict-cypress",
+    "context-v2-early-shallow",
+    "context-v2-early-medium",
+    "context-v2-early-deep",
+    "context-v2-split-aurora",
+    "context-v2-split-atlas",
+    "context-v2-tool-recent",
+    "context-v2-tool-early"
+  ]
+}

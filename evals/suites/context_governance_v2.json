@@ -1,0 +1,191 @@
+{
+  "benchmark": "GitHubResearch Agent Controlled Context Governance Benchmark",
+  "version": "2.0.0",
+  "description": "Sixteen paired real-model cases measuring provider token savings, information retention, and governance loss boundaries.",
+  "requiredLayers": ["context_governance"],
+  "thresholds": {
+    "minLayerPassRate": 1.0,
+    "minContextTokenReduction": 0.6
+  },
+  "cases": [
+    {
+      "caseId": "context-v2-latest-short",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "contextCaseType": "latest_authority",
+      "prompt": "当前唯一有效发布代号是 LANTERN-284。只输出当前代号。",
+      "expected": "LANTERN-284",
+      "noiseTurns": 12,
+      "contextBlockLimit": 1200
+    },
+    {
+      "caseId": "context-v2-latest-long",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "contextCaseType": "latest_authority",
+      "prompt": "先前标签全部作废，最终审计标签为 SUMMIT-509。只输出最终标签。",
+      "expected": "SUMMIT-509",
+      "noiseTurns": 24,
+      "contextBlockLimit": 1200
+    },
+    {
+      "caseId": "context-v2-recent-harbor",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "contextCaseType": "recent_dependency",
+      "fact": "为稍后的核验记录：Harbor 的会话校验串是 HARBOR-731。",
+      "prompt": "Harbor 的会话校验串是什么？只输出校验串。",
+      "expected": "HARBOR-731",
+      "noiseTurns": 16,
+      "trailingNoiseTurns": 1,
+      "contextBlockLimit": 1200
+    },
+    {
+      "caseId": "context-v2-recent-quartz",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "contextCaseType": "recent_dependency",
+      "fact": "请记住当前任务：Quartz 的交付确认码是 CRYSTAL-617。",
+      "prompt": "Quartz 的交付确认码是什么？只输出确认码。",
+      "expected": "CRYSTAL-617",
+      "noiseTurns": 22,
+      "trailingNoiseTurns": 2,
+      "contextBlockLimit": 1400
+    },
+    {
+      "caseId": "context-v2-recent-pine",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "contextCaseType": "recent_dependency",
+      "fact": "当前 Pine 演练的收尾标记为 NEEDLE-448。",
+      "prompt": "刚才记录的 Pine 演练收尾标记是什么？只输出标记。",
+      "expected": "NEEDLE-448",
+      "noiseTurns": 26,
+      "trailingNoiseTurns": 3,
+      "contextBlockLimit": 1800
+    },
+    {
+      "caseId": "context-v2-system-orbit",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "contextCaseType": "system_anchor",
+      "fact": "Orbit 项目的稳定区域码是 RING-205。",
+      "prompt": "根据耐久会话摘要，Orbit 的稳定区域码是什么？只输出区域码。",
+      "expected": "RING-205",
+      "noiseTurns": 20,
+      "contextBlockLimit": 1200
+    },
+    {
+      "caseId": "context-v2-system-violet",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "contextCaseType": "system_anchor",
+      "fact": "Violet 报告的固定页脚短语是 PURPLE HORIZON。",
+      "prompt": "Violet 报告固定页脚短语是什么？只输出短语。",
+      "expected": "PURPLE HORIZON",
+      "noiseTurns": 28,
+      "contextBlockLimit": 1200
+    },
+    {
+      "caseId": "context-v2-conflict-borealis",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "contextCaseType": "conflict_override",
+      "oldFact": "Borealis 原先的部署代号是 EMBER-642。",
+      "prompt": "旧值已作废，Borealis 当前部署代号是 FLAME-900。只输出当前代号。",
+      "expected": "FLAME-900",
+      "noiseTurns": 18,
+      "contextBlockLimit": 1200
+    },
+    {
+      "caseId": "context-v2-conflict-cypress",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "contextCaseType": "conflict_override",
+      "oldFact": "Cypress 原访问口令是 MOSS-884。",
+      "prompt": "口令已经轮换，Cypress 当前唯一有效口令是 FERN-221。只输出当前口令。",
+      "expected": "FERN-221",
+      "noiseTurns": 25,
+      "contextBlockLimit": 1200
+    },
+    {
+      "caseId": "context-v2-early-shallow",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "contextCaseType": "early_dependency",
+      "fact": "稍后需要用到：Delta 的恢复码是 RIVER-125。",
+      "prompt": "最早记录的 Delta 恢复码是什么？只输出恢复码；不可见则输出 UNKNOWN。",
+      "expected": "RIVER-125",
+      "noiseTurns": 7,
+      "contextBlockLimit": 1200
+    },
+    {
+      "caseId": "context-v2-early-medium",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "contextCaseType": "early_dependency",
+      "fact": "为后续问题记录：Ember 服务的诊断短码是 SPARK-416。",
+      "prompt": "对话早期记录的 Ember 诊断短码是什么？只输出短码；不可见则输出 UNKNOWN。",
+      "expected": "SPARK-416",
+      "noiseTurns": 15,
+      "contextBlockLimit": 1600
+    },
+    {
+      "caseId": "context-v2-early-deep",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "contextCaseType": "early_dependency",
+      "fact": "请在长对话后仍记住：Raven 的审计码是 WING-332。",
+      "prompt": "对话开始时给出的 Raven 审计码是什么？只输出审计码；不可见则输出 UNKNOWN。",
+      "expected": "WING-332",
+      "noiseTurns": 26,
+      "contextBlockLimit": 2400
+    },
+    {
+      "caseId": "context-v2-split-aurora",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "contextCaseType": "split_dependency",
+      "earlyFact": "Aurora 的区域代号是 EAST-4。",
+      "recentFact": "Aurora 的发布波次是 WAVE-9。",
+      "prompt": "按“区域/波次”输出 Aurora 的两个值；任一不可见则输出 UNKNOWN。",
+      "expected": "EAST-4/WAVE-9",
+      "noiseTurns": 18,
+      "contextBlockLimit": 1600
+    },
+    {
+      "caseId": "context-v2-split-atlas",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "contextCaseType": "split_dependency",
+      "earlyFact": "Atlas 的固定归档日是 FRIDAY。",
+      "recentFact": "Atlas 的归档确认码是 STONE-612。",
+      "prompt": "按“归档日#确认码”输出 Atlas 的两个值；任一不可见则输出 UNKNOWN。",
+      "expected": "FRIDAY#STONE-612",
+      "noiseTurns": 24,
+      "contextBlockLimit": 2200
+    },
+    {
+      "caseId": "context-v2-tool-recent",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "contextCaseType": "recent_tool_result",
+      "toolResult": "The authoritative lookup value is TOOL-913.",
+      "prompt": "最近一次工具查询得到的权威值是什么？只输出值。",
+      "expected": "TOOL-913",
+      "noiseTurns": 20,
+      "contextBlockLimit": 1400
+    },
+    {
+      "caseId": "context-v2-tool-early",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "contextCaseType": "early_tool_result",
+      "toolResult": "The authoritative lookup value is TOOL-247.",
+      "prompt": "早期工具查询得到的权威值是什么？只输出值；不可见则输出 UNKNOWN。",
+      "expected": "TOOL-247",
+      "noiseTurns": 22,
+      "contextBlockLimit": 1800
+    }
+  ]
+}

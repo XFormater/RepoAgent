@@ -1,0 +1,67 @@
+{
+  "caseId": "conv-30__q0018",
+  "sampleId": "conv-30",
+  "questionIndex": 18,
+  "question": "Do Jon and Gina start businesses out of what they love?",
+  "answer": "Yes",
+  "adversarialAnswer": null,
+  "category": 1,
+  "categoryName": "multi_hop",
+  "evidence": [
+    "D1:4",
+    "D6:8"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D18:21",
+      "D6:17",
+      "D13:7",
+      "D16:15",
+      "D6:15",
+      "D12:5",
+      "D16:5",
+      "D1:15",
+      "D11:6",
+      "D10:6"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 707.926,
+    "injectedChars": 2022,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "Yes, they start businesses out of what they love.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 84,
+      "completion_tokens": 11,
+      "total_tokens": 95
+    },
+    "latencyMs": 1280,
+    "answer": "Yes, they start businesses out of what they love.",
+    "f1": 1.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "Yes, they start businesses out of what they love.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 657,
+      "completion_tokens": 11,
+      "total_tokens": 668
+    },
+    "latencyMs": 1061,
+    "answer": "Yes, they start businesses out of what they love.",
+    "f1": 1.0,
+    "injectedChars": 2022
+  },
+  "f1Delta": 0.0
+}

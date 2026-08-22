@@ -7,6 +7,7 @@ mutate an existing session history list in place.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
@@ -29,6 +30,8 @@ if TYPE_CHECKING:
 SNIP_SAFETY_BUFFER = 1024
 MICROCOMPACT_MIN_CHARS = 500
 INFLIGHT_COMPACT_TARGET_RATIO = 0.85
+MAX_RECALLED_HISTORY_BLOCKS = 8
+MAX_RECALLED_TOOL_BLOCKS = 3
 COMPACTABLE_TOOLS = frozenset({
     "read_file", "exec", "grep", "find_files",
     "web_search", "web_fetch", "list_dir", "list_exec_sessions",
@@ -410,7 +413,11 @@ class ContextGovernor:
             return messages
 
         system_messages = [dict(msg) for msg in messages if msg.get("role") == "system"]
-        non_system = [dict(msg) for msg in messages if msg.get("role") != "system"]
+        non_system = [
+            (idx, dict(msg))
+            for idx, msg in enumerate(messages)
+            if msg.get("role") != "system"
+        ]
         if not non_system:
             return messages
 
@@ -422,17 +429,151 @@ class ContextGovernor:
             tools,
         )
         remaining_budget = max(0, budget - max(system_tokens, fixed_tokens))
-        kept: list[dict[str, Any]] = []
-        kept_tokens = 0
-        for message in reversed(non_system):
-            msg_tokens = estimate_message_tokens(message)
-            if kept and kept_tokens + msg_tokens > remaining_budget:
-                break
-            kept.append(message)
-            kept_tokens += msg_tokens
-        kept.reverse()
+        blocks = self._history_blocks(non_system)
+        if not blocks:
+            plain_non_system = [message for _, message in non_system]
+            return system_messages + self._legal_history_tail([], plain_non_system)
 
-        return system_messages + self._legal_history_tail(kept, non_system)
+        selected: set[int] = {len(blocks) - 1}
+        used_tokens = self._block_tokens(blocks[-1][1])
+        latest_user = next(
+            (
+                message
+                for _, message in reversed(non_system)
+                if message.get("role") == "user"
+            ),
+            None,
+        )
+        query_terms = self._relevance_terms(self._message_search_text(latest_user or {}))
+
+        # Any messages produced during the current runner invocation are authoritative
+        # in-flight state. They must not disappear merely because an old transcript
+        # overflowed after a tool call.
+        for block_index, (original_indexes, block) in enumerate(blocks[:-1]):
+            if any(index >= config.inflight_start_index for index in original_indexes):
+                block_tokens = self._block_tokens(block)
+                if used_tokens + block_tokens <= remaining_budget:
+                    selected.add(block_index)
+                    used_tokens += block_tokens
+
+        relevant = sorted(
+            (
+                (self._block_relevance(block, query_terms), block_index)
+                for block_index, (_, block) in enumerate(blocks[:-1])
+                if block_index not in selected
+            ),
+            key=lambda item: (item[0], item[1]),
+            reverse=True,
+        )
+        recalled = 0
+        for score, block_index in relevant:
+            if score <= 0 or recalled >= MAX_RECALLED_HISTORY_BLOCKS:
+                break
+            block_tokens = self._block_tokens(blocks[block_index][1])
+            if used_tokens + block_tokens <= remaining_budget:
+                selected.add(block_index)
+                used_tokens += block_tokens
+                recalled += 1
+
+        # Completed tool transactions are expensive to reproduce and may carry opaque
+        # values that lexical relevance cannot connect to a later natural-language
+        # question. Retain a bounded number of complete tool-containing user turns.
+        tool_candidates = [
+            block_index
+            for block_index, (_, block) in enumerate(blocks[:-1])
+            if block_index not in selected and self._block_has_tool_exchange(block)
+        ][-MAX_RECALLED_TOOL_BLOCKS:]
+        for block_index in tool_candidates:
+            block_tokens = self._block_tokens(blocks[block_index][1])
+            if used_tokens + block_tokens <= remaining_budget:
+                selected.add(block_index)
+                used_tokens += block_tokens
+
+        # Spend the remaining budget on a contiguous recent tail. Relevant historical
+        # blocks above displace irrelevant tail blocks instead of increasing the cap.
+        for block_index in range(len(blocks) - 2, -1, -1):
+            if block_index in selected:
+                continue
+            block_tokens = self._block_tokens(blocks[block_index][1])
+            if used_tokens + block_tokens > remaining_budget:
+                break
+            selected.add(block_index)
+            used_tokens += block_tokens
+
+        kept = [
+            message
+            for block_index, (_, block) in enumerate(blocks)
+            if block_index in selected
+            for message in block
+        ]
+        plain_non_system = [message for _, message in non_system]
+        return system_messages + self._legal_history_tail(kept, plain_non_system)
+
+    @staticmethod
+    def _history_blocks(
+        messages: list[tuple[int, dict[str, Any]]],
+    ) -> list[tuple[list[int], list[dict[str, Any]]]]:
+        """Group history into user-owned turns so tool protocols stay intact."""
+        blocks: list[tuple[list[int], list[dict[str, Any]]]] = []
+        current_indexes: list[int] = []
+        current: list[dict[str, Any]] = []
+        for original_index, message in messages:
+            if message.get("role") == "user" and current:
+                blocks.append((current_indexes, current))
+                current_indexes = []
+                current = []
+            current_indexes.append(original_index)
+            current.append(message)
+        if current:
+            blocks.append((current_indexes, current))
+        return blocks
+
+    @staticmethod
+    def _block_tokens(block: list[dict[str, Any]]) -> int:
+        return sum(estimate_message_tokens(message) for message in block)
+
+    @staticmethod
+    def _message_search_text(message: dict[str, Any]) -> str:
+        content = message.get("content")
+        parts = [content] if isinstance(content, str) else []
+        for tool_call in cast(list[Any], message.get("tool_calls") or []):
+            if not isinstance(tool_call, dict):
+                continue
+            function = cast(dict[str, Any], tool_call).get("function")
+            if isinstance(function, dict):
+                parts.extend(str(value) for value in cast(dict[str, Any], function).values())
+        return " ".join(parts)
+
+    @classmethod
+    def _relevance_terms(cls, text: str) -> set[str]:
+        ascii_terms = {
+            token.casefold()
+            for token in re.findall(r"[A-Za-z0-9][A-Za-z0-9_.:/#|-]{2,}", text)
+            if token.casefold()
+            not in {
+                "the", "and", "for", "only", "current", "what", "from",
+                "this", "that", "with", "unknown", "output",
+            }
+        }
+        cjk_chunks = re.findall(r"[\u3400-\u9fff]+", text)
+        cjk_terms = {
+            chunk[start : start + width]
+            for chunk in cjk_chunks
+            for width in (2, 3, 4)
+            for start in range(max(0, len(chunk) - width + 1))
+        }
+        return ascii_terms | cjk_terms
+
+    @classmethod
+    def _block_relevance(cls, block: list[dict[str, Any]], query_terms: set[str]) -> int:
+        if not query_terms:
+            return 0
+        text = " ".join(cls._message_search_text(message) for message in block)
+        return len(query_terms & cls._relevance_terms(text))
+
+    @staticmethod
+    def _block_has_tool_exchange(block: list[dict[str, Any]]) -> bool:
+        return any(message.get("role") == "tool" or message.get("tool_calls") for message in block)
 
     @staticmethod
     def _tool_result_compaction_message(message: dict[str, Any]) -> str:

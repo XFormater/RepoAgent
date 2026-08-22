@@ -1,0 +1,67 @@
+{
+  "caseId": "conv-42__q0049",
+  "sampleId": "conv-42",
+  "questionIndex": 49,
+  "question": "How many times has Joanna's scripts been rejected?",
+  "answer": "Twice",
+  "adversarialAnswer": null,
+  "category": 1,
+  "categoryName": "multi_hop",
+  "evidence": [
+    "D14:1",
+    "D24:12"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D27:8",
+      "D19:5",
+      "D2:15",
+      "D19:15",
+      "D27:23",
+      "D4:11",
+      "D2:26",
+      "D9:12",
+      "D22:22",
+      "D26:11"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1372.032,
+    "injectedChars": 2360,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 82,
+      "completion_tokens": 3,
+      "total_tokens": 85
+    },
+    "latencyMs": 1169,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 737,
+      "completion_tokens": 3,
+      "total_tokens": 740
+    },
+    "latencyMs": 1109,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2360
+  },
+  "f1Delta": 0.0
+}

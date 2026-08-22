@@ -1,0 +1,67 @@
+{
+  "caseId": "conv-42__q0050",
+  "sampleId": "conv-42",
+  "questionIndex": 50,
+  "question": "What is something Nate gave to Joanna that brings her a lot of joy?",
+  "answer": "stuffed toy pup",
+  "adversarialAnswer": null,
+  "category": 1,
+  "categoryName": "multi_hop",
+  "evidence": [
+    "D13:9",
+    "D24:2"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D12:3",
+      "D24:4",
+      "D19:13",
+      "D18:3",
+      "D28:25",
+      "D19:3",
+      "D23:1",
+      "D22:19",
+      "D29:3",
+      "D23:26"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1224.059,
+    "injectedChars": 3379,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 87,
+      "completion_tokens": 4,
+      "total_tokens": 91
+    },
+    "latencyMs": 1297,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "a stuffed animal dog",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 982,
+      "completion_tokens": 4,
+      "total_tokens": 986
+    },
+    "latencyMs": 994,
+    "answer": "a stuffed animal dog",
+    "f1": 0.3333333333333333,
+    "injectedChars": 3379
+  },
+  "f1Delta": 0.3333333333333333
+}

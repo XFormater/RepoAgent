@@ -43,6 +43,7 @@ from nanobot.repo_agent.registry import RepositoryExpertRegistry
 from nanobot.repo_agent.repository import RepositoryError, RepositoryManager
 from nanobot.repo_agent.research import RepositoryResearchOrchestrator
 from nanobot.repo_agent.store import RepositoryStateStore
+from nanobot.security.logical_vfs import LogicalVFS, VFSIdentity
 from nanobot.utils.llm_runtime import LLMRuntime
 from nanobot.utils.prompt_templates import render_template
 
@@ -126,10 +127,11 @@ class RepositoryOrchestrator:
         workspace: Path,
         tools: ToolRegistry,
         harness: HarnessService | None = None,
+        vfs: LogicalVFS | None = None,
     ):
         self.config = config
         self.tools = tools
-        self.manager = RepositoryManager(workspace, config)
+        self.manager = RepositoryManager(workspace, config, vfs=vfs)
         self.store = RepositoryStateStore(workspace, config.state_dir)
         self.registry = RepositoryExpertRegistry(config, tools)
         self.client = RepositoryControlClient()
@@ -1041,6 +1043,45 @@ class RepositoryOrchestrator:
         )
 
     async def run(
+        self,
+        *,
+        request: str,
+        actor: str,
+        session_key: str,
+        initial_messages: list[dict[str, Any]],
+        runtime: LLMRuntime,
+        invoke: RepositoryAgentInvoker,
+        on_update: Callable[[str], Awaitable[None]] | None = None,
+        tenant_id: str = "default",
+    ) -> RepositoryTurnResult:
+        """Run one repository turn inside its user-scoped logical VFS."""
+        if self.manager.vfs is None or not self.manager.vfs.enabled:
+            return await self._run_scoped(
+                request=request,
+                actor=actor,
+                session_key=session_key,
+                initial_messages=initial_messages,
+                runtime=runtime,
+                invoke=invoke,
+                on_update=on_update,
+            )
+        identity = VFSIdentity(
+            tenant_id=tenant_id,
+            user_id=actor or session_key,
+            session_id=session_key,
+        )
+        with self.manager.vfs.bind(identity), self.manager.bind_vfs_identity(identity):
+            return await self._run_scoped(
+                request=request,
+                actor=actor,
+                session_key=session_key,
+                initial_messages=initial_messages,
+                runtime=runtime,
+                invoke=invoke,
+                on_update=on_update,
+            )
+
+    async def _run_scoped(
         self,
         *,
         request: str,

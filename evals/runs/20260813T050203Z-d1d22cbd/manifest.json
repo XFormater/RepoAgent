@@ -1,0 +1,42 @@
+{
+  "benchmark": "GitHubResearch Agent Model-in-the-Loop System Benchmark",
+  "version": "1.0.0",
+  "runId": "20260813T050203Z-d1d22cbd",
+  "startedAt": "2026-08-13T05:02:03.070135+00:00",
+  "executionMode": "online-model-in-the-loop",
+  "model": "deepseek-v4-pro",
+  "providerType": "OpenAICompatProvider",
+  "contextWindowTokens": 262144,
+  "generation": {
+    "temperature": 0.0,
+    "maxTokens": 256,
+    "reasoningEffort": "none"
+  },
+  "suite": "/root/GitHubResearch_Agent/evals/suites/agent_system_model_v1.json",
+  "suiteSha256": "cfc56bafdf515ed0ad17570e8d10dda96cd15a54dc113955e59d9785b48d687a",
+  "configSha256": "d3979cd94b719d7d9617ff758800321d356921c47949106d43f303ddd0ec7408",
+  "gitCommit": "2f1fb94f78e1db6dba5230d0a522d7e5da3bd16b",
+  "python": "3.12.3",
+  "platform": "Linux-6.8.0-63-generic-x86_64-with-glibc2.39",
+  "repetitions": 1,
+  "selectedLayers": [
+    "context_governance",
+    "harness_regression",
+    "memory_benefit",
+    "recovery_correctness"
+  ],
+  "selectedCases": [
+    "harness-single-tool-roundtrip",
+    "harness-multi-tool-state",
+    "harness-write-read-state",
+    "context-recent-constraint",
+    "context-latest-user-fact",
+    "context-instruction-retention",
+    "memory-cross-session-project",
+    "memory-user-preference",
+    "memory-delayed-recall",
+    "recovery-transient-tool",
+    "recovery-ack-loss-boundary",
+    "recovery-checkpoint-resume"
+  ]
+}

@@ -37,6 +37,7 @@ Pick the row that matches what you want to accomplish next:
 | Schedule work or create a local trigger | [Automations](./automations.md) |
 | Understand and manage long-term memory | [Memory](./memory.md) |
 | Operate supervised multi-agent workflows | [Production Multi-Agent Harness](./multi-agent-harness.md) |
+| Gate Harness quality regressions in CI | [Harness Quality Evaluation](./harness-quality-evaluation.md) |
 | Analyze and maintain a real GitHub repository | [Repository Agent](./repository-agent.md) |
 | Run nanobot continuously | [Deployment](./deployment.md) |
 | Run separate bots or workspaces | [Multiple Instances](./multiple-instances.md) |

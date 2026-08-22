@@ -55,6 +55,8 @@ class _SubagentOrigin(TypedDict):
     channel: str
     chat_id: str
     session_key: str | None
+    tenant_id: str
+    user_id: str
 
 
 @dataclass(slots=True)
@@ -347,6 +349,7 @@ class SubagentManager:
         temperature: float | None = None,
         role: str = AgentRole.WORKER.value,
         tenant_id: str = "default",
+        user_id: str = "default",
         exclusive_workspace: bool = False,
         workspace_scope: WorkspaceScope | None = None,
         *,
@@ -363,6 +366,8 @@ class SubagentManager:
             "channel": origin_channel,
             "chat_id": origin_chat_id,
             "session_key": session_key,
+            "tenant_id": tenant_id,
+            "user_id": user_id,
         }
 
         agent_role = AgentRole(role)
@@ -430,6 +435,7 @@ class SubagentManager:
         temperature: float | None = None,
         role: str = AgentRole.WORKER.value,
         tenant_id: str = "default",
+        user_id: str = "default",
         exclusive_workspace: bool = False,
         workspace_scope: WorkspaceScope | None = None,
         *,
@@ -446,6 +452,8 @@ class SubagentManager:
             "channel": origin_channel,
             "chat_id": origin_chat_id,
             "session_key": session_key,
+            "tenant_id": tenant_id,
+            "user_id": user_id,
         }
         agent_role = AgentRole(role)
         status = SubagentStatus(
@@ -600,6 +608,13 @@ class SubagentManager:
                     message_id=origin_message_id,
                     session_key=sess_key,
                     runtime=runtime,
+                    tenant_id=str(origin.get("tenant_id", "default")),
+                    user_id=str(
+                        origin.get("user_id")
+                        or origin.get("sender_id")
+                        or origin.get("chat_id")
+                        or "default"
+                    ),
                 )
             )
             token = bind_workspace_scope(workspace_scope) if workspace_scope is not None else None

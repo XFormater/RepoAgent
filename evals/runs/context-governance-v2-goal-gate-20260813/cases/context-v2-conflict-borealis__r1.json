@@ -1,0 +1,55 @@
+{
+  "caseId": "context-v2-conflict-borealis",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 2076,
+  "error": null,
+  "passed": true,
+  "expected": "FLAME-900",
+  "contextCaseType": "conflict_override",
+  "contextBlockLimit": 1200,
+  "sourceInputSha256": "6aab55043c29cd14a51b076562352fe4ff8ea88cbeb74d018d40036b154b8d33",
+  "sourceInputMessages": 40,
+  "variantOrder": [
+    "governance_off",
+    "governance_on"
+  ],
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "FLAME-900",
+    "normalizedAnswer": "FLAME-900",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 3743,
+      "completion_tokens": 4,
+      "total_tokens": 3747,
+      "cached_tokens": 3712,
+      "provider_tokens": 3747
+    },
+    "modelInputMessages": 40,
+    "estimatedInputTokens": 3814,
+    "providerPromptTokens": 3743
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": true,
+    "answer": "FLAME-900",
+    "normalizedAnswer": "FLAME-900",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1104,
+      "completion_tokens": 4,
+      "total_tokens": 1108,
+      "cached_tokens": 1024,
+      "provider_tokens": 1108
+    },
+    "modelInputMessages": 14,
+    "estimatedInputTokens": 1136,
+    "providerPromptTokens": 1104
+  },
+  "qualityDelta": 0,
+  "estimatedTokenReduction": 0.7021499737808076,
+  "providerPromptTokenReduction": 0.705049425594443
+}

@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-43__q0182",
+  "sampleId": "conv-43",
+  "questionIndex": 182,
+  "question": "What was the highest number of points Tim scored in a game recently?",
+  "answer": "No information available",
+  "adversarialAnswer": "40 points",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D3:1"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D1:8",
+      "D15:27",
+      "D23:3",
+      "D1:18",
+      "D20:37",
+      "D3:2",
+      "D26:32",
+      "D11:10",
+      "D26:8",
+      "D12:26"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 531.951,
+    "injectedChars": 2728,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 104,
+      "completion_tokens": 4,
+      "total_tokens": 108
+    },
+    "latencyMs": 1072,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 846,
+      "completion_tokens": 4,
+      "total_tokens": 850
+    },
+    "latencyMs": 1455,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 2728
+  },
+  "f1Delta": 0.0
+}

@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-43__q0202",
+  "sampleId": "conv-43",
+  "questionIndex": 202,
+  "question": "What is Tim excited to see at Disneyland?",
+  "answer": "No information available",
+  "adversarialAnswer": "The Harry Potter stuff",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D10:11"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D12:23",
+      "D13:9",
+      "D6:18",
+      "D25:11",
+      "D12:29",
+      "D27:11",
+      "D27:39",
+      "D12:17",
+      "D14:4",
+      "D21:5"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 372.077,
+    "injectedChars": 1901,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "(b) The Harry Potter stuff.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 101,
+      "completion_tokens": 7,
+      "total_tokens": 108
+    },
+    "latencyMs": 1095,
+    "answer": "The Harry Potter stuff",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 650,
+      "completion_tokens": 3,
+      "total_tokens": 653
+    },
+    "latencyMs": 1256,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 1901
+  },
+  "f1Delta": 1.0
+}

@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-41__q0129",
+  "sampleId": "conv-41",
+  "questionIndex": 129,
+  "question": "What does John think about trying new classes at the yoga studio?",
+  "answer": "Trying new classes is a fun way to switch up the exercise routine.",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D25:14"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D27:7",
+      "D13:35",
+      "D11:5",
+      "D22:9",
+      "D25:11",
+      "D18:22",
+      "D21:8",
+      "D2:6",
+      "D13:23",
+      "D17:15"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 729.018,
+    "injectedChars": 1960,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "He is open to trying new classes.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 85,
+      "completion_tokens": 8,
+      "total_tokens": 93
+    },
+    "latencyMs": 1253,
+    "answer": "He is open to trying new classes.",
+    "f1": 0.5555555555555556,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 642,
+      "completion_tokens": 3,
+      "total_tokens": 645
+    },
+    "latencyMs": 1018,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 1960
+  },
+  "f1Delta": -0.5555555555555556
+}

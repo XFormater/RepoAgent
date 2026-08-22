@@ -1,0 +1,48 @@
+{
+  "caseId": "context-v2-tool-early",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 2251,
+  "error": null,
+  "passed": false,
+  "expected": "TOOL-247",
+  "contextCaseType": "early_tool_result",
+  "contextBlockLimit": 1800,
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "TOOL-247",
+    "normalizedAnswer": "TOOL-247",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 4610,
+      "completion_tokens": 4,
+      "total_tokens": 4614,
+      "provider_tokens": 4614
+    },
+    "modelInputMessages": 50,
+    "estimatedInputTokens": 4699,
+    "providerPromptTokens": 4610
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": false,
+    "answer": "UNKNOWN",
+    "normalizedAnswer": "UNKNOWN",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1684,
+      "completion_tokens": 2,
+      "total_tokens": 1686,
+      "cached_tokens": 1152,
+      "provider_tokens": 1686
+    },
+    "modelInputMessages": 18,
+    "estimatedInputTokens": 1721,
+    "providerPromptTokens": 1684
+  },
+  "qualityDelta": -1,
+  "estimatedTokenReduction": 0.6337518620983188,
+  "providerPromptTokenReduction": 0.63470715835141
+}

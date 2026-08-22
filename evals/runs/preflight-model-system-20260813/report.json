@@ -1,0 +1,116 @@
+{
+  "benchmark": "GitHubResearch Agent Model-in-the-Loop System Benchmark",
+  "version": "1.0.0",
+  "runId": "preflight-model-system-20260813",
+  "model": "deepseek-v4-pro",
+  "executionMode": "online-model-in-the-loop",
+  "passed": false,
+  "caseRuns": 1,
+  "passedCaseRuns": 1,
+  "passRate": 1.0,
+  "layerScores": {
+    "harness_regression": {
+      "passed": 1,
+      "total": 1,
+      "passRate": 1.0
+    },
+    "context_governance": {
+      "passed": 0,
+      "total": 0,
+      "passRate": 0.0
+    },
+    "memory_benefit": {
+      "passed": 0,
+      "total": 0,
+      "passRate": 0.0
+    },
+    "recovery_correctness": {
+      "passed": 0,
+      "total": 0,
+      "passRate": 0.0
+    }
+  },
+  "evaluationPaths": {
+    "fixedBenchmark": {
+      "caseRuns": 1,
+      "layerScores": {
+        "harness_regression": {
+          "passed": 1,
+          "total": 1,
+          "passRate": 1.0
+        },
+        "context_governance": {
+          "passed": 0,
+          "total": 0,
+          "passRate": 0.0
+        },
+        "memory_benefit": {
+          "passed": 0,
+          "total": 0,
+          "passRate": 0.0
+        },
+        "recovery_correctness": {
+          "passed": 0,
+          "total": 0,
+          "passRate": 0.0
+        }
+      }
+    },
+    "controlledExperiments": {
+      "contextGovernance": {
+        "pairedCases": 0,
+        "controlAccuracy": 0.0,
+        "treatmentAccuracy": 0.0,
+        "meanEstimatedTokenReduction": 0.0
+      },
+      "memoryBenefit": {
+        "pairedCases": 0,
+        "controlAccuracy": 0.0,
+        "treatmentAccuracy": 0.0,
+        "accuracyGain": 0.0,
+        "retrievalHitRate": 0.0
+      }
+    },
+    "artifactAggregation": {
+      "runDirectory": "/root/GitHubResearch_Agent/evals/runs/preflight-model-system-20260813",
+      "eventCount": 4,
+      "perCaseArtifacts": 1
+    }
+  },
+  "failures": [
+    "context_governance.passRate 0.0000 < 1.0000",
+    "memory_benefit.passRate 0.0000 < 1.0000",
+    "recovery_correctness.passRate 0.0000 < 1.0000",
+    "context.tokenReduction 0.0000 < 0.1500",
+    "memory.accuracyGain 0.0000 < 0.5000"
+  ],
+  "results": [
+    {
+      "caseId": "harness-single-tool-roundtrip",
+      "layer": "harness_regression",
+      "scenario": "lookup",
+      "repetition": 1,
+      "latencyMs": 4285,
+      "error": null,
+      "passed": true,
+      "answer": "CANARY-47",
+      "normalizedAnswer": "CANARY-47",
+      "expected": "CANARY-47",
+      "stopReason": "completed",
+      "toolCalls": [
+        "lookup_value"
+      ],
+      "requiredCalls": [
+        "lookup_value"
+      ],
+      "lookupKeysValid": true,
+      "usage": {
+        "prompt_tokens": 752,
+        "completion_tokens": 50,
+        "total_tokens": 802,
+        "provider_tokens": 802,
+        "cached_tokens": 384
+      }
+    }
+  ]
+}

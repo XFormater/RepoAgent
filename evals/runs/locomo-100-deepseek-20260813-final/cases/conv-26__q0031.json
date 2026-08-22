@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-26__q0031",
+  "sampleId": "conv-26",
+  "questionIndex": 31,
+  "question": "When did Melanie go camping in June?",
+  "answer": "The week before 27 June 2023",
+  "adversarialAnswer": null,
+  "category": 2,
+  "categoryName": "temporal",
+  "evidence": [
+    "D4:8"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D7:12",
+      "D8:36",
+      "D1:8",
+      "D2:7",
+      "D6:8",
+      "D13:14",
+      "D12:10",
+      "D2:9",
+      "D2:13",
+      "D5:8"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 2530.125,
+    "injectedChars": 1958,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 80,
+      "completion_tokens": 3,
+      "total_tokens": 83
+    },
+    "latencyMs": 1033,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 641,
+      "completion_tokens": 4,
+      "total_tokens": 645
+    },
+    "latencyMs": 1468,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 1958
+  },
+  "f1Delta": 0.0
+}

@@ -1,0 +1,67 @@
+{
+  "caseId": "conv-30__q0004",
+  "sampleId": "conv-30",
+  "questionIndex": 4,
+  "question": "Why did Jon decide to start his dance studio?",
+  "answer": "He lost his job and decided to start his own business to share his passion.",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D1:2",
+    "D1:4"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D3:1",
+      "D16:6",
+      "D15:5",
+      "D6:3",
+      "D9:8",
+      "D1:6",
+      "D6:15",
+      "D18:18",
+      "D1:24",
+      "D2:6"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 788.216,
+    "injectedChars": 2677,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "He wanted to share his passion for dance with others.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 82,
+      "completion_tokens": 11,
+      "total_tokens": 93
+    },
+    "latencyMs": 1039,
+    "answer": "He wanted to share his passion for dance with others.",
+    "f1": 0.41666666666666663,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "He wanted to teach others the joy that dancing brings him.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 808,
+      "completion_tokens": 12,
+      "total_tokens": 820
+    },
+    "latencyMs": 1318,
+    "answer": "He wanted to teach others the joy that dancing brings him.",
+    "f1": 0.16666666666666666,
+    "injectedChars": 2677
+  },
+  "f1Delta": -0.24999999999999997
+}

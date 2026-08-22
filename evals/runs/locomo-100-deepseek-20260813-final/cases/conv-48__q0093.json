@@ -1,0 +1,67 @@
+{
+  "caseId": "conv-48__q0093",
+  "sampleId": "conv-48",
+  "questionIndex": 93,
+  "question": "What projects is Jolene planning for next year?",
+  "answer": "developing renewable energy finding ways to supply clean water to those with limited access",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D22:10",
+    "D22:12"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D10:14",
+      "D5:9",
+      "D19:8",
+      "D4:15",
+      "D2:8",
+      "D12:6",
+      "D20:1",
+      "D1:4",
+      "D2:30",
+      "D7:17"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1191.012,
+    "injectedChars": 1960,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 82,
+      "completion_tokens": 3,
+      "total_tokens": 85
+    },
+    "latencyMs": 993,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 637,
+      "completion_tokens": 3,
+      "total_tokens": 640
+    },
+    "latencyMs": 1319,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 1960
+  },
+  "f1Delta": 0.0
+}

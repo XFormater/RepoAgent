@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-26__q0169",
+  "sampleId": "conv-26",
+  "questionIndex": 169,
+  "question": "What is Caroline's reason for getting into running?",
+  "answer": "No information available",
+  "adversarialAnswer": "To de-stress and clear her mind",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D7:21"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D7:21",
+      "D15:1",
+      "D17:6",
+      "D2:14",
+      "D19:8",
+      "D3:10",
+      "D12:5",
+      "D17:18",
+      "D1:6",
+      "D9:15"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 1980.379,
+    "injectedChars": 1901,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "(b) To de-stress and clear her mind.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 105,
+      "completion_tokens": 11,
+      "total_tokens": 116
+    },
+    "latencyMs": 1268,
+    "answer": "To de-stress and clear her mind",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 645,
+      "completion_tokens": 3,
+      "total_tokens": 648
+    },
+    "latencyMs": 1924,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 1901
+  },
+  "f1Delta": 1.0
+}

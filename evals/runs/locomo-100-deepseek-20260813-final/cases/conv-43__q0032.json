@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-43__q0032",
+  "sampleId": "conv-43",
+  "questionIndex": 32,
+  "question": "Which US states might Tim be in during September 2023 based on his plans of visiting Universal Studios?",
+  "answer": "California or Florida",
+  "adversarialAnswer": null,
+  "category": 3,
+  "categoryName": "open_domain",
+  "evidence": [
+    "D10:9"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D11:18",
+      "D1:4",
+      "D6:16",
+      "D26:12",
+      "D10:1",
+      "D18:5",
+      "D2:5",
+      "D8:10",
+      "D21:15",
+      "D15:37"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1322.792,
+    "injectedChars": 2268,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_off",
+    "memory_on"
+  ],
+  "memoryOff": {
+    "rawAnswer": "California or Florida",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 93,
+      "completion_tokens": 3,
+      "total_tokens": 96
+    },
+    "latencyMs": 999,
+    "answer": "California or Florida",
+    "f1": 1.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 710,
+      "completion_tokens": 3,
+      "total_tokens": 713
+    },
+    "latencyMs": 1224,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2268
+  },
+  "f1Delta": -1.0
+}

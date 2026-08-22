@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-42__q0114",
+  "sampleId": "conv-42",
+  "questionIndex": 114,
+  "question": "What kind of books does Nate enjoy?",
+  "answer": "Adventures and magic",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D9:14"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D5:8",
+      "D20:5",
+      "D9:13",
+      "D19:15",
+      "D25:5",
+      "D27:29",
+      "D9:12",
+      "D10:16",
+      "D9:2",
+      "D2:12"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 776.603,
+    "injectedChars": 1925,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 80,
+      "completion_tokens": 4,
+      "total_tokens": 84
+    },
+    "latencyMs": 1232,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "This trilogy is one of my faves. The world building, battles, and storytelling always blow me away!",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 634,
+      "completion_tokens": 22,
+      "total_tokens": 656
+    },
+    "latencyMs": 1511,
+    "answer": "This trilogy is one of my faves. The world building, battles, and storytelling always blow me away!",
+    "f1": 0.0,
+    "injectedChars": 1925
+  },
+  "f1Delta": 0.0
+}

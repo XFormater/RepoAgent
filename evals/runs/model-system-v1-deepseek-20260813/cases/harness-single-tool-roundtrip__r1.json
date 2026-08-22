@@ -1,0 +1,27 @@
+{
+  "caseId": "harness-single-tool-roundtrip",
+  "layer": "harness_regression",
+  "scenario": "lookup",
+  "repetition": 1,
+  "latencyMs": 4263,
+  "error": null,
+  "passed": true,
+  "answer": "CANARY-47",
+  "normalizedAnswer": "CANARY-47",
+  "expected": "CANARY-47",
+  "stopReason": "completed",
+  "toolCalls": [
+    "lookup_value"
+  ],
+  "requiredCalls": [
+    "lookup_value"
+  ],
+  "lookupKeysValid": true,
+  "usage": {
+    "prompt_tokens": 752,
+    "completion_tokens": 50,
+    "total_tokens": 802,
+    "cached_tokens": 640,
+    "provider_tokens": 802
+  }
+}

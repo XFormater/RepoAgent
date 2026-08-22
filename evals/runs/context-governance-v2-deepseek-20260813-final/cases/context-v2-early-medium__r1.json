@@ -1,0 +1,55 @@
+{
+  "caseId": "context-v2-early-medium",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 1451,
+  "error": null,
+  "passed": false,
+  "expected": "SPARK-416",
+  "contextCaseType": "early_dependency",
+  "contextBlockLimit": 1600,
+  "sourceInputSha256": "3348ef9056687473e986d1af658a9fb016c21df4b9757719eba707ad81e231c2",
+  "sourceInputMessages": 34,
+  "variantOrder": [
+    "governance_off",
+    "governance_on"
+  ],
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "SPARK-416",
+    "normalizedAnswer": "SPARK-416",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 3136,
+      "completion_tokens": 4,
+      "total_tokens": 3140,
+      "cached_tokens": 3072,
+      "provider_tokens": 3140
+    },
+    "modelInputMessages": 34,
+    "estimatedInputTokens": 3206,
+    "providerPromptTokens": 3136
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": false,
+    "answer": "UNKNOWN",
+    "normalizedAnswer": "UNKNOWN",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1485,
+      "completion_tokens": 2,
+      "total_tokens": 1487,
+      "cached_tokens": 1408,
+      "provider_tokens": 1487
+    },
+    "modelInputMessages": 16,
+    "estimatedInputTokens": 1520,
+    "providerPromptTokens": 1485
+  },
+  "qualityDelta": -1,
+  "estimatedTokenReduction": 0.5258889582033687,
+  "providerPromptTokenReduction": 0.5264668367346939
+}

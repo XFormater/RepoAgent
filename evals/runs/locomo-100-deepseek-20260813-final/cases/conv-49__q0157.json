@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-49__q0157",
+  "sampleId": "conv-49",
+  "questionIndex": 157,
+  "question": "How did Sam get into watercolor painting?",
+  "answer": "No information available",
+  "adversarialAnswer": "friend's advice",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D1:16"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D1:15",
+      "D11:9",
+      "D12:3",
+      "D8:21",
+      "D1:5",
+      "D17:7",
+      "D24:16",
+      "D15:9",
+      "D9:9",
+      "D24:6"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 403.008,
+    "injectedChars": 1709,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_off",
+    "memory_on"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 99,
+      "completion_tokens": 3,
+      "total_tokens": 102
+    },
+    "latencyMs": 889,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 609,
+      "completion_tokens": 3,
+      "total_tokens": 612
+    },
+    "latencyMs": 1054,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 1709
+  },
+  "f1Delta": 0.0
+}

@@ -3,6 +3,7 @@
 # pyright: reportConstantRedefinition=false, reportMissingTypeStubs=false, reportPrivateUsage=false, reportUnusedFunction=false, reportUnusedImport=false
 
 import asyncio
+import json
 import os
 import sys
 from contextlib import suppress
@@ -390,6 +391,55 @@ def harness_worker(
         asyncio.run(run())
     except KeyboardInterrupt:
         console.print("[yellow]Harness worker stopped.[/yellow]")
+
+
+@app.command("harness-eval")
+def harness_eval(
+    dataset: Path = typer.Argument(..., exists=True, readable=True, help="Golden cases JSON"),
+    observations: Path = typer.Argument(
+        ..., exists=True, readable=True, help="Recorded Harness observations JSON"
+    ),
+    output: Path | None = typer.Option(None, "--output", "-o", help="Write JSON report"),
+    baseline: Path | None = typer.Option(
+        None, "--baseline", exists=True, readable=True, help="Previous report JSON"
+    ),
+) -> None:
+    """Run deterministic Harness quality and regression gates."""
+    from pydantic import TypeAdapter
+
+    from nanobot.harness import (
+        EvaluationCase,
+        EvaluationObservation,
+        EvaluationReport,
+        EvaluationThresholds,
+        evaluate_suite,
+    )
+
+    dataset_payload = json.loads(dataset.read_text(encoding="utf-8"))
+    observation_payload = json.loads(observations.read_text(encoding="utf-8"))
+    cases = TypeAdapter(list[EvaluationCase]).validate_python(dataset_payload["cases"])
+    thresholds = EvaluationThresholds.model_validate(dataset_payload.get("thresholds", {}))
+    recorded = TypeAdapter(list[EvaluationObservation]).validate_python(observation_payload)
+    baseline_score = None
+    if baseline is not None:
+        previous = EvaluationReport.model_validate_json(baseline.read_text(encoding="utf-8"))
+        baseline_score = previous.mean_score
+    report = evaluate_suite(
+        cases, recorded, thresholds=thresholds, baseline_mean_score=baseline_score
+    )
+    encoded = report.model_dump_json(indent=2, by_alias=True)
+    if output is not None:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(encoded + "\n", encoding="utf-8")
+    console.print(
+        f"Harness eval: {'PASS' if report.passed else 'FAIL'} "
+        f"cases={report.pass_count}/{report.case_count} "
+        f"pass_rate={report.pass_rate:.2%} mean_score={report.mean_score:.4f}"
+    )
+    for failure in report.failures:
+        console.print(f"[red]- {escape(failure)}[/red]")
+    if not report.passed:
+        raise typer.Exit(code=1)
 
 
 @app.command()

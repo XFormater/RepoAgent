@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-30__q0022",
+  "sampleId": "conv-30",
+  "questionIndex": 22,
+  "question": "When did Gina develop a video presentation to teach how to style her fashion pieces? ",
+  "answer": "June, 2023",
+  "adversarialAnswer": null,
+  "category": 2,
+  "categoryName": "temporal",
+  "evidence": [
+    "D13:4"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D13:4",
+      "D18:5",
+      "D8:12",
+      "D5:1",
+      "D10:4",
+      "D8:15",
+      "D11:12",
+      "D6:16",
+      "D19:2",
+      "D2:5"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 546.497,
+    "injectedChars": 3307,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_off",
+    "memory_on"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 89,
+      "completion_tokens": 3,
+      "total_tokens": 92
+    },
+    "latencyMs": 526,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "8:29 pm on 13 June, 2023",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 962,
+      "completion_tokens": 12,
+      "total_tokens": 974
+    },
+    "latencyMs": 935,
+    "answer": "8:29 pm on 13 June, 2023",
+    "f1": 0.5,
+    "injectedChars": 3307
+  },
+  "f1Delta": 0.5
+}

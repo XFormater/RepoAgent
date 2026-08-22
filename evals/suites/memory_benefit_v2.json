@@ -1,0 +1,224 @@
+{
+  "benchmark": "GitHubResearch Agent Memory Benefit Benchmark",
+  "version": "2.0.0",
+  "description": "Twenty paired real-model cases separating causal memory benefit from conflict and irrelevant-memory safety.",
+  "requiredLayers": ["memory_benefit"],
+  "thresholds": {
+    "minLayerPassRate": 0.95,
+    "minMemoryAccuracyGain": 0.5
+  },
+  "cases": [
+    {
+      "caseId": "memory-v2-exact-borealis",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "benefit_required",
+      "prompt": "我之前指定的 Borealis 项目环境代号是什么？没有相关信息只输出 UNKNOWN，否则只输出代号。",
+      "expected": "EMBER-642",
+      "memoryQuery": "Borealis 项目环境代号",
+      "memories": ["用户指定 Borealis 项目的环境代号是 EMBER-642。", "Atlas 项目每周五归档。", "用户偏好中文总结。"]
+    },
+    {
+      "caseId": "memory-v2-exact-meridian",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "benefit_required",
+      "prompt": "Meridian 报告以前约定的页眉短语是什么？未知时只输出 UNKNOWN，否则只输出短语。",
+      "expected": "NORTH STAR",
+      "memoryQuery": "Meridian 报告页眉约定",
+      "memories": ["用户要求 Meridian 报告的页眉短语固定为 NORTH STAR。", "Borealis 使用蓝绿色主题。", "用户时区为 Asia/Shanghai。"]
+    },
+    {
+      "caseId": "memory-v2-exact-cypress",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "benefit_required",
+      "prompt": "Cypress 演示之前设置的访问口令是什么？没有记录只输出 UNKNOWN，否则只输出口令。",
+      "expected": "MOSS-884",
+      "memoryQuery": "Cypress 演示访问口令",
+      "memories": ["用户为 Cypress 演示设置的访问口令是 MOSS-884。", "Meridian 需要导出 PDF。", "用户周末不接收常规报告。"]
+    },
+    {
+      "caseId": "memory-v2-exact-orion",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "benefit_required",
+      "prompt": "我为 Orion 数据导出任务指定的批次标签是什么？不知道就只输出 UNKNOWN。",
+      "expected": "CEDAR-219",
+      "memoryQuery": "Orion 数据导出批次标签",
+      "memories": ["Orion 数据导出任务的批次标签被用户设为 CEDAR-219。", "Orion 的日志保留七天。", "用户倾向使用表格展示结果。"]
+    },
+    {
+      "caseId": "memory-v2-semantic-lagoon",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "benefit_required",
+      "prompt": "上次谈到 Lagoon 服务时，我给它的紧急回滚标识是哪一个？无从判断则只输出 UNKNOWN。",
+      "expected": "TIDE-407",
+      "memoryQuery": "Lagoon 服务紧急回滚标识",
+      "memories": ["若 Lagoon 服务需要紧急撤销发布，用户约定用 TIDE-407 作为回滚标识。", "Lagoon 服务部署在测试区域。", "用户希望事故报告简洁。"]
+    },
+    {
+      "caseId": "memory-v2-semantic-kepler",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "benefit_required",
+      "prompt": "Kepler 审计里用于确认最终签核的那串字符是什么？缺失时只输出 UNKNOWN。",
+      "expected": "AXIS-553",
+      "memoryQuery": "Kepler 最终审计签核字符",
+      "memories": ["用户说明 Kepler 审计完成时应以确认串 AXIS-553 签核。", "Kepler 每月生成一次审计。", "用户不需要彩色封面。"]
+    },
+    {
+      "caseId": "memory-v2-semantic-saffron",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "benefit_required",
+      "prompt": "Saffron 迁移完成后要回报的完成暗号是什么？没有记忆就只输出 UNKNOWN。",
+      "expected": "GOLD-731",
+      "memoryQuery": "Saffron 迁移完成暗号",
+      "memories": ["用户约定 Saffron 迁移彻底结束后以 GOLD-731 作为完成暗号。", "Saffron 使用增量迁移。", "用户要求保留回滚快照。"]
+    },
+    {
+      "caseId": "memory-v2-semantic-polaris",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "benefit_required",
+      "prompt": "Polaris 演练的收尾确认码还记得吗？不知道只输出 UNKNOWN。",
+      "expected": "NOVA-826",
+      "memoryQuery": "Polaris 演练收尾确认码",
+      "memories": ["Polaris 演练结束时，用户要求使用 NOVA-826 作为收尾确认码。", "Polaris 演练不触发真实告警。", "用户希望先给结论。"]
+    },
+    {
+      "caseId": "memory-v2-compose-aurora",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "benefit_required",
+      "prompt": "把 Aurora 项目的区域代号和发布波次按“区域/波次”格式输出；任一信息未知则只输出 UNKNOWN。",
+      "expected": "EAST-4/WAVE-9",
+      "retrievalTerms": ["EAST-4", "WAVE-9"],
+      "memoryQuery": "Aurora 项目区域代号 发布波次",
+      "memories": ["Aurora 项目的区域代号是 EAST-4。", "Aurora 项目的发布波次是 WAVE-9。", "Aurora 项目由平台组维护。", "用户要求输出紧凑。"]
+    },
+    {
+      "caseId": "memory-v2-compose-juniper",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "benefit_required",
+      "prompt": "将 Juniper 的环境名和审批码用冒号连接输出；任一项不清楚就只输出 UNKNOWN。",
+      "expected": "STAGING:LEAF-390",
+      "retrievalTerms": ["STAGING", "LEAF-390"],
+      "memoryQuery": "Juniper 环境名 审批码",
+      "memories": ["Juniper 当前约定的环境名是 STAGING。", "Juniper 的发布审批码为 LEAF-390。", "Juniper 使用每日备份。", "用户默认使用 UTC+8。"]
+    },
+    {
+      "caseId": "memory-v2-compose-voyager",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "benefit_required",
+      "prompt": "按“负责人|冻结标识”输出 Voyager 的两个既有约定；缺少任一项只输出 UNKNOWN。",
+      "expected": "LIN|ICE-144",
+      "retrievalTerms": ["LIN", "ICE-144"],
+      "memoryQuery": "Voyager 负责人 冻结标识",
+      "memories": ["Voyager 项目的负责人简称是 LIN。", "Voyager 进入发布冻结时使用标识 ICE-144。", "Voyager 的例会在周二。", "用户喜欢短回答。"]
+    },
+    {
+      "caseId": "memory-v2-compose-atlas",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "benefit_required",
+      "prompt": "Atlas 的归档日和归档确认码分别是什么？按“日期#确认码”输出；信息不足只输出 UNKNOWN。",
+      "expected": "FRIDAY#STONE-612",
+      "retrievalTerms": ["FRIDAY", "STONE-612"],
+      "memoryQuery": "Atlas 归档日 归档确认码",
+      "memories": ["Atlas 项目的固定归档日是 FRIDAY。", "Atlas 归档成功后的确认码是 STONE-612。", "Atlas 报告使用英文文件名。", "用户不需要邮件抄送。"]
+    },
+    {
+      "caseId": "memory-v2-conflict-borealis",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "conflict_override",
+      "prompt": "旧设置已作废：Borealis 当前环境代号是 FLAME-900。只输出当前代号。",
+      "expected": "FLAME-900",
+      "retrievalTerm": "EMBER-642",
+      "memoryQuery": "Borealis 当前环境代号",
+      "memories": ["历史记录：Borealis 的环境代号是 EMBER-642。", "用户当前消息优先于旧记录。", "Atlas 每周五归档。"]
+    },
+    {
+      "caseId": "memory-v2-conflict-cypress",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "conflict_override",
+      "prompt": "Cypress 的旧口令已轮换，当前唯一有效口令为 FERN-221。只输出当前口令。",
+      "expected": "FERN-221",
+      "retrievalTerm": "MOSS-884",
+      "memoryQuery": "Cypress 当前访问口令",
+      "memories": ["旧记录显示 Cypress 演示访问口令为 MOSS-884。", "Cypress 每季度轮换口令。", "用户要求优先使用最新消息。"]
+    },
+    {
+      "caseId": "memory-v2-conflict-kepler",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "conflict_override",
+      "prompt": "本轮修订后 Kepler 的最终签核串是 AXIS-990，历史值不再有效。只输出新值。",
+      "expected": "AXIS-990",
+      "retrievalTerm": "AXIS-553",
+      "memoryQuery": "Kepler 最终签核串",
+      "memories": ["历史记忆：Kepler 的审计签核串是 AXIS-553。", "Kepler 审计按月执行。", "用户当前修订应覆盖历史值。"]
+    },
+    {
+      "caseId": "memory-v2-conflict-juniper",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "conflict_override",
+      "prompt": "Juniper 已从 STAGING 切换到 PRODUCTION。只输出当前环境名。",
+      "expected": "PRODUCTION",
+      "retrievalTerm": "STAGING",
+      "memoryQuery": "Juniper 当前环境",
+      "memories": ["先前的 Juniper 环境名为 STAGING。", "Juniper 使用每日备份。", "当前用户陈述优先。"]
+    },
+    {
+      "caseId": "memory-v2-irrelevant-raven",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "irrelevant_non_regression",
+      "prompt": "本题给定 Raven 的校验码是 WING-332。只输出这个校验码。",
+      "expected": "WING-332",
+      "retrievalTerm": "Borealis",
+      "memoryQuery": "Raven 校验码",
+      "memories": ["Borealis 的历史环境代号是 EMBER-642。", "Meridian 报告需要 PDF。", "用户偏好中文。"]
+    },
+    {
+      "caseId": "memory-v2-irrelevant-solar",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "irrelevant_non_regression",
+      "prompt": "Solar 当前发布标签在本消息中定义为 RAY-808。只输出标签。",
+      "expected": "RAY-808",
+      "retrievalTerm": "Cypress",
+      "memoryQuery": "Solar 当前发布标签",
+      "memories": ["Cypress 的旧访问口令为 MOSS-884。", "Atlas 固定周五归档。", "用户周末不接收报告。"]
+    },
+    {
+      "caseId": "memory-v2-irrelevant-delta",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "irrelevant_non_regression",
+      "prompt": "Delta 任务的本轮操作标识是 RIVER-125。只输出标识。",
+      "expected": "RIVER-125",
+      "retrievalTerm": "Kepler",
+      "memoryQuery": "Delta 本轮操作标识",
+      "memories": ["Kepler 的旧审计签核串是 AXIS-553。", "Saffron 使用增量迁移。", "用户默认时区为 Asia/Shanghai。"]
+    },
+    {
+      "caseId": "memory-v2-irrelevant-ember",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "memoryCaseType": "irrelevant_non_regression",
+      "prompt": "Ember 服务的即时诊断短码是 SPARK-416。只输出短码。",
+      "expected": "SPARK-416",
+      "retrievalTerm": "Voyager",
+      "memoryQuery": "Ember 即时诊断短码",
+      "memories": ["Voyager 的负责人简称为 LIN。", "Juniper 以前使用 STAGING 环境。", "用户喜欢紧凑输出。"]
+    }
+  ]
+}

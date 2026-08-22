@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-44__q0057",
+  "sampleId": "conv-44",
+  "questionIndex": 57,
+  "question": "When did Andrew adopt Scout?",
+  "answer": "few days before November 2023",
+  "adversarialAnswer": null,
+  "category": 2,
+  "categoryName": "temporal",
+  "evidence": [
+    "D28:6"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D19:9",
+      "D16:5",
+      "D4:20",
+      "D1:18",
+      "D16:19",
+      "D8:13",
+      "D8:17",
+      "D11:27",
+      "D19:27",
+      "D27:13"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1327.227,
+    "injectedChars": 1778,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_off",
+    "memory_on"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 78,
+      "completion_tokens": 3,
+      "total_tokens": 81
+    },
+    "latencyMs": 742,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 598,
+      "completion_tokens": 3,
+      "total_tokens": 601
+    },
+    "latencyMs": 1024,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 1778
+  },
+  "f1Delta": 0.0
+}

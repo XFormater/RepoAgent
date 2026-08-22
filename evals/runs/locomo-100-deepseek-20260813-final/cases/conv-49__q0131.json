@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-49__q0131",
+  "sampleId": "conv-49",
+  "questionIndex": 131,
+  "question": "What did Sam suggest Evan try for stress relief and flexibility?",
+  "answer": "Yoga",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D18:8"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D17:13",
+      "D1:10",
+      "D1:20",
+      "D3:10",
+      "D18:8",
+      "D23:11",
+      "D23:9",
+      "D8:29",
+      "D23:18",
+      "D2:11"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 514.997,
+    "injectedChars": 2379,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "Yoga",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 84,
+      "completion_tokens": 2,
+      "total_tokens": 86
+    },
+    "latencyMs": 1147,
+    "answer": "Yoga",
+    "f1": 1.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "Yoga",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 740,
+      "completion_tokens": 2,
+      "total_tokens": 742
+    },
+    "latencyMs": 874,
+    "answer": "Yoga",
+    "f1": 1.0,
+    "injectedChars": 2379
+  },
+  "f1Delta": 0.0
+}

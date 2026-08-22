@@ -1,0 +1,55 @@
+{
+  "caseId": "context-v2-early-deep",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 2001,
+  "error": null,
+  "passed": true,
+  "expected": "WING-332",
+  "contextCaseType": "early_dependency",
+  "contextBlockLimit": 2400,
+  "sourceInputSha256": "9d90a55de84c806122b538a045d47de7bdab039ec6418de062d6c9632eb0b50b",
+  "sourceInputMessages": 56,
+  "variantOrder": [
+    "governance_on",
+    "governance_off"
+  ],
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "WING-332",
+    "normalizedAnswer": "WING-332",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 5368,
+      "completion_tokens": 4,
+      "total_tokens": 5372,
+      "cached_tokens": 5248,
+      "provider_tokens": 5372
+    },
+    "modelInputMessages": 56,
+    "estimatedInputTokens": 5466,
+    "providerPromptTokens": 5368
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": true,
+    "answer": "WING-332",
+    "normalizedAnswer": "WING-332",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 2323,
+      "completion_tokens": 4,
+      "total_tokens": 2327,
+      "cached_tokens": 2304,
+      "provider_tokens": 2327
+    },
+    "modelInputMessages": 26,
+    "estimatedInputTokens": 2376,
+    "providerPromptTokens": 2323
+  },
+  "qualityDelta": 0,
+  "estimatedTokenReduction": 0.5653128430296377,
+  "providerPromptTokenReduction": 0.5672503725782414
+}

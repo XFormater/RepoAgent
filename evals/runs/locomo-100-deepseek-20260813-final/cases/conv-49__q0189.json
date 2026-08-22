@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-49__q0189",
+  "sampleId": "conv-49",
+  "questionIndex": 189,
+  "question": "What did Evan and his partner keep from their extended family on January 5, 2024?",
+  "answer": "No information available",
+  "adversarialAnswer": "their marriage",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D23:1"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D23:1",
+      "D5:21",
+      "D3:10",
+      "D23:9",
+      "D9:7",
+      "D1:10",
+      "D17:10",
+      "D1:20",
+      "D16:6",
+      "D15:12"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 161.055,
+    "injectedChars": 2096,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "(b) their marriage.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 109,
+      "completion_tokens": 5,
+      "total_tokens": 114
+    },
+    "latencyMs": 1220,
+    "answer": "their marriage",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "(b) their marriage",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 688,
+      "completion_tokens": 4,
+      "total_tokens": 692
+    },
+    "latencyMs": 872,
+    "answer": "their marriage",
+    "f1": 0.0,
+    "injectedChars": 2096
+  },
+  "f1Delta": 0.0
+}

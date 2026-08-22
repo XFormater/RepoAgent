@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-50__q0138",
+  "sampleId": "conv-50",
+  "questionIndex": 138,
+  "question": "How did Calvin feel about performing with someone he admires?",
+  "answer": "Unreal, like a dream come true",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D26:9"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D26:8",
+      "D24:4",
+      "D12:3",
+      "D11:10",
+      "D21:2",
+      "D28:28",
+      "D2:13",
+      "D25:3",
+      "D27:9",
+      "D5:2"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 711.764,
+    "injectedChars": 2508,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "Nervous",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 84,
+      "completion_tokens": 3,
+      "total_tokens": 87
+    },
+    "latencyMs": 586,
+    "answer": "Nervous",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "Bet it was an incredible experience to perform with someone you admire.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 745,
+      "completion_tokens": 13,
+      "total_tokens": 758
+    },
+    "latencyMs": 1028,
+    "answer": "Bet it was an incredible experience to perform with someone you admire.",
+    "f1": 0.0,
+    "injectedChars": 2508
+  },
+  "f1Delta": 0.0
+}

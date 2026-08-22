@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-48__q0146",
+  "sampleId": "conv-48",
+  "questionIndex": 146,
+  "question": "What kind of yoga routine does Deborah recommend to Jolene?",
+  "answer": "A gentle flow routine focused on breathing and grounding",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D16:15"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D11:6",
+      "D11:4",
+      "D22:13",
+      "D28:4",
+      "D26:12",
+      "D23:22",
+      "D4:42",
+      "D13:7",
+      "D23:2",
+      "D15:17"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 876.609,
+    "injectedChars": 2729,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 84,
+      "completion_tokens": 3,
+      "total_tokens": 87
+    },
+    "latencyMs": 1490,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 824,
+      "completion_tokens": 4,
+      "total_tokens": 828
+    },
+    "latencyMs": 929,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 2729
+  },
+  "f1Delta": 0.0
+}

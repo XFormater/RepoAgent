@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-41__q0092",
+  "sampleId": "conv-41",
+  "questionIndex": 92,
+  "question": "How often does John work out with his family?",
+  "answer": "Three times a week",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D13:7"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D19:18",
+      "D19:4",
+      "D16:13",
+      "D13:21",
+      "D24:5",
+      "D27:7",
+      "D24:9",
+      "D20:10",
+      "D18:14",
+      "D32:3"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1033.175,
+    "injectedChars": 2468,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "Every weekend",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 82,
+      "completion_tokens": 2,
+      "total_tokens": 84
+    },
+    "latencyMs": 1282,
+    "answer": "Every weekend",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 738,
+      "completion_tokens": 3,
+      "total_tokens": 741
+    },
+    "latencyMs": 971,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2468
+  },
+  "f1Delta": 0.0
+}

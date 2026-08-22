@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-30__q0098",
+  "sampleId": "conv-30",
+  "questionIndex": 98,
+  "question": "Where is Jon's fashion internship?",
+  "answer": "No information available",
+  "adversarialAnswer": "fashion department of an international company",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D12:3"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D12:2",
+      "D2:5",
+      "D11:9",
+      "D4:3",
+      "D4:6",
+      "D17:1",
+      "D1:14",
+      "D17:10",
+      "D17:2",
+      "D1:20"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 126.434,
+    "injectedChars": 2473,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "(b) fashion department of an international company.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 100,
+      "completion_tokens": 9,
+      "total_tokens": 109
+    },
+    "latencyMs": 1184,
+    "answer": "fashion department of an international company",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 794,
+      "completion_tokens": 3,
+      "total_tokens": 797
+    },
+    "latencyMs": 1278,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 2473
+  },
+  "f1Delta": 1.0
+}

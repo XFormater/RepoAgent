@@ -1,0 +1,44 @@
+{
+  "caseId": "context-instruction-retention",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 1729,
+  "error": null,
+  "passed": true,
+  "expected": "SUMMIT-509",
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "SUMMIT-509",
+    "normalizedAnswer": "SUMMIT-509",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 7303,
+      "completion_tokens": 5,
+      "total_tokens": 7308,
+      "cached_tokens": 7296,
+      "provider_tokens": 7308
+    },
+    "modelInputMessages": 54,
+    "estimatedInputTokens": 7395
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": true,
+    "answer": "SUMMIT-509",
+    "normalizedAnswer": "SUMMIT-509",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1165,
+      "completion_tokens": 5,
+      "total_tokens": 1170,
+      "cached_tokens": 1152,
+      "provider_tokens": 1170
+    },
+    "modelInputMessages": 10,
+    "estimatedInputTokens": 1191
+  },
+  "qualityDelta": 0,
+  "estimatedTokenReduction": 0.8389452332657201
+}

@@ -1,0 +1,24 @@
+{
+  "caseId": "recovery-checkpoint-resume",
+  "layer": "recovery_correctness",
+  "scenario": "checkpoint_resume",
+  "repetition": 1,
+  "latencyMs": 2355,
+  "error": null,
+  "passed": true,
+  "answer": "RESUMED-305",
+  "normalizedAnswer": "RESUMED-305",
+  "expected": "RESUMED-305",
+  "stopReason": "completed",
+  "usage": {
+    "prompt_tokens": 405,
+    "completion_tokens": 5,
+    "total_tokens": 410,
+    "cached_tokens": 384,
+    "provider_tokens": 410
+  },
+  "crashObserved": true,
+  "checkpointPhase": "tools_completed",
+  "toolExecutions": 1,
+  "duplicateSideEffects": 0
+}

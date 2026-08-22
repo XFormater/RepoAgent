@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-48__q0051",
+  "sampleId": "conv-48",
+  "questionIndex": 51,
+  "question": "When did Jolene buy a new aquarium for Seraphim?",
+  "answer": "24 June, 2023",
+  "adversarialAnswer": null,
+  "category": 2,
+  "categoryName": "temporal",
+  "evidence": [
+    "D14:4"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D8:10",
+      "D13:5",
+      "D25:1",
+      "D8:4",
+      "D7:3",
+      "D15:10",
+      "D11:4",
+      "D8:6",
+      "D27:9",
+      "D23:27"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1510.196,
+    "injectedChars": 2651,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 85,
+      "completion_tokens": 3,
+      "total_tokens": 88
+    },
+    "latencyMs": 1340,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 3,
+      "total_tokens": 819
+    },
+    "latencyMs": 1229,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2651
+  },
+  "f1Delta": 0.0
+}

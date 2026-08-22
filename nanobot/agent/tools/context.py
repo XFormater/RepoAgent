@@ -40,6 +40,11 @@ class RequestContext:
     turn_id: str | None = None
     workspace: Path | None = None
     attributes: dict[str, Any] = field(default_factory=dict)
+    # Trusted identity resolved by the ingress adapter.  These are kept
+    # separate from arbitrary message metadata so filesystem namespaces and
+    # durable stores do not have to trust model/user text.
+    tenant_id: str = "default"
+    user_id: str | None = None
 
 
 @runtime_checkable

@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-41__q0043",
+  "sampleId": "conv-41",
+  "questionIndex": 43,
+  "question": "When was John's old area hit with a flood?",
+  "answer": "The week before 7 July 2023",
+  "adversarialAnswer": null,
+  "category": 2,
+  "categoryName": "temporal",
+  "evidence": [
+    "D23:1"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D4:20",
+      "D18:5",
+      "D15:11",
+      "D10:12",
+      "D24:6",
+      "D18:2",
+      "D30:8",
+      "D18:1",
+      "D3:1",
+      "D3:4"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1649.465,
+    "injectedChars": 3367,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 83,
+      "completion_tokens": 3,
+      "total_tokens": 86
+    },
+    "latencyMs": 890,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 960,
+      "completion_tokens": 4,
+      "total_tokens": 964
+    },
+    "latencyMs": 1247,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 3367
+  },
+  "f1Delta": 0.0
+}

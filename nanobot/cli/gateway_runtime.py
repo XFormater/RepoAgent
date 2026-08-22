@@ -780,6 +780,10 @@ def _run_gateway(
                             {
                                 "status": "ready" if ready else "unavailable",
                                 "harness": components,
+                                "vfs": {
+                                    "enabled": bool(getattr(agent.vfs, "enabled", False)),
+                                    "metrics": agent.vfs.snapshot() if hasattr(agent, "vfs") else {},
+                                },
                             }
                         )
                         status = "200 OK" if ready else "503 Service Unavailable"

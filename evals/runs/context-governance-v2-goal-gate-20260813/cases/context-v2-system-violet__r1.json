@@ -1,0 +1,55 @@
+{
+  "caseId": "context-v2-system-violet",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 2115,
+  "error": null,
+  "passed": true,
+  "expected": "PURPLE HORIZON",
+  "contextCaseType": "system_anchor",
+  "contextBlockLimit": 1200,
+  "sourceInputSha256": "f4105fda06833a06a4028c18d0fed5a123ff2401cd0d1fb634e7fa30bd19b6e0",
+  "sourceInputMessages": 58,
+  "variantOrder": [
+    "governance_on",
+    "governance_off"
+  ],
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "PURPLE HORIZON",
+    "normalizedAnswer": "PURPLE HORIZON",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 5759,
+      "completion_tokens": 7,
+      "total_tokens": 5766,
+      "cached_tokens": 5632,
+      "provider_tokens": 5766
+    },
+    "modelInputMessages": 58,
+    "estimatedInputTokens": 5867,
+    "providerPromptTokens": 5759
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": true,
+    "answer": "PURPLE HORIZON",
+    "normalizedAnswer": "PURPLE HORIZON",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1090,
+      "completion_tokens": 7,
+      "total_tokens": 1097,
+      "cached_tokens": 1024,
+      "provider_tokens": 1097
+    },
+    "modelInputMessages": 12,
+    "estimatedInputTokens": 1129,
+    "providerPromptTokens": 1090
+  },
+  "qualityDelta": 0,
+  "estimatedTokenReduction": 0.8075677518322822,
+  "providerPromptTokenReduction": 0.810731029692655
+}

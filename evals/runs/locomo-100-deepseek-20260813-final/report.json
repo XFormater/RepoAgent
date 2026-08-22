@@ -1,0 +1,6735 @@
+{
+  "benchmark": "LoCoMo QA through the nanobot long-term-memory retrieval path",
+  "version": "1.0.0",
+  "runId": "locomo-100-deepseek-20260813-final",
+  "model": "deepseek-v4-pro",
+  "executionMode": "online-model-in-the-loop",
+  "scope": {
+    "selection": "locomo-100-fixed-smoke",
+    "evaluatedQuestions": 100,
+    "officialQuestions": 1986,
+    "questionCoverage": 0.050352467270896276,
+    "evaluatedConversations": 10,
+    "officialConversations": 10,
+    "isFullOfficialRun": false
+  },
+  "scores": {
+    "memoryOffMeanF1": 0.16025305250305252,
+    "memoryOnMeanF1": 0.30375601604278074,
+    "meanF1Delta": 0.14350296353972825,
+    "memoryOffNonAdversarialMeanF1": 0.07825071753643183,
+    "memoryOnNonAdversarialMeanF1": 0.12176105979581915,
+    "nonAdversarialMeanF1Delta": 0.04351034225938733,
+    "pairedWins": 24,
+    "pairedTies": 68,
+    "pairedLosses": 8,
+    "byCategory": {
+      "1": {
+        "name": "multi_hop",
+        "count": 14,
+        "memoryOffMeanF1": 0.0744047619047619,
+        "memoryOnMeanF1": 0.09970238095238095,
+        "meanF1Delta": 0.025297619047619044
+      },
+      "2": {
+        "name": "temporal",
+        "count": 16,
+        "memoryOffMeanF1": 0.0,
+        "memoryOnMeanF1": 0.08948863636363637,
+        "meanF1Delta": 0.08948863636363637
+      },
+      "3": {
+        "name": "open_domain",
+        "count": 5,
+        "memoryOffMeanF1": 0.3276190476190476,
+        "memoryOnMeanF1": 0.1035294117647059,
+        "meanF1Delta": -0.22408963585434175
+      },
+      "4": {
+        "name": "single_hop",
+        "count": 42,
+        "memoryOffMeanF1": 0.07965579394150824,
+        "memoryOnMeanF1": 0.14357864357864358,
+        "meanF1Delta": 0.06392284963713535
+      },
+      "5": {
+        "name": "adversarial",
+        "count": 23,
+        "memoryOffMeanF1": 0.43478260869565216,
+        "memoryOnMeanF1": 0.9130434782608695,
+        "meanF1Delta": 0.4782608695652174
+      }
+    }
+  },
+  "retrieval": {
+    "evidenceRecallAt10": 0.1959090909090909,
+    "evidenceHitRateAt10": 0.21,
+    "questionsWithEvidence": 100,
+    "meanLatencyMs": 987.80796,
+    "meanInjectedChars": 2345.2,
+    "degradedQueries": 0
+  },
+  "usage": {
+    "memoryOff": {
+      "promptTokens": 8848,
+      "completionTokens": 434,
+      "totalTokens": 9282
+    },
+    "memoryOn": {
+      "promptTokens": 73256,
+      "completionTokens": 451,
+      "totalTokens": 73707
+    }
+  },
+  "limitations": [
+    "The default 100-question subset is not a full official LoCoMo score.",
+    "Dialogue turns are pre-indexed, so LLM memory extraction and persistence are not tested.",
+    "The run uses deterministic hash embeddings and an identity reranker.",
+    "Official category-5 scoring can inflate aggregate results; non-adversarial F1 is separate."
+  ],
+  "results": [
+    {
+      "caseId": "conv-26__q0015",
+      "sampleId": "conv-26",
+      "questionIndex": 15,
+      "question": "What activities does Melanie partake in?",
+      "answer": "pottery, camping, painting, swimming",
+      "adversarialAnswer": null,
+      "category": 1,
+      "categoryName": "multi_hop",
+      "evidence": [
+        "D5:4",
+        "D9:1",
+        "D1:12",
+        "D1:18"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D1:8",
+          "D17:22",
+          "D6:8",
+          "D2:9",
+          "D7:12",
+          "D13:2",
+          "D9:7",
+          "D8:18",
+          "D15:18",
+          "D13:14"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1068.727,
+        "injectedChars": 1692,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 79,
+          "completion_tokens": 3,
+          "total_tokens": 82
+        },
+        "latencyMs": 754,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 584,
+          "completion_tokens": 4,
+          "total_tokens": 588,
+          "cached_tokens": 512
+        },
+        "latencyMs": 3089,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 1692
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-26__q0027",
+      "sampleId": "conv-26",
+      "questionIndex": 27,
+      "question": "Would Caroline pursue writing as a career option?",
+      "answer": "LIkely no; though she likes reading, she wants to be a counselor",
+      "adversarialAnswer": null,
+      "category": 3,
+      "categoryName": "open_domain",
+      "evidence": [
+        "D7:5",
+        "D7:9"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D15:15",
+          "D6:10",
+          "D15:19",
+          "D15:24",
+          "D14:19",
+          "D13:6",
+          "D9:14",
+          "D14:35",
+          "D11:2",
+          "D2:14"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 2619.493,
+        "injectedChars": 2690,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_off",
+        "memory_on"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 81,
+          "completion_tokens": 3,
+          "total_tokens": 84
+        },
+        "latencyMs": 944,
+        "answer": "No information available",
+        "f1": 0.4,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 803,
+          "completion_tokens": 3,
+          "total_tokens": 806
+        },
+        "latencyMs": 1003,
+        "answer": "No information available",
+        "f1": 0.4,
+        "injectedChars": 2690
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-26__q0031",
+      "sampleId": "conv-26",
+      "questionIndex": 31,
+      "question": "When did Melanie go camping in June?",
+      "answer": "The week before 27 June 2023",
+      "adversarialAnswer": null,
+      "category": 2,
+      "categoryName": "temporal",
+      "evidence": [
+        "D4:8"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D7:12",
+          "D8:36",
+          "D1:8",
+          "D2:7",
+          "D6:8",
+          "D13:14",
+          "D12:10",
+          "D2:9",
+          "D2:13",
+          "D5:8"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 2530.125,
+        "injectedChars": 1958,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 80,
+          "completion_tokens": 3,
+          "total_tokens": 83
+        },
+        "latencyMs": 1033,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 641,
+          "completion_tokens": 4,
+          "total_tokens": 645
+        },
+        "latencyMs": 1468,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 1958
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-26__q0036",
+      "sampleId": "conv-26",
+      "questionIndex": 36,
+      "question": "When did Caroline join a mentorship program?",
+      "answer": "The weekend before 17 July 2023",
+      "adversarialAnswer": null,
+      "category": 2,
+      "categoryName": "temporal",
+      "evidence": [
+        "D9:2"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D8:33",
+          "D4:1",
+          "D1:5",
+          "D14:11",
+          "D14:30",
+          "D7:11",
+          "D6:7",
+          "D8:23",
+          "D12:17",
+          "D19:11"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 2439.787,
+        "injectedChars": 2873,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_off",
+        "memory_on"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 80,
+          "completion_tokens": 3,
+          "total_tokens": 83
+        },
+        "latencyMs": 1175,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 847,
+          "completion_tokens": 3,
+          "total_tokens": 850
+        },
+        "latencyMs": 586,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2873
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-26__q0039",
+      "sampleId": "conv-26",
+      "questionIndex": 39,
+      "question": "In what ways is Caroline participating in the LGBTQ community?",
+      "answer": "Joining activist group, going to pride parades, participating in an art show, mentoring program",
+      "adversarialAnswer": null,
+      "category": 1,
+      "categoryName": "multi_hop",
+      "evidence": [
+        "D10:3",
+        "D5:1",
+        "D9:12",
+        "D9:2"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D1:8",
+          "D17:20",
+          "D2:13",
+          "D16:12",
+          "D2:9",
+          "D6:8",
+          "D8:11",
+          "D7:12",
+          "D17:24",
+          "D10:18"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 2347.221,
+        "injectedChars": 1976,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 83,
+          "completion_tokens": 3,
+          "total_tokens": 86
+        },
+        "latencyMs": 1271,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 642,
+          "completion_tokens": 3,
+          "total_tokens": 645
+        },
+        "latencyMs": 4861,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 1976
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-26__q0084",
+      "sampleId": "conv-26",
+      "questionIndex": 84,
+      "question": "How does Melanie prioritize self-care?",
+      "answer": "by carving out some me-time each day for activities like running, reading, or playing the violin",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D2:5"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D13:2",
+          "D11:7",
+          "D11:13",
+          "D11:15",
+          "D14:4",
+          "D16:6",
+          "D11:11",
+          "D2:9",
+          "D1:8",
+          "D8:20"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 2258.183,
+        "injectedChars": 2484,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 79,
+          "completion_tokens": 3,
+          "total_tokens": 82
+        },
+        "latencyMs": 861,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 752,
+          "completion_tokens": 3,
+          "total_tokens": 755
+        },
+        "latencyMs": 1167,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2484
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-26__q0107",
+      "sampleId": "conv-26",
+      "questionIndex": 107,
+      "question": "What is Melanie's reason for getting into running?",
+      "answer": "To de-stress and clear her mind",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D7:21"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D7:21",
+          "D11:8",
+          "D15:1",
+          "D17:6",
+          "D2:14",
+          "D19:8",
+          "D19:12",
+          "D3:10",
+          "D12:5",
+          "D17:18"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 2168.375,
+        "injectedChars": 2018,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 82,
+          "completion_tokens": 3,
+          "total_tokens": 85
+        },
+        "latencyMs": 692,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 647,
+          "completion_tokens": 3,
+          "total_tokens": 650
+        },
+        "latencyMs": 817,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2018
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-26__q0128",
+      "sampleId": "conv-26",
+      "questionIndex": 128,
+      "question": "What did Caroline find in her neighborhood during her walk?",
+      "answer": "a rainbow sidewalk",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D14:23"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D12:13",
+          "D1:17",
+          "D14:17",
+          "D10:5",
+          "D7:20",
+          "D14:22",
+          "D18:4",
+          "D10:20",
+          "D18:10",
+          "D9:17"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 2076.852,
+        "injectedChars": 2428,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 83,
+          "completion_tokens": 3,
+          "total_tokens": 86
+        },
+        "latencyMs": 1221,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 721,
+          "completion_tokens": 4,
+          "total_tokens": 725
+        },
+        "latencyMs": 1117,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 2428
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-26__q0169",
+      "sampleId": "conv-26",
+      "questionIndex": 169,
+      "question": "What is Caroline's reason for getting into running?",
+      "answer": "No information available",
+      "adversarialAnswer": "To de-stress and clear her mind",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D7:21"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D7:21",
+          "D15:1",
+          "D17:6",
+          "D2:14",
+          "D19:8",
+          "D3:10",
+          "D12:5",
+          "D17:18",
+          "D1:6",
+          "D9:15"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 1980.379,
+        "injectedChars": 1901,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "(b) To de-stress and clear her mind.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 105,
+          "completion_tokens": 11,
+          "total_tokens": 116
+        },
+        "latencyMs": 1268,
+        "answer": "To de-stress and clear her mind",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 645,
+          "completion_tokens": 3,
+          "total_tokens": 648
+        },
+        "latencyMs": 1924,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 1901
+      },
+      "f1Delta": 1.0
+    },
+    {
+      "caseId": "conv-26__q0186",
+      "sampleId": "conv-26",
+      "questionIndex": 186,
+      "question": "Who is Caroline a fan of in terms of modern music?",
+      "answer": "No information available",
+      "adversarialAnswer": "Ed Sheeran",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D15:28"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D8:10",
+          "D14:29",
+          "D19:2",
+          "D5:6",
+          "D14:27",
+          "D14:15",
+          "D10:18",
+          "D11:12",
+          "D15:28",
+          "D14:2"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 1889.923,
+        "injectedChars": 3144,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "(b) Ed Sheeran.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 103,
+          "completion_tokens": 7,
+          "total_tokens": 110
+        },
+        "latencyMs": 1496,
+        "answer": "Ed Sheeran",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 931,
+          "completion_tokens": 3,
+          "total_tokens": 934
+        },
+        "latencyMs": 1122,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 3144
+      },
+      "f1Delta": 1.0
+    },
+    {
+      "caseId": "conv-30__q0000",
+      "sampleId": "conv-30",
+      "questionIndex": 0,
+      "question": "When Jon has lost his job as a banker?",
+      "answer": "19 January, 2023",
+      "adversarialAnswer": null,
+      "category": 2,
+      "categoryName": "temporal",
+      "evidence": [
+        "D1:2"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D1:2",
+          "D13:9",
+          "D13:18",
+          "D11:21",
+          "D18:8",
+          "D12:4",
+          "D13:8",
+          "D8:15",
+          "D7:7",
+          "D8:23"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 883.772,
+        "injectedChars": 2526,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_off",
+        "memory_on"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 82,
+          "completion_tokens": 3,
+          "total_tokens": 85
+        },
+        "latencyMs": 1231,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "Yesterday",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 784,
+          "completion_tokens": 1,
+          "total_tokens": 785
+        },
+        "latencyMs": 1294,
+        "answer": "Yesterday",
+        "f1": 0.0,
+        "injectedChars": 2526
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-30__q0004",
+      "sampleId": "conv-30",
+      "questionIndex": 4,
+      "question": "Why did Jon decide to start his dance studio?",
+      "answer": "He lost his job and decided to start his own business to share his passion.",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D1:2",
+        "D1:4"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D3:1",
+          "D16:6",
+          "D15:5",
+          "D6:3",
+          "D9:8",
+          "D1:6",
+          "D6:15",
+          "D18:18",
+          "D1:24",
+          "D2:6"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 788.216,
+        "injectedChars": 2677,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "He wanted to share his passion for dance with others.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 82,
+          "completion_tokens": 11,
+          "total_tokens": 93
+        },
+        "latencyMs": 1039,
+        "answer": "He wanted to share his passion for dance with others.",
+        "f1": 0.41666666666666663,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "He wanted to teach others the joy that dancing brings him.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 808,
+          "completion_tokens": 12,
+          "total_tokens": 820
+        },
+        "latencyMs": 1318,
+        "answer": "He wanted to teach others the joy that dancing brings him.",
+        "f1": 0.16666666666666666,
+        "injectedChars": 2677
+      },
+      "f1Delta": -0.24999999999999997
+    },
+    {
+      "caseId": "conv-30__q0018",
+      "sampleId": "conv-30",
+      "questionIndex": 18,
+      "question": "Do Jon and Gina start businesses out of what they love?",
+      "answer": "Yes",
+      "adversarialAnswer": null,
+      "category": 1,
+      "categoryName": "multi_hop",
+      "evidence": [
+        "D1:4",
+        "D6:8"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D18:21",
+          "D6:17",
+          "D13:7",
+          "D16:15",
+          "D6:15",
+          "D12:5",
+          "D16:5",
+          "D1:15",
+          "D11:6",
+          "D10:6"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 707.926,
+        "injectedChars": 2022,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "Yes, they start businesses out of what they love.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 84,
+          "completion_tokens": 11,
+          "total_tokens": 95
+        },
+        "latencyMs": 1280,
+        "answer": "Yes, they start businesses out of what they love.",
+        "f1": 1.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "Yes, they start businesses out of what they love.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 657,
+          "completion_tokens": 11,
+          "total_tokens": 668
+        },
+        "latencyMs": 1061,
+        "answer": "Yes, they start businesses out of what they love.",
+        "f1": 1.0,
+        "injectedChars": 2022
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-30__q0021",
+      "sampleId": "conv-30",
+      "questionIndex": 21,
+      "question": "When did Jon start reading \"The Lean Startup\"?",
+      "answer": "May, 2023",
+      "adversarialAnswer": null,
+      "category": 2,
+      "categoryName": "temporal",
+      "evidence": [
+        "D12:6"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D12:6",
+          "D6:7",
+          "D6:17",
+          "D16:4",
+          "D5:6",
+          "D5:14",
+          "D9:3",
+          "D14:11",
+          "D16:15",
+          "D18:8"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 628.465,
+        "injectedChars": 1778,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 82,
+          "completion_tokens": 3,
+          "total_tokens": 85
+        },
+        "latencyMs": 1295,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "7:18 pm on 27 May, 2023",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 603,
+          "completion_tokens": 12,
+          "total_tokens": 615
+        },
+        "latencyMs": 1544,
+        "answer": "7:18 pm on 27 May, 2023",
+        "f1": 0.5,
+        "injectedChars": 1778
+      },
+      "f1Delta": 0.5
+    },
+    {
+      "caseId": "conv-30__q0022",
+      "sampleId": "conv-30",
+      "questionIndex": 22,
+      "question": "When did Gina develop a video presentation to teach how to style her fashion pieces? ",
+      "answer": "June, 2023",
+      "adversarialAnswer": null,
+      "category": 2,
+      "categoryName": "temporal",
+      "evidence": [
+        "D13:4"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D13:4",
+          "D18:5",
+          "D8:12",
+          "D5:1",
+          "D10:4",
+          "D8:15",
+          "D11:12",
+          "D6:16",
+          "D19:2",
+          "D2:5"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 546.497,
+        "injectedChars": 3307,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_off",
+        "memory_on"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 89,
+          "completion_tokens": 3,
+          "total_tokens": 92
+        },
+        "latencyMs": 526,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "8:29 pm on 13 June, 2023",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 962,
+          "completion_tokens": 12,
+          "total_tokens": 974
+        },
+        "latencyMs": 935,
+        "answer": "8:29 pm on 13 June, 2023",
+        "f1": 0.5,
+        "injectedChars": 3307
+      },
+      "f1Delta": 0.5
+    },
+    {
+      "caseId": "conv-30__q0058",
+      "sampleId": "conv-30",
+      "questionIndex": 58,
+      "question": "Why did Jon shut down his bank account?",
+      "answer": "for his business",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D8:1"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D8:1",
+          "D5:14",
+          "D14:11",
+          "D16:15",
+          "D19:3",
+          "D13:17",
+          "D4:15",
+          "D4:16",
+          "D6:17",
+          "D12:6"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 465.972,
+        "injectedChars": 1596,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "He was moving to a new country.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 81,
+          "completion_tokens": 8,
+          "total_tokens": 89
+        },
+        "latencyMs": 1429,
+        "answer": "He was moving to a new country.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "He needed to do it for his biz.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 570,
+          "completion_tokens": 9,
+          "total_tokens": 579
+        },
+        "latencyMs": 1058,
+        "answer": "He needed to do it for his biz.",
+        "f1": 0.36363636363636365,
+        "injectedChars": 1596
+      },
+      "f1Delta": 0.36363636363636365
+    },
+    {
+      "caseId": "conv-30__q0080",
+      "sampleId": "conv-30",
+      "questionIndex": 80,
+      "question": "What plans does Jon have after receiving advice at the networking event?",
+      "answer": "Sprucing up his business plan, tweaking his pitch to investors, and working on an online platform.",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D18:10"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D16:4",
+          "D6:7",
+          "D14:7",
+          "D1:26",
+          "D18:9",
+          "D11:3",
+          "D15:10",
+          "D12:2",
+          "D8:22",
+          "D18:12"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 377.757,
+        "injectedChars": 1841,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "He plans to follow up with contacts and explore new opportunities.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 85,
+          "completion_tokens": 12,
+          "total_tokens": 97
+        },
+        "latencyMs": 1250,
+        "answer": "He plans to follow up with contacts and explore new opportunities.",
+        "f1": 0.25,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 615,
+          "completion_tokens": 3,
+          "total_tokens": 618
+        },
+        "latencyMs": 1324,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 1841
+      },
+      "f1Delta": -0.25
+    },
+    {
+      "caseId": "conv-30__q0081",
+      "sampleId": "conv-30",
+      "questionIndex": 81,
+      "question": "What offer does Gina make to Jon regarding social media?",
+      "answer": "Helping with making content and managing his social media accounts.",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D18:13"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D9:3",
+          "D4:4",
+          "D1:15",
+          "D7:1",
+          "D16:4",
+          "D15:15",
+          "D18:21",
+          "D5:6",
+          "D18:19",
+          "D18:18"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 296.319,
+        "injectedChars": 1714,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_off",
+        "memory_on"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 83,
+          "completion_tokens": 3,
+          "total_tokens": 86
+        },
+        "latencyMs": 1148,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 589,
+          "completion_tokens": 3,
+          "total_tokens": 592
+        },
+        "latencyMs": 1070,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 1714
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-30__q0091",
+      "sampleId": "conv-30",
+      "questionIndex": 91,
+      "question": "How is Jon's store doing?",
+      "answer": "No information available",
+      "adversarialAnswer": "The store is doing great.",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D4:2"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D6:10",
+          "D1:18",
+          "D5:19",
+          "D14:4",
+          "D2:1",
+          "D7:6",
+          "D18:7",
+          "D13:12",
+          "D2:2",
+          "D6:9"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 207.803,
+        "injectedChars": 2358,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 100,
+          "completion_tokens": 4,
+          "total_tokens": 104
+        },
+        "latencyMs": 952,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 729,
+          "completion_tokens": 4,
+          "total_tokens": 733
+        },
+        "latencyMs": 1009,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 2358
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-30__q0098",
+      "sampleId": "conv-30",
+      "questionIndex": 98,
+      "question": "Where is Jon's fashion internship?",
+      "answer": "No information available",
+      "adversarialAnswer": "fashion department of an international company",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D12:3"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D12:2",
+          "D2:5",
+          "D11:9",
+          "D4:3",
+          "D4:6",
+          "D17:1",
+          "D1:14",
+          "D17:10",
+          "D17:2",
+          "D1:20"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 126.434,
+        "injectedChars": 2473,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "(b) fashion department of an international company.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 100,
+          "completion_tokens": 9,
+          "total_tokens": 109
+        },
+        "latencyMs": 1184,
+        "answer": "fashion department of an international company",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 794,
+          "completion_tokens": 3,
+          "total_tokens": 797
+        },
+        "latencyMs": 1278,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 2473
+      },
+      "f1Delta": 1.0
+    },
+    {
+      "caseId": "conv-41__q0042",
+      "sampleId": "conv-41",
+      "questionIndex": 42,
+      "question": "What area was hit by a flood?",
+      "answer": "West County",
+      "adversarialAnswer": null,
+      "category": 1,
+      "categoryName": "multi_hop",
+      "evidence": [
+        "D14:21",
+        "D23:1"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D10:12",
+          "D29:4",
+          "D10:13",
+          "D30:8",
+          "D18:1",
+          "D23:1",
+          "D18:5",
+          "D21:15",
+          "D25:2",
+          "D4:13"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 0.5,
+        "evidenceHit": true,
+        "latencyMs": 1821.241,
+        "injectedChars": 3280,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_off",
+        "memory_on"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 80,
+          "completion_tokens": 4,
+          "total_tokens": 84
+        },
+        "latencyMs": 1141,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "John's old area",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 936,
+          "completion_tokens": 4,
+          "total_tokens": 940
+        },
+        "latencyMs": 1352,
+        "answer": "John's old area",
+        "f1": 0.0,
+        "injectedChars": 3280
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-41__q0043",
+      "sampleId": "conv-41",
+      "questionIndex": 43,
+      "question": "When was John's old area hit with a flood?",
+      "answer": "The week before 7 July 2023",
+      "adversarialAnswer": null,
+      "category": 2,
+      "categoryName": "temporal",
+      "evidence": [
+        "D23:1"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D4:20",
+          "D18:5",
+          "D15:11",
+          "D10:12",
+          "D24:6",
+          "D18:2",
+          "D30:8",
+          "D18:1",
+          "D3:1",
+          "D3:4"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1649.465,
+        "injectedChars": 3367,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 83,
+          "completion_tokens": 3,
+          "total_tokens": 86
+        },
+        "latencyMs": 890,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 960,
+          "completion_tokens": 4,
+          "total_tokens": 964
+        },
+        "latencyMs": 1247,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 3367
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-41__q0062",
+      "sampleId": "conv-41",
+      "questionIndex": 62,
+      "question": "How many dogs has Maria adopted from the dog shelter she volunteers at?",
+      "answer": "two",
+      "adversarialAnswer": null,
+      "category": 1,
+      "categoryName": "multi_hop",
+      "evidence": [
+        "D30:1",
+        "D31:2"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D1:11",
+          "D20:7",
+          "D22:12",
+          "D20:5",
+          "D11:5",
+          "D17:12",
+          "D11:12",
+          "D17:8",
+          "D29:5",
+          "D27:8"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1488.908,
+        "injectedChars": 2284,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 86,
+          "completion_tokens": 4,
+          "total_tokens": 90
+        },
+        "latencyMs": 1013,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 698,
+          "completion_tokens": 4,
+          "total_tokens": 702
+        },
+        "latencyMs": 1021,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 2284
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-41__q0077",
+      "sampleId": "conv-41",
+      "questionIndex": 77,
+      "question": "What activity did John's colleague, Rob, invite him to?",
+      "answer": "beginner's yoga class",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D7:16"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D17:9",
+          "D17:7",
+          "D21:4",
+          "D13:37",
+          "D15:12",
+          "D2:13",
+          "D2:15",
+          "D18:13",
+          "D7:15",
+          "D11:15"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1179.423,
+        "injectedChars": 2095,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 85,
+          "completion_tokens": 3,
+          "total_tokens": 88
+        },
+        "latencyMs": 1309,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 669,
+          "completion_tokens": 3,
+          "total_tokens": 672
+        },
+        "latencyMs": 969,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2095
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-41__q0092",
+      "sampleId": "conv-41",
+      "questionIndex": 92,
+      "question": "How often does John work out with his family?",
+      "answer": "Three times a week",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D13:7"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D19:18",
+          "D19:4",
+          "D16:13",
+          "D13:21",
+          "D24:5",
+          "D27:7",
+          "D24:9",
+          "D20:10",
+          "D18:14",
+          "D32:3"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1033.175,
+        "injectedChars": 2468,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "Every weekend",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 82,
+          "completion_tokens": 2,
+          "total_tokens": 84
+        },
+        "latencyMs": 1282,
+        "answer": "Every weekend",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 738,
+          "completion_tokens": 3,
+          "total_tokens": 741
+        },
+        "latencyMs": 971,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2468
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-41__q0102",
+      "sampleId": "conv-41",
+      "questionIndex": 102,
+      "question": "What does Maria need to spread the word about for the fundraiser for the volunteer shelter?",
+      "answer": "chili cook-off",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D16:4"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D16:4",
+          "D28:3",
+          "D22:16",
+          "D21:19",
+          "D5:2",
+          "D27:8",
+          "D11:12",
+          "D20:5",
+          "D27:1",
+          "D10:17"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 886.381,
+        "injectedChars": 2783,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "volunteer opportunities",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 89,
+          "completion_tokens": 4,
+          "total_tokens": 93
+        },
+        "latencyMs": 1442,
+        "answer": "volunteer opportunities",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "chili cook-off",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 823,
+          "completion_tokens": 4,
+          "total_tokens": 827
+        },
+        "latencyMs": 1118,
+        "answer": "chili cook-off",
+        "f1": 1.0,
+        "injectedChars": 2783
+      },
+      "f1Delta": 1.0
+    },
+    {
+      "caseId": "conv-41__q0129",
+      "sampleId": "conv-41",
+      "questionIndex": 129,
+      "question": "What does John think about trying new classes at the yoga studio?",
+      "answer": "Trying new classes is a fun way to switch up the exercise routine.",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D25:14"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D27:7",
+          "D13:35",
+          "D11:5",
+          "D22:9",
+          "D25:11",
+          "D18:22",
+          "D21:8",
+          "D2:6",
+          "D13:23",
+          "D17:15"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 729.018,
+        "injectedChars": 1960,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "He is open to trying new classes.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 85,
+          "completion_tokens": 8,
+          "total_tokens": 93
+        },
+        "latencyMs": 1253,
+        "answer": "He is open to trying new classes.",
+        "f1": 0.5555555555555556,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 642,
+          "completion_tokens": 3,
+          "total_tokens": 645
+        },
+        "latencyMs": 1018,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 1960
+      },
+      "f1Delta": -0.5555555555555556
+    },
+    {
+      "caseId": "conv-41__q0135",
+      "sampleId": "conv-41",
+      "questionIndex": 135,
+      "question": "Why does Maria think it's important for younger generations to visit military memorials?",
+      "answer": "To remember and appreciate those who served",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D27:12"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D27:12",
+          "D21:24",
+          "D27:14",
+          "D17:1",
+          "D21:25",
+          "D5:2",
+          "D20:3",
+          "D14:6",
+          "D7:3",
+          "D9:12"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 531.927,
+        "injectedChars": 2544,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "To understand the sacrifices made for their freedom",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 88,
+          "completion_tokens": 8,
+          "total_tokens": 96
+        },
+        "latencyMs": 1084,
+        "answer": "To understand the sacrifices made for their freedom",
+        "f1": 0.15384615384615383,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "To remember and appreciate those who served.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 776,
+          "completion_tokens": 8,
+          "total_tokens": 784
+        },
+        "latencyMs": 1002,
+        "answer": "To remember and appreciate those who served.",
+        "f1": 1.0,
+        "injectedChars": 2544
+      },
+      "f1Delta": 0.8461538461538461
+    },
+    {
+      "caseId": "conv-41__q0161",
+      "sampleId": "conv-41",
+      "questionIndex": 161,
+      "question": "What did Maria receive a certificate for?",
+      "answer": "No information available",
+      "adversarialAnswer": "completion of a university degree",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D9:2"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D15:12",
+          "D15:4",
+          "D8:9",
+          "D29:14",
+          "D13:17",
+          "D18:3",
+          "D13:4",
+          "D2:23",
+          "D21:23",
+          "D11:14"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 347.088,
+        "injectedChars": 2474,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 100,
+          "completion_tokens": 3,
+          "total_tokens": 103
+        },
+        "latencyMs": 1238,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 771,
+          "completion_tokens": 3,
+          "total_tokens": 774
+        },
+        "latencyMs": 918,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 2474
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-41__q0175",
+      "sampleId": "conv-41",
+      "questionIndex": 175,
+      "question": "What did Maria recently get promoted to?",
+      "answer": "No information available",
+      "adversarialAnswer": "assistant manager",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D19:8"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D15:12",
+          "D18:13",
+          "D7:15",
+          "D8:11",
+          "D31:18",
+          "D6:11",
+          "D30:19",
+          "D2:15",
+          "D22:8",
+          "D23:4"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 197.914,
+        "injectedChars": 1932,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "assistant manager",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 97,
+          "completion_tokens": 3,
+          "total_tokens": 100
+        },
+        "latencyMs": 976,
+        "answer": "assistant manager",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 637,
+          "completion_tokens": 4,
+          "total_tokens": 641
+        },
+        "latencyMs": 902,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 1932
+      },
+      "f1Delta": 1.0
+    },
+    {
+      "caseId": "conv-42__q0025",
+      "sampleId": "conv-42",
+      "questionIndex": 25,
+      "question": "When did Joanna hike with her buddies?",
+      "answer": "The weekend after 3June, 2022.",
+      "adversarialAnswer": null,
+      "category": 2,
+      "categoryName": "temporal",
+      "evidence": [
+        "D14:19"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D28:30",
+          "D8:7",
+          "D3:7",
+          "D23:22",
+          "D2:25",
+          "D16:3",
+          "D23:20",
+          "D14:19",
+          "D25:16",
+          "D21:17"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 1511.26,
+        "injectedChars": 2092,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 80,
+          "completion_tokens": 4,
+          "total_tokens": 84
+        },
+        "latencyMs": 1012,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "Around 5:44 pm on 3 June, 2022",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 664,
+          "completion_tokens": 14,
+          "total_tokens": 678
+        },
+        "latencyMs": 1182,
+        "answer": "Around 5:44 pm on 3 June, 2022",
+        "f1": 0.18181818181818182,
+        "injectedChars": 2092
+      },
+      "f1Delta": 0.18181818181818182
+    },
+    {
+      "caseId": "conv-42__q0049",
+      "sampleId": "conv-42",
+      "questionIndex": 49,
+      "question": "How many times has Joanna's scripts been rejected?",
+      "answer": "Twice",
+      "adversarialAnswer": null,
+      "category": 1,
+      "categoryName": "multi_hop",
+      "evidence": [
+        "D14:1",
+        "D24:12"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D27:8",
+          "D19:5",
+          "D2:15",
+          "D19:15",
+          "D27:23",
+          "D4:11",
+          "D2:26",
+          "D9:12",
+          "D22:22",
+          "D26:11"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1372.032,
+        "injectedChars": 2360,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 82,
+          "completion_tokens": 3,
+          "total_tokens": 85
+        },
+        "latencyMs": 1169,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 737,
+          "completion_tokens": 3,
+          "total_tokens": 740
+        },
+        "latencyMs": 1109,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2360
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-42__q0050",
+      "sampleId": "conv-42",
+      "questionIndex": 50,
+      "question": "What is something Nate gave to Joanna that brings her a lot of joy?",
+      "answer": "stuffed toy pup",
+      "adversarialAnswer": null,
+      "category": 1,
+      "categoryName": "multi_hop",
+      "evidence": [
+        "D13:9",
+        "D24:2"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D12:3",
+          "D24:4",
+          "D19:13",
+          "D18:3",
+          "D28:25",
+          "D19:3",
+          "D23:1",
+          "D22:19",
+          "D29:3",
+          "D23:26"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1224.059,
+        "injectedChars": 3379,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 87,
+          "completion_tokens": 4,
+          "total_tokens": 91
+        },
+        "latencyMs": 1297,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "a stuffed animal dog",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 982,
+          "completion_tokens": 4,
+          "total_tokens": 986
+        },
+        "latencyMs": 994,
+        "answer": "a stuffed animal dog",
+        "f1": 0.3333333333333333,
+        "injectedChars": 3379
+      },
+      "f1Delta": 0.3333333333333333
+    },
+    {
+      "caseId": "conv-42__q0064",
+      "sampleId": "conv-42",
+      "questionIndex": 64,
+      "question": "When did Nate win a big Valorant tourney?",
+      "answer": "The Saturday before 7November, 2022",
+      "adversarialAnswer": null,
+      "category": 2,
+      "categoryName": "temporal",
+      "evidence": [
+        "D27:1"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D18:8",
+          "D4:3",
+          "D17:14",
+          "D12:1",
+          "D27:25",
+          "D19:17",
+          "D20:1",
+          "D23:1",
+          "D25:3",
+          "D20:13"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1074.133,
+        "injectedChars": 2999,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 83,
+          "completion_tokens": 4,
+          "total_tokens": 87
+        },
+        "latencyMs": 782,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 870,
+          "completion_tokens": 3,
+          "total_tokens": 873
+        },
+        "latencyMs": 1335,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2999
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-42__q0093",
+      "sampleId": "conv-42",
+      "questionIndex": 93,
+      "question": "What game was the second tournament that Nate won based on?",
+      "answer": "Street Fighter",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D10:4",
+        "D10:6"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D17:1",
+          "D1:7",
+          "D27:1",
+          "D11:9",
+          "D20:7",
+          "D22:8",
+          "D25:4",
+          "D10:8",
+          "D25:5",
+          "D20:3"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 917.076,
+        "injectedChars": 2646,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 84,
+          "completion_tokens": 3,
+          "total_tokens": 87
+        },
+        "latencyMs": 894,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "Counter-Strike: Global Offensive",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 787,
+          "completion_tokens": 7,
+          "total_tokens": 794
+        },
+        "latencyMs": 1762,
+        "answer": "Counter-Strike: Global Offensive",
+        "f1": 0.0,
+        "injectedChars": 2646
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-42__q0114",
+      "sampleId": "conv-42",
+      "questionIndex": 114,
+      "question": "What kind of books does Nate enjoy?",
+      "answer": "Adventures and magic",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D9:14"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D5:8",
+          "D20:5",
+          "D9:13",
+          "D19:15",
+          "D25:5",
+          "D27:29",
+          "D9:12",
+          "D10:16",
+          "D9:2",
+          "D2:12"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 776.603,
+        "injectedChars": 1925,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 80,
+          "completion_tokens": 4,
+          "total_tokens": 84
+        },
+        "latencyMs": 1232,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "This trilogy is one of my faves. The world building, battles, and storytelling always blow me away!",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 634,
+          "completion_tokens": 22,
+          "total_tokens": 656
+        },
+        "latencyMs": 1511,
+        "answer": "This trilogy is one of my faves. The world building, battles, and storytelling always blow me away!",
+        "f1": 0.0,
+        "injectedChars": 1925
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-42__q0130",
+      "sampleId": "conv-42",
+      "questionIndex": 130,
+      "question": "What is displayed on Joanna's cork board for motivation and creativity?",
+      "answer": "inspiring quotes, photos, and little keepsakes",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D15:7"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D15:7",
+          "D22:23",
+          "D22:3",
+          "D22:12",
+          "D22:7",
+          "D22:15",
+          "D24:2",
+          "D22:5",
+          "D22:13",
+          "D23:25"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 629.684,
+        "injectedChars": 1870,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 85,
+          "completion_tokens": 4,
+          "total_tokens": 89
+        },
+        "latencyMs": 988,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "Inspiring quotes and pictures",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 609,
+          "completion_tokens": 5,
+          "total_tokens": 614
+        },
+        "latencyMs": 1249,
+        "answer": "Inspiring quotes and pictures",
+        "f1": 0.5,
+        "injectedChars": 1870
+      },
+      "f1Delta": 0.5
+    },
+    {
+      "caseId": "conv-42__q0170",
+      "sampleId": "conv-42",
+      "questionIndex": 170,
+      "question": "Why did Joanna name the stuffed animal dog Tilly?",
+      "answer": "after a dog she had in Michigan",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D24:6"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D16:3",
+          "D28:30",
+          "D11:9",
+          "D28:4",
+          "D13:4",
+          "D13:11",
+          "D24:7",
+          "D20:5",
+          "D11:5",
+          "D15:17"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 488.373,
+        "injectedChars": 1745,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 83,
+          "completion_tokens": 3,
+          "total_tokens": 86
+        },
+        "latencyMs": 901,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 593,
+          "completion_tokens": 4,
+          "total_tokens": 597
+        },
+        "latencyMs": 1067,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 1745
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-42__q0243",
+      "sampleId": "conv-42",
+      "questionIndex": 243,
+      "question": "What does Nate do after receiving a rejection from a production company?",
+      "answer": "No information available",
+      "adversarialAnswer": "keep grinding and moving ahead",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D24:14"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D14:1",
+          "D23:1",
+          "D19:17",
+          "D24:12",
+          "D19:7",
+          "D27:26",
+          "D17:14",
+          "D27:25",
+          "D29:2",
+          "D8:13"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 347.371,
+        "injectedChars": 2786,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "(b) keep grinding and moving ahead.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 105,
+          "completion_tokens": 8,
+          "total_tokens": 113
+        },
+        "latencyMs": 1455,
+        "answer": "keep grinding and moving ahead",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 837,
+          "completion_tokens": 3,
+          "total_tokens": 840
+        },
+        "latencyMs": 935,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 2786
+      },
+      "f1Delta": 1.0
+    },
+    {
+      "caseId": "conv-42__q0249",
+      "sampleId": "conv-42",
+      "questionIndex": 249,
+      "question": "What game is Joanna currently playing and recommends to others on November 7, 2022?",
+      "answer": "No information available",
+      "adversarialAnswer": "\"Xenoblade Chronicles\"",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D27:23"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D23:12",
+          "D24:10",
+          "D23:6",
+          "D1:6",
+          "D23:9",
+          "D24:14",
+          "D1:4",
+          "D23:25",
+          "D10:5",
+          "D25:28"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 199.979,
+        "injectedChars": 1675,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 112,
+          "completion_tokens": 3,
+          "total_tokens": 115
+        },
+        "latencyMs": 539,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 608,
+          "completion_tokens": 3,
+          "total_tokens": 611
+        },
+        "latencyMs": 1275,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 1675
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-43__q0023",
+      "sampleId": "conv-43",
+      "questionIndex": 23,
+      "question": "When is Tim attending a book conference?",
+      "answer": "September 2023",
+      "adversarialAnswer": null,
+      "category": 2,
+      "categoryName": "temporal",
+      "evidence": [
+        "D7:6"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D11:24",
+          "D15:30",
+          "D20:41",
+          "D26:6",
+          "D26:30",
+          "D22:13",
+          "D14:12",
+          "D3:30",
+          "D6:8",
+          "D2:7"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1820.575,
+        "injectedChars": 2999,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 80,
+          "completion_tokens": 4,
+          "total_tokens": 84
+        },
+        "latencyMs": 1230,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 893,
+          "completion_tokens": 3,
+          "total_tokens": 896
+        },
+        "latencyMs": 915,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2999
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-43__q0026",
+      "sampleId": "conv-43",
+      "questionIndex": 26,
+      "question": "Which TV series does Tim mention watching?",
+      "answer": "That, Wheel of Time",
+      "adversarialAnswer": null,
+      "category": 1,
+      "categoryName": "multi_hop",
+      "evidence": [
+        "D17:1",
+        "D17:11",
+        "D26:36"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D2:15",
+          "D26:34",
+          "D12:7",
+          "D2:3",
+          "D2:5",
+          "D2:13",
+          "D15:17",
+          "D18:15",
+          "D14:18",
+          "D22:17"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1475.989,
+        "injectedChars": 1740,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_off",
+        "memory_on"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 80,
+          "completion_tokens": 3,
+          "total_tokens": 83
+        },
+        "latencyMs": 991,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 589,
+          "completion_tokens": 3,
+          "total_tokens": 592
+        },
+        "latencyMs": 3869,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 1740
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-43__q0032",
+      "sampleId": "conv-43",
+      "questionIndex": 32,
+      "question": "Which US states might Tim be in during September 2023 based on his plans of visiting Universal Studios?",
+      "answer": "California or Florida",
+      "adversarialAnswer": null,
+      "category": 3,
+      "categoryName": "open_domain",
+      "evidence": [
+        "D10:9"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D11:18",
+          "D1:4",
+          "D6:16",
+          "D26:12",
+          "D10:1",
+          "D18:5",
+          "D2:5",
+          "D8:10",
+          "D21:15",
+          "D15:37"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1322.792,
+        "injectedChars": 2268,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_off",
+        "memory_on"
+      ],
+      "memoryOff": {
+        "rawAnswer": "California or Florida",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 93,
+          "completion_tokens": 3,
+          "total_tokens": 96
+        },
+        "latencyMs": 999,
+        "answer": "California or Florida",
+        "f1": 1.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 710,
+          "completion_tokens": 3,
+          "total_tokens": 713
+        },
+        "latencyMs": 1224,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2268
+      },
+      "f1Delta": -1.0
+    },
+    {
+      "caseId": "conv-43__q0092",
+      "sampleId": "conv-43",
+      "questionIndex": 92,
+      "question": "What did John's teammates give him when they met on Aug 15th?",
+      "answer": "a basketball with autographs on it",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D7:7"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D27:16",
+          "D15:13",
+          "D15:20",
+          "D24:7",
+          "D25:3",
+          "D4:2",
+          "D19:15",
+          "D7:8",
+          "D2:19",
+          "D7:1"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1164.813,
+        "injectedChars": 1935,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_off",
+        "memory_on"
+      ],
+      "memoryOff": {
+        "rawAnswer": "A signed jersey",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 88,
+          "completion_tokens": 3,
+          "total_tokens": 91
+        },
+        "latencyMs": 943,
+        "answer": "A signed jersey",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 645,
+          "completion_tokens": 4,
+          "total_tokens": 649
+        },
+        "latencyMs": 1251,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 1935
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-43__q0125",
+      "sampleId": "conv-43",
+      "questionIndex": 125,
+      "question": "What J.K. Rowling quote does Tim resonate with?",
+      "answer": "\"Turn on the light - happiness hides in the darkest of times.\"",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D15:11"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D15:19",
+          "D15:13",
+          "D24:1",
+          "D25:11",
+          "D26:12",
+          "D3:20",
+          "D2:3",
+          "D3:34",
+          "D1:16",
+          "D25:3"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1010.635,
+        "injectedChars": 1787,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 84,
+          "completion_tokens": 4,
+          "total_tokens": 88
+        },
+        "latencyMs": 955,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 606,
+          "completion_tokens": 3,
+          "total_tokens": 609
+        },
+        "latencyMs": 742,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 1787
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-43__q0145",
+      "sampleId": "conv-43",
+      "questionIndex": 145,
+      "question": "Where was the forest picture shared by John on December 1,2023 taken?",
+      "answer": "near his hometown",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D20:28"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D18:12",
+          "D22:6",
+          "D3:23",
+          "D22:9",
+          "D22:5",
+          "D26:15",
+          "D20:36",
+          "D26:23",
+          "D26:9",
+          "D12:26"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 850.467,
+        "injectedChars": 2461,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 89,
+          "completion_tokens": 3,
+          "total_tokens": 92
+        },
+        "latencyMs": 1004,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 738,
+          "completion_tokens": 3,
+          "total_tokens": 741
+        },
+        "latencyMs": 1176,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2461
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-43__q0154",
+      "sampleId": "conv-43",
+      "questionIndex": 154,
+      "question": "How did John feel about the atmosphere during the big game against the rival team?",
+      "answer": "electric and intense",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D23:5"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D8:3",
+          "D26:9",
+          "D29:12",
+          "D16:10",
+          "D6:11",
+          "D28:11",
+          "D11:13",
+          "D3:21",
+          "D3:29",
+          "D20:36"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 684.324,
+        "injectedChars": 2694,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "He said the atmosphere was electric.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 88,
+          "completion_tokens": 7,
+          "total_tokens": 95
+        },
+        "latencyMs": 945,
+        "answer": "He said the atmosphere was electric.",
+        "f1": 0.28571428571428575,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 795,
+          "completion_tokens": 3,
+          "total_tokens": 798
+        },
+        "latencyMs": 1160,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2694
+      },
+      "f1Delta": -0.28571428571428575
+    },
+    {
+      "caseId": "conv-43__q0182",
+      "sampleId": "conv-43",
+      "questionIndex": 182,
+      "question": "What was the highest number of points Tim scored in a game recently?",
+      "answer": "No information available",
+      "adversarialAnswer": "40 points",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D3:1"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D1:8",
+          "D15:27",
+          "D23:3",
+          "D1:18",
+          "D20:37",
+          "D3:2",
+          "D26:32",
+          "D11:10",
+          "D26:8",
+          "D12:26"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 531.951,
+        "injectedChars": 2728,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 104,
+          "completion_tokens": 4,
+          "total_tokens": 108
+        },
+        "latencyMs": 1072,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 846,
+          "completion_tokens": 4,
+          "total_tokens": 850
+        },
+        "latencyMs": 1455,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 2728
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-43__q0202",
+      "sampleId": "conv-43",
+      "questionIndex": 202,
+      "question": "What is Tim excited to see at Disneyland?",
+      "answer": "No information available",
+      "adversarialAnswer": "The Harry Potter stuff",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D10:11"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D12:23",
+          "D13:9",
+          "D6:18",
+          "D25:11",
+          "D12:29",
+          "D27:11",
+          "D27:39",
+          "D12:17",
+          "D14:4",
+          "D21:5"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 372.077,
+        "injectedChars": 1901,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "(b) The Harry Potter stuff.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 101,
+          "completion_tokens": 7,
+          "total_tokens": 108
+        },
+        "latencyMs": 1095,
+        "answer": "The Harry Potter stuff",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 650,
+          "completion_tokens": 3,
+          "total_tokens": 653
+        },
+        "latencyMs": 1256,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 1901
+      },
+      "f1Delta": 1.0
+    },
+    {
+      "caseId": "conv-43__q0241",
+      "sampleId": "conv-43",
+      "questionIndex": 241,
+      "question": "What was Tims's reaction to sealing the deal with the beverage company?",
+      "answer": "No information available",
+      "adversarialAnswer": "crazy feeling, sense of accomplishment",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D29:6"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D6:11",
+          "D8:9",
+          "D8:16",
+          "D29:12",
+          "D22:9",
+          "D16:3",
+          "D23:7",
+          "D19:4",
+          "D20:37",
+          "D27:4"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 210.776,
+        "injectedChars": 3077,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "crazy feeling, sense of accomplishment.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 108,
+          "completion_tokens": 8,
+          "total_tokens": 116
+        },
+        "latencyMs": 922,
+        "answer": "crazy feeling, sense of accomplishment",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 884,
+          "completion_tokens": 3,
+          "total_tokens": 887
+        },
+        "latencyMs": 858,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 3077
+      },
+      "f1Delta": 1.0
+    },
+    {
+      "caseId": "conv-44__q0035",
+      "sampleId": "conv-44",
+      "questionIndex": 35,
+      "question": "What are the names of Andrew's dogs?",
+      "answer": "Toby, Scout, Buddy",
+      "adversarialAnswer": null,
+      "category": 1,
+      "categoryName": "multi_hop",
+      "evidence": [
+        "D12:1",
+        "D24:6",
+        "D28:8"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D17:2",
+          "D10:7",
+          "D11:9",
+          "D20:39",
+          "D10:19",
+          "D10:6",
+          "D19:12",
+          "D11:7",
+          "D11:34",
+          "D10:15"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1821.615,
+        "injectedChars": 3492,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 81,
+          "completion_tokens": 3,
+          "total_tokens": 84
+        },
+        "latencyMs": 1264,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 1006,
+          "completion_tokens": 3,
+          "total_tokens": 1009
+        },
+        "latencyMs": 744,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 3492
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-44__q0037",
+      "sampleId": "conv-44",
+      "questionIndex": 37,
+      "question": "When did Audrey get into an accident in the park?",
+      "answer": "between October 19 and 24, 2023",
+      "adversarialAnswer": null,
+      "category": 2,
+      "categoryName": "temporal",
+      "evidence": [
+        "D25:2"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D21:2",
+          "D21:8",
+          "D11:10",
+          "D11:12",
+          "D3:10",
+          "D23:10",
+          "D8:12",
+          "D20:8",
+          "D7:9",
+          "D24:19"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1651.492,
+        "injectedChars": 2347,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 83,
+          "completion_tokens": 4,
+          "total_tokens": 87
+        },
+        "latencyMs": 831,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 729,
+          "completion_tokens": 4,
+          "total_tokens": 733
+        },
+        "latencyMs": 715,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 2347
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-44__q0051",
+      "sampleId": "conv-44",
+      "questionIndex": 51,
+      "question": "What items has Audrey bought or made for her dogs?",
+      "answer": "dog tags, toys, dog beds, collars",
+      "adversarialAnswer": null,
+      "category": 1,
+      "categoryName": "multi_hop",
+      "evidence": [
+        "D1:2",
+        "D9:5",
+        "D18:10",
+        "D24:1"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D8:18",
+          "D15:5",
+          "D11:16",
+          "D24:18",
+          "D12:8",
+          "D9:11",
+          "D12:6",
+          "D10:3",
+          "D24:17",
+          "D11:10"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1490.247,
+        "injectedChars": 2171,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 83,
+          "completion_tokens": 4,
+          "total_tokens": 87
+        },
+        "latencyMs": 978,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "Audrey made personalized tags for them.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 694,
+          "completion_tokens": 8,
+          "total_tokens": 702
+        },
+        "latencyMs": 1027,
+        "answer": "Audrey made personalized tags for them.",
+        "f1": 0.0625,
+        "injectedChars": 2171
+      },
+      "f1Delta": 0.0625
+    },
+    {
+      "caseId": "conv-44__q0057",
+      "sampleId": "conv-44",
+      "questionIndex": 57,
+      "question": "When did Andrew adopt Scout?",
+      "answer": "few days before November 2023",
+      "adversarialAnswer": null,
+      "category": 2,
+      "categoryName": "temporal",
+      "evidence": [
+        "D28:6"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D19:9",
+          "D16:5",
+          "D4:20",
+          "D1:18",
+          "D16:19",
+          "D8:13",
+          "D8:17",
+          "D11:27",
+          "D19:27",
+          "D27:13"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1327.227,
+        "injectedChars": 1778,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_off",
+        "memory_on"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 78,
+          "completion_tokens": 3,
+          "total_tokens": 81
+        },
+        "latencyMs": 742,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 598,
+          "completion_tokens": 3,
+          "total_tokens": 601
+        },
+        "latencyMs": 1024,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 1778
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-44__q0063",
+      "sampleId": "conv-44",
+      "questionIndex": 63,
+      "question": "What kind of pastries did Andrew and his girlfriend have at the cafe?",
+      "answer": "croissants, muffins, and tarts",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D3:17"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D3:15",
+          "D4:24",
+          "D18:11",
+          "D25:1",
+          "D20:30",
+          "D21:3",
+          "D13:14",
+          "D6:3",
+          "D17:1",
+          "D20:31"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1176.321,
+        "injectedChars": 2504,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 87,
+          "completion_tokens": 3,
+          "total_tokens": 90
+        },
+        "latencyMs": 1050,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 775,
+          "completion_tokens": 3,
+          "total_tokens": 778
+        },
+        "latencyMs": 1140,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2504
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-44__q0103",
+      "sampleId": "conv-44",
+      "questionIndex": 103,
+      "question": "What organization does Audrey donate a portion of his profits to?",
+      "answer": "Animal shelter",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D22:7"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D9:1",
+          "D7:5",
+          "D2:9",
+          "D10:23",
+          "D19:26",
+          "D20:20",
+          "D9:6",
+          "D22:7",
+          "D4:15",
+          "D23:5"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 838.459,
+        "injectedChars": 2661,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 84,
+          "completion_tokens": 4,
+          "total_tokens": 88
+        },
+        "latencyMs": 1007,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 812,
+          "completion_tokens": 3,
+          "total_tokens": 815
+        },
+        "latencyMs": 1062,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2661
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-44__q0110",
+      "sampleId": "conv-44",
+      "questionIndex": 110,
+      "question": "What activity do Andrew and Buddy enjoy doing together?",
+      "answer": "Walking",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D24:8"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D10:6",
+          "D4:24",
+          "D26:4",
+          "D24:6",
+          "D20:11",
+          "D24:8",
+          "D27:13",
+          "D28:10",
+          "D13:9",
+          "D20:15"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 682.994,
+        "injectedChars": 2147,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 82,
+          "completion_tokens": 3,
+          "total_tokens": 85
+        },
+        "latencyMs": 953,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "Walks",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 687,
+          "completion_tokens": 2,
+          "total_tokens": 689
+        },
+        "latencyMs": 1296,
+        "answer": "Walks",
+        "f1": 1.0,
+        "injectedChars": 2147
+      },
+      "f1Delta": 1.0
+    },
+    {
+      "caseId": "conv-44__q0121",
+      "sampleId": "conv-44",
+      "questionIndex": 121,
+      "question": "What is Andrew planning to do with Scout, Toby, and Buddy?",
+      "answer": "Take them to a nearby park",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D28:10"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D26:4",
+          "D20:11",
+          "D23:13",
+          "D20:32",
+          "D28:10",
+          "D12:4",
+          "D26:6",
+          "D23:27",
+          "D20:39",
+          "D26:2"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 524.138,
+        "injectedChars": 2177,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "He is planning to take them to the vet.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 86,
+          "completion_tokens": 10,
+          "total_tokens": 96
+        },
+        "latencyMs": 1312,
+        "answer": "He is planning to take them to the vet.",
+        "f1": 0.4615384615384615,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "Take them to a nearby park",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 697,
+          "completion_tokens": 6,
+          "total_tokens": 703
+        },
+        "latencyMs": 1413,
+        "answer": "Take them to a nearby park",
+        "f1": 1.0,
+        "injectedChars": 2177
+      },
+      "f1Delta": 0.5384615384615385
+    },
+    {
+      "caseId": "conv-44__q0141",
+      "sampleId": "conv-44",
+      "questionIndex": 141,
+      "question": "How does Andrew describe the new beds for his dogs?",
+      "answer": "No information available",
+      "adversarialAnswer": "Super cozy and comfy",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D18:12"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D28:12",
+          "D11:11",
+          "D13:5",
+          "D10:3",
+          "D10:4",
+          "D25:7",
+          "D18:21",
+          "D13:6",
+          "D10:17",
+          "D9:20"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 366.236,
+        "injectedChars": 2675,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "Super cozy and comfy",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 103,
+          "completion_tokens": 5,
+          "total_tokens": 108
+        },
+        "latencyMs": 1361,
+        "answer": "Super cozy and comfy",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 811,
+          "completion_tokens": 4,
+          "total_tokens": 815
+        },
+        "latencyMs": 965,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 2675
+      },
+      "f1Delta": 1.0
+    },
+    {
+      "caseId": "conv-44__q0149",
+      "sampleId": "conv-44",
+      "questionIndex": 149,
+      "question": "What type of games do Andrew's dogs like to play at the park?",
+      "answer": "No information available",
+      "adversarialAnswer": "Fetch and Frisbee",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D23:14"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D23:13",
+          "D21:3",
+          "D20:31",
+          "D4:27",
+          "D23:10",
+          "D3:10",
+          "D17:2",
+          "D10:19",
+          "D1:15",
+          "D27:13"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 201.212,
+        "injectedChars": 2972,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "(b) Fetch and Frisbee.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 106,
+          "completion_tokens": 7,
+          "total_tokens": 113
+        },
+        "latencyMs": 787,
+        "answer": "Fetch and Frisbee",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 903,
+          "completion_tokens": 3,
+          "total_tokens": 906
+        },
+        "latencyMs": 920,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 2972
+      },
+      "f1Delta": 1.0
+    },
+    {
+      "caseId": "conv-47__q0005",
+      "sampleId": "conv-47",
+      "questionIndex": 5,
+      "question": "What are John and James' favorite games?",
+      "answer": "John's favorite game is CS:GO, and James's is Apex Legends.",
+      "adversarialAnswer": null,
+      "category": 1,
+      "categoryName": "multi_hop",
+      "evidence": [
+        "D3:11",
+        "D4:16"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D1:13",
+          "D12:10",
+          "D10:4",
+          "D22:9",
+          "D4:17",
+          "D25:13",
+          "D18:3",
+          "D3:15",
+          "D20:15",
+          "D26:5"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1668.604,
+        "injectedChars": 2338,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 81,
+          "completion_tokens": 4,
+          "total_tokens": 85
+        },
+        "latencyMs": 958,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 713,
+          "completion_tokens": 3,
+          "total_tokens": 716
+        },
+        "latencyMs": 1290,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2338
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-47__q0011",
+      "sampleId": "conv-47",
+      "questionIndex": 11,
+      "question": "How was John feeling on April 10, 2022?",
+      "answer": "seeking solitude",
+      "adversarialAnswer": null,
+      "category": 2,
+      "categoryName": "temporal",
+      "evidence": [
+        "D6:7"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D16:4",
+          "D1:19",
+          "D3:13",
+          "D6:5",
+          "D11:10",
+          "D16:6",
+          "D21:12",
+          "D13:13",
+          "D31:12",
+          "D1:37"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1492.361,
+        "injectedChars": 1779,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 85,
+          "completion_tokens": 3,
+          "total_tokens": 88
+        },
+        "latencyMs": 1010,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 579,
+          "completion_tokens": 4,
+          "total_tokens": 583
+        },
+        "latencyMs": 1177,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 1779
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-47__q0017",
+      "sampleId": "conv-47",
+      "questionIndex": 17,
+      "question": "What is the board game where you have to find the imposter that John mentions to James?",
+      "answer": "Mafia",
+      "adversarialAnswer": null,
+      "category": 3,
+      "categoryName": "open_domain",
+      "evidence": [
+        "D8:36"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D30:9",
+          "D10:7",
+          "D22:8",
+          "D24:3",
+          "D17:17",
+          "D17:29",
+          "D3:15",
+          "D27:5",
+          "D27:9",
+          "D9:8"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1327.962,
+        "injectedChars": 2446,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_off",
+        "memory_on"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 91,
+          "completion_tokens": 3,
+          "total_tokens": 94
+        },
+        "latencyMs": 830,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 739,
+          "completion_tokens": 3,
+          "total_tokens": 742
+        },
+        "latencyMs": 1389,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2446
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-47__q0029",
+      "sampleId": "conv-47",
+      "questionIndex": 29,
+      "question": "When did James depart for his trip to Canada?",
+      "answer": "July 11, 2022",
+      "adversarialAnswer": null,
+      "category": 2,
+      "categoryName": "temporal",
+      "evidence": [
+        "D16:9"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D20:20",
+          "D13:6",
+          "D28:21",
+          "D13:4",
+          "D19:12",
+          "D11:7",
+          "D17:4",
+          "D17:17",
+          "D24:21",
+          "D8:33"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1173.021,
+        "injectedChars": 2293,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 82,
+          "completion_tokens": 3,
+          "total_tokens": 85
+        },
+        "latencyMs": 1016,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 715,
+          "completion_tokens": 3,
+          "total_tokens": 718
+        },
+        "latencyMs": 941,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2293
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-47__q0072",
+      "sampleId": "conv-47",
+      "questionIndex": 72,
+      "question": "What instrument is John learning to play as of 27 March, 2022?",
+      "answer": "Drums",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D3:2",
+        "D3:3"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D26:9",
+          "D31:10",
+          "D3:15",
+          "D2:14",
+          "D18:15",
+          "D28:2",
+          "D9:12",
+          "D28:34",
+          "D27:5",
+          "D28:4"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1017.618,
+        "injectedChars": 1626,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "guitar",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 89,
+          "completion_tokens": 3,
+          "total_tokens": 92
+        },
+        "latencyMs": 880,
+        "answer": "guitar",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 587,
+          "completion_tokens": 4,
+          "total_tokens": 591
+        },
+        "latencyMs": 896,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 1626
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-47__q0075",
+      "sampleId": "conv-47",
+      "questionIndex": 75,
+      "question": "What game was James playing in the online gaming tournament in April 2022?",
+      "answer": "Apex Legends",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D4:16"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D6:14",
+          "D13:18",
+          "D9:4",
+          "D1:30",
+          "D1:7",
+          "D25:2",
+          "D18:16",
+          "D31:3",
+          "D2:13",
+          "D2:15"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 852.707,
+        "injectedChars": 2092,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 88,
+          "completion_tokens": 3,
+          "total_tokens": 91
+        },
+        "latencyMs": 1190,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 676,
+          "completion_tokens": 3,
+          "total_tokens": 679
+        },
+        "latencyMs": 1164,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2092
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-47__q0083",
+      "sampleId": "conv-47",
+      "questionIndex": 83,
+      "question": "What impresses John about Japan?",
+      "answer": "Technologically advanced megacities and tasty street food",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D6:15"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D2:14",
+          "D12:10",
+          "D1:33",
+          "D9:13",
+          "D9:15",
+          "D21:10",
+          "D4:23",
+          "D3:23",
+          "D1:13",
+          "D16:6"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 687.314,
+        "injectedChars": 1565,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 79,
+          "completion_tokens": 3,
+          "total_tokens": 82
+        },
+        "latencyMs": 1281,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 561,
+          "completion_tokens": 3,
+          "total_tokens": 564
+        },
+        "latencyMs": 1397,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 1565
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-47__q0102",
+      "sampleId": "conv-47",
+      "questionIndex": 102,
+      "question": "What did James enjoy doing on cold winter days?",
+      "answer": "Reading while snuggled under the covers",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D16:9"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D14:7",
+          "D12:10",
+          "D14:30",
+          "D30:3",
+          "D23:9",
+          "D30:5",
+          "D11:6",
+          "D20:14",
+          "D28:7",
+          "D30:7"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 530.906,
+        "injectedChars": 1570,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_off",
+        "memory_on"
+      ],
+      "memoryOff": {
+        "rawAnswer": "Sledding",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 82,
+          "completion_tokens": 3,
+          "total_tokens": 85
+        },
+        "latencyMs": 869,
+        "answer": "Sledding",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 550,
+          "completion_tokens": 3,
+          "total_tokens": 553
+        },
+        "latencyMs": 1288,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 1570
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-47__q0177",
+      "sampleId": "conv-47",
+      "questionIndex": 177,
+      "question": "What did James use to play when he was younger to let off steam?",
+      "answer": "No information available",
+      "adversarialAnswer": "drums",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D24:15"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D30:7",
+          "D17:17",
+          "D24:13",
+          "D20:20",
+          "D11:7",
+          "D22:14",
+          "D11:2",
+          "D25:12",
+          "D15:11",
+          "D24:15"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 373.934,
+        "injectedChars": 2472,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "(b) drums",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 103,
+          "completion_tokens": 3,
+          "total_tokens": 106
+        },
+        "latencyMs": 900,
+        "answer": "drums",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "(b) drums",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 779,
+          "completion_tokens": 3,
+          "total_tokens": 782
+        },
+        "latencyMs": 1289,
+        "answer": "drums",
+        "f1": 0.0,
+        "injectedChars": 2472
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-47__q0184",
+      "sampleId": "conv-47",
+      "questionIndex": 184,
+      "question": "What decision did John and Samantha make on 31 October, 2022?",
+      "answer": "No information available",
+      "adversarialAnswer": "To move in together",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D29:8",
+        "D29:10"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D12:10",
+          "D27:13",
+          "D29:13",
+          "D25:13",
+          "D14:30",
+          "D2:14",
+          "D21:12",
+          "D27:11",
+          "D18:3",
+          "D27:9"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 214.007,
+        "injectedChars": 1843,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 107,
+          "completion_tokens": 4,
+          "total_tokens": 111
+        },
+        "latencyMs": 1043,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 631,
+          "completion_tokens": 4,
+          "total_tokens": 635
+        },
+        "latencyMs": 1117,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 1843
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-48__q0023",
+      "sampleId": "conv-48",
+      "questionIndex": 23,
+      "question": "Why did Jolene sometimes put off doing yoga?",
+      "answer": "She's more interested in playing video games",
+      "adversarialAnswer": null,
+      "category": 3,
+      "categoryName": "open_domain",
+      "evidence": [
+        "D3:11",
+        "D2:30"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D2:10",
+          "D7:19",
+          "D9:4",
+          "D19:14",
+          "D14:10",
+          "D21:12",
+          "D1:12",
+          "D7:13",
+          "D2:6",
+          "D3:5"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1675.909,
+        "injectedChars": 1538,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_off",
+        "memory_on"
+      ],
+      "memoryOff": {
+        "rawAnswer": "Because she was too tired",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 82,
+          "completion_tokens": 5,
+          "total_tokens": 87
+        },
+        "latencyMs": 1308,
+        "answer": "Because she was too tired",
+        "f1": 0.16666666666666666,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 537,
+          "completion_tokens": 3,
+          "total_tokens": 540
+        },
+        "latencyMs": 987,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 1538
+      },
+      "f1Delta": -0.16666666666666666
+    },
+    {
+      "caseId": "conv-48__q0051",
+      "sampleId": "conv-48",
+      "questionIndex": 51,
+      "question": "When did Jolene buy a new aquarium for Seraphim?",
+      "answer": "24 June, 2023",
+      "adversarialAnswer": null,
+      "category": 2,
+      "categoryName": "temporal",
+      "evidence": [
+        "D14:4"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D8:10",
+          "D13:5",
+          "D25:1",
+          "D8:4",
+          "D7:3",
+          "D15:10",
+          "D11:4",
+          "D8:6",
+          "D27:9",
+          "D23:27"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1510.196,
+        "injectedChars": 2651,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 85,
+          "completion_tokens": 3,
+          "total_tokens": 88
+        },
+        "latencyMs": 1340,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 816,
+          "completion_tokens": 3,
+          "total_tokens": 819
+        },
+        "latencyMs": 1229,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2651
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-48__q0073",
+      "sampleId": "conv-48",
+      "questionIndex": 73,
+      "question": "Did Jolene teach herself how to play the console?",
+      "answer": "yes",
+      "adversarialAnswer": null,
+      "category": 1,
+      "categoryName": "multi_hop",
+      "evidence": [
+        "D2:28",
+        "D24:8"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D9:4",
+          "D22:6",
+          "D27:5",
+          "D10:20",
+          "D20:7",
+          "D10:4",
+          "D22:12",
+          "D15:2",
+          "D22:8",
+          "D22:22"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1346.968,
+        "injectedChars": 2908,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 83,
+          "completion_tokens": 4,
+          "total_tokens": 87
+        },
+        "latencyMs": 1015,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 816,
+          "completion_tokens": 3,
+          "total_tokens": 819
+        },
+        "latencyMs": 1311,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2908
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-48__q0093",
+      "sampleId": "conv-48",
+      "questionIndex": 93,
+      "question": "What projects is Jolene planning for next year?",
+      "answer": "developing renewable energy finding ways to supply clean water to those with limited access",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D22:10",
+        "D22:12"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D10:14",
+          "D5:9",
+          "D19:8",
+          "D4:15",
+          "D2:8",
+          "D12:6",
+          "D20:1",
+          "D1:4",
+          "D2:30",
+          "D7:17"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1191.012,
+        "injectedChars": 1960,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 82,
+          "completion_tokens": 3,
+          "total_tokens": 85
+        },
+        "latencyMs": 993,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 637,
+          "completion_tokens": 3,
+          "total_tokens": 640
+        },
+        "latencyMs": 1319,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 1960
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-48__q0130",
+      "sampleId": "conv-48",
+      "questionIndex": 130,
+      "question": "What does Deborah find comforting about going to art shows?",
+      "answer": "It makes her feel like she's still experiencing it with her mom",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D12:3"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D11:4",
+          "D15:7",
+          "D1:9",
+          "D16:17",
+          "D23:22",
+          "D3:12",
+          "D8:3",
+          "D26:7",
+          "D13:7",
+          "D8:15"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1036.728,
+        "injectedChars": 1895,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 83,
+          "completion_tokens": 3,
+          "total_tokens": 86
+        },
+        "latencyMs": 957,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 627,
+          "completion_tokens": 3,
+          "total_tokens": 630
+        },
+        "latencyMs": 939,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 1895
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-48__q0146",
+      "sampleId": "conv-48",
+      "questionIndex": 146,
+      "question": "What kind of yoga routine does Deborah recommend to Jolene?",
+      "answer": "A gentle flow routine focused on breathing and grounding",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D16:15"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D11:6",
+          "D11:4",
+          "D22:13",
+          "D28:4",
+          "D26:12",
+          "D23:22",
+          "D4:42",
+          "D13:7",
+          "D23:2",
+          "D15:17"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 876.609,
+        "injectedChars": 2729,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 84,
+          "completion_tokens": 3,
+          "total_tokens": 87
+        },
+        "latencyMs": 1490,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 824,
+          "completion_tokens": 4,
+          "total_tokens": 828
+        },
+        "latencyMs": 929,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 2729
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-48__q0170",
+      "sampleId": "conv-48",
+      "questionIndex": 170,
+      "question": "How did Deborah's mom support her yoga practice when she first started?",
+      "answer": "attended classes with her",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D24:5"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D7:4",
+          "D4:6",
+          "D22:7",
+          "D9:4",
+          "D16:7",
+          "D30:5",
+          "D11:4",
+          "D22:2",
+          "D28:19",
+          "D22:4"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 712.32,
+        "injectedChars": 2685,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "She bought her a yoga mat.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 86,
+          "completion_tokens": 7,
+          "total_tokens": 93
+        },
+        "latencyMs": 1350,
+        "answer": "She bought her a yoga mat.",
+        "f1": 0.22222222222222224,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 777,
+          "completion_tokens": 3,
+          "total_tokens": 780
+        },
+        "latencyMs": 1166,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2685
+      },
+      "f1Delta": -0.22222222222222224
+    },
+    {
+      "caseId": "conv-48__q0172",
+      "sampleId": "conv-48",
+      "questionIndex": 172,
+      "question": "What was one of Jolene's favorite games to play with her mom on the nintendo wii game system?",
+      "answer": "Monster Hunter: World",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D24:10"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D24:8",
+          "D2:17",
+          "D30:1",
+          "D27:5",
+          "D28:3",
+          "D19:11",
+          "D22:12",
+          "D19:12",
+          "D24:9",
+          "D29:7"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 546.576,
+        "injectedChars": 3029,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 95,
+          "completion_tokens": 3,
+          "total_tokens": 98
+        },
+        "latencyMs": 1189,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 877,
+          "completion_tokens": 4,
+          "total_tokens": 881
+        },
+        "latencyMs": 973,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 3029
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-48__q0197",
+      "sampleId": "conv-48",
+      "questionIndex": 197,
+      "question": "Where did Jolene meet her new friend Anna?",
+      "answer": "No information available",
+      "adversarialAnswer": "yoga in the park",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D3:6"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D2:10",
+          "D9:4",
+          "D4:13",
+          "D27:9",
+          "D22:4",
+          "D26:20",
+          "D5:9",
+          "D16:7",
+          "D2:12",
+          "D1:12"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 377.261,
+        "injectedChars": 2012,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 101,
+          "completion_tokens": 4,
+          "total_tokens": 105
+        },
+        "latencyMs": 545,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 656,
+          "completion_tokens": 4,
+          "total_tokens": 660
+        },
+        "latencyMs": 1899,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 2012
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-48__q0215",
+      "sampleId": "conv-48",
+      "questionIndex": 215,
+      "question": "How did Deborah come to have her pet, Susie?",
+      "answer": "No information available",
+      "adversarialAnswer": "She adopted her two years ago when feeling lonely.",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D16:6"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D16:5",
+          "D22:4",
+          "D3:12",
+          "D26:7",
+          "D28:19",
+          "D26:1",
+          "D30:1",
+          "D16:7",
+          "D27:2",
+          "D11:6"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 212.074,
+        "injectedChars": 2541,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "(b) She adopted her two years ago when feeling lonely.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 108,
+          "completion_tokens": 12,
+          "total_tokens": 120
+        },
+        "latencyMs": 1260,
+        "answer": "She adopted her two years ago when feeling lonely.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 770,
+          "completion_tokens": 3,
+          "total_tokens": 773
+        },
+        "latencyMs": 1273,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 2541
+      },
+      "f1Delta": 1.0
+    },
+    {
+      "caseId": "conv-49__q0019",
+      "sampleId": "conv-49",
+      "questionIndex": 19,
+      "question": "Considering their conversations and personal growth, what advice might Evan and Sam give to someone facing a major life transition or challenge?",
+      "answer": "Evan and Sam would likely advise embracing small, consistent changes​​, finding stress-relieving activities like hiking​​, painting, and road trips​​, and the importance of friendship and support in navigating challenges​​.",
+      "adversarialAnswer": null,
+      "category": 3,
+      "categoryName": "open_domain",
+      "evidence": [
+        "D3:10",
+        "D3:15",
+        "D22:1",
+        "D8:17",
+        "D8:22",
+        "D9:8",
+        "D9:11",
+        "D14:7",
+        "D14:12",
+        "D12:7",
+        "D12:11"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D1:13",
+          "D10:10",
+          "D14:4",
+          "D14:5",
+          "D10:2",
+          "D1:19",
+          "D13:9",
+          "D1:4",
+          "D1:9",
+          "D14:7"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 0.09090909090909091,
+        "evidenceHit": true,
+        "latencyMs": 1403.519,
+        "injectedChars": 2412,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "Embrace change and trust yourself",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 96,
+          "completion_tokens": 6,
+          "total_tokens": 102
+        },
+        "latencyMs": 964,
+        "answer": "Embrace change and trust yourself",
+        "f1": 0.07142857142857142,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "Set goals, find something you enjoy, and get a buddy for support.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 775,
+          "completion_tokens": 15,
+          "total_tokens": 790
+        },
+        "latencyMs": 1310,
+        "answer": "Set goals, find something you enjoy, and get a buddy for support.",
+        "f1": 0.11764705882352941,
+        "injectedChars": 2412
+      },
+      "f1Delta": 0.046218487394957986
+    },
+    {
+      "caseId": "conv-49__q0058",
+      "sampleId": "conv-49",
+      "questionIndex": 58,
+      "question": "When did Evan start lifting weights?",
+      "answer": "October 2022",
+      "adversarialAnswer": null,
+      "category": 2,
+      "categoryName": "temporal",
+      "evidence": [
+        "D12:2"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D2:15",
+          "D2:13",
+          "D1:5",
+          "D1:8",
+          "D2:17",
+          "D5:21",
+          "D2:5",
+          "D12:4",
+          "D1:7",
+          "D13:9"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1289.026,
+        "injectedChars": 2041,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 79,
+          "completion_tokens": 4,
+          "total_tokens": 83
+        },
+        "latencyMs": 1020,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 675,
+          "completion_tokens": 3,
+          "total_tokens": 678
+        },
+        "latencyMs": 855,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2041
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-49__q0077",
+      "sampleId": "conv-49",
+      "questionIndex": 77,
+      "question": "How does Evan spend his time with his bride after the wedding?",
+      "answer": "family get-together, honeymoon in Canada to see snowy landscapes, ski, taste local cuisine and do some snowshoeing",
+      "adversarialAnswer": null,
+      "category": 1,
+      "categoryName": "multi_hop",
+      "evidence": [
+        "D23:15",
+        "D23:23",
+        "D23:25",
+        "D24:9"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D24:23",
+          "D1:6",
+          "D17:8",
+          "D7:1",
+          "D7:10",
+          "D18:7",
+          "D8:33",
+          "D25:6",
+          "D2:4",
+          "D8:21"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1164.295,
+        "injectedChars": 2379,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "He takes her to the beach.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 85,
+          "completion_tokens": 7,
+          "total_tokens": 92
+        },
+        "latencyMs": 1125,
+        "answer": "He takes her to the beach.",
+        "f1": 0.041666666666666664,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 738,
+          "completion_tokens": 4,
+          "total_tokens": 742
+        },
+        "latencyMs": 1233,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 2379
+      },
+      "f1Delta": -0.041666666666666664
+    },
+    {
+      "caseId": "conv-49__q0086",
+      "sampleId": "conv-49",
+      "questionIndex": 86,
+      "question": "What advice did Evan give Sam about finding a passion?",
+      "answer": "keep trying new things until something sparks excitement",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D1:18"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D8:29",
+          "D22:4",
+          "D1:11",
+          "D23:11",
+          "D8:19",
+          "D17:7",
+          "D5:13",
+          "D17:13",
+          "D8:18",
+          "D3:14"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1040.919,
+        "injectedChars": 2233,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 83,
+          "completion_tokens": 3,
+          "total_tokens": 86
+        },
+        "latencyMs": 1446,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 712,
+          "completion_tokens": 3,
+          "total_tokens": 715
+        },
+        "latencyMs": 1195,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2233
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-49__q0093",
+      "sampleId": "conv-49",
+      "questionIndex": 93,
+      "question": "What novel is Evan reading that he finds gripping?",
+      "answer": "The Great Gatsby",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D4:10"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D1:10",
+          "D15:17",
+          "D2:17",
+          "D15:10",
+          "D16:17",
+          "D15:12",
+          "D15:14",
+          "D15:18",
+          "D20:14",
+          "D4:11"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 930.645,
+        "injectedChars": 1669,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 82,
+          "completion_tokens": 4,
+          "total_tokens": 86
+        },
+        "latencyMs": 946,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 571,
+          "completion_tokens": 4,
+          "total_tokens": 575
+        },
+        "latencyMs": 940,
+        "answer": "No information available.",
+        "f1": 0.0,
+        "injectedChars": 1669
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-49__q0103",
+      "sampleId": "conv-49",
+      "questionIndex": 103,
+      "question": "What kind of recipe did Evan request from Sam on 19 August, 2023?",
+      "answer": "recipes with more vegetables",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D7:7"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D8:19",
+          "D8:27",
+          "D7:5",
+          "D8:29",
+          "D5:23",
+          "D23:11",
+          "D8:4",
+          "D9:13",
+          "D8:17",
+          "D15:17"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 637.532,
+        "injectedChars": 1790,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_off",
+        "memory_on"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 90,
+          "completion_tokens": 3,
+          "total_tokens": 93
+        },
+        "latencyMs": 736,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 619,
+          "completion_tokens": 3,
+          "total_tokens": 622
+        },
+        "latencyMs": 1027,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 1790
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-49__q0131",
+      "sampleId": "conv-49",
+      "questionIndex": 131,
+      "question": "What did Sam suggest Evan try for stress relief and flexibility?",
+      "answer": "Yoga",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D18:8"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D17:13",
+          "D1:10",
+          "D1:20",
+          "D3:10",
+          "D18:8",
+          "D23:11",
+          "D23:9",
+          "D8:29",
+          "D23:18",
+          "D2:11"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 514.997,
+        "injectedChars": 2379,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "Yoga",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 84,
+          "completion_tokens": 2,
+          "total_tokens": 86
+        },
+        "latencyMs": 1147,
+        "answer": "Yoga",
+        "f1": 1.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "Yoga",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 740,
+          "completion_tokens": 2,
+          "total_tokens": 742
+        },
+        "latencyMs": 874,
+        "answer": "Yoga",
+        "f1": 1.0,
+        "injectedChars": 2379
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-49__q0157",
+      "sampleId": "conv-49",
+      "questionIndex": 157,
+      "question": "How did Sam get into watercolor painting?",
+      "answer": "No information available",
+      "adversarialAnswer": "friend's advice",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D1:16"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D1:15",
+          "D11:9",
+          "D12:3",
+          "D8:21",
+          "D1:5",
+          "D17:7",
+          "D24:16",
+          "D15:9",
+          "D9:9",
+          "D24:6"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 403.008,
+        "injectedChars": 1709,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_off",
+        "memory_on"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 99,
+          "completion_tokens": 3,
+          "total_tokens": 102
+        },
+        "latencyMs": 889,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 609,
+          "completion_tokens": 3,
+          "total_tokens": 612
+        },
+        "latencyMs": 1054,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 1709
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-49__q0163",
+      "sampleId": "conv-49",
+      "questionIndex": 163,
+      "question": "What novel is Sam reading that he finds gripping?",
+      "answer": "No information available",
+      "adversarialAnswer": "The Great Gatsby",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D4:10"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D15:17",
+          "D20:14",
+          "D4:11",
+          "D5:14",
+          "D15:13",
+          "D16:17",
+          "D15:7",
+          "D21:3",
+          "D21:15",
+          "D24:4"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 285.081,
+        "injectedChars": 1618,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 100,
+          "completion_tokens": 3,
+          "total_tokens": 103
+        },
+        "latencyMs": 523,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 574,
+          "completion_tokens": 3,
+          "total_tokens": 577
+        },
+        "latencyMs": 1031,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 1618
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-49__q0189",
+      "sampleId": "conv-49",
+      "questionIndex": 189,
+      "question": "What did Evan and his partner keep from their extended family on January 5, 2024?",
+      "answer": "No information available",
+      "adversarialAnswer": "their marriage",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D23:1"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D23:1",
+          "D5:21",
+          "D3:10",
+          "D23:9",
+          "D9:7",
+          "D1:10",
+          "D17:10",
+          "D1:20",
+          "D16:6",
+          "D15:12"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 161.055,
+        "injectedChars": 2096,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "(b) their marriage.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 109,
+          "completion_tokens": 5,
+          "total_tokens": 114
+        },
+        "latencyMs": 1220,
+        "answer": "their marriage",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "(b) their marriage",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 688,
+          "completion_tokens": 4,
+          "total_tokens": 692
+        },
+        "latencyMs": 872,
+        "answer": "their marriage",
+        "f1": 0.0,
+        "injectedChars": 2096
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-50__q0016",
+      "sampleId": "conv-50",
+      "questionIndex": 16,
+      "question": "When did Dave take a trip to mountainous regions?",
+      "answer": "July 2023",
+      "adversarialAnswer": null,
+      "category": 2,
+      "categoryName": "temporal",
+      "evidence": [
+        "D8:10"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D8:10",
+          "D25:17",
+          "D12:6",
+          "D4:7",
+          "D3:12",
+          "D22:5",
+          "D30:8",
+          "D23:18",
+          "D4:1",
+          "D20:1"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 1386.602,
+        "injectedChars": 3359,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 82,
+          "completion_tokens": 3,
+          "total_tokens": 85
+        },
+        "latencyMs": 942,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "Next month from 9 June, 2023.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 972,
+          "completion_tokens": 11,
+          "total_tokens": 983
+        },
+        "latencyMs": 1069,
+        "answer": "Next month from 9 June, 2023.",
+        "f1": 0.25,
+        "injectedChars": 3359
+      },
+      "f1Delta": 0.25
+    },
+    {
+      "caseId": "conv-50__q0030",
+      "sampleId": "conv-50",
+      "questionIndex": 30,
+      "question": "What kind of music does Dave listen to?",
+      "answer": "classic rock, Japanese music",
+      "adversarialAnswer": null,
+      "category": 1,
+      "categoryName": "multi_hop",
+      "evidence": [
+        "D2:10",
+        "D28:40",
+        "D10:11"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D11:5",
+          "D7:15",
+          "D11:7",
+          "D12:8",
+          "D25:25",
+          "D19:11",
+          "D1:12",
+          "D14:13",
+          "D8:12",
+          "D23:11"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1258.035,
+        "injectedChars": 2570,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 81,
+          "completion_tokens": 3,
+          "total_tokens": 84
+        },
+        "latencyMs": 965,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 784,
+          "completion_tokens": 3,
+          "total_tokens": 787
+        },
+        "latencyMs": 1159,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2570
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-50__q0072",
+      "sampleId": "conv-50",
+      "questionIndex": 72,
+      "question": "Which band was Dave's favorite at the music festival in April 2023?",
+      "answer": "Aerosmith",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D2:10"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D15:6",
+          "D23:7",
+          "D23:5",
+          "D3:2",
+          "D7:3",
+          "D9:13",
+          "D3:5",
+          "D3:3",
+          "D23:6",
+          "D16:2"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 1113.19,
+        "injectedChars": 2709,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 88,
+          "completion_tokens": 3,
+          "total_tokens": 91
+        },
+        "latencyMs": 1247,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 813,
+          "completion_tokens": 3,
+          "total_tokens": 816
+        },
+        "latencyMs": 844,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2709
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-50__q0074",
+      "sampleId": "conv-50",
+      "questionIndex": 74,
+      "question": "What advice did Calvin receive from the producer at the music festival?",
+      "answer": "to stay true to himself and sound unique",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D3:7"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D7:15",
+          "D7:3",
+          "D23:6",
+          "D9:13",
+          "D7:11",
+          "D13:16",
+          "D25:28",
+          "D12:11",
+          "D23:8",
+          "D3:5"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 968.601,
+        "injectedChars": 2559,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 85,
+          "completion_tokens": 3,
+          "total_tokens": 88
+        },
+        "latencyMs": 1020,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 774,
+          "completion_tokens": 3,
+          "total_tokens": 777
+        },
+        "latencyMs": 889,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2559
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-50__q0077",
+      "sampleId": "conv-50",
+      "questionIndex": 77,
+      "question": "What did Calvin receive as a gift from another artist?",
+      "answer": "a gold necklace with a diamond pendant",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D4:26"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D4:26",
+          "D9:11",
+          "D30:8",
+          "D25:22",
+          "D13:4",
+          "D8:7",
+          "D11:3",
+          "D9:1",
+          "D25:20",
+          "D1:9"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 1,
+        "evidenceRecall": 1.0,
+        "evidenceHit": true,
+        "latencyMs": 840.512,
+        "injectedChars": 3000,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 83,
+          "completion_tokens": 3,
+          "total_tokens": 86
+        },
+        "latencyMs": 1179,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "A great reminder of why he keeps hustling as a musician.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 878,
+          "completion_tokens": 13,
+          "total_tokens": 891
+        },
+        "latencyMs": 1489,
+        "answer": "A great reminder of why he keeps hustling as a musician.",
+        "f1": 0.0,
+        "injectedChars": 3000
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-50__q0138",
+      "sampleId": "conv-50",
+      "questionIndex": 138,
+      "question": "How did Calvin feel about performing with someone he admires?",
+      "answer": "Unreal, like a dream come true",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D26:9"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D26:8",
+          "D24:4",
+          "D12:3",
+          "D11:10",
+          "D21:2",
+          "D28:28",
+          "D2:13",
+          "D25:3",
+          "D27:9",
+          "D5:2"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 711.764,
+        "injectedChars": 2508,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "Nervous",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 84,
+          "completion_tokens": 3,
+          "total_tokens": 87
+        },
+        "latencyMs": 586,
+        "answer": "Nervous",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "Bet it was an incredible experience to perform with someone you admire.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 745,
+          "completion_tokens": 13,
+          "total_tokens": 758
+        },
+        "latencyMs": 1028,
+        "answer": "Bet it was an incredible experience to perform with someone you admire.",
+        "f1": 0.0,
+        "injectedChars": 2508
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-50__q0156",
+      "sampleId": "conv-50",
+      "questionIndex": 156,
+      "question": "Where did Dave take a stunning photo of a waterfall?",
+      "answer": "Nearby park",
+      "adversarialAnswer": null,
+      "category": 4,
+      "categoryName": "single_hop",
+      "evidence": [
+        "D30:15"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D12:6",
+          "D4:17",
+          "D25:17",
+          "D28:32",
+          "D9:18",
+          "D25:25",
+          "D16:18",
+          "D30:12",
+          "D14:11",
+          "D18:12"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 573.399,
+        "injectedChars": 2805,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 83,
+          "completion_tokens": 3,
+          "total_tokens": 86
+        },
+        "latencyMs": 757,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 864,
+          "completion_tokens": 3,
+          "total_tokens": 867
+        },
+        "latencyMs": 1058,
+        "answer": "No information available",
+        "f1": 0.0,
+        "injectedChars": 2805
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-50__q0186",
+      "sampleId": "conv-50",
+      "questionIndex": 186,
+      "question": "What did Calvin recently get that is a \"masterpiece on canvas\"?",
+      "answer": "No information available",
+      "adversarialAnswer": "Ferrari",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D23:16"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D30:8",
+          "D27:7",
+          "D13:4",
+          "D25:30",
+          "D28:8",
+          "D25:20",
+          "D28:15",
+          "D28:29",
+          "D28:11",
+          "D11:3"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 445.74,
+        "injectedChars": 2832,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "(b) Ferrari.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 102,
+          "completion_tokens": 4,
+          "total_tokens": 106
+        },
+        "latencyMs": 1081,
+        "answer": "Ferrari",
+        "f1": 0.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 854,
+          "completion_tokens": 3,
+          "total_tokens": 857
+        },
+        "latencyMs": 928,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 2832
+      },
+      "f1Delta": 1.0
+    },
+    {
+      "caseId": "conv-50__q0198",
+      "sampleId": "conv-50",
+      "questionIndex": 198,
+      "question": "What kind of impact does Dave's blog on vegan recipes have on people?",
+      "answer": "No information available",
+      "adversarialAnswer": "It inspires others to start their DIY projects",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D28:10"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D11:5",
+          "D9:15",
+          "D28:5",
+          "D24:5",
+          "D25:14",
+          "D28:30",
+          "D13:6",
+          "D1:4",
+          "D25:1",
+          "D2:7"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 315.244,
+        "injectedChars": 2431,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_off",
+        "memory_on"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 110,
+          "completion_tokens": 3,
+          "total_tokens": 113
+        },
+        "latencyMs": 1086,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 775,
+          "completion_tokens": 3,
+          "total_tokens": 778
+        },
+        "latencyMs": 1738,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 2431
+      },
+      "f1Delta": 0.0
+    },
+    {
+      "caseId": "conv-50__q0203",
+      "sampleId": "conv-50",
+      "questionIndex": 203,
+      "question": "Where did Calvin take a stunning photo of a waterfall?",
+      "answer": "No information available",
+      "adversarialAnswer": "Nearby park",
+      "category": 5,
+      "categoryName": "adversarial",
+      "evidence": [
+        "D30:15"
+      ],
+      "retrieval": {
+        "retrievedIds": [
+          "D16:18",
+          "D30:12",
+          "D12:6",
+          "D30:8",
+          "D22:4",
+          "D25:17",
+          "D25:26",
+          "D3:13",
+          "D28:32",
+          "D23:16"
+        ],
+        "retrievedCount": 10,
+        "evidenceHits": 0,
+        "evidenceRecall": 0.0,
+        "evidenceHit": false,
+        "latencyMs": 175.869,
+        "injectedChars": 2815,
+        "degraded": false,
+        "degradationReason": null
+      },
+      "variantOrder": [
+        "memory_on",
+        "memory_off"
+      ],
+      "memoryOff": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 100,
+          "completion_tokens": 4,
+          "total_tokens": 104
+        },
+        "latencyMs": 802,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 0
+      },
+      "memoryOn": {
+        "rawAnswer": "No information available.",
+        "finishReason": "stop",
+        "usage": {
+          "prompt_tokens": 866,
+          "completion_tokens": 4,
+          "total_tokens": 870
+        },
+        "latencyMs": 957,
+        "answer": "No information available",
+        "f1": 1.0,
+        "injectedChars": 2815
+      },
+      "f1Delta": 0.0
+    }
+  ]
+}

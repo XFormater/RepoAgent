@@ -1,0 +1,290 @@
+{
+  "passed": false,
+  "caseCount": 5,
+  "passCount": 3,
+  "passRate": 0.6,
+  "meanScore": 0.9155555555555555,
+  "baselineMeanScore": null,
+  "meanScoreDelta": null,
+  "tagScores": {
+    "argument-grounding": 0.9155555555555555,
+    "bfcl": 0.9155555555555555,
+    "tool-selection": 0.9155555555555555
+  },
+  "cases": [
+    {
+      "caseId": "bfcl:simple_python_15",
+      "tags": [
+        "bfcl",
+        "argument-grounding",
+        "tool-selection"
+      ],
+      "passed": false,
+      "score": 0.8,
+      "criteria": [
+        {
+          "name": "success",
+          "passed": true,
+          "detail": "expected=True actual=True"
+        },
+        {
+          "name": "forbidden_term:```",
+          "passed": false,
+          "detail": "term must not appear"
+        },
+        {
+          "name": "required_pattern:\"name\"\\s*:\\s*\"integrate\"",
+          "passed": true,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "required_pattern:\"function\"\\s*:\\s*\"x\\*\\*3\"",
+          "passed": false,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "required_pattern:\"start_x\"\\s*:\\s*\\-2",
+          "passed": true,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "required_pattern:\"end_x\"\\s*:\\s*3",
+          "passed": true,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "required_pattern:\"method\"\\s*:\\s*\"simpson\"",
+          "passed": true,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "max_output_chars",
+          "passed": true,
+          "detail": "limit=2000 actual=1735"
+        },
+        {
+          "name": "max_latency_ms",
+          "passed": true,
+          "detail": "limit=60000 actual=19861"
+        },
+        {
+          "name": "max_tool_calls",
+          "passed": true,
+          "detail": "limit=0 actual=0"
+        }
+      ]
+    },
+    {
+      "caseId": "bfcl:simple_python_16",
+      "tags": [
+        "bfcl",
+        "argument-grounding",
+        "tool-selection"
+      ],
+      "passed": false,
+      "score": 0.7777777777777778,
+      "criteria": [
+        {
+          "name": "success",
+          "passed": true,
+          "detail": "expected=True actual=True"
+        },
+        {
+          "name": "forbidden_term:```",
+          "passed": true,
+          "detail": "term must not appear"
+        },
+        {
+          "name": "required_pattern:\"name\"\\s*:\\s*\"calculus\\.derivative\"",
+          "passed": true,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "required_pattern:\"function\"\\s*:\\s*\"2x\\*\\*2\"",
+          "passed": false,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "required_pattern:\"value\"\\s*:\\s*1",
+          "passed": true,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "required_pattern:\"function_variable\"\\s*:\\s*\"x\"",
+          "passed": false,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "max_output_chars",
+          "passed": true,
+          "detail": "limit=2000 actual=78"
+        },
+        {
+          "name": "max_latency_ms",
+          "passed": true,
+          "detail": "limit=60000 actual=26839"
+        },
+        {
+          "name": "max_tool_calls",
+          "passed": true,
+          "detail": "limit=0 actual=0"
+        }
+      ]
+    },
+    {
+      "caseId": "bfcl:simple_python_17",
+      "tags": [
+        "bfcl",
+        "argument-grounding",
+        "tool-selection"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "criteria": [
+        {
+          "name": "success",
+          "passed": true,
+          "detail": "expected=True actual=True"
+        },
+        {
+          "name": "forbidden_term:```",
+          "passed": true,
+          "detail": "term must not appear"
+        },
+        {
+          "name": "required_pattern:\"name\"\\s*:\\s*\"get_prime_factors\"",
+          "passed": true,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "required_pattern:\"number\"\\s*:\\s*450",
+          "passed": true,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "required_pattern:\"formatted\"\\s*:\\s*true",
+          "passed": true,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "max_output_chars",
+          "passed": true,
+          "detail": "limit=2000 actual=78"
+        },
+        {
+          "name": "max_latency_ms",
+          "passed": true,
+          "detail": "limit=60000 actual=16931"
+        },
+        {
+          "name": "max_tool_calls",
+          "passed": true,
+          "detail": "limit=0 actual=0"
+        }
+      ]
+    },
+    {
+      "caseId": "bfcl:simple_python_18",
+      "tags": [
+        "bfcl",
+        "argument-grounding",
+        "tool-selection"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "criteria": [
+        {
+          "name": "success",
+          "passed": true,
+          "detail": "expected=True actual=True"
+        },
+        {
+          "name": "forbidden_term:```",
+          "passed": true,
+          "detail": "term must not appear"
+        },
+        {
+          "name": "required_pattern:\"name\"\\s*:\\s*\"number_analysis\\.prime_factors\"",
+          "passed": true,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "required_pattern:\"number\"\\s*:\\s*123456",
+          "passed": true,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "max_output_chars",
+          "passed": true,
+          "detail": "limit=2000 actual=74"
+        },
+        {
+          "name": "max_latency_ms",
+          "passed": true,
+          "detail": "limit=60000 actual=28186"
+        },
+        {
+          "name": "max_tool_calls",
+          "passed": true,
+          "detail": "limit=0 actual=0"
+        }
+      ]
+    },
+    {
+      "caseId": "bfcl:simple_python_19",
+      "tags": [
+        "bfcl",
+        "argument-grounding",
+        "tool-selection"
+      ],
+      "passed": true,
+      "score": 1.0,
+      "criteria": [
+        {
+          "name": "success",
+          "passed": true,
+          "detail": "expected=True actual=True"
+        },
+        {
+          "name": "forbidden_term:```",
+          "passed": true,
+          "detail": "term must not appear"
+        },
+        {
+          "name": "required_pattern:\"name\"\\s*:\\s*\"math\\.gcd\"",
+          "passed": true,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "required_pattern:\"num1\"\\s*:\\s*40",
+          "passed": true,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "required_pattern:\"num2\"\\s*:\\s*50",
+          "passed": true,
+          "detail": "pattern must match"
+        },
+        {
+          "name": "max_output_chars",
+          "passed": true,
+          "detail": "limit=2000 actual=59"
+        },
+        {
+          "name": "max_latency_ms",
+          "passed": true,
+          "detail": "limit=60000 actual=21392"
+        },
+        {
+          "name": "max_tool_calls",
+          "passed": true,
+          "detail": "limit=0 actual=0"
+        }
+      ]
+    }
+  ],
+  "failures": [
+    "pass_rate 0.6000 < 0.9000",
+    "mean_score 0.9156 < 0.9800"
+  ]
+}

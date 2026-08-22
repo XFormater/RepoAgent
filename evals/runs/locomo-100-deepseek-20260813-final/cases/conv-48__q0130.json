@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-48__q0130",
+  "sampleId": "conv-48",
+  "questionIndex": 130,
+  "question": "What does Deborah find comforting about going to art shows?",
+  "answer": "It makes her feel like she's still experiencing it with her mom",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D12:3"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D11:4",
+      "D15:7",
+      "D1:9",
+      "D16:17",
+      "D23:22",
+      "D3:12",
+      "D8:3",
+      "D26:7",
+      "D13:7",
+      "D8:15"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1036.728,
+    "injectedChars": 1895,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 83,
+      "completion_tokens": 3,
+      "total_tokens": 86
+    },
+    "latencyMs": 957,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 627,
+      "completion_tokens": 3,
+      "total_tokens": 630
+    },
+    "latencyMs": 939,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 1895
+  },
+  "f1Delta": 0.0
+}

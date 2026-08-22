@@ -1,0 +1,76 @@
+{
+  "caseId": "conv-49__q0019",
+  "sampleId": "conv-49",
+  "questionIndex": 19,
+  "question": "Considering their conversations and personal growth, what advice might Evan and Sam give to someone facing a major life transition or challenge?",
+  "answer": "Evan and Sam would likely advise embracing small, consistent changes​​, finding stress-relieving activities like hiking​​, painting, and road trips​​, and the importance of friendship and support in navigating challenges​​.",
+  "adversarialAnswer": null,
+  "category": 3,
+  "categoryName": "open_domain",
+  "evidence": [
+    "D3:10",
+    "D3:15",
+    "D22:1",
+    "D8:17",
+    "D8:22",
+    "D9:8",
+    "D9:11",
+    "D14:7",
+    "D14:12",
+    "D12:7",
+    "D12:11"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D1:13",
+      "D10:10",
+      "D14:4",
+      "D14:5",
+      "D10:2",
+      "D1:19",
+      "D13:9",
+      "D1:4",
+      "D1:9",
+      "D14:7"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 0.09090909090909091,
+    "evidenceHit": true,
+    "latencyMs": 1403.519,
+    "injectedChars": 2412,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "Embrace change and trust yourself",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 96,
+      "completion_tokens": 6,
+      "total_tokens": 102
+    },
+    "latencyMs": 964,
+    "answer": "Embrace change and trust yourself",
+    "f1": 0.07142857142857142,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "Set goals, find something you enjoy, and get a buddy for support.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 775,
+      "completion_tokens": 15,
+      "total_tokens": 790
+    },
+    "latencyMs": 1310,
+    "answer": "Set goals, find something you enjoy, and get a buddy for support.",
+    "f1": 0.11764705882352941,
+    "injectedChars": 2412
+  },
+  "f1Delta": 0.046218487394957986
+}

@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-47__q0075",
+  "sampleId": "conv-47",
+  "questionIndex": 75,
+  "question": "What game was James playing in the online gaming tournament in April 2022?",
+  "answer": "Apex Legends",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D4:16"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D6:14",
+      "D13:18",
+      "D9:4",
+      "D1:30",
+      "D1:7",
+      "D25:2",
+      "D18:16",
+      "D31:3",
+      "D2:13",
+      "D2:15"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 852.707,
+    "injectedChars": 2092,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 88,
+      "completion_tokens": 3,
+      "total_tokens": 91
+    },
+    "latencyMs": 1190,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 676,
+      "completion_tokens": 3,
+      "total_tokens": 679
+    },
+    "latencyMs": 1164,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2092
+  },
+  "f1Delta": 0.0
+}

@@ -1,0 +1,29 @@
+{
+  "caseId": "harness-write-read-state",
+  "layer": "harness_regression",
+  "scenario": "state_roundtrip",
+  "repetition": 1,
+  "latencyMs": 2631,
+  "error": null,
+  "passed": true,
+  "answer": "QUARTZ-913",
+  "normalizedAnswer": "QUARTZ-913",
+  "expected": "QUARTZ-913",
+  "stopReason": "completed",
+  "toolCalls": [
+    "write_state",
+    "read_state"
+  ],
+  "requiredCalls": [
+    "write_state",
+    "read_state"
+  ],
+  "lookupKeysValid": true,
+  "usage": {
+    "prompt_tokens": 965,
+    "completion_tokens": 102,
+    "total_tokens": 1067,
+    "cached_tokens": 896,
+    "provider_tokens": 1067
+  }
+}

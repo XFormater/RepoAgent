@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-49__q0103",
+  "sampleId": "conv-49",
+  "questionIndex": 103,
+  "question": "What kind of recipe did Evan request from Sam on 19 August, 2023?",
+  "answer": "recipes with more vegetables",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D7:7"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D8:19",
+      "D8:27",
+      "D7:5",
+      "D8:29",
+      "D5:23",
+      "D23:11",
+      "D8:4",
+      "D9:13",
+      "D8:17",
+      "D15:17"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 637.532,
+    "injectedChars": 1790,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_off",
+    "memory_on"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 90,
+      "completion_tokens": 3,
+      "total_tokens": 93
+    },
+    "latencyMs": 736,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 619,
+      "completion_tokens": 3,
+      "total_tokens": 622
+    },
+    "latencyMs": 1027,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 1790
+  },
+  "f1Delta": 0.0
+}

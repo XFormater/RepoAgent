@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-47__q0177",
+  "sampleId": "conv-47",
+  "questionIndex": 177,
+  "question": "What did James use to play when he was younger to let off steam?",
+  "answer": "No information available",
+  "adversarialAnswer": "drums",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D24:15"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D30:7",
+      "D17:17",
+      "D24:13",
+      "D20:20",
+      "D11:7",
+      "D22:14",
+      "D11:2",
+      "D25:12",
+      "D15:11",
+      "D24:15"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 373.934,
+    "injectedChars": 2472,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "(b) drums",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 103,
+      "completion_tokens": 3,
+      "total_tokens": 106
+    },
+    "latencyMs": 900,
+    "answer": "drums",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "(b) drums",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 779,
+      "completion_tokens": 3,
+      "total_tokens": 782
+    },
+    "latencyMs": 1289,
+    "answer": "drums",
+    "f1": 0.0,
+    "injectedChars": 2472
+  },
+  "f1Delta": 0.0
+}

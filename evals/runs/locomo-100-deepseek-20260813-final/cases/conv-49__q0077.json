@@ -1,0 +1,69 @@
+{
+  "caseId": "conv-49__q0077",
+  "sampleId": "conv-49",
+  "questionIndex": 77,
+  "question": "How does Evan spend his time with his bride after the wedding?",
+  "answer": "family get-together, honeymoon in Canada to see snowy landscapes, ski, taste local cuisine and do some snowshoeing",
+  "adversarialAnswer": null,
+  "category": 1,
+  "categoryName": "multi_hop",
+  "evidence": [
+    "D23:15",
+    "D23:23",
+    "D23:25",
+    "D24:9"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D24:23",
+      "D1:6",
+      "D17:8",
+      "D7:1",
+      "D7:10",
+      "D18:7",
+      "D8:33",
+      "D25:6",
+      "D2:4",
+      "D8:21"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1164.295,
+    "injectedChars": 2379,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "He takes her to the beach.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 85,
+      "completion_tokens": 7,
+      "total_tokens": 92
+    },
+    "latencyMs": 1125,
+    "answer": "He takes her to the beach.",
+    "f1": 0.041666666666666664,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 738,
+      "completion_tokens": 4,
+      "total_tokens": 742
+    },
+    "latencyMs": 1233,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 2379
+  },
+  "f1Delta": -0.041666666666666664
+}

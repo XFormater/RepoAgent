@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-26__q0084",
+  "sampleId": "conv-26",
+  "questionIndex": 84,
+  "question": "How does Melanie prioritize self-care?",
+  "answer": "by carving out some me-time each day for activities like running, reading, or playing the violin",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D2:5"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D13:2",
+      "D11:7",
+      "D11:13",
+      "D11:15",
+      "D14:4",
+      "D16:6",
+      "D11:11",
+      "D2:9",
+      "D1:8",
+      "D8:20"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 2258.183,
+    "injectedChars": 2484,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 79,
+      "completion_tokens": 3,
+      "total_tokens": 82
+    },
+    "latencyMs": 861,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 752,
+      "completion_tokens": 3,
+      "total_tokens": 755
+    },
+    "latencyMs": 1167,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2484
+  },
+  "f1Delta": 0.0
+}

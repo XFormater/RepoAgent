@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-26__q0107",
+  "sampleId": "conv-26",
+  "questionIndex": 107,
+  "question": "What is Melanie's reason for getting into running?",
+  "answer": "To de-stress and clear her mind",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D7:21"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D7:21",
+      "D11:8",
+      "D15:1",
+      "D17:6",
+      "D2:14",
+      "D19:8",
+      "D19:12",
+      "D3:10",
+      "D12:5",
+      "D17:18"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 2168.375,
+    "injectedChars": 2018,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 82,
+      "completion_tokens": 3,
+      "total_tokens": 85
+    },
+    "latencyMs": 692,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 647,
+      "completion_tokens": 3,
+      "total_tokens": 650
+    },
+    "latencyMs": 817,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2018
+  },
+  "f1Delta": 0.0
+}

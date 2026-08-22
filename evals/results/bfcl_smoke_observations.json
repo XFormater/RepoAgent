@@ -1,0 +1,142 @@
+[
+  {
+    "caseId": "bfcl:simple_python_0",
+    "output": "{\"name\": \"calculate_triangle_area\", \"arguments\": {\"base\": 10, \"height\": 5}}",
+    "succeeded": true,
+    "latencyMs": 22187,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_1",
+    "output": "{\"name\": \"math.factorial\", \"arguments\": {\"number\": 5}}",
+    "succeeded": true,
+    "latencyMs": 19697,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_2",
+    "output": "{\"name\": \"math.hypot\", \"arguments\": {\"x\": 4, \"y\": 5}}",
+    "succeeded": true,
+    "latencyMs": 36818,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_3",
+    "output": "{\"name\": \"algebra.quadratic_roots\", \"arguments\": {\"a\": 1, \"b\": -3, \"c\": 2}}",
+    "succeeded": true,
+    "latencyMs": 25869,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_4",
+    "output": "{\"name\": \"solve_quadratic_equation\", \"arguments\": {\"a\": 2, \"b\": 6, \"c\": 5}}",
+    "succeeded": true,
+    "latencyMs": 16262,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_5",
+    "output": "🐈 GitHubResearchAgent\n✻ The user wants me to find all roots of a quadratic equation with\n✻ a=3, b=-11, c=-4.\n✻ The function is `solve_quadratic` with required parameters a\n✻ , b, c and optional parameter root_type.\n✻ The user says \"Find all the roots\" which implies they want both\n✻ real and complex roots.\n✻ So I should set root_type to \"all\".\n{\"name\": \"solve_quadratic\", \"arguments\": {\"a\": 3, \"b\": -11, \"c\": -4,            \n\"root_type\": \"all\"}}                                                            \n\n/root/GitHubResearch_Agent/nanobot/memory_system/storage/vector_store.py:120: UserWarning: Api key is used with an insecure connection.\n  self._client = client or AsyncQdrantClient(",
+    "succeeded": true,
+    "latencyMs": 19654,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_6",
+    "output": "{\"name\": \"solve_quadratic\", \"arguments\": {\"a\": 2, \"b\": 5, \"c\": 3}}",
+    "succeeded": true,
+    "latencyMs": 18528,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_7",
+    "output": "🐈 GitHubResearchAgent\n✻ The user asks: \"What is the circumference of a circle with a\n✻ radius of 4 inches?\" The function is `calculate_circumference\n✻ ` with parameters `radius` (integer, required) and `unit` (string\n✻ , optional, default 'cm').\n✻ The radius is 4 and the unit is \"inches\".\n✻ I should include the unit since the user specified it.\n{\"name\": \"calculate_circumference\", \"arguments\": {\"radius\": 4, \"unit\":          \n\"inches\"}}                                                                      \n\n/root/GitHubResearch_Agent/nanobot/memory_system/storage/vector_store.py:120: UserWarning: Api key is used with an insecure connection.\n  self._client = client or AsyncQdrantClient(",
+    "succeeded": true,
+    "latencyMs": 21666,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_8",
+    "output": "{\"name\": \"geometry.area_circle\", \"arguments\": {\"radius\": 10}}",
+    "succeeded": true,
+    "latencyMs": 23448,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_9",
+    "output": "🐈 GitHubResearchAgent\n✻ The user is asking me to calculate the area of a circle with\n✻ a radius of 5 units.\n✻ The available function is `geometry.calculate_area_circle` with\n✻ required parameter `radius` and optional `unit`.\n✻ Since the user said \"units\", I should include that as the unit\n✻ .\n{\"name\": \"geometry.calculate_area_circle\", \"arguments\": {\"radius\": 5, \"unit\":   \n\"units\"}}                                                                       \n\n/root/GitHubResearch_Agent/nanobot/memory_system/storage/vector_store.py:120: UserWarning: Api key is used with an insecure connection.\n  self._client = client or AsyncQdrantClient(",
+    "succeeded": true,
+    "latencyMs": 15111,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_10",
+    "output": "{\"name\": \"calculate_area\", \"arguments\": {\"base\": 6, \"height\": 10, \"unit\": \"cm\"}}",
+    "succeeded": true,
+    "latencyMs": 18637,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_11",
+    "output": "{\"name\": \"calculate_triangle_area\", \"arguments\": {\"base\": 10, \"height\": 5}}",
+    "succeeded": true,
+    "latencyMs": 18096,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_12",
+    "output": "{\"name\": \"geometry.circumference\", \"arguments\": {\"radius\": 3}}",
+    "succeeded": true,
+    "latencyMs": 15004,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_13",
+    "output": "🐈 GitHubResearchAgent\n✻ The user is asking me to make a function call.\n✻ They want to calculate the area under the curve y=x^2 from x\n✻ =1 to x=3.\n✻ The available function is `calculate_area_under_curve` with\n✻ parameters: `function` (string), `interval` (array of floats\n✻ ), and `method` (string, optional, default 'trapezoidal').\n✻ The\n✻ function is y=x^2, and the interval is from 1 to 3.\n✻ I need to return a JSON object with name and arguments.\n✻ Let\n✻ me construct the call:\n-\n✻ name: \"calculate_area_under_curve\"\n-\n✻ arguments: {\"function\": \"x^2\", \"interval\": [1, 3]}\n\nI\n✻ don't need to specify `method` since the default 'trapezoidal\n✻ ' should be fine, and the user didn't specify a method.\n{\"name\": \"calculate_area_under_curve\", \"arguments\": {\"function\": \"x^2\",         \n\"interval\": [1, 3]}}                                                            \n\n/root/GitHubResearch_Agent/nanobot/memory_system/storage/vector_store.py:120: UserWarning: Api key is used with an insecure connection.\n  self._client = client or AsyncQdrantClient(",
+    "succeeded": true,
+    "latencyMs": 19792,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_14",
+    "output": "{\"name\": \"calculate_derivative\", \"arguments\": {\"function\": \"3x^2 + 2x - 1\"}}",
+    "succeeded": true,
+    "latencyMs": 18380,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_15",
+    "output": "🐈 nanobot\nError calling LLM: Connection error.                                            \n\n2026-08-12 10:17:42 [warning  ] memory_record_retry            attempt=1 batch_id=8c7f262fe8996fbf81d9b63f00d75d662c4ea4d8c5bef94d0d5ac06e7178eeb4 error='Error calling LLM: Connection error.'\n2026-08-12 10:17:49 [warning  ] memory_record_retry            attempt=2 batch_id=8c7f262fe8996fbf81d9b63f00d75d662c4ea4d8c5bef94d0d5ac06e7178eeb4 error='Error calling LLM: Connection error.'\n2026-08-12 10:17:56 [warning  ] memory_record_retry            attempt=3 batch_id=8c7f262fe8996fbf81d9b63f00d75d662c4ea4d8c5bef94d0d5ac06e7178eeb4 error='Error calling LLM: Connection error.'\n2026-08-12 10:18:05 [warning  ] memory_record_retry            attempt=4 batch_id=8c7f262fe8996fbf81d9b63f00d75d662c4ea4d8c5bef94d0d5ac06e7178eeb4 error='Error calling LLM: Connection error.'\n2026-08-12 10:18:05 [warning  ] memory_record_failed           batch_id=8c7f262fe8996fbf81d9b63f00d75d662c4ea4d8c5bef94d0d5ac06e7178eeb4 error='Error calling LLM: Connection error.' user_id=cli:user\n\n/root/GitHubResearch_Agent/nanobot/memory_system/storage/vector_store.py:120: UserWarning: Api key is used with an insecure connection.\n  self._client = client or AsyncQdrantClient(",
+    "succeeded": true,
+    "latencyMs": 73961,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_16",
+    "output": "🐈 nanobot\nError calling LLM: Connection error.                                            \n\n2026-08-12 10:18:49 [warning  ] memory_record_retry            attempt=1 batch_id=3f8a2c4c0f05c30078ae7314ad0029f3ba11d1b7806836a2efb826594740513d error='Error calling LLM: Connection error.'\n2026-08-12 10:18:57 [warning  ] memory_record_retry            attempt=2 batch_id=3f8a2c4c0f05c30078ae7314ad0029f3ba11d1b7806836a2efb826594740513d error='Error calling LLM: Connection error.'\n2026-08-12 10:19:04 [warning  ] memory_record_retry            attempt=3 batch_id=3f8a2c4c0f05c30078ae7314ad0029f3ba11d1b7806836a2efb826594740513d error='Error calling LLM: Connection error.'\n2026-08-12 10:19:12 [warning  ] memory_record_retry            attempt=4 batch_id=3f8a2c4c0f05c30078ae7314ad0029f3ba11d1b7806836a2efb826594740513d error='Error calling LLM: Connection error.'\n2026-08-12 10:19:12 [warning  ] memory_record_failed           batch_id=3f8a2c4c0f05c30078ae7314ad0029f3ba11d1b7806836a2efb826594740513d error='Error calling LLM: Connection error.' user_id=cli:user\n\n/root/GitHubResearch_Agent/nanobot/memory_system/storage/vector_store.py:120: UserWarning: Api key is used with an insecure connection.\n  self._client = client or AsyncQdrantClient(",
+    "succeeded": true,
+    "latencyMs": 67588,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_17",
+    "output": "🐈 nanobot\nError calling LLM: Connection error.                                            \n\n2026-08-12 10:19:57 [warning  ] memory_record_retry            attempt=1 batch_id=e6b092462a811533f21e1da0f3279baeb893e6f76871551bc9c89d8db1077650 error='Error calling LLM: Connection error.'\n2026-08-12 10:20:04 [warning  ] memory_record_retry            attempt=2 batch_id=e6b092462a811533f21e1da0f3279baeb893e6f76871551bc9c89d8db1077650 error='Error calling LLM: Connection error.'\n2026-08-12 10:20:12 [warning  ] memory_record_retry            attempt=3 batch_id=e6b092462a811533f21e1da0f3279baeb893e6f76871551bc9c89d8db1077650 error='Error calling LLM: Connection error.'\n2026-08-12 10:20:20 [warning  ] memory_record_retry            attempt=4 batch_id=e6b092462a811533f21e1da0f3279baeb893e6f76871551bc9c89d8db1077650 error='Error calling LLM: Connection error.'\n2026-08-12 10:20:20 [warning  ] memory_record_failed           batch_id=e6b092462a811533f21e1da0f3279baeb893e6f76871551bc9c89d8db1077650 error='Error calling LLM: Connection error.' user_id=cli:user\n\n/root/GitHubResearch_Agent/nanobot/memory_system/storage/vector_store.py:120: UserWarning: Api key is used with an insecure connection.\n  self._client = client or AsyncQdrantClient(",
+    "succeeded": true,
+    "latencyMs": 67648,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_18",
+    "output": "🐈 nanobot\nError calling LLM: Connection error.                                            \n\n2026-08-12 10:21:05 [warning  ] memory_record_retry            attempt=1 batch_id=552036593d6b9a3406c6dcf60102d4f80dabd6980ae2f4c9c7353e25410b3956 error='Error calling LLM: Connection error.'\n2026-08-12 10:21:12 [warning  ] memory_record_retry            attempt=2 batch_id=552036593d6b9a3406c6dcf60102d4f80dabd6980ae2f4c9c7353e25410b3956 error='Error calling LLM: Connection error.'\n2026-08-12 10:21:19 [warning  ] memory_record_retry            attempt=3 batch_id=552036593d6b9a3406c6dcf60102d4f80dabd6980ae2f4c9c7353e25410b3956 error='Error calling LLM: Connection error.'\n2026-08-12 10:21:27 [warning  ] memory_record_retry            attempt=4 batch_id=552036593d6b9a3406c6dcf60102d4f80dabd6980ae2f4c9c7353e25410b3956 error='Error calling LLM: Connection error.'\n2026-08-12 10:21:27 [warning  ] memory_record_failed           batch_id=552036593d6b9a3406c6dcf60102d4f80dabd6980ae2f4c9c7353e25410b3956 error='Error calling LLM: Connection error.' user_id=cli:user\n\n/root/GitHubResearch_Agent/nanobot/memory_system/storage/vector_store.py:120: UserWarning: Api key is used with an insecure connection.\n  self._client = client or AsyncQdrantClient(",
+    "succeeded": true,
+    "latencyMs": 67646,
+    "toolCalls": 0
+  },
+  {
+    "caseId": "bfcl:simple_python_19",
+    "output": "🐈 nanobot\nError calling LLM: Connection error.                                            \n\n2026-08-12 10:22:12 [warning  ] memory_record_retry            attempt=1 batch_id=7c8ca5db8815d9bc0b51cb229d73d7ccdaf553f346cc878b0ffde1953c576d5d error='Error calling LLM: Connection error.'\n2026-08-12 10:22:19 [warning  ] memory_record_retry            attempt=2 batch_id=7c8ca5db8815d9bc0b51cb229d73d7ccdaf553f346cc878b0ffde1953c576d5d error='Error calling LLM: Connection error.'\n2026-08-12 10:22:27 [warning  ] memory_record_retry            attempt=3 batch_id=7c8ca5db8815d9bc0b51cb229d73d7ccdaf553f346cc878b0ffde1953c576d5d error='Error calling LLM: Connection error.'\n2026-08-12 10:22:35 [warning  ] memory_record_retry            attempt=4 batch_id=7c8ca5db8815d9bc0b51cb229d73d7ccdaf553f346cc878b0ffde1953c576d5d error='Error calling LLM: Connection error.'\n2026-08-12 10:22:35 [warning  ] memory_record_failed           batch_id=7c8ca5db8815d9bc0b51cb229d73d7ccdaf553f346cc878b0ffde1953c576d5d error='Error calling LLM: Connection error.' user_id=cli:user\n\n/root/GitHubResearch_Agent/nanobot/memory_system/storage/vector_store.py:120: UserWarning: Api key is used with an insecure connection.\n  self._client = client or AsyncQdrantClient(",
+    "succeeded": true,
+    "latencyMs": 67619,
+    "toolCalls": 0
+  }
+]

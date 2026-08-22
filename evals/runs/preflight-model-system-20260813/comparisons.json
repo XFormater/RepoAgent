@@ -1,0 +1,15 @@
+{
+  "contextGovernance": {
+    "pairedCases": 0,
+    "controlAccuracy": 0.0,
+    "treatmentAccuracy": 0.0,
+    "meanEstimatedTokenReduction": 0.0
+  },
+  "memoryBenefit": {
+    "pairedCases": 0,
+    "controlAccuracy": 0.0,
+    "treatmentAccuracy": 0.0,
+    "accuracyGain": 0.0,
+    "retrievalHitRate": 0.0
+  }
+}

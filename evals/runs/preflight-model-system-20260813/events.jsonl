@@ -1,0 +1,4 @@
+{"timestamp": "2026-08-13T04:19:39.051963+00:00", "runId": "preflight-model-system-20260813", "event": "run_started", "model": "deepseek-v4-pro", "cases": 1}
+{"timestamp": "2026-08-13T04:19:39.052144+00:00", "runId": "preflight-model-system-20260813", "event": "case_started", "caseId": "harness-single-tool-roundtrip", "layer": "harness_regression", "repetition": 1}
+{"timestamp": "2026-08-13T04:19:43.337249+00:00", "runId": "preflight-model-system-20260813", "event": "case_completed", "caseId": "harness-single-tool-roundtrip", "layer": "harness_regression", "repetition": 1, "passed": true, "latencyMs": 4285, "error": null}
+{"timestamp": "2026-08-13T04:19:43.337927+00:00", "runId": "preflight-model-system-20260813", "event": "run_completed", "passed": false, "passRate": 1.0}

@@ -20,9 +20,9 @@ from nanobot.agent.tools.schema import (
     tool_parameters_schema,
 )
 from nanobot.config_base import Base
+from nanobot.security.logical_vfs import current_vfs, current_vfs_identity
 from nanobot.security.workspace_access import current_tool_workspace
 from nanobot.utils.helpers import build_image_content_blocks, detect_image_mime
-
 
 _SENSITIVE_WORKSPACE_FILENAMES = frozenset(
     {
@@ -192,6 +192,9 @@ class _FsTool(Tool):
         )
         if _is_sensitive_workspace_path(resolved):
             raise PermissionError(f"Access to credential file {resolved.name!r} is blocked")
+        vfs = current_vfs()
+        if vfs is not None and vfs.enabled and vfs.is_read_only_path(resolved):
+            raise PermissionError("shared VFS skills are read-only")
         return resolved
 
     def _resolve(self, path: str) -> Path:
@@ -548,6 +551,10 @@ class WriteFileTool(_FsTool):
             if content is None:
                 raise ValueError("Unknown content")
             fp = self._resolve_write(path)
+            vfs = current_vfs()
+            identity = current_vfs_identity()
+            if vfs is not None and identity is not None:
+                vfs.enforce_write(identity, fp, len(content.encode("utf-8")))
             fp.parent.mkdir(parents=True, exist_ok=True)
             fp.write_text(content, encoding="utf-8")
             self._file_states.record_write(fp)
@@ -932,6 +939,10 @@ class EditFileTool(_FsTool):
                 content = raw.decode("utf-8")
                 if content.strip():
                     return ToolResult.error(f"Error: Cannot create file — {path} already exists and is not empty.")
+                vfs = current_vfs()
+                identity = current_vfs_identity()
+                if vfs is not None and identity is not None:
+                    vfs.enforce_write(identity, fp, len(new_text.encode("utf-8")))
                 fp.write_text(new_text, encoding="utf-8")
                 self._file_states.record_write(fp)
                 return f"Successfully edited {fp}"
@@ -1019,6 +1030,11 @@ class EditFileTool(_FsTool):
                 new_content = new_content[: match.start] + replacement + new_content[end:]
             if uses_crlf:
                 new_content = new_content.replace("\n", "\r\n")
+
+            vfs = current_vfs()
+            identity = current_vfs_identity()
+            if vfs is not None and identity is not None:
+                vfs.enforce_write(identity, fp, len(new_content.encode("utf-8")))
 
             fp.write_bytes(new_content.encode("utf-8"))
             self._file_states.record_write(fp)

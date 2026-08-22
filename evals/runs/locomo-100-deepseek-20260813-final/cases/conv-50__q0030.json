@@ -1,0 +1,68 @@
+{
+  "caseId": "conv-50__q0030",
+  "sampleId": "conv-50",
+  "questionIndex": 30,
+  "question": "What kind of music does Dave listen to?",
+  "answer": "classic rock, Japanese music",
+  "adversarialAnswer": null,
+  "category": 1,
+  "categoryName": "multi_hop",
+  "evidence": [
+    "D2:10",
+    "D28:40",
+    "D10:11"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D11:5",
+      "D7:15",
+      "D11:7",
+      "D12:8",
+      "D25:25",
+      "D19:11",
+      "D1:12",
+      "D14:13",
+      "D8:12",
+      "D23:11"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1258.035,
+    "injectedChars": 2570,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 81,
+      "completion_tokens": 3,
+      "total_tokens": 84
+    },
+    "latencyMs": 965,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 784,
+      "completion_tokens": 3,
+      "total_tokens": 787
+    },
+    "latencyMs": 1159,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2570
+  },
+  "f1Delta": 0.0
+}

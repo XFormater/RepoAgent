@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-50__q0077",
+  "sampleId": "conv-50",
+  "questionIndex": 77,
+  "question": "What did Calvin receive as a gift from another artist?",
+  "answer": "a gold necklace with a diamond pendant",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D4:26"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D4:26",
+      "D9:11",
+      "D30:8",
+      "D25:22",
+      "D13:4",
+      "D8:7",
+      "D11:3",
+      "D9:1",
+      "D25:20",
+      "D1:9"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 840.512,
+    "injectedChars": 3000,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 83,
+      "completion_tokens": 3,
+      "total_tokens": 86
+    },
+    "latencyMs": 1179,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "A great reminder of why he keeps hustling as a musician.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 878,
+      "completion_tokens": 13,
+      "total_tokens": 891
+    },
+    "latencyMs": 1489,
+    "answer": "A great reminder of why he keeps hustling as a musician.",
+    "f1": 0.0,
+    "injectedChars": 3000
+  },
+  "f1Delta": 0.0
+}

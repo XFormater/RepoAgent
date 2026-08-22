@@ -1,0 +1,67 @@
+{
+  "caseId": "conv-48__q0023",
+  "sampleId": "conv-48",
+  "questionIndex": 23,
+  "question": "Why did Jolene sometimes put off doing yoga?",
+  "answer": "She's more interested in playing video games",
+  "adversarialAnswer": null,
+  "category": 3,
+  "categoryName": "open_domain",
+  "evidence": [
+    "D3:11",
+    "D2:30"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D2:10",
+      "D7:19",
+      "D9:4",
+      "D19:14",
+      "D14:10",
+      "D21:12",
+      "D1:12",
+      "D7:13",
+      "D2:6",
+      "D3:5"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1675.909,
+    "injectedChars": 1538,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_off",
+    "memory_on"
+  ],
+  "memoryOff": {
+    "rawAnswer": "Because she was too tired",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 82,
+      "completion_tokens": 5,
+      "total_tokens": 87
+    },
+    "latencyMs": 1308,
+    "answer": "Because she was too tired",
+    "f1": 0.16666666666666666,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 537,
+      "completion_tokens": 3,
+      "total_tokens": 540
+    },
+    "latencyMs": 987,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 1538
+  },
+  "f1Delta": -0.16666666666666666
+}

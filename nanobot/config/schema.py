@@ -13,6 +13,7 @@ from nanobot.cron.types import CronSchedule
 from nanobot.harness.config import HarnessConfig
 from nanobot.memory_system.config import MemorySettings
 from nanobot.repo_agent.config import RepositoryAgentConfig
+from nanobot.security.logical_vfs import LogicalVFSConfig
 
 if TYPE_CHECKING:
     from nanobot.agent.tools.cli_apps import CliAppsToolConfig
@@ -437,6 +438,7 @@ class Config(BaseSettings):
     tools: ToolsConfig = Field(default_factory=ToolsConfig)
     memory: MemorySettings = Field(default_factory=MemorySettings)
     harness: HarnessConfig = Field(default_factory=HarnessConfig)
+    vfs: LogicalVFSConfig = Field(default_factory=LogicalVFSConfig)
     repository_agent: RepositoryAgentConfig = Field(
         default_factory=RepositoryAgentConfig,
         validation_alias=AliasChoices("repositoryAgent", "repository_agent"),

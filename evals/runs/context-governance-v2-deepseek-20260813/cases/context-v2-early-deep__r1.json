@@ -1,0 +1,47 @@
+{
+  "caseId": "context-v2-early-deep",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 2556,
+  "error": null,
+  "passed": false,
+  "expected": "WING-332",
+  "contextCaseType": "early_dependency",
+  "contextBlockLimit": 2400,
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "WING-332",
+    "normalizedAnswer": "WING-332",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 5368,
+      "completion_tokens": 4,
+      "total_tokens": 5372,
+      "provider_tokens": 5372
+    },
+    "modelInputMessages": 56,
+    "estimatedInputTokens": 5466,
+    "providerPromptTokens": 5368
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": false,
+    "answer": "UNKNOWN",
+    "normalizedAnswer": "UNKNOWN",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 2295,
+      "completion_tokens": 2,
+      "total_tokens": 2297,
+      "provider_tokens": 2297
+    },
+    "modelInputMessages": 24,
+    "estimatedInputTokens": 2339,
+    "providerPromptTokens": 2295
+  },
+  "qualityDelta": -1,
+  "estimatedTokenReduction": 0.5720819612147823,
+  "providerPromptTokenReduction": 0.5724664679582712
+}

@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-44__q0121",
+  "sampleId": "conv-44",
+  "questionIndex": 121,
+  "question": "What is Andrew planning to do with Scout, Toby, and Buddy?",
+  "answer": "Take them to a nearby park",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D28:10"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D26:4",
+      "D20:11",
+      "D23:13",
+      "D20:32",
+      "D28:10",
+      "D12:4",
+      "D26:6",
+      "D23:27",
+      "D20:39",
+      "D26:2"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 524.138,
+    "injectedChars": 2177,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "He is planning to take them to the vet.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 86,
+      "completion_tokens": 10,
+      "total_tokens": 96
+    },
+    "latencyMs": 1312,
+    "answer": "He is planning to take them to the vet.",
+    "f1": 0.4615384615384615,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "Take them to a nearby park",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 697,
+      "completion_tokens": 6,
+      "total_tokens": 703
+    },
+    "latencyMs": 1413,
+    "answer": "Take them to a nearby park",
+    "f1": 1.0,
+    "injectedChars": 2177
+  },
+  "f1Delta": 0.5384615384615385
+}

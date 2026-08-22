@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-50__q0072",
+  "sampleId": "conv-50",
+  "questionIndex": 72,
+  "question": "Which band was Dave's favorite at the music festival in April 2023?",
+  "answer": "Aerosmith",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D2:10"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D15:6",
+      "D23:7",
+      "D23:5",
+      "D3:2",
+      "D7:3",
+      "D9:13",
+      "D3:5",
+      "D3:3",
+      "D23:6",
+      "D16:2"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1113.19,
+    "injectedChars": 2709,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 88,
+      "completion_tokens": 3,
+      "total_tokens": 91
+    },
+    "latencyMs": 1247,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 813,
+      "completion_tokens": 3,
+      "total_tokens": 816
+    },
+    "latencyMs": 844,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2709
+  },
+  "f1Delta": 0.0
+}

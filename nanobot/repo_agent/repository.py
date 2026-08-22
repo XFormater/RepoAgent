@@ -9,6 +9,8 @@ import re
 import shutil
 import stat
 import tempfile
+from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -16,6 +18,7 @@ from urllib.parse import urlsplit
 
 from nanobot.repo_agent.config import RepositoryAgentConfig
 from nanobot.repo_agent.models import RepositoryRecord, RepositoryTask
+from nanobot.security.logical_vfs import LogicalVFS, VFSIdentity
 
 _GITHUB_URL_RE = re.compile(
     r"https://github\.com/[A-Za-z0-9_.-]{1,100}/[A-Za-z0-9_.-]{1,100}(?:\.git)?",
@@ -40,13 +43,49 @@ class ParsedRepositoryURL:
 
 
 class RepositoryManager:
-    def __init__(self, workspace: Path, config: RepositoryAgentConfig):
+    def __init__(
+        self,
+        workspace: Path,
+        config: RepositoryAgentConfig,
+        *,
+        vfs: LogicalVFS | None = None,
+    ):
         self.workspace = workspace.resolve()
         self.config = config
-        self.cache_root = (self.workspace / config.cache_dir).resolve()
-        if self.cache_root != self.workspace and self.workspace not in self.cache_root.parents:
+        self._base_cache_root = (self.workspace / config.cache_dir).resolve()
+        if self._base_cache_root != self.workspace and self.workspace not in self._base_cache_root.parents:
             raise ValueError("repository cache directory must remain inside the workspace")
-        self.cache_root.mkdir(parents=True, exist_ok=True)
+        self._base_cache_root.mkdir(parents=True, exist_ok=True)
+        self.vfs = vfs
+        self._scope: ContextVar[VFSIdentity | None] = ContextVar(
+            "repository_manager_vfs_identity", default=None
+        )
+
+    @property
+    def cache_root(self) -> Path:
+        """Return the active user-scoped cache, or the legacy root."""
+        identity = self._scope.get()
+        if self.vfs is not None and self.vfs.enabled and identity is not None:
+            root = self.vfs.repository_root(identity)
+            root.mkdir(parents=True, exist_ok=True)
+            return root
+        return self._base_cache_root
+
+    @property
+    def allowed_roots(self) -> list[Path]:
+        """Roots that repository read tools may safely resolve below."""
+        roots = [self._base_cache_root]
+        if self.vfs is not None and self.vfs.enabled:
+            roots.append(self.vfs.root)
+        return roots
+
+    @contextmanager
+    def bind_vfs_identity(self, identity: VFSIdentity) -> Any:
+        token = self._scope.set(identity)
+        try:
+            yield
+        finally:
+            self._scope.reset(token)
 
     @staticmethod
     def extract_url(text: str) -> str | None:

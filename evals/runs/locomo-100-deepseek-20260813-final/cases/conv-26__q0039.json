@@ -1,0 +1,69 @@
+{
+  "caseId": "conv-26__q0039",
+  "sampleId": "conv-26",
+  "questionIndex": 39,
+  "question": "In what ways is Caroline participating in the LGBTQ community?",
+  "answer": "Joining activist group, going to pride parades, participating in an art show, mentoring program",
+  "adversarialAnswer": null,
+  "category": 1,
+  "categoryName": "multi_hop",
+  "evidence": [
+    "D10:3",
+    "D5:1",
+    "D9:12",
+    "D9:2"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D1:8",
+      "D17:20",
+      "D2:13",
+      "D16:12",
+      "D2:9",
+      "D6:8",
+      "D8:11",
+      "D7:12",
+      "D17:24",
+      "D10:18"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 2347.221,
+    "injectedChars": 1976,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 83,
+      "completion_tokens": 3,
+      "total_tokens": 86
+    },
+    "latencyMs": 1271,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 642,
+      "completion_tokens": 3,
+      "total_tokens": 645
+    },
+    "latencyMs": 4861,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 1976
+  },
+  "f1Delta": 0.0
+}

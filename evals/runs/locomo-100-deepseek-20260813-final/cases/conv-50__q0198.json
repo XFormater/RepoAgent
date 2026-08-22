@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-50__q0198",
+  "sampleId": "conv-50",
+  "questionIndex": 198,
+  "question": "What kind of impact does Dave's blog on vegan recipes have on people?",
+  "answer": "No information available",
+  "adversarialAnswer": "It inspires others to start their DIY projects",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D28:10"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D11:5",
+      "D9:15",
+      "D28:5",
+      "D24:5",
+      "D25:14",
+      "D28:30",
+      "D13:6",
+      "D1:4",
+      "D25:1",
+      "D2:7"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 315.244,
+    "injectedChars": 2431,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_off",
+    "memory_on"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 110,
+      "completion_tokens": 3,
+      "total_tokens": 113
+    },
+    "latencyMs": 1086,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 775,
+      "completion_tokens": 3,
+      "total_tokens": 778
+    },
+    "latencyMs": 1738,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 2431
+  },
+  "f1Delta": 0.0
+}

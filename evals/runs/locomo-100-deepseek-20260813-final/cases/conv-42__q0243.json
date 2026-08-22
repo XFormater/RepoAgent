@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-42__q0243",
+  "sampleId": "conv-42",
+  "questionIndex": 243,
+  "question": "What does Nate do after receiving a rejection from a production company?",
+  "answer": "No information available",
+  "adversarialAnswer": "keep grinding and moving ahead",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D24:14"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D14:1",
+      "D23:1",
+      "D19:17",
+      "D24:12",
+      "D19:7",
+      "D27:26",
+      "D17:14",
+      "D27:25",
+      "D29:2",
+      "D8:13"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 347.371,
+    "injectedChars": 2786,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "(b) keep grinding and moving ahead.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 105,
+      "completion_tokens": 8,
+      "total_tokens": 113
+    },
+    "latencyMs": 1455,
+    "answer": "keep grinding and moving ahead",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 837,
+      "completion_tokens": 3,
+      "total_tokens": 840
+    },
+    "latencyMs": 935,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 2786
+  },
+  "f1Delta": 1.0
+}

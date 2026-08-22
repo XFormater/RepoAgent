@@ -1,0 +1,37 @@
+{
+  "benchmark": "LoCoMo QA through the nanobot long-term-memory retrieval path",
+  "version": "1.0.0",
+  "runId": "locomo-preflight-deepseek-20260813",
+  "startedAt": "2026-08-13T09:59:36.129226+00:00",
+  "model": "deepseek-v4-pro",
+  "providerType": "OpenAICompatProvider",
+  "generation": {
+    "temperature": 0.0,
+    "maxTokens": 64,
+    "reasoningEffort": "none"
+  },
+  "dataset": "/root/GitHubResearch_Agent/evals/vendor/locomo/locomo10.json",
+  "datasetSha256": "79fa87e90f04081343b8c8debecb80a9a6842b76a7aa537dc9fdf651ea698ff4",
+  "sourceCommit": "3eb6f2c585f5e1699204e3c3bdf7adc5c28cb376",
+  "suite": "/root/GitHubResearch_Agent/evals/suites/locomo_memory_v1.json",
+  "suiteSha256": "aed7fd53a6bf6568e8cdca42d2535ce05ab1ae9d2192b0207869ded6cbb7b797",
+  "configSha256": "d3979cd94b719d7d9617ff758800321d356921c47949106d43f303ddd0ec7408",
+  "gitCommit": "2f1fb94f78e1db6dba5230d0a522d7e5da3bd16b",
+  "python": "3.12.3",
+  "platform": "Linux-6.8.0-63-generic-x86_64-with-glibc2.39",
+  "perConversation": 10,
+  "selectedCases": [
+    "conv-26__q0015"
+  ],
+  "memory": {
+    "ingestion": "pre-index each raw dated dialogue turn as one MemoryRecord",
+    "storage": "in-memory production adapters",
+    "embedding": "hash",
+    "embeddingDimension": 384,
+    "vectorTopK": 20,
+    "reranker": "identity",
+    "rerankerTopN": 10,
+    "maxInjectedChars": 6000,
+    "graphEnabled": false
+  }
+}

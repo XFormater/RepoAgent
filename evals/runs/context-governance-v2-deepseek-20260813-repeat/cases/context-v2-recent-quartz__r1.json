@@ -1,0 +1,49 @@
+{
+  "caseId": "context-v2-recent-quartz",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 2050,
+  "error": null,
+  "passed": true,
+  "expected": "CRYSTAL-617",
+  "contextCaseType": "recent_dependency",
+  "contextBlockLimit": 1400,
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "CRYSTAL-617",
+    "normalizedAnswer": "CRYSTAL-617",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 4958,
+      "completion_tokens": 6,
+      "total_tokens": 4964,
+      "cached_tokens": 4864,
+      "provider_tokens": 4964
+    },
+    "modelInputMessages": 52,
+    "estimatedInputTokens": 5041,
+    "providerPromptTokens": 4958
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": true,
+    "answer": "CRYSTAL-617",
+    "normalizedAnswer": "CRYSTAL-617",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1304,
+      "completion_tokens": 6,
+      "total_tokens": 1310,
+      "cached_tokens": 1280,
+      "provider_tokens": 1310
+    },
+    "modelInputMessages": 16,
+    "estimatedInputTokens": 1333,
+    "providerPromptTokens": 1304
+  },
+  "qualityDelta": 0,
+  "estimatedTokenReduction": 0.7355683396151558,
+  "providerPromptTokenReduction": 0.7369907220653489
+}

@@ -1,0 +1,42 @@
+{
+  "benchmark": "GitHubResearch Agent Offline Capability Benchmark",
+  "version": "1.0.0",
+  "description": "Deterministic local scenarios for five core capability domains; fake providers and temporary state only.",
+  "thresholds": {"minPassRate": 1.0, "minCategoryPassRate": 1.0},
+  "cases": [
+    {"caseId":"state-tool-loop-integrity","category":"planning_state_machine","capability":"Preserve reasoning, tool calls, and tool results across a state transition.","nodeId":"tests/agent/test_runner_core.py::test_runner_preserves_reasoning_fields_and_tool_results","timeoutSeconds":30},
+    {"caseId":"state-max-iteration-finalization","category":"planning_state_machine","capability":"Enter no-tools finalization after exhausting the action budget.","nodeId":"tests/agent/test_runner_core.py::test_runner_uses_no_tools_finalization_after_max_iterations","timeoutSeconds":30},
+    {"caseId":"state-sustained-goal-continue","category":"planning_state_machine","capability":"Continue while a persisted goal remains active.","nodeId":"tests/agent/test_runner_goal_continue.py::test_runner_forces_continue_when_goal_active","timeoutSeconds":30},
+    {"caseId":"state-goal-budget-boundary","category":"planning_state_machine","capability":"Respect the hard iteration budget for sustained goals.","nodeId":"tests/agent/test_runner_goal_continue.py::test_runner_respects_max_iterations_even_with_active_goal","timeoutSeconds":30},
+    {"caseId":"state-llm-wall-timeout","category":"planning_state_machine","capability":"Terminate a hung model request through the outer timeout.","nodeId":"tests/agent/test_runner_core.py::test_runner_times_out_hung_llm_request","timeoutSeconds":30},
+    {"caseId":"state-length-recovery","category":"planning_state_machine","capability":"Recover all response segments after length truncation.","nodeId":"tests/agent/test_runner_core.py::test_runner_length_recovery_returns_all_segments","timeoutSeconds":30},
+
+    {"caseId":"vfs-user-task-isolation","category":"vfs_sandbox","capability":"Keep user and task namespaces stable and isolated.","nodeId":"tests/security/test_logical_vfs.py::test_user_and_task_namespaces_are_stable_and_isolated","timeoutSeconds":30},
+    {"caseId":"vfs-tenant-repository-isolation","category":"vfs_sandbox","capability":"Scope one repository independently per tenant and user.","nodeId":"tests/security/test_logical_vfs.py::test_same_repository_is_scoped_per_tenant_and_user","timeoutSeconds":30},
+    {"caseId":"vfs-shared-skill-readonly","category":"vfs_sandbox","capability":"Keep shared skills read-only while user skills remain writable.","nodeId":"tests/security/test_logical_vfs.py::test_shared_skills_are_read_only_and_user_skills_are_writable","timeoutSeconds":30},
+    {"caseId":"vfs-quota-enforcement","category":"vfs_sandbox","capability":"Reject namespace writes exceeding configured quotas.","nodeId":"tests/security/test_logical_vfs.py::test_quota_is_enforced_for_user_and_task_writes","timeoutSeconds":30},
+    {"caseId":"sandbox-bwrap-mount-policy","category":"vfs_sandbox","capability":"Expose only the task workspace as writable in Bubblewrap.","nodeId":"tests/harness/test_sandbox_executor.py::test_bwrap_command_isolates_process_and_mounts_only_task_workspace_rw","timeoutSeconds":30},
+    {"caseId":"sandbox-secret-redaction","category":"vfs_sandbox","capability":"Redact provider credentials from sandbox errors.","nodeId":"tests/harness/test_sandbox_executor.py::test_sandbox_error_redaction_hides_provider_keys","timeoutSeconds":30},
+
+    {"caseId":"delegate-context-tool-boundary","category":"delegation_subagents","capability":"Propagate harness context with a child-specific tool allowlist.","nodeId":"tests/agent/tools/test_subagent_tools.py::test_real_subagent_run_uses_harness_context_and_spec_tool_allowlist","timeoutSeconds":30},
+    {"caseId":"delegate-concurrency-admission","category":"delegation_subagents","capability":"Reject child admission at the concurrency limit.","nodeId":"tests/agent/tools/test_subagent_tools.py::test_spawn_tool_rejects_when_at_concurrency_limit","timeoutSeconds":30},
+    {"caseId":"delegate-inline-slot-accounting","category":"delegation_subagents","capability":"Count inline child work against the shared concurrency budget.","nodeId":"tests/agent/tools/test_subagent_tools.py::test_inline_spawn_counts_toward_concurrency_limit","timeoutSeconds":30},
+    {"caseId":"delegate-inline-cancellation","category":"delegation_subagents","capability":"Cancel an inline child by its owning session.","nodeId":"tests/agent/tools/test_subagent_tools.py::test_cancel_by_session_cancels_inline_subagent","timeoutSeconds":30},
+    {"caseId":"delegate-runtime-snapshot","category":"delegation_subagents","capability":"Capture child runtime before background execution.","nodeId":"tests/agent/test_subagent_lifecycle.py::TestSpawn::test_runtime_is_captured_before_background_task_starts","timeoutSeconds":30},
+    {"caseId":"delegate-resource-cleanup-order","category":"delegation_subagents","capability":"Cancel child tasks before closing execution sessions.","nodeId":"tests/agent/test_subagent_lifecycle.py::test_close_cancels_tasks_before_closing_exec_sessions","timeoutSeconds":30},
+
+    {"caseId":"memory-core-roundtrip","category":"memory_management","capability":"Persist and read core memory without external services.","nodeId":"tests/agent/test_memory_store.py::TestMemoryStoreBasicIO::test_write_and_read_memory","timeoutSeconds":30},
+    {"caseId":"memory-concurrent-cursors","category":"memory_management","capability":"Allocate unique history cursors under concurrent writes.","nodeId":"tests/agent/test_memory_store.py::TestHistoryWithCursor::test_append_history_allocates_unique_cursors_under_concurrent_writes","timeoutSeconds":30},
+    {"caseId":"memory-compaction-cursor-safety","category":"memory_management","capability":"Preserve history after the dream cursor during compaction.","nodeId":"tests/agent/test_memory_store.py::TestHistoryWithCursor::test_compact_history_preserves_entries_after_dream_cursor","timeoutSeconds":30},
+    {"caseId":"memory-record-idempotency","category":"memory_management","capability":"Make repeated long-term memory writes idempotent.","nodeId":"tests/memory_system/test_record_pipeline.py::test_record_batch_is_idempotent","timeoutSeconds":30},
+    {"caseId":"memory-bounded-retrieval","category":"memory_management","capability":"Rank and inject memories within a bounded context budget.","nodeId":"tests/memory_system/test_retrieve_pipeline.py::test_retrieve_ranks_and_injects_bounded_memory","timeoutSeconds":30},
+    {"caseId":"memory-summary-restart-recovery","category":"memory_management","capability":"Recover a compacted summary after process restart.","nodeId":"tests/agent/test_auto_compact.py::TestSummaryPersistence::test_summary_recovered_after_restart","timeoutSeconds":30},
+
+    {"caseId":"hitl-inject-after-tool","category":"human_intervention","capability":"Inject a user correction at the post-tool checkpoint.","nodeId":"tests/agent/test_runner_injections.py::test_checkpoint1_injects_after_tool_execution","timeoutSeconds":30},
+    {"caseId":"hitl-inject-after-response","category":"human_intervention","capability":"Resume when input arrives after a candidate final response.","nodeId":"tests/agent/test_runner_injections.py::test_checkpoint2_injects_after_final_response_with_resuming_stream","timeoutSeconds":30},
+    {"caseId":"hitl-route-active-followup","category":"human_intervention","capability":"Route a mid-turn follow-up to the active pending queue.","nodeId":"tests/agent/test_runner_injections.py::test_followup_routed_to_pending_queue","timeoutSeconds":30},
+    {"caseId":"hitl-inject-at-budget-boundary","category":"human_intervention","capability":"Drain pending intervention at the iteration boundary.","nodeId":"tests/agent/test_runner_injections.py::test_drain_injections_on_max_iterations","timeoutSeconds":30},
+    {"caseId":"hitl-stop-active-turn","category":"human_intervention","capability":"Cancel an active turn after an explicit stop request.","nodeId":"tests/agent/test_task_cancel.py::TestHandleStop::test_stop_cancels_active_task","timeoutSeconds":30},
+    {"caseId":"hitl-cancel-checkpoint-restore","category":"human_intervention","capability":"Restore the durable checkpoint when dispatch is cancelled.","nodeId":"tests/agent/test_stop_preserves_context.py::test_dispatch_cancellation_restores_checkpoint","timeoutSeconds":30}
+  ]
+}

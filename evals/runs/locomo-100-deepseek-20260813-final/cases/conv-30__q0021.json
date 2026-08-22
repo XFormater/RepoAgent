@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-30__q0021",
+  "sampleId": "conv-30",
+  "questionIndex": 21,
+  "question": "When did Jon start reading \"The Lean Startup\"?",
+  "answer": "May, 2023",
+  "adversarialAnswer": null,
+  "category": 2,
+  "categoryName": "temporal",
+  "evidence": [
+    "D12:6"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D12:6",
+      "D6:7",
+      "D6:17",
+      "D16:4",
+      "D5:6",
+      "D5:14",
+      "D9:3",
+      "D14:11",
+      "D16:15",
+      "D18:8"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 628.465,
+    "injectedChars": 1778,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 82,
+      "completion_tokens": 3,
+      "total_tokens": 85
+    },
+    "latencyMs": 1295,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "7:18 pm on 27 May, 2023",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 603,
+      "completion_tokens": 12,
+      "total_tokens": 615
+    },
+    "latencyMs": 1544,
+    "answer": "7:18 pm on 27 May, 2023",
+    "f1": 0.5,
+    "injectedChars": 1778
+  },
+  "f1Delta": 0.5
+}

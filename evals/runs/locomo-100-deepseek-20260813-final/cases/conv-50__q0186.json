@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-50__q0186",
+  "sampleId": "conv-50",
+  "questionIndex": 186,
+  "question": "What did Calvin recently get that is a \"masterpiece on canvas\"?",
+  "answer": "No information available",
+  "adversarialAnswer": "Ferrari",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D23:16"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D30:8",
+      "D27:7",
+      "D13:4",
+      "D25:30",
+      "D28:8",
+      "D25:20",
+      "D28:15",
+      "D28:29",
+      "D28:11",
+      "D11:3"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 445.74,
+    "injectedChars": 2832,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "(b) Ferrari.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 4,
+      "total_tokens": 106
+    },
+    "latencyMs": 1081,
+    "answer": "Ferrari",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 854,
+      "completion_tokens": 3,
+      "total_tokens": 857
+    },
+    "latencyMs": 928,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 2832
+  },
+  "f1Delta": 1.0
+}

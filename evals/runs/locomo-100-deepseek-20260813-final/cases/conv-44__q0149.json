@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-44__q0149",
+  "sampleId": "conv-44",
+  "questionIndex": 149,
+  "question": "What type of games do Andrew's dogs like to play at the park?",
+  "answer": "No information available",
+  "adversarialAnswer": "Fetch and Frisbee",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D23:14"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D23:13",
+      "D21:3",
+      "D20:31",
+      "D4:27",
+      "D23:10",
+      "D3:10",
+      "D17:2",
+      "D10:19",
+      "D1:15",
+      "D27:13"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 201.212,
+    "injectedChars": 2972,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "(b) Fetch and Frisbee.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 106,
+      "completion_tokens": 7,
+      "total_tokens": 113
+    },
+    "latencyMs": 787,
+    "answer": "Fetch and Frisbee",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 903,
+      "completion_tokens": 3,
+      "total_tokens": 906
+    },
+    "latencyMs": 920,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 2972
+  },
+  "f1Delta": 1.0
+}

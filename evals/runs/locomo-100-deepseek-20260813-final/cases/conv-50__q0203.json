@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-50__q0203",
+  "sampleId": "conv-50",
+  "questionIndex": 203,
+  "question": "Where did Calvin take a stunning photo of a waterfall?",
+  "answer": "No information available",
+  "adversarialAnswer": "Nearby park",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D30:15"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D16:18",
+      "D30:12",
+      "D12:6",
+      "D30:8",
+      "D22:4",
+      "D25:17",
+      "D25:26",
+      "D3:13",
+      "D28:32",
+      "D23:16"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 175.869,
+    "injectedChars": 2815,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 100,
+      "completion_tokens": 4,
+      "total_tokens": 104
+    },
+    "latencyMs": 802,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 866,
+      "completion_tokens": 4,
+      "total_tokens": 870
+    },
+    "latencyMs": 957,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 2815
+  },
+  "f1Delta": 0.0
+}

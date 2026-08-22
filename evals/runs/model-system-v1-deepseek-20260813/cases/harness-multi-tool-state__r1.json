@@ -1,0 +1,29 @@
+{
+  "caseId": "harness-multi-tool-state",
+  "layer": "harness_regression",
+  "scenario": "lookup",
+  "repetition": 1,
+  "latencyMs": 1935,
+  "error": null,
+  "passed": true,
+  "answer": "ORBIT-NIMBUS",
+  "normalizedAnswer": "ORBIT-NIMBUS",
+  "expected": "ORBIT-NIMBUS",
+  "stopReason": "completed",
+  "toolCalls": [
+    "lookup_value",
+    "lookup_value"
+  ],
+  "requiredCalls": [
+    "lookup_value",
+    "lookup_value"
+  ],
+  "lookupKeysValid": true,
+  "usage": {
+    "prompt_tokens": 806,
+    "completion_tokens": 84,
+    "total_tokens": 890,
+    "cached_tokens": 640,
+    "provider_tokens": 890
+  }
+}

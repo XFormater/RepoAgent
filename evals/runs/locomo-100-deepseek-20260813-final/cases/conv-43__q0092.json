@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-43__q0092",
+  "sampleId": "conv-43",
+  "questionIndex": 92,
+  "question": "What did John's teammates give him when they met on Aug 15th?",
+  "answer": "a basketball with autographs on it",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D7:7"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D27:16",
+      "D15:13",
+      "D15:20",
+      "D24:7",
+      "D25:3",
+      "D4:2",
+      "D19:15",
+      "D7:8",
+      "D2:19",
+      "D7:1"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1164.813,
+    "injectedChars": 1935,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_off",
+    "memory_on"
+  ],
+  "memoryOff": {
+    "rawAnswer": "A signed jersey",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 88,
+      "completion_tokens": 3,
+      "total_tokens": 91
+    },
+    "latencyMs": 943,
+    "answer": "A signed jersey",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 645,
+      "completion_tokens": 4,
+      "total_tokens": 649
+    },
+    "latencyMs": 1251,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 1935
+  },
+  "f1Delta": 0.0
+}

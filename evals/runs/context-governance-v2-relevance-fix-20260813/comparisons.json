@@ -1,0 +1,95 @@
+{
+  "contextGovernance": {
+    "pairedCases": 16,
+    "controlAccuracy": 1.0,
+    "treatmentAccuracy": 1.0,
+    "meanProviderPromptTokenReduction": 0.6491253089546467,
+    "meanEstimatedTokenReduction": 0.6465288636231771,
+    "totalControlPromptTokens": 68253,
+    "totalTreatmentPromptTokens": 22172,
+    "meanControlPromptTokens": 4265.8125,
+    "meanTreatmentPromptTokens": 1385.75,
+    "weightedProviderPromptTokenReduction": 0.6751498102647503,
+    "harmfulRegressionRate": 0.0,
+    "slices": {
+      "conflict_override": {
+        "cases": 2,
+        "controlAccuracy": 1.0,
+        "treatmentAccuracy": 1.0,
+        "accuracyDelta": 0.0,
+        "harmfulRegressionRate": 0.0,
+        "meanProviderPromptTokenReduction": 0.7457069711741342
+      },
+      "early_dependency": {
+        "cases": 3,
+        "controlAccuracy": 1.0,
+        "treatmentAccuracy": 1.0,
+        "accuracyDelta": 0.0,
+        "harmfulRegressionRate": 0.0,
+        "meanProviderPromptTokenReduction": 0.45150564604315946
+      },
+      "early_tool_result": {
+        "cases": 1,
+        "controlAccuracy": 1.0,
+        "treatmentAccuracy": 1.0,
+        "accuracyDelta": 0.0,
+        "harmfulRegressionRate": 0.0,
+        "meanProviderPromptTokenReduction": 0.6605206073752712
+      },
+      "latest_authority": {
+        "cases": 2,
+        "controlAccuracy": 1.0,
+        "treatmentAccuracy": 1.0,
+        "accuracyDelta": 0.0,
+        "harmfulRegressionRate": 0.0,
+        "meanProviderPromptTokenReduction": 0.6758573377162581
+      },
+      "recent_dependency": {
+        "cases": 3,
+        "controlAccuracy": 1.0,
+        "treatmentAccuracy": 1.0,
+        "accuracyDelta": 0.0,
+        "harmfulRegressionRate": 0.0,
+        "meanProviderPromptTokenReduction": 0.713185225591291
+      },
+      "recent_tool_result": {
+        "cases": 1,
+        "controlAccuracy": 1.0,
+        "treatmentAccuracy": 1.0,
+        "accuracyDelta": 0.0,
+        "harmfulRegressionRate": 0.0,
+        "meanProviderPromptTokenReduction": 0.6769890424011433
+      },
+      "split_dependency": {
+        "cases": 2,
+        "controlAccuracy": 1.0,
+        "treatmentAccuracy": 1.0,
+        "accuracyDelta": 0.0,
+        "harmfulRegressionRate": 0.0,
+        "meanProviderPromptTokenReduction": 0.5822612109920426
+      },
+      "system_anchor": {
+        "cases": 2,
+        "controlAccuracy": 1.0,
+        "treatmentAccuracy": 1.0,
+        "accuracyDelta": 0.0,
+        "harmfulRegressionRate": 0.0,
+        "meanProviderPromptTokenReduction": 0.7733858194148554
+      }
+    }
+  },
+  "memoryBenefit": {
+    "pairedCases": 0,
+    "controlAccuracy": 0.0,
+    "treatmentAccuracy": 0.0,
+    "accuracyGain": 0.0,
+    "meanControlPromptTokens": 0.0,
+    "meanTreatmentPromptTokens": 0.0,
+    "meanPromptTokenOverhead": 0.0,
+    "relativePromptTokenOverhead": 0.0,
+    "meanInjectedChars": 0.0,
+    "retrievalHitRate": 0.0,
+    "harmfulRegressionRate": 0.0,
+    "slices": {}
+  }
+}

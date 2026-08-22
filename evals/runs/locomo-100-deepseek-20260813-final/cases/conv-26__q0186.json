@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-26__q0186",
+  "sampleId": "conv-26",
+  "questionIndex": 186,
+  "question": "Who is Caroline a fan of in terms of modern music?",
+  "answer": "No information available",
+  "adversarialAnswer": "Ed Sheeran",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D15:28"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D8:10",
+      "D14:29",
+      "D19:2",
+      "D5:6",
+      "D14:27",
+      "D14:15",
+      "D10:18",
+      "D11:12",
+      "D15:28",
+      "D14:2"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 1889.923,
+    "injectedChars": 3144,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "(b) Ed Sheeran.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 103,
+      "completion_tokens": 7,
+      "total_tokens": 110
+    },
+    "latencyMs": 1496,
+    "answer": "Ed Sheeran",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 931,
+      "completion_tokens": 3,
+      "total_tokens": 934
+    },
+    "latencyMs": 1122,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 3144
+  },
+  "f1Delta": 1.0
+}

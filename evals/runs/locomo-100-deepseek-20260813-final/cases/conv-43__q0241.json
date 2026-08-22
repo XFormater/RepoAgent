@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-43__q0241",
+  "sampleId": "conv-43",
+  "questionIndex": 241,
+  "question": "What was Tims's reaction to sealing the deal with the beverage company?",
+  "answer": "No information available",
+  "adversarialAnswer": "crazy feeling, sense of accomplishment",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D29:6"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D6:11",
+      "D8:9",
+      "D8:16",
+      "D29:12",
+      "D22:9",
+      "D16:3",
+      "D23:7",
+      "D19:4",
+      "D20:37",
+      "D27:4"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 210.776,
+    "injectedChars": 3077,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "crazy feeling, sense of accomplishment.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 108,
+      "completion_tokens": 8,
+      "total_tokens": 116
+    },
+    "latencyMs": 922,
+    "answer": "crazy feeling, sense of accomplishment",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 884,
+      "completion_tokens": 3,
+      "total_tokens": 887
+    },
+    "latencyMs": 858,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 3077
+  },
+  "f1Delta": 1.0
+}

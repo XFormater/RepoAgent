@@ -188,6 +188,117 @@ def test_snip_history_reserves_budget_for_tool_definitions(monkeypatch):
     assert contents == ["system", "recent two"]
 
 
+def test_snip_history_keeps_query_relevant_early_turn_within_same_budget(monkeypatch):
+    provider = MagicMock()
+    tools = MagicMock()
+    tools.get_definitions.return_value = []
+    messages = [
+        {"role": "system", "content": "system"},
+        {"role": "user", "content": "Delta recovery code is RIVER-125."},
+        {"role": "assistant", "content": "recorded"},
+        {"role": "user", "content": "unrelated noise one"},
+        {"role": "assistant", "content": "noise ack one"},
+        {"role": "user", "content": "unrelated noise two"},
+        {"role": "assistant", "content": "noise ack two"},
+        {"role": "user", "content": "What is the Delta recovery code?"},
+    ]
+    spec = make_run_spec(
+        provider,
+        initial_messages=messages,
+        tools=tools,
+        model="test-model",
+        max_iterations=1,
+        max_tool_result_chars=_MAX_TOOL_RESULT_CHARS,
+        context_window_tokens=2000,
+        context_block_limit=220,
+    )
+    monkeypatch.setattr(
+        "nanobot.agent.context_governance.estimate_prompt_tokens_chain",
+        lambda _provider, _model, estimate_messages, _tools: (
+            1000 if len(estimate_messages) > 1 else 0,
+            None,
+        ),
+    )
+    monkeypatch.setattr(
+        "nanobot.agent.context_governance.estimate_message_tokens",
+        lambda message: 40 if message.get("role") != "system" else 0,
+    )
+
+    trimmed = ContextGovernor().snip_history(
+        _governance_config(provider, tools, spec, inflight_start_index=len(messages)),
+        messages,
+    )
+    contents = [str(message.get("content")) for message in trimmed]
+
+    assert "Delta recovery code is RIVER-125." in contents
+    assert "What is the Delta recovery code?" in contents
+    assert len(trimmed) < len(messages)
+
+
+def test_snip_history_keeps_complete_early_tool_turn_within_same_budget(monkeypatch):
+    provider = MagicMock()
+    tools = MagicMock()
+    tools.get_definitions.return_value = []
+    messages = [
+        {"role": "system", "content": "system"},
+        {"role": "user", "content": "Look up the opaque value."},
+        {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+                {
+                    "id": "call-old",
+                    "type": "function",
+                    "function": {"name": "lookup", "arguments": "{}"},
+                }
+            ],
+        },
+        {
+            "role": "tool",
+            "tool_call_id": "call-old",
+            "name": "lookup",
+            "content": "TOOL-247",
+        },
+        {"role": "assistant", "content": "lookup complete"},
+        {"role": "user", "content": "unrelated noise"},
+        {"role": "assistant", "content": "noise ack"},
+        {"role": "user", "content": "What was the early tool result?"},
+    ]
+    spec = make_run_spec(
+        provider,
+        initial_messages=messages,
+        tools=tools,
+        model="test-model",
+        max_iterations=1,
+        max_tool_result_chars=_MAX_TOOL_RESULT_CHARS,
+        context_window_tokens=2000,
+        context_block_limit=220,
+    )
+    monkeypatch.setattr(
+        "nanobot.agent.context_governance.estimate_prompt_tokens_chain",
+        lambda _provider, _model, estimate_messages, _tools: (
+            1000 if len(estimate_messages) > 1 else 0,
+            None,
+        ),
+    )
+    monkeypatch.setattr(
+        "nanobot.agent.context_governance.estimate_message_tokens",
+        lambda message: 40 if message.get("role") != "system" else 0,
+    )
+
+    trimmed = ContextGovernor().snip_history(
+        _governance_config(provider, tools, spec, inflight_start_index=len(messages)),
+        messages,
+    )
+
+    assert any(message.get("tool_call_id") == "call-old" for message in trimmed)
+    assert any(
+        any(call.get("id") == "call-old" for call in message.get("tool_calls", []))
+        for message in trimmed
+    )
+    assert any(message.get("content") == "TOOL-247" for message in trimmed)
+
+
 async def test_backfill_missing_tool_results_inserts_error():
     """Orphaned tool_use (no matching tool_result) should get a synthetic error."""
 

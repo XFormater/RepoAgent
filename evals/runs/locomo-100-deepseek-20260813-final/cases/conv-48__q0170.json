@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-48__q0170",
+  "sampleId": "conv-48",
+  "questionIndex": 170,
+  "question": "How did Deborah's mom support her yoga practice when she first started?",
+  "answer": "attended classes with her",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D24:5"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D7:4",
+      "D4:6",
+      "D22:7",
+      "D9:4",
+      "D16:7",
+      "D30:5",
+      "D11:4",
+      "D22:2",
+      "D28:19",
+      "D22:4"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 712.32,
+    "injectedChars": 2685,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "She bought her a yoga mat.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 86,
+      "completion_tokens": 7,
+      "total_tokens": 93
+    },
+    "latencyMs": 1350,
+    "answer": "She bought her a yoga mat.",
+    "f1": 0.22222222222222224,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 777,
+      "completion_tokens": 3,
+      "total_tokens": 780
+    },
+    "latencyMs": 1166,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2685
+  },
+  "f1Delta": -0.22222222222222224
+}

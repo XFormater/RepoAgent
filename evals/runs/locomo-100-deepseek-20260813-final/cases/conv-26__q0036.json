@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-26__q0036",
+  "sampleId": "conv-26",
+  "questionIndex": 36,
+  "question": "When did Caroline join a mentorship program?",
+  "answer": "The weekend before 17 July 2023",
+  "adversarialAnswer": null,
+  "category": 2,
+  "categoryName": "temporal",
+  "evidence": [
+    "D9:2"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D8:33",
+      "D4:1",
+      "D1:5",
+      "D14:11",
+      "D14:30",
+      "D7:11",
+      "D6:7",
+      "D8:23",
+      "D12:17",
+      "D19:11"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 2439.787,
+    "injectedChars": 2873,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_off",
+    "memory_on"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 80,
+      "completion_tokens": 3,
+      "total_tokens": 83
+    },
+    "latencyMs": 1175,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 847,
+      "completion_tokens": 3,
+      "total_tokens": 850
+    },
+    "latencyMs": 586,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2873
+  },
+  "f1Delta": 0.0
+}

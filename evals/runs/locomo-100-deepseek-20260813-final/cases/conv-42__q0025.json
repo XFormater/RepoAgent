@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-42__q0025",
+  "sampleId": "conv-42",
+  "questionIndex": 25,
+  "question": "When did Joanna hike with her buddies?",
+  "answer": "The weekend after 3June, 2022.",
+  "adversarialAnswer": null,
+  "category": 2,
+  "categoryName": "temporal",
+  "evidence": [
+    "D14:19"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D28:30",
+      "D8:7",
+      "D3:7",
+      "D23:22",
+      "D2:25",
+      "D16:3",
+      "D23:20",
+      "D14:19",
+      "D25:16",
+      "D21:17"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 1511.26,
+    "injectedChars": 2092,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 80,
+      "completion_tokens": 4,
+      "total_tokens": 84
+    },
+    "latencyMs": 1012,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "Around 5:44 pm on 3 June, 2022",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 664,
+      "completion_tokens": 14,
+      "total_tokens": 678
+    },
+    "latencyMs": 1182,
+    "answer": "Around 5:44 pm on 3 June, 2022",
+    "f1": 0.18181818181818182,
+    "injectedChars": 2092
+  },
+  "f1Delta": 0.18181818181818182
+}

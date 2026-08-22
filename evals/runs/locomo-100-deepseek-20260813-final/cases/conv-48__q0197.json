@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-48__q0197",
+  "sampleId": "conv-48",
+  "questionIndex": 197,
+  "question": "Where did Jolene meet her new friend Anna?",
+  "answer": "No information available",
+  "adversarialAnswer": "yoga in the park",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D3:6"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D2:10",
+      "D9:4",
+      "D4:13",
+      "D27:9",
+      "D22:4",
+      "D26:20",
+      "D5:9",
+      "D16:7",
+      "D2:12",
+      "D1:12"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 377.261,
+    "injectedChars": 2012,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 101,
+      "completion_tokens": 4,
+      "total_tokens": 105
+    },
+    "latencyMs": 545,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 656,
+      "completion_tokens": 4,
+      "total_tokens": 660
+    },
+    "latencyMs": 1899,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 2012
+  },
+  "f1Delta": 0.0
+}

@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-44__q0110",
+  "sampleId": "conv-44",
+  "questionIndex": 110,
+  "question": "What activity do Andrew and Buddy enjoy doing together?",
+  "answer": "Walking",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D24:8"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D10:6",
+      "D4:24",
+      "D26:4",
+      "D24:6",
+      "D20:11",
+      "D24:8",
+      "D27:13",
+      "D28:10",
+      "D13:9",
+      "D20:15"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 682.994,
+    "injectedChars": 2147,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 82,
+      "completion_tokens": 3,
+      "total_tokens": 85
+    },
+    "latencyMs": 953,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "Walks",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 687,
+      "completion_tokens": 2,
+      "total_tokens": 689
+    },
+    "latencyMs": 1296,
+    "answer": "Walks",
+    "f1": 1.0,
+    "injectedChars": 2147
+  },
+  "f1Delta": 1.0
+}

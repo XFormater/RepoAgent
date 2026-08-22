@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-41__q0175",
+  "sampleId": "conv-41",
+  "questionIndex": 175,
+  "question": "What did Maria recently get promoted to?",
+  "answer": "No information available",
+  "adversarialAnswer": "assistant manager",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D19:8"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D15:12",
+      "D18:13",
+      "D7:15",
+      "D8:11",
+      "D31:18",
+      "D6:11",
+      "D30:19",
+      "D2:15",
+      "D22:8",
+      "D23:4"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 197.914,
+    "injectedChars": 1932,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "assistant manager",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 97,
+      "completion_tokens": 3,
+      "total_tokens": 100
+    },
+    "latencyMs": 976,
+    "answer": "assistant manager",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 637,
+      "completion_tokens": 4,
+      "total_tokens": 641
+    },
+    "latencyMs": 902,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 1932
+  },
+  "f1Delta": 1.0
+}

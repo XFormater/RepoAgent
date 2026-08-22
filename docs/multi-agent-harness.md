@@ -24,6 +24,24 @@ PostgreSQL is authoritative for AgentSpec, AgentInstance, Workflow, Task,
 Checkpoint and the durable message Outbox. Redis owns ephemeral coordination:
 Streams mailboxes, idempotency keys and expiring Worker leases.
 
+## Logical VFS
+
+The runtime also exposes a logical VFS namespace above the host filesystem.
+`LogicalVFS` derives physical roots from `(tenant_id, user_id, task_id)` and
+never uses raw user or channel identifiers as directory names. Repository
+downloads and task workspaces created during a repository turn are placed under
+the active user's project namespace; a different user receives a different
+cache root even when the GitHub repository is identical. The context builder
+adds the active user's private skill root to the request-local skill search
+path, while built-in and workspace-level skills remain shared and read-only.
+User/task workspaces are read-write.
+
+File tools enforce the VFS byte/file quota before writes that target a managed
+namespace. Expired task and project namespaces can be removed by
+`cleanup_expired()`; cleanup re-validates that every target is below the VFS
+root. This layer is a policy and namespace abstraction, not a FUSE filesystem:
+Bubblewrap remains responsible for process/mount isolation when enabled.
+
 The six control-plane abstractions are deliberately separate:
 
 | Abstraction | Responsibility | Authoritative storage |
@@ -134,6 +152,12 @@ so concurrent replay of one tool call creates exactly one Task.
     "maxQueuedTasksPerTenant": 1000,
     "workerCapacity": 4,
     "workerHeartbeatTtl": 90,
+    "workerExecutionBackend": "bwrap",
+    "sandboxNetwork": "host",
+    "sandboxMemoryMb": 1536,
+    "sandboxProcessLimit": 128,
+    "sandboxOpenFilesLimit": 256,
+    "sandboxFileSizeMb": 512,
     "checkpointMaxBytes": 262144,
     "retentionDays": 30
   }
@@ -152,6 +176,12 @@ The corresponding environment override names are
 `NANOBOT_HARNESS__MAX_QUEUED_TASKS_PER_TENANT`,
 `NANOBOT_HARNESS__WORKER_CAPACITY`,
 `NANOBOT_HARNESS__WORKER_HEARTBEAT_TTL`,
+`NANOBOT_HARNESS__WORKER_EXECUTION_BACKEND`,
+`NANOBOT_HARNESS__SANDBOX_NETWORK`,
+`NANOBOT_HARNESS__SANDBOX_MEMORY_MB`,
+`NANOBOT_HARNESS__SANDBOX_PROCESS_LIMIT`,
+`NANOBOT_HARNESS__SANDBOX_OPEN_FILES_LIMIT`,
+`NANOBOT_HARNESS__SANDBOX_FILE_SIZE_MB`,
 `NANOBOT_HARNESS__CHECKPOINT_MAX_BYTES`, and
 `NANOBOT_HARNESS__RETENTION_DAYS`. Keep PostgreSQL, Redis, Neo4j and
 Qdrant credentials in Docker secrets or an untracked `.env`; never put them in
@@ -203,7 +233,8 @@ Redis keys are namespaced by `harness.keyPrefix`:
 `GET /health` is process liveness. `GET /ready` checks Harness PostgreSQL and Redis and
 returns 503 when durable delegation is unavailable. `HarnessService.diagnostics()`
 reports tenant task-state counts, workflow/agent/checkpoint counts, pending Outbox count
-and age, plus metric snapshots. `maintenance()` expires deadlines, flushes Outbox and
+and age, plus metric snapshots. The readiness payload also exposes logical VFS status
+and process-local counters such as quota violations and namespace cleanup. `maintenance()` expires deadlines, flushes Outbox and
 prunes old terminal aggregates according to `retentionDays`. It also scans active
 workflows and returns lease-orphaned Tasks to `ready`.
 
@@ -212,6 +243,21 @@ Run an independent worker with:
 ```bash
 nanobot harness-worker --tenant default --capacity 4
 ```
+
+For production, set `workerExecutionBackend` to `bwrap`. The durable Worker
+remains the Harness control plane, while each claimed Task runs in a separate
+process with PID/IPC/UTS namespaces, all Linux capabilities dropped, a task
+workspace mount, bounded resource limits, and a minimal environment. The child
+receives only the projected RuntimeContext and AgentSpec; it does not receive
+the parent transcript, database configuration, Redis state, or `MEMORY.md`.
+The active LLM credential is passed through a short-lived, mode-0600 child
+config and is never mounted from the host `.env` file.
+
+`sandboxNetwork: "host"` is intentional when the deployment uses a host VPN
+proxy such as `127.0.0.1:7890`; it preserves access to that proxy while the
+filesystem and process namespaces remain isolated. Use `"none"` only when the
+provider is reachable through an external network sidecar or another explicit
+egress design.
 
 The Worker loads the configured provider and ToolRegistry, advertises its roles and
 capabilities, projects Task metadata/dependencies/checkpoints into the isolated runtime,

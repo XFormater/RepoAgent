@@ -38,6 +38,7 @@ from nanobot.agent.tools.schema import (
 )
 from nanobot.config.paths import get_media_dir
 from nanobot.config_base import Base
+from nanobot.security.logical_vfs import VFSQuotaError, current_vfs, current_vfs_identity
 from nanobot.security.workspace_access import current_scope_allows_loopback, current_tool_workspace
 from nanobot.security.workspace_policy import is_path_within
 
@@ -359,6 +360,15 @@ class ExecTool(Tool):
 
             result = "\n".join(output_parts) if output_parts else "(no output)"
 
+            vfs = current_vfs()
+            identity = current_vfs_identity()
+            if vfs is not None and identity is not None:
+                try:
+                    vfs.check_quota(identity, root=Path(prepared.cwd))
+                except VFSQuotaError as exc:
+                    logger.warning("VFS quota exceeded after shell command: {}", exc)
+                    return ToolResult.error(f"Error: {exc}")
+
             max_len = clamp_session_int(max_output_chars, self._MAX_OUTPUT, 1000, MAX_OUTPUT_CHARS)
             if len(result) > max_len:
                 half = max_len // 2
@@ -401,6 +411,14 @@ class ExecTool(Tool):
                 ),
             )
             result = format_session_poll(session_id, poll)
+            vfs = current_vfs()
+            identity = current_vfs_identity()
+            if vfs is not None and identity is not None:
+                try:
+                    vfs.check_quota(identity, root=Path(prepared.cwd))
+                except VFSQuotaError as exc:
+                    logger.warning("VFS quota exceeded after shell session: {}", exc)
+                    return ToolResult.error(f"Error: {exc}")
             return ToolResult.error(result) if poll.timed_out else result
         except Exception as exc:
             return ToolResult.error(f"Error executing command: {exc}")

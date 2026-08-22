@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-49__q0086",
+  "sampleId": "conv-49",
+  "questionIndex": 86,
+  "question": "What advice did Evan give Sam about finding a passion?",
+  "answer": "keep trying new things until something sparks excitement",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D1:18"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D8:29",
+      "D22:4",
+      "D1:11",
+      "D23:11",
+      "D8:19",
+      "D17:7",
+      "D5:13",
+      "D17:13",
+      "D8:18",
+      "D3:14"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1040.919,
+    "injectedChars": 2233,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 83,
+      "completion_tokens": 3,
+      "total_tokens": 86
+    },
+    "latencyMs": 1446,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 712,
+      "completion_tokens": 3,
+      "total_tokens": 715
+    },
+    "latencyMs": 1195,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2233
+  },
+  "f1Delta": 0.0
+}

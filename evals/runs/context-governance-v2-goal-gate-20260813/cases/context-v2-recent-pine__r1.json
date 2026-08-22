@@ -1,0 +1,55 @@
+{
+  "caseId": "context-v2-recent-pine",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 1937,
+  "error": null,
+  "passed": true,
+  "expected": "NEEDLE-448",
+  "contextCaseType": "recent_dependency",
+  "contextBlockLimit": 1800,
+  "sourceInputSha256": "119f15c795faa7044c6add4638e6f4018af2b1a5a1cf24af3fb3e84d9ef2f814",
+  "sourceInputMessages": 62,
+  "variantOrder": [
+    "governance_on",
+    "governance_off"
+  ],
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "NEEDLE-448",
+    "normalizedAnswer": "NEEDLE-448",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 5967,
+      "completion_tokens": 5,
+      "total_tokens": 5972,
+      "cached_tokens": 5888,
+      "provider_tokens": 5972
+    },
+    "modelInputMessages": 62,
+    "estimatedInputTokens": 6078,
+    "providerPromptTokens": 5967
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": true,
+    "answer": "NEEDLE-448",
+    "normalizedAnswer": "NEEDLE-448",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1704,
+      "completion_tokens": 5,
+      "total_tokens": 1709,
+      "cached_tokens": 1664,
+      "provider_tokens": 1709
+    },
+    "modelInputMessages": 20,
+    "estimatedInputTokens": 1752,
+    "providerPromptTokens": 1704
+  },
+  "qualityDelta": 0,
+  "estimatedTokenReduction": 0.7117472852912142,
+  "providerPromptTokenReduction": 0.714429361488185
+}

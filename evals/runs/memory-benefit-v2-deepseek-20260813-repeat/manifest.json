@@ -1,0 +1,47 @@
+{
+  "benchmark": "GitHubResearch Agent Memory Benefit Benchmark",
+  "version": "2.0.0",
+  "runId": "memory-benefit-v2-deepseek-20260813-repeat",
+  "startedAt": "2026-08-13T04:48:25.347107+00:00",
+  "executionMode": "online-model-in-the-loop",
+  "model": "deepseek-v4-pro",
+  "providerType": "OpenAICompatProvider",
+  "contextWindowTokens": 262144,
+  "generation": {
+    "temperature": 0.0,
+    "maxTokens": 256,
+    "reasoningEffort": "none"
+  },
+  "suite": "/root/GitHubResearch_Agent/evals/suites/memory_benefit_v2.json",
+  "suiteSha256": "610a763ed54f195537979e127cb53127e5b3c5fd403134be873dad9d66dee143",
+  "configSha256": "d3979cd94b719d7d9617ff758800321d356921c47949106d43f303ddd0ec7408",
+  "gitCommit": "2f1fb94f78e1db6dba5230d0a522d7e5da3bd16b",
+  "python": "3.12.3",
+  "platform": "Linux-6.8.0-63-generic-x86_64-with-glibc2.39",
+  "repetitions": 1,
+  "selectedLayers": [
+    "memory_benefit"
+  ],
+  "selectedCases": [
+    "memory-v2-exact-borealis",
+    "memory-v2-exact-meridian",
+    "memory-v2-exact-cypress",
+    "memory-v2-exact-orion",
+    "memory-v2-semantic-lagoon",
+    "memory-v2-semantic-kepler",
+    "memory-v2-semantic-saffron",
+    "memory-v2-semantic-polaris",
+    "memory-v2-compose-aurora",
+    "memory-v2-compose-juniper",
+    "memory-v2-compose-voyager",
+    "memory-v2-compose-atlas",
+    "memory-v2-conflict-borealis",
+    "memory-v2-conflict-cypress",
+    "memory-v2-conflict-kepler",
+    "memory-v2-conflict-juniper",
+    "memory-v2-irrelevant-raven",
+    "memory-v2-irrelevant-solar",
+    "memory-v2-irrelevant-delta",
+    "memory-v2-irrelevant-ember"
+  ]
+}

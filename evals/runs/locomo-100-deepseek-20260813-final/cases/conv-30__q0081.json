@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-30__q0081",
+  "sampleId": "conv-30",
+  "questionIndex": 81,
+  "question": "What offer does Gina make to Jon regarding social media?",
+  "answer": "Helping with making content and managing his social media accounts.",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D18:13"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D9:3",
+      "D4:4",
+      "D1:15",
+      "D7:1",
+      "D16:4",
+      "D15:15",
+      "D18:21",
+      "D5:6",
+      "D18:19",
+      "D18:18"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 296.319,
+    "injectedChars": 1714,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_off",
+    "memory_on"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 83,
+      "completion_tokens": 3,
+      "total_tokens": 86
+    },
+    "latencyMs": 1148,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 589,
+      "completion_tokens": 3,
+      "total_tokens": 592
+    },
+    "latencyMs": 1070,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 1714
+  },
+  "f1Delta": 0.0
+}

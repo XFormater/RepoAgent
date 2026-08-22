@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-26__q0128",
+  "sampleId": "conv-26",
+  "questionIndex": 128,
+  "question": "What did Caroline find in her neighborhood during her walk?",
+  "answer": "a rainbow sidewalk",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D14:23"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D12:13",
+      "D1:17",
+      "D14:17",
+      "D10:5",
+      "D7:20",
+      "D14:22",
+      "D18:4",
+      "D10:20",
+      "D18:10",
+      "D9:17"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 2076.852,
+    "injectedChars": 2428,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 83,
+      "completion_tokens": 3,
+      "total_tokens": 86
+    },
+    "latencyMs": 1221,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 721,
+      "completion_tokens": 4,
+      "total_tokens": 725
+    },
+    "latencyMs": 1117,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 2428
+  },
+  "f1Delta": 0.0
+}

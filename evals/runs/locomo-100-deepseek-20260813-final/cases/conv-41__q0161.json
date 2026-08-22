@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-41__q0161",
+  "sampleId": "conv-41",
+  "questionIndex": 161,
+  "question": "What did Maria receive a certificate for?",
+  "answer": "No information available",
+  "adversarialAnswer": "completion of a university degree",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D9:2"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D15:12",
+      "D15:4",
+      "D8:9",
+      "D29:14",
+      "D13:17",
+      "D18:3",
+      "D13:4",
+      "D2:23",
+      "D21:23",
+      "D11:14"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 347.088,
+    "injectedChars": 2474,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 100,
+      "completion_tokens": 3,
+      "total_tokens": 103
+    },
+    "latencyMs": 1238,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 771,
+      "completion_tokens": 3,
+      "total_tokens": 774
+    },
+    "latencyMs": 918,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 2474
+  },
+  "f1Delta": 0.0
+}

@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-41__q0102",
+  "sampleId": "conv-41",
+  "questionIndex": 102,
+  "question": "What does Maria need to spread the word about for the fundraiser for the volunteer shelter?",
+  "answer": "chili cook-off",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D16:4"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D16:4",
+      "D28:3",
+      "D22:16",
+      "D21:19",
+      "D5:2",
+      "D27:8",
+      "D11:12",
+      "D20:5",
+      "D27:1",
+      "D10:17"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 886.381,
+    "injectedChars": 2783,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "volunteer opportunities",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 89,
+      "completion_tokens": 4,
+      "total_tokens": 93
+    },
+    "latencyMs": 1442,
+    "answer": "volunteer opportunities",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "chili cook-off",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 823,
+      "completion_tokens": 4,
+      "total_tokens": 827
+    },
+    "latencyMs": 1118,
+    "answer": "chili cook-off",
+    "f1": 1.0,
+    "injectedChars": 2783
+  },
+  "f1Delta": 1.0
+}

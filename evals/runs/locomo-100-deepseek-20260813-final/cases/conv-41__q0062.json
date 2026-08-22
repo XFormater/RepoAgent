@@ -1,0 +1,67 @@
+{
+  "caseId": "conv-41__q0062",
+  "sampleId": "conv-41",
+  "questionIndex": 62,
+  "question": "How many dogs has Maria adopted from the dog shelter she volunteers at?",
+  "answer": "two",
+  "adversarialAnswer": null,
+  "category": 1,
+  "categoryName": "multi_hop",
+  "evidence": [
+    "D30:1",
+    "D31:2"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D1:11",
+      "D20:7",
+      "D22:12",
+      "D20:5",
+      "D11:5",
+      "D17:12",
+      "D11:12",
+      "D17:8",
+      "D29:5",
+      "D27:8"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1488.908,
+    "injectedChars": 2284,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 86,
+      "completion_tokens": 4,
+      "total_tokens": 90
+    },
+    "latencyMs": 1013,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 698,
+      "completion_tokens": 4,
+      "total_tokens": 702
+    },
+    "latencyMs": 1021,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 2284
+  },
+  "f1Delta": 0.0
+}

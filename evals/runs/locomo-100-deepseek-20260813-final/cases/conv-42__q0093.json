@@ -1,0 +1,67 @@
+{
+  "caseId": "conv-42__q0093",
+  "sampleId": "conv-42",
+  "questionIndex": 93,
+  "question": "What game was the second tournament that Nate won based on?",
+  "answer": "Street Fighter",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D10:4",
+    "D10:6"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D17:1",
+      "D1:7",
+      "D27:1",
+      "D11:9",
+      "D20:7",
+      "D22:8",
+      "D25:4",
+      "D10:8",
+      "D25:5",
+      "D20:3"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 917.076,
+    "injectedChars": 2646,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 84,
+      "completion_tokens": 3,
+      "total_tokens": 87
+    },
+    "latencyMs": 894,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "Counter-Strike: Global Offensive",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 787,
+      "completion_tokens": 7,
+      "total_tokens": 794
+    },
+    "latencyMs": 1762,
+    "answer": "Counter-Strike: Global Offensive",
+    "f1": 0.0,
+    "injectedChars": 2646
+  },
+  "f1Delta": 0.0
+}

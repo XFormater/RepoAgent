@@ -37,6 +37,29 @@ def test_sandbox_config_disables_stateful_services_and_nested_sandbox(tmp_path):
     assert isolated["tools"]["exec"]["allowedEnvKeys"] == []
 
 
+def test_sandbox_config_keeps_only_active_provider(tmp_path):
+    config = Config.model_validate(
+        {
+            "providers": {
+                "deepseek": {"apiKey": "deepseek-secret"},
+                "openai": {"apiKey": "unrelated-secret"},
+            },
+            "modelPresets": {
+                "primary": {
+                    "provider": "deepseek",
+                    "model": "deepseek-v4-pro",
+                }
+            },
+            "agents": {"defaults": {"modelPreset": "primary", "workspace": str(tmp_path)}},
+        }
+    )
+    executor = _executor(config, tmp_path)
+
+    assert executor._sandbox_config(tmp_path)["providers"] == {
+        "deepseek": {"apiKey": "deepseek-secret", "apiType": "auto"}
+    }
+
+
 def test_bwrap_command_isolates_process_and_mounts_only_task_workspace_rw(tmp_path):
     project = tmp_path / "app"
     workspace = project / "research" / "repo"

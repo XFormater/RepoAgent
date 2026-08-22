@@ -1,0 +1,67 @@
+{
+  "caseId": "conv-47__q0184",
+  "sampleId": "conv-47",
+  "questionIndex": 184,
+  "question": "What decision did John and Samantha make on 31 October, 2022?",
+  "answer": "No information available",
+  "adversarialAnswer": "To move in together",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D29:8",
+    "D29:10"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D12:10",
+      "D27:13",
+      "D29:13",
+      "D25:13",
+      "D14:30",
+      "D2:14",
+      "D21:12",
+      "D27:11",
+      "D18:3",
+      "D27:9"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 214.007,
+    "injectedChars": 1843,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 107,
+      "completion_tokens": 4,
+      "total_tokens": 111
+    },
+    "latencyMs": 1043,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 631,
+      "completion_tokens": 4,
+      "total_tokens": 635
+    },
+    "latencyMs": 1117,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 1843
+  },
+  "f1Delta": 0.0
+}

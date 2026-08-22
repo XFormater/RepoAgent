@@ -25,14 +25,135 @@
         "originMetadata": {}
       },
       "state": {
-        "nextRunAtMs": 1786446675380,
-        "lastRunAtMs": null,
-        "lastStatus": null,
+        "nextRunAtMs": 1787120434202,
+        "lastRunAtMs": 1787113234195,
+        "lastStatus": "ok",
         "lastError": null,
-        "runHistory": []
+        "runHistory": [
+          {
+            "runAtMs": 1786976433980,
+            "status": "ok",
+            "durationMs": 10,
+            "error": null
+          },
+          {
+            "runAtMs": 1786983633991,
+            "status": "ok",
+            "durationMs": 8,
+            "error": null
+          },
+          {
+            "runAtMs": 1786990834003,
+            "status": "ok",
+            "durationMs": 8,
+            "error": null
+          },
+          {
+            "runAtMs": 1786998034014,
+            "status": "ok",
+            "durationMs": 11,
+            "error": null
+          },
+          {
+            "runAtMs": 1787005234029,
+            "status": "ok",
+            "durationMs": 10,
+            "error": null
+          },
+          {
+            "runAtMs": 1787012434042,
+            "status": "ok",
+            "durationMs": 12,
+            "error": null
+          },
+          {
+            "runAtMs": 1787019634056,
+            "status": "ok",
+            "durationMs": 7,
+            "error": null
+          },
+          {
+            "runAtMs": 1787026834065,
+            "status": "ok",
+            "durationMs": 12,
+            "error": null
+          },
+          {
+            "runAtMs": 1787034034078,
+            "status": "ok",
+            "durationMs": 11,
+            "error": null
+          },
+          {
+            "runAtMs": 1787041234090,
+            "status": "ok",
+            "durationMs": 17,
+            "error": null
+          },
+          {
+            "runAtMs": 1787048434108,
+            "status": "ok",
+            "durationMs": 7,
+            "error": null
+          },
+          {
+            "runAtMs": 1787055634120,
+            "status": "ok",
+            "durationMs": 7,
+            "error": null
+          },
+          {
+            "runAtMs": 1787062834129,
+            "status": "ok",
+            "durationMs": 7,
+            "error": null
+          },
+          {
+            "runAtMs": 1787070034139,
+            "status": "ok",
+            "durationMs": 6,
+            "error": null
+          },
+          {
+            "runAtMs": 1787077234146,
+            "status": "ok",
+            "durationMs": 9,
+            "error": null
+          },
+          {
+            "runAtMs": 1787084434158,
+            "status": "ok",
+            "durationMs": 10,
+            "error": null
+          },
+          {
+            "runAtMs": 1787091634169,
+            "status": "ok",
+            "durationMs": 10,
+            "error": null
+          },
+          {
+            "runAtMs": 1787098834180,
+            "status": "ok",
+            "durationMs": 7,
+            "error": null
+          },
+          {
+            "runAtMs": 1787106034189,
+            "status": "ok",
+            "durationMs": 4,
+            "error": null
+          },
+          {
+            "runAtMs": 1787113234195,
+            "status": "ok",
+            "durationMs": 7,
+            "error": null
+          }
+        ]
       },
-      "createdAtMs": 1786439475331,
-      "updatedAtMs": 1786439475331,
+      "createdAtMs": 1786551633278,
+      "updatedAtMs": 1787113234202,
       "deleteAfterRun": false
     },
     {
@@ -59,14 +180,21 @@
         "originMetadata": {}
       },
       "state": {
-        "nextRunAtMs": 1786820400000,
-        "lastRunAtMs": null,
-        "lastStatus": null,
+        "nextRunAtMs": 1787425200000,
+        "lastRunAtMs": 1786820400001,
+        "lastStatus": "ok",
         "lastError": null,
-        "runHistory": []
+        "runHistory": [
+          {
+            "runAtMs": 1786820400001,
+            "status": "ok",
+            "durationMs": 859,
+            "error": null
+          }
+        ]
       },
-      "createdAtMs": 1786439475337,
-      "updatedAtMs": 1786439475337,
+      "createdAtMs": 1786551633285,
+      "updatedAtMs": 1786820400860,
       "deleteAfterRun": false
     },
     {
@@ -93,27 +221,135 @@
         "originMetadata": {}
       },
       "state": {
-        "nextRunAtMs": 1786444875385,
-        "lastRunAtMs": 1786443075384,
+        "nextRunAtMs": 1787118634235,
+        "lastRunAtMs": 1787116834234,
         "lastStatus": "ok",
         "lastError": null,
         "runHistory": [
           {
-            "runAtMs": 1786441275381,
+            "runAtMs": 1787082634187,
             "status": "ok",
             "durationMs": 2,
             "error": null
           },
           {
-            "runAtMs": 1786443075384,
+            "runAtMs": 1787084434190,
+            "status": "ok",
+            "durationMs": 0,
+            "error": null
+          },
+          {
+            "runAtMs": 1787086234191,
+            "status": "ok",
+            "durationMs": 3,
+            "error": null
+          },
+          {
+            "runAtMs": 1787088034197,
+            "status": "ok",
+            "durationMs": 3,
+            "error": null
+          },
+          {
+            "runAtMs": 1787089834202,
+            "status": "ok",
+            "durationMs": 1,
+            "error": null
+          },
+          {
+            "runAtMs": 1787091634203,
+            "status": "ok",
+            "durationMs": 1,
+            "error": null
+          },
+          {
+            "runAtMs": 1787093434205,
+            "status": "ok",
+            "durationMs": 1,
+            "error": null
+          },
+          {
+            "runAtMs": 1787095234208,
+            "status": "ok",
+            "durationMs": 1,
+            "error": null
+          },
+          {
+            "runAtMs": 1787097034210,
+            "status": "ok",
+            "durationMs": 1,
+            "error": null
+          },
+          {
+            "runAtMs": 1787098834212,
+            "status": "ok",
+            "durationMs": 1,
+            "error": null
+          },
+          {
+            "runAtMs": 1787100634214,
+            "status": "ok",
+            "durationMs": 1,
+            "error": null
+          },
+          {
+            "runAtMs": 1787102434219,
+            "status": "ok",
+            "durationMs": 0,
+            "error": null
+          },
+          {
+            "runAtMs": 1787104234221,
+            "status": "ok",
+            "durationMs": 1,
+            "error": null
+          },
+          {
+            "runAtMs": 1787106034222,
+            "status": "ok",
+            "durationMs": 1,
+            "error": null
+          },
+          {
+            "runAtMs": 1787107834224,
+            "status": "ok",
+            "durationMs": 1,
+            "error": null
+          },
+          {
+            "runAtMs": 1787109634227,
+            "status": "ok",
+            "durationMs": 1,
+            "error": null
+          },
+          {
+            "runAtMs": 1787111434230,
+            "status": "ok",
+            "durationMs": 0,
+            "error": null
+          },
+          {
+            "runAtMs": 1787113234231,
+            "status": "ok",
+            "durationMs": 1,
+            "error": null
+          },
+          {
+            "runAtMs": 1787115034233,
+            "status": "ok",
+            "durationMs": 0,
+            "error": null
+          },
+          {
+            "runAtMs": 1787116834234,
             "status": "ok",
             "durationMs": 1,
             "error": null
           }
         ]
       },
-      "createdAtMs": 1786439475374,
-      "updatedAtMs": 1786443075385,
+      "createdAtMs": 1786551633322,
+      "updatedAtMs": 1787116834235,
       "deleteAfterRun": false
     }
   ]

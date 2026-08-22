@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-42__q0170",
+  "sampleId": "conv-42",
+  "questionIndex": 170,
+  "question": "Why did Joanna name the stuffed animal dog Tilly?",
+  "answer": "after a dog she had in Michigan",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D24:6"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D16:3",
+      "D28:30",
+      "D11:9",
+      "D28:4",
+      "D13:4",
+      "D13:11",
+      "D24:7",
+      "D20:5",
+      "D11:5",
+      "D15:17"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 488.373,
+    "injectedChars": 1745,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 83,
+      "completion_tokens": 3,
+      "total_tokens": 86
+    },
+    "latencyMs": 901,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 593,
+      "completion_tokens": 4,
+      "total_tokens": 597
+    },
+    "latencyMs": 1067,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 1745
+  },
+  "f1Delta": 0.0
+}

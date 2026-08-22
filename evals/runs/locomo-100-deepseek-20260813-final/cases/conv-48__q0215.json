@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-48__q0215",
+  "sampleId": "conv-48",
+  "questionIndex": 215,
+  "question": "How did Deborah come to have her pet, Susie?",
+  "answer": "No information available",
+  "adversarialAnswer": "She adopted her two years ago when feeling lonely.",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D16:6"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D16:5",
+      "D22:4",
+      "D3:12",
+      "D26:7",
+      "D28:19",
+      "D26:1",
+      "D30:1",
+      "D16:7",
+      "D27:2",
+      "D11:6"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 212.074,
+    "injectedChars": 2541,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "(b) She adopted her two years ago when feeling lonely.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 108,
+      "completion_tokens": 12,
+      "total_tokens": 120
+    },
+    "latencyMs": 1260,
+    "answer": "She adopted her two years ago when feeling lonely.",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 770,
+      "completion_tokens": 3,
+      "total_tokens": 773
+    },
+    "latencyMs": 1273,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 2541
+  },
+  "f1Delta": 1.0
+}

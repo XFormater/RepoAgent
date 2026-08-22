@@ -1,0 +1,68 @@
+{
+  "caseId": "conv-44__q0035",
+  "sampleId": "conv-44",
+  "questionIndex": 35,
+  "question": "What are the names of Andrew's dogs?",
+  "answer": "Toby, Scout, Buddy",
+  "adversarialAnswer": null,
+  "category": 1,
+  "categoryName": "multi_hop",
+  "evidence": [
+    "D12:1",
+    "D24:6",
+    "D28:8"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D17:2",
+      "D10:7",
+      "D11:9",
+      "D20:39",
+      "D10:19",
+      "D10:6",
+      "D19:12",
+      "D11:7",
+      "D11:34",
+      "D10:15"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1821.615,
+    "injectedChars": 3492,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 81,
+      "completion_tokens": 3,
+      "total_tokens": 84
+    },
+    "latencyMs": 1264,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 1006,
+      "completion_tokens": 3,
+      "total_tokens": 1009
+    },
+    "latencyMs": 744,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 3492
+  },
+  "f1Delta": 0.0
+}

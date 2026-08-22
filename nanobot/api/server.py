@@ -8,10 +8,14 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import hashlib
 import hmac
 import json as _json
+import re
 import time
 import uuid
+from collections.abc import Mapping
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Awaitable, Callable, cast
 
 from aiohttp import web
@@ -134,6 +138,62 @@ def _as_str(value: object) -> str:
     return value if isinstance(value, str) else ""
 
 
+_IDENTITY_RE = re.compile(r"^[A-Za-z0-9._:@+-]{1,128}$")
+
+
+def _request_header(request: web.Request, name: str) -> str:
+    """Read a header while remaining compatible with lightweight test doubles."""
+    headers = getattr(request, "headers", None)
+    if not isinstance(headers, Mapping):
+        return ""
+    value = headers.get(name, "")
+    return value if isinstance(value, str) else ""
+
+
+def _request_identity(request: web.Request, requested_session: object = None) -> tuple[str, str, str]:
+    """Resolve ingress identity before constructing any session or file path.
+
+    Deployments with an upstream identity provider should replace these headers
+    at the gateway.  Invalid or missing values fall back to the API session,
+    never to arbitrary path fragments.
+    """
+    tenant = _request_header(request, "X-Nanobot-Tenant") or "default"
+    user = _request_header(request, "X-Nanobot-User")
+    session = requested_session if isinstance(requested_session, str) else ""
+    if not _IDENTITY_RE.fullmatch(tenant):
+        tenant = "default"
+    if not _IDENTITY_RE.fullmatch(user):
+        user = session if _IDENTITY_RE.fullmatch(session) else "default"
+    if not _IDENTITY_RE.fullmatch(session):
+        session = "default"
+    return tenant, user, session
+
+
+def _identity_media_dir(tenant: str, user: str):
+    key = hashlib.sha256(f"{tenant}:{user}".encode("utf-8")).hexdigest()[:24]
+    directory = get_media_dir("api") / key
+    directory.mkdir(parents=True, exist_ok=True)
+    return directory
+
+
+def _relocate_media_paths(paths: list[str], target_dir: Path) -> list[str]:
+    """Move multipart uploads from the staging directory into the identity root."""
+    target_dir.mkdir(parents=True, exist_ok=True)
+    relocated: list[str] = []
+    target_root = target_dir.resolve(strict=False)
+    for raw_path in paths:
+        source = Path(raw_path)
+        destination = target_dir / source.name
+        try:
+            if source.resolve(strict=False).parent != target_root:
+                source.replace(destination)
+            relocated.append(str(destination))
+        except OSError:
+            logger.warning("Unable to relocate uploaded media {}", source)
+            raise
+    return relocated
+
+
 def _require_json_object(value: object, field: str) -> dict[str, Any]:
     """Validate an object-valued field from an untrusted JSON request."""
     if not isinstance(value, dict):
@@ -178,7 +238,11 @@ _SSE_DONE = b"data: [DONE]\n\n"
 # ---------------------------------------------------------------------------
 
 
-def _parse_json_content(body: dict[str, Any]) -> tuple[str, list[str]]:
+def _parse_json_content(
+    body: dict[str, Any],
+    *,
+    media_dir: Any | None = None,
+) -> tuple[str, list[str]]:
     """Parse JSON request body. Returns (text, media_paths)."""
     messages_value = cast(object, body.get("messages"))
     if not isinstance(messages_value, list):
@@ -194,7 +258,7 @@ def _parse_json_content(body: dict[str, Any]) -> tuple[str, list[str]]:
         raise ValueError("Only a single user message is supported")
 
     user_content = message.get("content", "")
-    media_dir = get_media_dir("api")
+    media_dir = media_dir or get_media_dir("api")
     media_paths: list[str] = []
 
     if isinstance(user_content, list):
@@ -237,9 +301,13 @@ def _parse_json_content(body: dict[str, Any]) -> tuple[str, list[str]]:
     return text, media_paths
 
 
-async def _parse_multipart(request: web.Request) -> tuple[str, list[str], str | None, str | None]:
+async def _parse_multipart(
+    request: web.Request,
+    *,
+    media_dir: Any | None = None,
+) -> tuple[str, list[str], str | None, str | None]:
     """Parse multipart/form-data. Returns (text, media_paths, session_id, model)."""
-    media_dir = get_media_dir("api")
+    media_dir = media_dir or get_media_dir("api")
     reader = await request.multipart()
     text = ""
     session_id = None
@@ -295,9 +363,30 @@ async def handle_chat_completions(request: web.Request) -> web.Response | web.St
     )
 
     stream = False
+    tenant_id = "default"
+    user_id = "default"
     try:
         if content_type.startswith("multipart/"):
-            text, media_paths, session_id, requested_model = await _parse_multipart(request)
+            has_explicit_user = bool(
+                _IDENTITY_RE.fullmatch(_request_header(request, "X-Nanobot-User"))
+            )
+            tenant_id, user_id, _ = _request_identity(request)
+            pending_media_dir = get_media_dir("api") / "_pending"
+            pending_media_dir.mkdir(parents=True, exist_ok=True)
+            text, media_paths, session_id, requested_model = await _parse_multipart(
+                request,
+                media_dir=(
+                    _identity_media_dir(tenant_id, user_id)
+                    if has_explicit_user
+                    else pending_media_dir
+                ),
+            )
+            if not has_explicit_user:
+                tenant_id, user_id, _ = _request_identity(request, session_id)
+                media_paths = _relocate_media_paths(
+                    media_paths,
+                    _identity_media_dir(tenant_id, user_id),
+                )
         else:
             try:
                 body = await request.json()
@@ -308,8 +397,12 @@ async def handle_chat_completions(request: web.Request) -> web.Response | web.St
             body = cast(dict[str, Any], body)
             stream = body.get("stream", False)
             requested_model = body.get("model")
-            text, media_paths = _parse_json_content(body)
             session_id = body.get("session_id")
+            tenant_id, user_id, _ = _request_identity(request, session_id)
+            text, media_paths = _parse_json_content(
+                body,
+                media_dir=_identity_media_dir(tenant_id, user_id),
+            )
     except ValueError as e:
         return _error_json(400, str(e))
     except _FileSizeExceeded as e:
@@ -321,7 +414,21 @@ async def handle_chat_completions(request: web.Request) -> web.Response | web.St
     if requested_model and requested_model != model_name:
         return _error_json(400, f"Only configured model '{model_name}' is available")
 
-    session_key = f"api:{session_id}" if session_id else API_SESSION_KEY
+    _, _, safe_session = _request_identity(request, session_id)
+    explicit_identity = bool(
+        _request_header(request, "X-Nanobot-Tenant")
+        or _request_header(request, "X-Nanobot-User")
+    )
+    session_key = (
+        f"api:{tenant_id}:{user_id}:{safe_session}"
+        if explicit_identity
+        else (f"api:{safe_session}" if safe_session != "default" else API_SESSION_KEY)
+    )
+    request_metadata = {
+        "tenant_id": tenant_id,
+        "user_id": user_id,
+        "identity_source": "api_headers_or_session",
+    }
     session_locks: dict[str, asyncio.Lock] = _app_value(
         request.app,
         _SESSION_LOCKS_KEY,
@@ -371,6 +478,7 @@ async def handle_chat_completions(request: web.Request) -> web.Response | web.St
                             chat_id=API_CHAT_ID,
                             on_stream=_on_stream,
                             on_stream_end=_on_stream_end,
+                            metadata=request_metadata,
                         ),
                         timeout=timeout_s,
                     )
@@ -415,6 +523,7 @@ async def handle_chat_completions(request: web.Request) -> web.Response | web.St
                         channel="api",
                         chat_id=API_CHAT_ID,
                         hooks=[usage_capture],
+                        metadata=request_metadata,
                     ),
                     timeout=timeout_s,
                 )

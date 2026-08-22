@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-30__q0058",
+  "sampleId": "conv-30",
+  "questionIndex": 58,
+  "question": "Why did Jon shut down his bank account?",
+  "answer": "for his business",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D8:1"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D8:1",
+      "D5:14",
+      "D14:11",
+      "D16:15",
+      "D19:3",
+      "D13:17",
+      "D4:15",
+      "D4:16",
+      "D6:17",
+      "D12:6"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 465.972,
+    "injectedChars": 1596,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "He was moving to a new country.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 81,
+      "completion_tokens": 8,
+      "total_tokens": 89
+    },
+    "latencyMs": 1429,
+    "answer": "He was moving to a new country.",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "He needed to do it for his biz.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 570,
+      "completion_tokens": 9,
+      "total_tokens": 579
+    },
+    "latencyMs": 1058,
+    "answer": "He needed to do it for his biz.",
+    "f1": 0.36363636363636365,
+    "injectedChars": 1596
+  },
+  "f1Delta": 0.36363636363636365
+}

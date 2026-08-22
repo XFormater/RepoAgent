@@ -1,0 +1,127 @@
+{
+  "thresholds": {
+    "minCaseScore": 1.0,
+    "minPassRate": 0.9,
+    "minMeanScore": 0.98,
+    "maxMeanScoreRegression": 0.01
+  },
+  "cases": [
+    {
+      "caseId": "bfcl:simple_python_15",
+      "taskInput": "Function-calling evaluation. Do not execute the function. Return only one JSON object with keys name and arguments.\nUser request: Calculate the area under the curve from x = -2 to x = 3 for the function y = x^3 using simpson method.\nAvailable function: {\"name\": \"integrate\", \"description\": \"Calculate the area under a curve for a specified function between two x values.\", \"parameters\": {\"type\": \"dict\", \"properties\": {\"function\": {\"type\": \"string\", \"description\": \"The function to integrate, represented as a string. For example, 'x^3'\"}, \"start_x\": {\"type\": \"integer\", \"description\": \"The starting x-value to integrate over.\"}, \"end_x\": {\"type\": \"integer\", \"description\": \"The ending x-value to integrate over.\"}, \"method\": {\"type\": \"string\", \"description\": \"The method of numerical integration to use. Choices are 'trapezoid' or 'simpson'. Default is 'trapezoid'.\"}}, \"required\": [\"function\", \"start_x\", \"end_x\"]}}",
+      "tags": [
+        "bfcl",
+        "tool-selection",
+        "argument-grounding"
+      ],
+      "expectedSuccess": true,
+      "requiredTerms": [],
+      "forbiddenTerms": [
+        "```"
+      ],
+      "requiredPatterns": [
+        "\"name\"\\s*:\\s*\"integrate\"",
+        "\"function\"\\s*:\\s*\"x\\*\\*3\"",
+        "\"start_x\"\\s*:\\s*\\-2",
+        "\"end_x\"\\s*:\\s*3",
+        "\"method\"\\s*:\\s*\"simpson\""
+      ],
+      "minOutputChars": 0,
+      "maxOutputChars": 2000,
+      "maxLatencyMs": 60000,
+      "maxToolCalls": 0
+    },
+    {
+      "caseId": "bfcl:simple_python_16",
+      "taskInput": "Function-calling evaluation. Do not execute the function. Return only one JSON object with keys name and arguments.\nUser request: Calculate the derivative of the function 2x^2 at x = 1.\nAvailable function: {\"name\": \"calculus.derivative\", \"description\": \"Compute the derivative of a function at a specific value.\", \"parameters\": {\"type\": \"dict\", \"properties\": {\"function\": {\"type\": \"string\", \"description\": \"The function to calculate the derivative of.\"}, \"value\": {\"type\": \"integer\", \"description\": \"The value where the derivative needs to be calculated at.\"}, \"function_variable\": {\"type\": \"string\", \"description\": \"The variable present in the function, for instance x or y, etc. Default is 'x'.\"}}, \"required\": [\"function\", \"value\"]}}",
+      "tags": [
+        "bfcl",
+        "tool-selection",
+        "argument-grounding"
+      ],
+      "expectedSuccess": true,
+      "requiredTerms": [],
+      "forbiddenTerms": [
+        "```"
+      ],
+      "requiredPatterns": [
+        "\"name\"\\s*:\\s*\"calculus\\.derivative\"",
+        "\"function\"\\s*:\\s*\"2x\\*\\*2\"",
+        "\"value\"\\s*:\\s*1",
+        "\"function_variable\"\\s*:\\s*\"x\""
+      ],
+      "minOutputChars": 0,
+      "maxOutputChars": 2000,
+      "maxLatencyMs": 60000,
+      "maxToolCalls": 0
+    },
+    {
+      "caseId": "bfcl:simple_python_17",
+      "taskInput": "Function-calling evaluation. Do not execute the function. Return only one JSON object with keys name and arguments.\nUser request: Find the prime factors of 450\nAvailable function: {\"name\": \"get_prime_factors\", \"description\": \"Function to retrieve prime factors of a number.\", \"parameters\": {\"type\": \"dict\", \"properties\": {\"number\": {\"type\": \"integer\", \"description\": \"Number for which prime factors need to be calculated\"}, \"formatted\": {\"type\": \"boolean\", \"description\": \"Return formatted string if true, array if false. Default is true.\"}}, \"required\": [\"number\", \"formatted\"]}}",
+      "tags": [
+        "bfcl",
+        "tool-selection",
+        "argument-grounding"
+      ],
+      "expectedSuccess": true,
+      "requiredTerms": [],
+      "forbiddenTerms": [
+        "```"
+      ],
+      "requiredPatterns": [
+        "\"name\"\\s*:\\s*\"get_prime_factors\"",
+        "\"number\"\\s*:\\s*450",
+        "\"formatted\"\\s*:\\s*true"
+      ],
+      "minOutputChars": 0,
+      "maxOutputChars": 2000,
+      "maxLatencyMs": 60000,
+      "maxToolCalls": 0
+    },
+    {
+      "caseId": "bfcl:simple_python_18",
+      "taskInput": "Function-calling evaluation. Do not execute the function. Return only one JSON object with keys name and arguments.\nUser request: Find the prime factors of the number 123456.\nAvailable function: {\"name\": \"number_analysis.prime_factors\", \"description\": \"Compute the prime factors of a number.\", \"parameters\": {\"type\": \"dict\", \"properties\": {\"number\": {\"type\": \"integer\", \"description\": \"The number to be factored.\"}}, \"required\": [\"number\"]}}",
+      "tags": [
+        "bfcl",
+        "tool-selection",
+        "argument-grounding"
+      ],
+      "expectedSuccess": true,
+      "requiredTerms": [],
+      "forbiddenTerms": [
+        "```"
+      ],
+      "requiredPatterns": [
+        "\"name\"\\s*:\\s*\"number_analysis\\.prime_factors\"",
+        "\"number\"\\s*:\\s*123456"
+      ],
+      "minOutputChars": 0,
+      "maxOutputChars": 2000,
+      "maxLatencyMs": 60000,
+      "maxToolCalls": 0
+    },
+    {
+      "caseId": "bfcl:simple_python_19",
+      "taskInput": "Function-calling evaluation. Do not execute the function. Return only one JSON object with keys name and arguments.\nUser request: Calculate the greatest common divisor of two numbers: 40 and 50\nAvailable function: {\"name\": \"math.gcd\", \"description\": \"Compute the greatest common divisor of two numbers\", \"parameters\": {\"type\": \"dict\", \"properties\": {\"num1\": {\"type\": \"integer\", \"description\": \"The first number.\"}, \"num2\": {\"type\": \"integer\", \"description\": \"The second number.\"}}, \"required\": [\"num1\", \"num2\"]}}",
+      "tags": [
+        "bfcl",
+        "tool-selection",
+        "argument-grounding"
+      ],
+      "expectedSuccess": true,
+      "requiredTerms": [],
+      "forbiddenTerms": [
+        "```"
+      ],
+      "requiredPatterns": [
+        "\"name\"\\s*:\\s*\"math\\.gcd\"",
+        "\"num1\"\\s*:\\s*40",
+        "\"num2\"\\s*:\\s*50"
+      ],
+      "minOutputChars": 0,
+      "maxOutputChars": 2000,
+      "maxLatencyMs": 60000,
+      "maxToolCalls": 0
+    }
+  ]
+}

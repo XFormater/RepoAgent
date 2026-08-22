@@ -1,0 +1,43 @@
+{
+  "caseId": "context-latest-user-fact",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 1934,
+  "error": null,
+  "passed": true,
+  "expected": "HARBOR-731",
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "HARBOR-731",
+    "normalizedAnswer": "HARBOR-731",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 6183,
+      "completion_tokens": 6,
+      "total_tokens": 6189,
+      "cached_tokens": 4992,
+      "provider_tokens": 6189
+    },
+    "modelInputMessages": 46,
+    "estimatedInputTokens": 6262
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": true,
+    "answer": "HARBOR-731",
+    "normalizedAnswer": "HARBOR-731",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1161,
+      "completion_tokens": 6,
+      "total_tokens": 1167,
+      "provider_tokens": 1167
+    },
+    "modelInputMessages": 10,
+    "estimatedInputTokens": 1186
+  },
+  "qualityDelta": 0,
+  "estimatedTokenReduction": 0.8106036410092622
+}

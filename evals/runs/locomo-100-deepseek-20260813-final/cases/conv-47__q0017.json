@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-47__q0017",
+  "sampleId": "conv-47",
+  "questionIndex": 17,
+  "question": "What is the board game where you have to find the imposter that John mentions to James?",
+  "answer": "Mafia",
+  "adversarialAnswer": null,
+  "category": 3,
+  "categoryName": "open_domain",
+  "evidence": [
+    "D8:36"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D30:9",
+      "D10:7",
+      "D22:8",
+      "D24:3",
+      "D17:17",
+      "D17:29",
+      "D3:15",
+      "D27:5",
+      "D27:9",
+      "D9:8"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1327.962,
+    "injectedChars": 2446,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_off",
+    "memory_on"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 91,
+      "completion_tokens": 3,
+      "total_tokens": 94
+    },
+    "latencyMs": 830,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 739,
+      "completion_tokens": 3,
+      "total_tokens": 742
+    },
+    "latencyMs": 1389,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2446
+  },
+  "f1Delta": 0.0
+}

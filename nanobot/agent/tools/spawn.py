@@ -134,6 +134,16 @@ class SpawnTool(Tool):
         ):
             call_kwargs["tenant_id"] = str(request_ctx.metadata.get("tenant_id", "default"))
         if any(
+            p.name == "user_id" or p.kind is inspect.Parameter.VAR_KEYWORD
+            for p in parameters
+        ):
+            call_kwargs["user_id"] = str(
+                request_ctx.metadata.get("user_id")
+                or request_ctx.user_id
+                or request_ctx.sender_id
+                or "default"
+            )
+        if any(
             p.name == "exclusive_workspace" or p.kind is inspect.Parameter.VAR_KEYWORD
             for p in parameters
         ):

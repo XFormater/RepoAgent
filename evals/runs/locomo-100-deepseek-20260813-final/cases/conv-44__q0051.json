@@ -1,0 +1,69 @@
+{
+  "caseId": "conv-44__q0051",
+  "sampleId": "conv-44",
+  "questionIndex": 51,
+  "question": "What items has Audrey bought or made for her dogs?",
+  "answer": "dog tags, toys, dog beds, collars",
+  "adversarialAnswer": null,
+  "category": 1,
+  "categoryName": "multi_hop",
+  "evidence": [
+    "D1:2",
+    "D9:5",
+    "D18:10",
+    "D24:1"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D8:18",
+      "D15:5",
+      "D11:16",
+      "D24:18",
+      "D12:8",
+      "D9:11",
+      "D12:6",
+      "D10:3",
+      "D24:17",
+      "D11:10"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1490.247,
+    "injectedChars": 2171,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 83,
+      "completion_tokens": 4,
+      "total_tokens": 87
+    },
+    "latencyMs": 978,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "Audrey made personalized tags for them.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 694,
+      "completion_tokens": 8,
+      "total_tokens": 702
+    },
+    "latencyMs": 1027,
+    "answer": "Audrey made personalized tags for them.",
+    "f1": 0.0625,
+    "injectedChars": 2171
+  },
+  "f1Delta": 0.0625
+}

@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-30__q0080",
+  "sampleId": "conv-30",
+  "questionIndex": 80,
+  "question": "What plans does Jon have after receiving advice at the networking event?",
+  "answer": "Sprucing up his business plan, tweaking his pitch to investors, and working on an online platform.",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D18:10"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D16:4",
+      "D6:7",
+      "D14:7",
+      "D1:26",
+      "D18:9",
+      "D11:3",
+      "D15:10",
+      "D12:2",
+      "D8:22",
+      "D18:12"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 377.757,
+    "injectedChars": 1841,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "He plans to follow up with contacts and explore new opportunities.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 85,
+      "completion_tokens": 12,
+      "total_tokens": 97
+    },
+    "latencyMs": 1250,
+    "answer": "He plans to follow up with contacts and explore new opportunities.",
+    "f1": 0.25,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 615,
+      "completion_tokens": 3,
+      "total_tokens": 618
+    },
+    "latencyMs": 1324,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 1841
+  },
+  "f1Delta": -0.25
+}

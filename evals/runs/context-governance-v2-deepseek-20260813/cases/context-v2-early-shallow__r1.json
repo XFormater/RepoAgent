@@ -1,0 +1,47 @@
+{
+  "caseId": "context-v2-early-shallow",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 2092,
+  "error": null,
+  "passed": false,
+  "expected": "RIVER-125",
+  "contextCaseType": "early_dependency",
+  "contextBlockLimit": 1200,
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "RIVER-125",
+    "normalizedAnswer": "RIVER-125",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1507,
+      "completion_tokens": 4,
+      "total_tokens": 1511,
+      "provider_tokens": 1511
+    },
+    "modelInputMessages": 18,
+    "estimatedInputTokens": 1546,
+    "providerPromptTokens": 1507
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": false,
+    "answer": "UNKNOWN",
+    "normalizedAnswer": "UNKNOWN",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1076,
+      "completion_tokens": 2,
+      "total_tokens": 1078,
+      "provider_tokens": 1078
+    },
+    "modelInputMessages": 12,
+    "estimatedInputTokens": 1103,
+    "providerPromptTokens": 1076
+  },
+  "qualityDelta": -1,
+  "estimatedTokenReduction": 0.2865459249676585,
+  "providerPromptTokenReduction": 0.2859986728599867
+}

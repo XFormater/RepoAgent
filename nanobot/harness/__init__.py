@@ -1,6 +1,16 @@
 """Public multi-agent harness API."""
 
 from nanobot.harness.context import ContextProjector, DependencyResult, RuntimeContext
+from nanobot.harness.evaluation import (
+    CaseEvaluation,
+    CriterionResult,
+    EvaluationCase,
+    EvaluationObservation,
+    EvaluationReport,
+    EvaluationThresholds,
+    evaluate_case,
+    evaluate_suite,
+)
 from nanobot.harness.metrics import HarnessMetrics
 from nanobot.harness.models import (
     AgentInstance,
@@ -47,12 +57,18 @@ __all__ = [
     "Checkpoint",
     "ContextPolicy",
     "ContextProjector",
+    "CriterionResult",
+    "CaseEvaluation",
     "DependencyResult",
     "HarnessCapacityError",
     "HarnessConflictError",
     "HarnessScheduler",
     "HarnessMetrics",
     "HarnessService",
+    "EvaluationCase",
+    "EvaluationObservation",
+    "EvaluationReport",
+    "EvaluationThresholds",
     "HarnessWorker",
     "HarnessPoolWorker",
     "InMemoryHarnessStore",
@@ -75,4 +91,6 @@ __all__ = [
     "reviewer_agent_spec",
     "spec_for_role",
     "worker_agent_spec",
+    "evaluate_case",
+    "evaluate_suite",
 ]

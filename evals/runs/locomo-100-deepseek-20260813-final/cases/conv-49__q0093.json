@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-49__q0093",
+  "sampleId": "conv-49",
+  "questionIndex": 93,
+  "question": "What novel is Evan reading that he finds gripping?",
+  "answer": "The Great Gatsby",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D4:10"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D1:10",
+      "D15:17",
+      "D2:17",
+      "D15:10",
+      "D16:17",
+      "D15:12",
+      "D15:14",
+      "D15:18",
+      "D20:14",
+      "D4:11"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 930.645,
+    "injectedChars": 1669,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 82,
+      "completion_tokens": 4,
+      "total_tokens": 86
+    },
+    "latencyMs": 946,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 571,
+      "completion_tokens": 4,
+      "total_tokens": 575
+    },
+    "latencyMs": 940,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 1669
+  },
+  "f1Delta": 0.0
+}

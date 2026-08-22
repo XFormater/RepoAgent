@@ -71,6 +71,8 @@ class HarnessAgentExecutor:
                 runtime=runtime,
                 metadata=dict(context.task_metadata),
                 workspace=workspace,
+                tenant_id=context.tenant_id,
+                user_id=str(context.task_metadata.get("user_id") or context.agent_id),
             )
         )
         workspace_token = bind_workspace_scope(scope)

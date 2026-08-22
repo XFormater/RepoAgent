@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-44__q0103",
+  "sampleId": "conv-44",
+  "questionIndex": 103,
+  "question": "What organization does Audrey donate a portion of his profits to?",
+  "answer": "Animal shelter",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D22:7"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D9:1",
+      "D7:5",
+      "D2:9",
+      "D10:23",
+      "D19:26",
+      "D20:20",
+      "D9:6",
+      "D22:7",
+      "D4:15",
+      "D23:5"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 838.459,
+    "injectedChars": 2661,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 84,
+      "completion_tokens": 4,
+      "total_tokens": 88
+    },
+    "latencyMs": 1007,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 812,
+      "completion_tokens": 3,
+      "total_tokens": 815
+    },
+    "latencyMs": 1062,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2661
+  },
+  "f1Delta": 0.0
+}

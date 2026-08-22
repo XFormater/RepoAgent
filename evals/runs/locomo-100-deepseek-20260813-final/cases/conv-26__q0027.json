@@ -1,0 +1,67 @@
+{
+  "caseId": "conv-26__q0027",
+  "sampleId": "conv-26",
+  "questionIndex": 27,
+  "question": "Would Caroline pursue writing as a career option?",
+  "answer": "LIkely no; though she likes reading, she wants to be a counselor",
+  "adversarialAnswer": null,
+  "category": 3,
+  "categoryName": "open_domain",
+  "evidence": [
+    "D7:5",
+    "D7:9"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D15:15",
+      "D6:10",
+      "D15:19",
+      "D15:24",
+      "D14:19",
+      "D13:6",
+      "D9:14",
+      "D14:35",
+      "D11:2",
+      "D2:14"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 2619.493,
+    "injectedChars": 2690,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_off",
+    "memory_on"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 81,
+      "completion_tokens": 3,
+      "total_tokens": 84
+    },
+    "latencyMs": 944,
+    "answer": "No information available",
+    "f1": 0.4,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 803,
+      "completion_tokens": 3,
+      "total_tokens": 806
+    },
+    "latencyMs": 1003,
+    "answer": "No information available",
+    "f1": 0.4,
+    "injectedChars": 2690
+  },
+  "f1Delta": 0.0
+}

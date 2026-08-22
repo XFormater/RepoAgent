@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-44__q0141",
+  "sampleId": "conv-44",
+  "questionIndex": 141,
+  "question": "How does Andrew describe the new beds for his dogs?",
+  "answer": "No information available",
+  "adversarialAnswer": "Super cozy and comfy",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D18:12"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D28:12",
+      "D11:11",
+      "D13:5",
+      "D10:3",
+      "D10:4",
+      "D25:7",
+      "D18:21",
+      "D13:6",
+      "D10:17",
+      "D9:20"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 366.236,
+    "injectedChars": 2675,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "Super cozy and comfy",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 103,
+      "completion_tokens": 5,
+      "total_tokens": 108
+    },
+    "latencyMs": 1361,
+    "answer": "Super cozy and comfy",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 811,
+      "completion_tokens": 4,
+      "total_tokens": 815
+    },
+    "latencyMs": 965,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 2675
+  },
+  "f1Delta": 1.0
+}

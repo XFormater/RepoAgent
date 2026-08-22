@@ -1,0 +1,42 @@
+{
+  "caseId": "context-recent-constraint",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 2177,
+  "error": null,
+  "passed": true,
+  "expected": "LANTERN-284",
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "LANTERN-284",
+    "normalizedAnswer": "LANTERN-284",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 5071,
+      "completion_tokens": 4,
+      "total_tokens": 5075,
+      "provider_tokens": 5075
+    },
+    "modelInputMessages": 38,
+    "estimatedInputTokens": 5138
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": true,
+    "answer": "LANTERN-284",
+    "normalizedAnswer": "LANTERN-284",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1165,
+      "completion_tokens": 4,
+      "total_tokens": 1169,
+      "provider_tokens": 1169
+    },
+    "modelInputMessages": 10,
+    "estimatedInputTokens": 1190
+  },
+  "qualityDelta": 0,
+  "estimatedTokenReduction": 0.7683923705722071
+}

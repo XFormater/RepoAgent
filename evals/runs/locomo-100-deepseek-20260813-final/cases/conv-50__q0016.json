@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-50__q0016",
+  "sampleId": "conv-50",
+  "questionIndex": 16,
+  "question": "When did Dave take a trip to mountainous regions?",
+  "answer": "July 2023",
+  "adversarialAnswer": null,
+  "category": 2,
+  "categoryName": "temporal",
+  "evidence": [
+    "D8:10"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D8:10",
+      "D25:17",
+      "D12:6",
+      "D4:7",
+      "D3:12",
+      "D22:5",
+      "D30:8",
+      "D23:18",
+      "D4:1",
+      "D20:1"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 1386.602,
+    "injectedChars": 3359,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 82,
+      "completion_tokens": 3,
+      "total_tokens": 85
+    },
+    "latencyMs": 942,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "Next month from 9 June, 2023.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 972,
+      "completion_tokens": 11,
+      "total_tokens": 983
+    },
+    "latencyMs": 1069,
+    "answer": "Next month from 9 June, 2023.",
+    "f1": 0.25,
+    "injectedChars": 3359
+  },
+  "f1Delta": 0.25
+}

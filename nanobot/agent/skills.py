@@ -30,9 +30,23 @@ class SkillsLoader:
 
     def __init__(self, workspace: Path, builtin_skills_dir: Path | None = None, disabled_skills: set[str] | None = None):
         self.workspace = workspace
-        self.workspace_skills = workspace / "skills"
+        self.workspace_skill_roots = [workspace / "skills"]
         self.builtin_skills = builtin_skills_dir or BUILTIN_SKILLS_DIR
         self.disabled_skills = disabled_skills or set()
+
+    @property
+    def workspace_skills(self) -> Path:
+        return self.workspace_skill_roots[0]
+
+    def with_workspace_skill_root(self, root: Path) -> "SkillsLoader":
+        """Return a request-local loader with an additional private skill root."""
+        scoped = SkillsLoader(
+            self.workspace,
+            builtin_skills_dir=self.builtin_skills,
+            disabled_skills=set(self.disabled_skills),
+        )
+        scoped.workspace_skill_roots = [root.resolve(strict=False), *self.workspace_skill_roots]
+        return scoped
 
     def _skill_entries_from_dir(self, base: Path, source: str, *, skip_names: set[str] | None = None) -> list[dict[str, str]]:
         if not base.exists():
@@ -60,8 +74,16 @@ class SkillsLoader:
         Returns:
             List of skill info dicts with 'name', 'path', 'source'.
         """
-        skills = self._skill_entries_from_dir(self.workspace_skills, "workspace")
-        workspace_names = {entry["name"] for entry in skills}
+        skills: list[dict[str, str]] = []
+        workspace_names: set[str] = set()
+        for workspace_root in self.workspace_skill_roots:
+            entries = self._skill_entries_from_dir(
+                workspace_root,
+                "workspace",
+                skip_names=workspace_names,
+            )
+            skills.extend(entries)
+            workspace_names.update(entry["name"] for entry in entries)
         if self.builtin_skills and self.builtin_skills.exists():
             skills.extend(
                 self._skill_entries_from_dir(self.builtin_skills, "builtin", skip_names=workspace_names)
@@ -84,7 +106,7 @@ class SkillsLoader:
         Returns:
             Skill content or None if not found.
         """
-        roots = [self.workspace_skills]
+        roots = [*self.workspace_skill_roots]
         if self.builtin_skills:
             roots.append(self.builtin_skills)
         for root in roots:
@@ -143,10 +165,11 @@ class SkillsLoader:
             return ""
 
         sections: list[str] = []
-        groups = (
-            ("Workspace skills", "workspace", self.workspace_skills),
-            ("Built-in skills", "builtin", self.builtin_skills),
-        )
+        groups = [
+            ("Workspace skills", "workspace", root)
+            for root in self.workspace_skill_roots
+        ]
+        groups.append(("Built-in skills", "builtin", self.builtin_skills))
         for label, source, root in groups:
             entries = [
                 entry
@@ -166,7 +189,10 @@ class SkillsLoader:
                 if not available:
                     missing = self._get_missing_requirements(meta)
                     suffix = f" (unavailable: {missing})" if missing else " (unavailable)"
-                relative_path = Path(entry["path"]).relative_to(root).as_posix()
+                try:
+                    relative_path = Path(entry["path"]).relative_to(root).as_posix()
+                except ValueError:
+                    relative_path = Path(entry["path"]).name
                 lines.append(f"- **{skill_name}** — {desc}{suffix}  `{relative_path}`")
             sections.append("\n".join(lines))
         return "\n\n".join(sections)

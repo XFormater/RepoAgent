@@ -1,0 +1,55 @@
+{
+  "caseId": "context-v2-early-shallow",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 1758,
+  "error": null,
+  "passed": false,
+  "expected": "RIVER-125",
+  "contextCaseType": "early_dependency",
+  "contextBlockLimit": 1200,
+  "sourceInputSha256": "bc19db5359ac6868f11c73956eb968eb57675868fff5b729beb78ddffcef9a5d",
+  "sourceInputMessages": 18,
+  "variantOrder": [
+    "governance_on",
+    "governance_off"
+  ],
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "RIVER-125",
+    "normalizedAnswer": "RIVER-125",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1507,
+      "completion_tokens": 4,
+      "total_tokens": 1511,
+      "cached_tokens": 1408,
+      "provider_tokens": 1511
+    },
+    "modelInputMessages": 18,
+    "estimatedInputTokens": 1546,
+    "providerPromptTokens": 1507
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": false,
+    "answer": "UNKNOWN",
+    "normalizedAnswer": "UNKNOWN",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1076,
+      "completion_tokens": 2,
+      "total_tokens": 1078,
+      "cached_tokens": 1024,
+      "provider_tokens": 1078
+    },
+    "modelInputMessages": 12,
+    "estimatedInputTokens": 1103,
+    "providerPromptTokens": 1076
+  },
+  "qualityDelta": -1,
+  "estimatedTokenReduction": 0.2865459249676585,
+  "providerPromptTokenReduction": 0.2859986728599867
+}

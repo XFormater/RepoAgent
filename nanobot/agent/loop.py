@@ -61,6 +61,13 @@ from nanobot.runtime_context import (
     append_runtime_context,
     runtime_context_blocks_from_metadata,
 )
+from nanobot.security.logical_vfs import (
+    LogicalVFS,
+    LogicalVFSConfig,
+    VFSIdentity,
+    bind_vfs,
+    reset_vfs,
+)
 from nanobot.security.workspace_access import (
     WorkspaceScopeResolver,
     bind_workspace_scope,
@@ -304,6 +311,7 @@ class AgentLoop:
         repository_agent_config: RepositoryAgentConfig | None = None,
         memory_config: MemorySettings | None = None,
         harness_config: HarnessConfig | None = None,
+        vfs_config: LogicalVFSConfig | None = None,
         long_term_memory: LongTermMemoryService | None = None,
     ):
         from nanobot.config.schema import ToolsConfig
@@ -329,6 +337,14 @@ class AgentLoop:
         self.restart_mode = restart_mode
         self._runtime_model_publisher = runtime_model_publisher
         self.workspace = workspace
+        self.vfs = LogicalVFS(workspace, vfs_config or LogicalVFSConfig())
+        if self.vfs.enabled:
+            try:
+                removed = self.vfs.cleanup_expired()
+                if removed:
+                    logger.info("Logical VFS cleaned {} expired namespace(s)", removed)
+            except OSError as exc:
+                logger.warning("Logical VFS cleanup deferred: {}", exc)
         initial_model = model or provider.get_default_model()
         self.max_iterations = (
             max_iterations if max_iterations is not None else defaults.max_tool_iterations
@@ -543,6 +559,9 @@ class AgentLoop:
         self.runner = AgentRunner(self.context_orchestrator)
         self._idle_compact_check_interval_s = idle_compact_check_interval_seconds
         self._next_idle_compact_check_at = time.monotonic()
+        # Start due without consuming the monotonic clock during construction;
+        # this keeps startup deterministic for callers that inject a clock.
+        self._next_vfs_cleanup_at = 0.0
         if model_preset:
             self.set_model_preset(model_preset, publish_update=False)
         self._register_default_tools(provider_snapshot_loader=provider_snapshot_loader)
@@ -561,14 +580,15 @@ class AgentLoop:
             from nanobot.repo_agent.repository import RepositoryManager
             from nanobot.repo_agent.tools import repository_tools
 
-            repository_manager = RepositoryManager(workspace, repository_agent_config)
-            for tool in repository_tools(repository_manager.cache_root):
+            repository_manager = RepositoryManager(workspace, repository_agent_config, vfs=self.vfs)
+            for tool in repository_tools(repository_manager.allowed_roots):
                 self.tools.register(tool)
             self.repository_orchestrator = RepositoryOrchestrator(
                 config=repository_agent_config,
                 workspace=workspace,
                 tools=self.tools,
                 harness=harness,
+                vfs=self.vfs,
             )
         self._runtime_vars: dict[str, Any] = {}
         self._current_iteration: int = 0
@@ -634,6 +654,7 @@ class AgentLoop:
             repository_agent_config=config.repository_agent,
             memory_config=config.memory,
             harness_config=config.harness,
+            vfs_config=config.vfs,
             **extra,
         )
 
@@ -839,18 +860,31 @@ class AgentLoop:
         """Build the initial message list for the LLM turn."""
         assert ctx.session is not None
         scope = self.workspace_scopes.for_message(ctx.msg, ctx.session.metadata)
-        return self.context_orchestrator.build_messages(
-            history=ctx.history,
-            current_message=ctx.msg.content,
-            media=ctx.msg.media if ctx.kind is TurnKind.USER and ctx.msg.media else None,
-            channel=ctx.delivery.route.channel,
-            session_summary=ctx.pending_summary,
-            workspace=scope.project_path,
-            runtime_context_blocks=ctx.runtime_context_blocks,
-            include_memory_recent_history=not ctx.ephemeral,
-            session_key=ctx.session.key,
-            unified_session=self._unified_session,
+        identity = VFSIdentity(
+            tenant_id=str(ctx.msg.metadata.get("tenant_id", "default")),
+            user_id=str(
+                ctx.msg.metadata.get("user_id")
+                or ctx.msg.sender_id
+                or ctx.delivery.route.chat_id
+                or ctx.session.key
+            ),
+            session_id=ctx.session.key,
+            agent_id=str(ctx.msg.metadata.get("agent_id", "main")),
+            task_id=(str(ctx.msg.metadata["task_id"]) if ctx.msg.metadata.get("task_id") else None),
         )
+        with self.vfs.bind(identity):
+            return self.context_orchestrator.build_messages(
+                history=ctx.history,
+                current_message=ctx.msg.content,
+                media=ctx.msg.media if ctx.kind is TurnKind.USER and ctx.msg.media else None,
+                channel=ctx.delivery.route.channel,
+                session_summary=ctx.pending_summary,
+                workspace=scope.project_path,
+                runtime_context_blocks=ctx.runtime_context_blocks,
+                include_memory_recent_history=not ctx.ephemeral,
+                session_key=ctx.session.key,
+                unified_session=self._unified_session,
+            )
 
     def _request_context_for_turn(self, ctx: TurnContext) -> RequestContext:
         assert ctx.session is not None
@@ -871,6 +905,12 @@ class AgentLoop:
             sender_id=ctx.msg.sender_id,
             turn_id=ctx.turn_id,
             workspace=scope.project_path,
+            tenant_id=str(ctx.msg.metadata.get("tenant_id", "default")),
+            user_id=str(
+                ctx.msg.metadata.get("user_id")
+                or ctx.msg.sender_id
+                or ctx.delivery.route.chat_id
+            ),
         )
 
     async def _resolve_runtime_context_for_turn(
@@ -1071,6 +1111,12 @@ class AgentLoop:
                         sender_id=pending_msg.sender_id,
                         turn_id=request_ctx.turn_id,
                         workspace=scope.project_path,
+                        tenant_id=request_ctx.tenant_id,
+                        user_id=str(
+                            pending_msg.metadata.get("user_id")
+                            or pending_msg.sender_id
+                            or pending_msg.chat_id
+                        ),
                     )
                     blocks = await self._resolve_runtime_context_for_request(
                         pending_request,
@@ -1151,9 +1197,31 @@ class AgentLoop:
             runtime=runtime,
             metadata=dict(metadata or {}),
             workspace=effective_scope.project_path,
+            tenant_id=str((metadata or {}).get("tenant_id", "default")),
+            user_id=str((metadata or {}).get("user_id") or (metadata or {}).get("sender_id") or chat_id),
         )
+        if request_context is not None:
+            # Older adapters may construct RequestContext without identity
+            # fields; preserve the trusted values supplied by the turn.
+            request_ctx = dataclasses.replace(
+                request_context,
+                tenant_id=request_context.tenant_id or str((metadata or {}).get("tenant_id", "default")),
+                user_id=request_context.user_id or request_context.sender_id or chat_id,
+            )
         file_state_token = bind_file_states(self._file_state_store.for_session(active_session_key))
         request_token = bind_request_context(request_ctx)
+        vfs_identity = VFSIdentity(
+            tenant_id=request_ctx.tenant_id,
+            user_id=str(request_ctx.user_id or request_ctx.sender_id or chat_id or active_session_key or "default"),
+            session_id=active_session_key,
+            agent_id=str((metadata or {}).get("agent_id", "main")),
+            task_id=(
+                str((metadata or {}).get("task_id"))
+                if (metadata or {}).get("task_id")
+                else None
+            ),
+        )
+        vfs_tokens = bind_vfs(self.vfs, vfs_identity)
         workspace_token = bind_workspace_scope(effective_scope)
         turn_scope_stack = ExitStack()
         # Compute lazily because create_goal may create goal metadata during this run.
@@ -1232,6 +1300,7 @@ class AgentLoop:
         finally:
             turn_scope_stack.close()
             reset_workspace_scope(workspace_token)
+            reset_vfs(vfs_tokens)
             reset_request_context(request_token)
             reset_file_states(file_state_token)
         self._last_usage = result.usage
@@ -1273,6 +1342,14 @@ class AgentLoop:
             self.runtime_for_session,
             active_session_keys=self._pending_queues.keys(),
         )
+        if self.vfs.enabled and now >= self._next_vfs_cleanup_at:
+            self._next_vfs_cleanup_at = now + 300
+            try:
+                removed = self.vfs.cleanup_expired()
+                if removed:
+                    logger.info("Logical VFS cleanup removed {} expired namespace(s)", removed)
+            except OSError as exc:
+                logger.warning("Logical VFS periodic cleanup failed: {}", exc)
 
     async def run(self) -> None:
         """Run the agent loop, dispatching messages as tasks to stay responsive to /stop."""
@@ -1567,6 +1644,7 @@ class AgentLoop:
         delivery: TurnDelivery | None = None,
         on_runtime_admitted: Callable[[LLMRuntime], Awaitable[None]] | None = None,
         attributes: Mapping[str, Any] | None = None,
+        metadata: Mapping[str, Any] | None = None,
     ) -> OutboundMessage | None:
         """Process a single inbound message and return the response."""
         kind = TurnKind.SYSTEM if msg.channel == "system" else TurnKind.USER
@@ -1888,17 +1966,25 @@ class AgentLoop:
         ctx.delivery.record_runtime(runtime)
 
         ctx.request_context = self._request_context_for_turn(ctx)
-        if ctx.kind is TurnKind.USER or is_subagent:
-            ctx.runtime_context_blocks = await self._resolve_runtime_context_for_turn(ctx)
-        if ctx.kind is TurnKind.USER:
-            memory_block = await retrieve_for_turn(self, ctx)
-            if memory_block is not None:
-                ctx.runtime_context_blocks.append(memory_block)
-                self.context_orchestrator.metrics.blocks([memory_block])
-        core_memory = self.context_orchestrator.core_memory_block()
-        if core_memory is not None:
-            ctx.runtime_context_blocks.append(core_memory)
-            self.context_orchestrator.metrics.blocks([core_memory])
+        vfs_identity = VFSIdentity(
+            tenant_id=ctx.request_context.tenant_id,
+            user_id=ctx.request_context.user_id or ctx.request_context.sender_id or ctx.session_key,
+            session_id=ctx.session_key,
+            agent_id=str(ctx.msg.metadata.get("agent_id", "main")),
+            task_id=(str(ctx.msg.metadata["task_id"]) if ctx.msg.metadata.get("task_id") else None),
+        )
+        with self.vfs.bind(vfs_identity):
+            if ctx.kind is TurnKind.USER or is_subagent:
+                ctx.runtime_context_blocks = await self._resolve_runtime_context_for_turn(ctx)
+            if ctx.kind is TurnKind.USER:
+                memory_block = await retrieve_for_turn(self, ctx)
+                if memory_block is not None:
+                    ctx.runtime_context_blocks.append(memory_block)
+                    self.context_orchestrator.metrics.blocks([memory_block])
+            core_memory = self.context_orchestrator.core_memory_block()
+            if core_memory is not None:
+                ctx.runtime_context_blocks.append(core_memory)
+                self.context_orchestrator.metrics.blocks([core_memory])
         staged_provider_state = False
         if stored_state is not None and runtime.provider.can_resume_conversation_state(
             stored_state,
@@ -2439,12 +2525,13 @@ class AgentLoop:
         runtime: LLMRuntime | None = None,
         on_runtime_admitted: Callable[[LLMRuntime], Awaitable[None]] | None = None,
         attributes: Mapping[str, Any] | None = None,
+        metadata: Mapping[str, Any] | None = None,
     ) -> OutboundMessage | None:
         """Process an external message directly and return the outbound payload."""
         if channel == "system":
             raise ValueError("channel 'system' is reserved for internal messages")
         await self._connect_mcp()
-        metadata: dict[str, Any] = {}
+        metadata: dict[str, Any] = dict(metadata or {})
         if not persist_user_message:
             metadata[turn_continuation.SKIP_USER_PERSIST_META] = True
         msg = InboundMessage(

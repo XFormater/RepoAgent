@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-48__q0172",
+  "sampleId": "conv-48",
+  "questionIndex": 172,
+  "question": "What was one of Jolene's favorite games to play with her mom on the nintendo wii game system?",
+  "answer": "Monster Hunter: World",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D24:10"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D24:8",
+      "D2:17",
+      "D30:1",
+      "D27:5",
+      "D28:3",
+      "D19:11",
+      "D22:12",
+      "D19:12",
+      "D24:9",
+      "D29:7"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 546.576,
+    "injectedChars": 3029,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 95,
+      "completion_tokens": 3,
+      "total_tokens": 98
+    },
+    "latencyMs": 1189,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 877,
+      "completion_tokens": 4,
+      "total_tokens": 881
+    },
+    "latencyMs": 973,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 3029
+  },
+  "f1Delta": 0.0
+}

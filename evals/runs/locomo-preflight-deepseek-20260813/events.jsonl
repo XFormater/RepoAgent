@@ -1,0 +1,4 @@
+{"timestamp": "2026-08-13T09:59:36.135500+00:00", "event": "run_started", "selectedQuestions": 1}
+{"timestamp": "2026-08-13T09:59:36.446461+00:00", "event": "conversation_ingested", "sampleId": "conv-26", "records": 419}
+{"timestamp": "2026-08-13T09:59:40.645836+00:00", "event": "case_completed", "caseId": "conv-26__q0015", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T09:59:40.646299+00:00", "event": "run_completed", "evaluatedQuestions": 1, "memoryOnMeanF1": 0.0}

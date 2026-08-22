@@ -1,0 +1,54 @@
+{
+  "caseId": "context-instruction-retention",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 2717,
+  "error": null,
+  "passed": true,
+  "expected": "SUMMIT-509",
+  "contextCaseType": "latest_authority",
+  "contextBlockLimit": 1200,
+  "sourceInputSha256": "1dbeb091299cc730bfa31bd969ab6eca6a313152b25543f9f934fe3a35f0086b",
+  "sourceInputMessages": 54,
+  "variantOrder": [
+    "governance_on",
+    "governance_off"
+  ],
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "SUMMIT-509",
+    "normalizedAnswer": "SUMMIT-509",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 5341,
+      "completion_tokens": 5,
+      "total_tokens": 5346,
+      "cached_tokens": 4864,
+      "provider_tokens": 5346
+    },
+    "modelInputMessages": 54,
+    "estimatedInputTokens": 5431,
+    "providerPromptTokens": 5341
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": true,
+    "answer": "SUMMIT-509",
+    "normalizedAnswer": "SUMMIT-509",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1078,
+      "completion_tokens": 5,
+      "total_tokens": 1083,
+      "provider_tokens": 1083
+    },
+    "modelInputMessages": 12,
+    "estimatedInputTokens": 1105,
+    "providerPromptTokens": 1078
+  },
+  "qualityDelta": 0,
+  "estimatedTokenReduction": 0.796538390719941,
+  "providerPromptTokenReduction": 0.7981651376146789
+}

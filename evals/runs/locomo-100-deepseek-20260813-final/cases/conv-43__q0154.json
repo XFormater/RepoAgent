@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-43__q0154",
+  "sampleId": "conv-43",
+  "questionIndex": 154,
+  "question": "How did John feel about the atmosphere during the big game against the rival team?",
+  "answer": "electric and intense",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D23:5"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D8:3",
+      "D26:9",
+      "D29:12",
+      "D16:10",
+      "D6:11",
+      "D28:11",
+      "D11:13",
+      "D3:21",
+      "D3:29",
+      "D20:36"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 684.324,
+    "injectedChars": 2694,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "He said the atmosphere was electric.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 88,
+      "completion_tokens": 7,
+      "total_tokens": 95
+    },
+    "latencyMs": 945,
+    "answer": "He said the atmosphere was electric.",
+    "f1": 0.28571428571428575,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 795,
+      "completion_tokens": 3,
+      "total_tokens": 798
+    },
+    "latencyMs": 1160,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2694
+  },
+  "f1Delta": -0.28571428571428575
+}

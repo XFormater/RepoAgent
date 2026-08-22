@@ -1,0 +1,22 @@
+{
+  "caseId": "recovery-transient-tool",
+  "layer": "recovery_correctness",
+  "scenario": "transient_tool",
+  "repetition": 1,
+  "latencyMs": 4058,
+  "error": null,
+  "passed": true,
+  "answer": "RECOVERED-118",
+  "normalizedAnswer": "RECOVERED-118",
+  "expected": "RECOVERED-118",
+  "stopReason": "completed",
+  "usage": {
+    "prompt_tokens": 1309,
+    "completion_tokens": 99,
+    "total_tokens": 1408,
+    "provider_tokens": 1408,
+    "cached_tokens": 640
+  },
+  "attempts": 2,
+  "duplicateSideEffects": 0
+}

@@ -1,0 +1,67 @@
+{
+  "caseId": "conv-47__q0072",
+  "sampleId": "conv-47",
+  "questionIndex": 72,
+  "question": "What instrument is John learning to play as of 27 March, 2022?",
+  "answer": "Drums",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D3:2",
+    "D3:3"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D26:9",
+      "D31:10",
+      "D3:15",
+      "D2:14",
+      "D18:15",
+      "D28:2",
+      "D9:12",
+      "D28:34",
+      "D27:5",
+      "D28:4"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1017.618,
+    "injectedChars": 1626,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "guitar",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 89,
+      "completion_tokens": 3,
+      "total_tokens": 92
+    },
+    "latencyMs": 880,
+    "answer": "guitar",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 587,
+      "completion_tokens": 4,
+      "total_tokens": 591
+    },
+    "latencyMs": 896,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 1626
+  },
+  "f1Delta": 0.0
+}

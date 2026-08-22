@@ -1,0 +1,67 @@
+{
+  "caseId": "conv-48__q0073",
+  "sampleId": "conv-48",
+  "questionIndex": 73,
+  "question": "Did Jolene teach herself how to play the console?",
+  "answer": "yes",
+  "adversarialAnswer": null,
+  "category": 1,
+  "categoryName": "multi_hop",
+  "evidence": [
+    "D2:28",
+    "D24:8"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D9:4",
+      "D22:6",
+      "D27:5",
+      "D10:20",
+      "D20:7",
+      "D10:4",
+      "D22:12",
+      "D15:2",
+      "D22:8",
+      "D22:22"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1346.968,
+    "injectedChars": 2908,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 83,
+      "completion_tokens": 4,
+      "total_tokens": 87
+    },
+    "latencyMs": 1015,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 3,
+      "total_tokens": 819
+    },
+    "latencyMs": 1311,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2908
+  },
+  "f1Delta": 0.0
+}

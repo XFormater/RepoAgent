@@ -1,0 +1,24 @@
+{
+  "caseId": "recovery-ack-loss-boundary",
+  "layer": "recovery_correctness",
+  "scenario": "ack_loss",
+  "repetition": 1,
+  "latencyMs": 3067,
+  "error": null,
+  "passed": true,
+  "answer": "COMMITTED-77",
+  "normalizedAnswer": "COMMITTED-77",
+  "expected": "COMMITTED-77",
+  "stopReason": "completed",
+  "usage": {
+    "prompt_tokens": 1526,
+    "completion_tokens": 99,
+    "total_tokens": 1625,
+    "provider_tokens": 1625,
+    "cached_tokens": 896
+  },
+  "commitAttempts": 1,
+  "inspectAttempts": 1,
+  "sideEffects": 1,
+  "duplicateSideEffects": 0
+}

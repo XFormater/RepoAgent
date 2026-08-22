@@ -52,6 +52,24 @@ class HarnessProcessSandboxExecutor:
     def _sandbox_config(self, workspace: Path) -> dict[str, Any]:
         """Return the smallest config required by an isolated child runtime."""
         data = self.config.model_dump(mode="json", by_alias=True, exclude_none=True)
+        # A child only needs the provider selected for this runtime. Never copy
+        # unrelated provider credentials into its short-lived config, even when
+        # the parent has several fallback providers configured.
+        active_provider = self.config.get_provider_name()
+        providers = data.get("providers", {})
+        if active_provider and isinstance(providers, dict):
+            provider_value = providers.get(active_provider)
+            if provider_value is None:
+                provider_value = providers.get(
+                    active_provider.replace("_", "-")
+                )
+            data["providers"] = (
+                {active_provider: provider_value}
+                if isinstance(provider_value, dict)
+                else {}
+            )
+        else:
+            data["providers"] = {}
         agents = data.get("agents", {})
         defaults = agents.get("defaults", {})
         defaults["workspace"] = str(workspace)
@@ -264,4 +282,3 @@ class HarnessProcessSandboxExecutor:
         if envelope.get("kind") != "text" or not isinstance(envelope.get("value"), str):
             raise RuntimeError("Harness sandbox returned an invalid result envelope")
         return envelope["value"]
-

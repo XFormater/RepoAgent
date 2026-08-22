@@ -1,0 +1,67 @@
+{
+  "caseId": "conv-47__q0005",
+  "sampleId": "conv-47",
+  "questionIndex": 5,
+  "question": "What are John and James' favorite games?",
+  "answer": "John's favorite game is CS:GO, and James's is Apex Legends.",
+  "adversarialAnswer": null,
+  "category": 1,
+  "categoryName": "multi_hop",
+  "evidence": [
+    "D3:11",
+    "D4:16"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D1:13",
+      "D12:10",
+      "D10:4",
+      "D22:9",
+      "D4:17",
+      "D25:13",
+      "D18:3",
+      "D3:15",
+      "D20:15",
+      "D26:5"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1668.604,
+    "injectedChars": 2338,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 81,
+      "completion_tokens": 4,
+      "total_tokens": 85
+    },
+    "latencyMs": 958,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 713,
+      "completion_tokens": 3,
+      "total_tokens": 716
+    },
+    "latencyMs": 1290,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2338
+  },
+  "f1Delta": 0.0
+}

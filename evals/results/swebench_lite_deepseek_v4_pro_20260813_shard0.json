@@ -1,0 +1,285 @@
+{
+  "benchmark": "SWE-bench Lite pinned dev subset",
+  "model": "deepseek-v4-pro",
+  "total": 11,
+  "completed": 11,
+  "resolved": 0,
+  "resolve_rate": 0.0,
+  "results": [
+    {
+      "instance_id": "marshmallow-code__marshmallow-1343",
+      "resolved": false,
+      "model_patch": "",
+      "report": {
+        "marshmallow-code__marshmallow-1343": {
+          "patch_is_None": false,
+          "patch_exists": true,
+          "patch_successfully_applied": true,
+          "resolved": false,
+          "tests_status": {
+            "FAIL_TO_PASS": {
+              "success": [],
+              "failure": [
+                "tests/test_marshalling.py::TestUnmarshaller::test_deserialize_wrong_nested_type_with_validates_method"
+              ]
+            },
+            "PASS_TO_PASS": {
+              "success": [
+                "tests/test_marshalling.py::test_missing_is_falsy",
+                "tests/test_marshalling.py::TestMarshaller::test_prefix",
+                "tests/test_marshalling.py::TestMarshaller::test_marshalling_generator",
+                "tests/test_marshalling.py::TestMarshaller::test_default_to_missing",
+                "tests/test_marshalling.py::TestMarshaller::test_serialize_fields_with_load_only_param",
+                "tests/test_marshalling.py::TestMarshaller::test_missing_data_are_skipped",
+                "tests/test_marshalling.py::TestMarshaller::test_serialize_with_load_only_doesnt_validate",
+                "tests/test_marshalling.py::TestMarshaller::test_serialize_fields_with_dump_to_param",
+                "tests/test_marshalling.py::TestMarshaller::test_serialize_fields_with_dump_to_and_prefix_params",
+                "tests/test_marshalling.py::TestMarshaller::test_stores_indices_of_errors_when_many_equals_true",
+                "tests/test_marshalling.py::TestMarshaller::test_doesnt_store_errors_when_index_errors_equals_false",
+                "tests/test_marshalling.py::TestUnmarshaller::test_extra_data_is_ignored",
+                "tests/test_marshalling.py::TestUnmarshaller::test_stores_errors",
+                "tests/test_marshalling.py::TestUnmarshaller::test_stores_indices_of_errors_when_many_equals_true",
+                "tests/test_marshalling.py::TestUnmarshaller::test_doesnt_store_errors_when_index_errors_equals_false",
+                "tests/test_marshalling.py::TestUnmarshaller::test_deserialize",
+                "tests/test_marshalling.py::TestUnmarshaller::test_extra_fields",
+                "tests/test_marshalling.py::TestUnmarshaller::test_deserialize_many",
+                "tests/test_marshalling.py::TestUnmarshaller::test_deserialize_stores_errors",
+                "tests/test_marshalling.py::TestUnmarshaller::test_deserialize_fields_with_attribute_param",
+                "tests/test_marshalling.py::TestUnmarshaller::test_deserialize_fields_with_load_from_param",
+                "tests/test_marshalling.py::TestUnmarshaller::test_deserialize_fields_with_dump_only_param",
+                "tests/test_marshalling.py::TestUnmarshaller::test_deserialize_wrong_type_root_data",
+                "tests/test_marshalling.py::TestUnmarshaller::test_deserialize_wrong_type_nested_data"
+              ],
+              "failure": []
+            },
+            "FAIL_TO_FAIL": {
+              "success": [],
+              "failure": []
+            },
+            "PASS_TO_FAIL": {
+              "success": [],
+              "failure": []
+            }
+          }
+        }
+      },
+      "stop_reason": "max_iterations",
+      "error": null,
+      "latency_ms": 566056
+    },
+    {
+      "instance_id": "pvlib__pvlib-python-1072",
+      "resolved": false,
+      "model_patch": "",
+      "report": {},
+      "stop_reason": "error",
+      "error": "RuntimeError: skopeo image copy failed: time=\"2026-08-13T01:37:51+08:00\" level=fatal msg=\"initializing source docker://swebench/sweb.eval.x86_64.pvlib_1776_pvlib-python-1072:latest: pinging container registry registry-1.docker.io: Get \\\"https://registry-1.docker.io/v2/\\\": proxyconnect tcp: dial tcp 127.0.0.1:7890: connect: connection refused\"\n",
+      "latency_ms": 73
+    },
+    {
+      "instance_id": "pvlib__pvlib-python-1854",
+      "resolved": false,
+      "model_patch": "",
+      "report": {},
+      "stop_reason": "error",
+      "error": "RuntimeError: skopeo image copy failed: time=\"2026-08-13T01:37:51+08:00\" level=fatal msg=\"initializing source docker://swebench/sweb.eval.x86_64.pvlib_1776_pvlib-python-1854:latest: pinging container registry registry-1.docker.io: Get \\\"https://registry-1.docker.io/v2/\\\": proxyconnect tcp: dial tcp 127.0.0.1:7890: connect: connection refused\"\n",
+      "latency_ms": 73
+    },
+    {
+      "instance_id": "pydicom__pydicom-1256",
+      "resolved": false,
+      "model_patch": "",
+      "report": {},
+      "stop_reason": "error",
+      "error": "RuntimeError: skopeo image copy failed: time=\"2026-08-13T01:37:51+08:00\" level=fatal msg=\"initializing source docker://swebench/sweb.eval.x86_64.pydicom_1776_pydicom-1256:latest: pinging container registry registry-1.docker.io: Get \\\"https://registry-1.docker.io/v2/\\\": proxyconnect tcp: dial tcp 127.0.0.1:7890: connect: connection refused\"\n",
+      "latency_ms": 77
+    },
+    {
+      "instance_id": "pydicom__pydicom-1694",
+      "resolved": false,
+      "model_patch": "",
+      "report": {},
+      "stop_reason": "error",
+      "error": "RuntimeError: skopeo image copy failed: time=\"2026-08-13T01:37:51+08:00\" level=fatal msg=\"initializing source docker://swebench/sweb.eval.x86_64.pydicom_1776_pydicom-1694:latest: pinging container registry registry-1.docker.io: Get \\\"https://registry-1.docker.io/v2/\\\": proxyconnect tcp: dial tcp 127.0.0.1:7890: connect: connection refused\"\n",
+      "latency_ms": 73
+    },
+    {
+      "instance_id": "pydicom__pydicom-901",
+      "resolved": false,
+      "model_patch": "",
+      "report": {},
+      "stop_reason": "error",
+      "error": "RuntimeError: skopeo image copy failed: time=\"2026-08-13T01:37:51+08:00\" level=fatal msg=\"initializing source docker://swebench/sweb.eval.x86_64.pydicom_1776_pydicom-901:latest: pinging container registry registry-1.docker.io: Get \\\"https://registry-1.docker.io/v2/\\\": proxyconnect tcp: dial tcp 127.0.0.1:7890: connect: connection refused\"\n",
+      "latency_ms": 72
+    },
+    {
+      "instance_id": "pylint-dev__astroid-1196",
+      "resolved": false,
+      "model_patch": "",
+      "report": {},
+      "stop_reason": "error",
+      "error": "RuntimeError: skopeo image copy failed: time=\"2026-08-13T01:37:51+08:00\" level=fatal msg=\"initializing source docker://swebench/sweb.eval.x86_64.pylint-dev_1776_astroid-1196:latest: pinging container registry registry-1.docker.io: Get \\\"https://registry-1.docker.io/v2/\\\": proxyconnect tcp: dial tcp 127.0.0.1:7890: connect: connection refused\"\n",
+      "latency_ms": 69
+    },
+    {
+      "instance_id": "pylint-dev__astroid-1268",
+      "resolved": false,
+      "model_patch": "",
+      "report": {},
+      "stop_reason": "error",
+      "error": "RuntimeError: skopeo image copy failed: time=\"2026-08-13T01:37:51+08:00\" level=fatal msg=\"initializing source docker://swebench/sweb.eval.x86_64.pylint-dev_1776_astroid-1268:latest: pinging container registry registry-1.docker.io: Get \\\"https://registry-1.docker.io/v2/\\\": proxyconnect tcp: dial tcp 127.0.0.1:7890: connect: connection refused\"\n",
+      "latency_ms": 72
+    },
+    {
+      "instance_id": "pylint-dev__astroid-1978",
+      "resolved": false,
+      "model_patch": "",
+      "report": {},
+      "stop_reason": "error",
+      "error": "RuntimeError: skopeo image copy failed: time=\"2026-08-13T01:37:51+08:00\" level=fatal msg=\"initializing source docker://swebench/sweb.eval.x86_64.pylint-dev_1776_astroid-1978:latest: pinging container registry registry-1.docker.io: Get \\\"https://registry-1.docker.io/v2/\\\": proxyconnect tcp: dial tcp 127.0.0.1:7890: connect: connection refused\"\n",
+      "latency_ms": 75
+    },
+    {
+      "instance_id": "sqlfluff__sqlfluff-1733",
+      "resolved": false,
+      "model_patch": "",
+      "report": {
+        "sqlfluff__sqlfluff-1733": {
+          "patch_is_None": false,
+          "patch_exists": true,
+          "patch_successfully_applied": true,
+          "resolved": false,
+          "tests_status": {
+            "FAIL_TO_PASS": {
+              "success": [],
+              "failure": [
+                "test/rules/std_L003_L036_L039_combo_test.py::test__rules__std_L003_L036_L039"
+              ]
+            },
+            "PASS_TO_PASS": {
+              "success": [
+                "test/rules/std_L016_L36_combo_test.py::test__rules__std_L016_L036_long_line_lint",
+                "test/rules/std_L016_L36_combo_test.py::test__rules__std_L016_L036_long_line_fix",
+                "test/rules/std_L016_L36_combo_test.py::test__rules__std_L016_L036_long_line_fix2"
+              ],
+              "failure": []
+            },
+            "FAIL_TO_FAIL": {
+              "success": [],
+              "failure": []
+            },
+            "PASS_TO_FAIL": {
+              "success": [],
+              "failure": []
+            }
+          }
+        }
+      },
+      "stop_reason": "max_iterations",
+      "error": null,
+      "latency_ms": 624657
+    },
+    {
+      "instance_id": "sqlfluff__sqlfluff-1763",
+      "resolved": false,
+      "model_patch": "",
+      "report": {
+        "sqlfluff__sqlfluff-1763": {
+          "patch_is_None": false,
+          "patch_exists": true,
+          "patch_successfully_applied": true,
+          "resolved": false,
+          "tests_status": {
+            "FAIL_TO_PASS": {
+              "success": [],
+              "failure": [
+                "test/core/linter_test.py::test_safe_create_replace_file[utf8_create]",
+                "test/core/linter_test.py::test_safe_create_replace_file[utf8_update]",
+                "test/core/linter_test.py::test_safe_create_replace_file[utf8_special_char]"
+              ]
+            },
+            "PASS_TO_PASS": {
+              "success": [
+                "test/core/linter_test.py::test__linter__path_from_paths__dir",
+                "test/core/linter_test.py::test__linter__path_from_paths__default",
+                "test/core/linter_test.py::test__linter__path_from_paths__exts",
+                "test/core/linter_test.py::test__linter__path_from_paths__file",
+                "test/core/linter_test.py::test__linter__path_from_paths__not_exist",
+                "test/core/linter_test.py::test__linter__path_from_paths__not_exist_ignore",
+                "test/core/linter_test.py::test__linter__path_from_paths__explicit_ignore",
+                "test/core/linter_test.py::test__linter__path_from_paths__dot",
+                "test/core/linter_test.py::test__linter__path_from_paths__ignore[test/fixtures/linter/sqlfluffignore]",
+                "test/core/linter_test.py::test__linter__path_from_paths__ignore[test/fixtures/linter/sqlfluffignore/]",
+                "test/core/linter_test.py::test__linter__path_from_paths__ignore[test/fixtures/linter/sqlfluffignore/.]",
+                "test/core/linter_test.py::test__linter__lint_string_vs_file[test/fixtures/linter/indentation_errors.sql]",
+                "test/core/linter_test.py::test__linter__lint_string_vs_file[test/fixtures/linter/whitespace_errors.sql]",
+                "test/core/linter_test.py::test__linter__get_violations_filter_rules[None-7]",
+                "test/core/linter_test.py::test__linter__get_violations_filter_rules[L010-2]",
+                "test/core/linter_test.py::test__linter__get_violations_filter_rules[rules2-2]",
+                "test/core/linter_test.py::test__linter__linting_result__sum_dicts",
+                "test/core/linter_test.py::test__linter__linting_result__combine_dicts",
+                "test/core/linter_test.py::test__linter__linting_result_check_tuples_by_path[False-list]",
+                "test/core/linter_test.py::test__linter__linting_result_check_tuples_by_path[True-dict]",
+                "test/core/linter_test.py::test__linter__linting_result_get_violations[1]",
+                "test/core/linter_test.py::test__linter__linting_result_get_violations[2]",
+                "test/core/linter_test.py::test__linter__linting_parallel_thread[False]",
+                "test/core/linter_test.py::test__linter__linting_parallel_thread[True]",
+                "test/core/linter_test.py::test_lint_path_parallel_wrapper_exception",
+                "test/core/linter_test.py::test__linter__linting_unexpected_error_handled_gracefully",
+                "test/core/linter_test.py::test__linter__raises_malformed_noqa",
+                "test/core/linter_test.py::test__linter__empty_file",
+                "test/core/linter_test.py::test__linter__mask_templated_violations[True-check_tuples0]",
+                "test/core/linter_test.py::test__linter__mask_templated_violations[False-check_tuples1]",
+                "test/core/linter_test.py::test__linter__encoding[test/fixtures/linter/encoding-utf-8.sql-autodetect-False]",
+                "test/core/linter_test.py::test__linter__encoding[test/fixtures/linter/encoding-utf-8-sig.sql-autodetect-False]",
+                "test/core/linter_test.py::test__linter__encoding[test/fixtures/linter/encoding-utf-8.sql-utf-8-False]",
+                "test/core/linter_test.py::test__linter__encoding[test/fixtures/linter/encoding-utf-8-sig.sql-utf-8-True]",
+                "test/core/linter_test.py::test__linter__encoding[test/fixtures/linter/encoding-utf-8.sql-utf-8-sig-False]",
+                "test/core/linter_test.py::test__linter__encoding[test/fixtures/linter/encoding-utf-8-sig.sql-utf-8-sig-False]",
+                "test/core/linter_test.py::test_parse_noqa[-None]",
+                "test/core/linter_test.py::test_parse_noqa[noqa-expected1]",
+                "test/core/linter_test.py::test_parse_noqa[noqa?-SQLParseError]",
+                "test/core/linter_test.py::test_parse_noqa[noqa:-expected3]",
+                "test/core/linter_test.py::test_parse_noqa[noqa:L001,L002-expected4]",
+                "test/core/linter_test.py::test_parse_noqa[noqa:",
+                "test/core/linter_test.py::test_linted_file_ignore_masked_violations[1_violation_no_ignore]",
+                "test/core/linter_test.py::test_linted_file_ignore_masked_violations[1_violation_ignore_specific_line]",
+                "test/core/linter_test.py::test_linted_file_ignore_masked_violations[1_violation_ignore_different_specific_line]",
+                "test/core/linter_test.py::test_linted_file_ignore_masked_violations[1_violation_ignore_different_specific_rule]",
+                "test/core/linter_test.py::test_linted_file_ignore_masked_violations[1_violation_ignore_enable_this_range]",
+                "test/core/linter_test.py::test_linted_file_ignore_masked_violations[1_violation_ignore_disable_this_range]",
+                "test/core/linter_test.py::test_linted_file_ignore_masked_violations[1_violation_line_1_ignore_disable_specific_2_3]",
+                "test/core/linter_test.py::test_linted_file_ignore_masked_violations[1_violation_line_2_ignore_disable_specific_2_3]",
+                "test/core/linter_test.py::test_linted_file_ignore_masked_violations[1_violation_line_3_ignore_disable_specific_2_3]",
+                "test/core/linter_test.py::test_linted_file_ignore_masked_violations[1_violation_line_4_ignore_disable_specific_2_3]",
+                "test/core/linter_test.py::test_linted_file_ignore_masked_violations[1_violation_line_1_ignore_disable_all_2_3]",
+                "test/core/linter_test.py::test_linted_file_ignore_masked_violations[1_violation_line_2_ignore_disable_all_2_3]",
+                "test/core/linter_test.py::test_linted_file_ignore_masked_violations[1_violation_line_3_ignore_disable_all_2_3]",
+                "test/core/linter_test.py::test_linted_file_ignore_masked_violations[1_violation_line_4_ignore_disable_all_2_3]",
+                "test/core/linter_test.py::test_linted_file_ignore_masked_violations[4_violations_two_types_disable_specific_enable_all]",
+                "test/core/linter_test.py::test_linted_file_ignore_masked_violations[4_violations_two_types_disable_all_enable_specific]",
+                "test/core/linter_test.py::test_linter_noqa",
+                "test/core/linter_test.py::test_linter_noqa_with_templating",
+                "test/core/linter_test.py::test_delayed_exception",
+                "test/core/linter_test.py::test__attempt_to_change_templater_warning",
+                "test/core/linter_test.py::test_safe_create_replace_file[incorrect_encoding]"
+              ],
+              "failure": []
+            },
+            "FAIL_TO_FAIL": {
+              "success": [],
+              "failure": []
+            },
+            "PASS_TO_FAIL": {
+              "success": [],
+              "failure": []
+            }
+          }
+        }
+      },
+      "stop_reason": "max_iterations",
+      "error": null,
+      "latency_ms": 552617
+    }
+  ]
+}

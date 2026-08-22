@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-43__q0125",
+  "sampleId": "conv-43",
+  "questionIndex": 125,
+  "question": "What J.K. Rowling quote does Tim resonate with?",
+  "answer": "\"Turn on the light - happiness hides in the darkest of times.\"",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D15:11"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D15:19",
+      "D15:13",
+      "D24:1",
+      "D25:11",
+      "D26:12",
+      "D3:20",
+      "D2:3",
+      "D3:34",
+      "D1:16",
+      "D25:3"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1010.635,
+    "injectedChars": 1787,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 84,
+      "completion_tokens": 4,
+      "total_tokens": 88
+    },
+    "latencyMs": 955,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 606,
+      "completion_tokens": 3,
+      "total_tokens": 609
+    },
+    "latencyMs": 742,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 1787
+  },
+  "f1Delta": 0.0
+}

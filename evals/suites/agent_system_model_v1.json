@@ -1,0 +1,126 @@
+{
+  "benchmark": "GitHubResearch Agent Model-in-the-Loop System Benchmark",
+  "version": "1.0.0",
+  "description": "Four-layer system evaluation with a pinned real model, paired module ablations, controlled fault injection, and unified run artifacts.",
+  "thresholds": {
+    "minLayerPassRate": 1.0,
+    "minContextTokenReduction": 0.15,
+    "minMemoryAccuracyGain": 0.5
+  },
+  "cases": [
+    {
+      "caseId": "harness-single-tool-roundtrip",
+      "layer": "harness_regression",
+      "scenario": "lookup",
+      "prompt": "调用 lookup_value 查询键 release_channel。拿到结果后，只输出查询到的值，不要解释。",
+      "expected": "CANARY-47",
+      "values": {"release_channel": "CANARY-47"},
+      "requiredCalls": ["lookup_value"]
+    },
+    {
+      "caseId": "harness-multi-tool-state",
+      "layer": "harness_regression",
+      "scenario": "lookup",
+      "prompt": "分别调用 lookup_value 查询 alpha_fragment 和 beta_fragment，然后按查询顺序用连字符连接。只输出连接结果。",
+      "expected": "ORBIT-NIMBUS",
+      "values": {"alpha_fragment": "ORBIT", "beta_fragment": "NIMBUS"},
+      "requiredLookupKeys": ["alpha_fragment", "beta_fragment"],
+      "requiredCalls": ["lookup_value", "lookup_value"]
+    },
+    {
+      "caseId": "harness-write-read-state",
+      "layer": "harness_regression",
+      "scenario": "state_roundtrip",
+      "prompt": "先调用 write_state 将键 deployment_token 写为 QUARTZ-913，再调用 read_state 读回它。只输出读回的值。",
+      "expected": "QUARTZ-913",
+      "requiredCalls": ["write_state", "read_state"]
+    },
+    {
+      "caseId": "context-recent-constraint",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "prompt": "当前有效发布代号是 LANTERN-284。忽略更早历史，只输出当前有效发布代号。",
+      "expected": "LANTERN-284",
+      "noiseTurns": 18,
+      "contextBlockLimit": 1200
+    },
+    {
+      "caseId": "context-latest-user-fact",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "prompt": "本轮唯一有效的校验字符串是 HARBOR-731。只输出该校验字符串。",
+      "expected": "HARBOR-731",
+      "noiseTurns": 22,
+      "contextBlockLimit": 1200
+    },
+    {
+      "caseId": "context-instruction-retention",
+      "layer": "context_governance",
+      "scenario": "history_ablation",
+      "prompt": "最终审计标签为 SUMMIT-509；先前标签全部作废。只输出最终审计标签。",
+      "expected": "SUMMIT-509",
+      "noiseTurns": 26,
+      "contextBlockLimit": 1200
+    },
+    {
+      "caseId": "memory-cross-session-project",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "prompt": "我之前指定的 Borealis 项目环境代号是什么？如果上下文中没有相关记忆，只输出 UNKNOWN；否则只输出代号。",
+      "expected": "EMBER-642",
+      "memoryQuery": "Borealis 项目环境代号",
+      "memories": [
+        "用户指定 Borealis 项目的环境代号是 EMBER-642。",
+        "用户偏好所有技术总结使用中文。",
+        "Atlas 项目的归档时间是每周五。"
+      ]
+    },
+    {
+      "caseId": "memory-user-preference",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "prompt": "我之前为 Meridian 报告指定的页眉短语是什么？如果没有相关记忆，只输出 UNKNOWN；否则只输出短语。",
+      "expected": "NORTH STAR",
+      "memoryQuery": "Meridian 报告页眉短语",
+      "memories": [
+        "用户要求 Meridian 报告的页眉短语固定为 NORTH STAR。",
+        "用户的默认时区是 Asia/Shanghai。",
+        "Borealis 项目使用蓝绿色主题。"
+      ]
+    },
+    {
+      "caseId": "memory-delayed-recall",
+      "layer": "memory_benefit",
+      "scenario": "retrieval_ablation",
+      "prompt": "我之前为 Cypress 演示设置的访问口令是什么？如果没有相关记忆，只输出 UNKNOWN；否则只输出口令。",
+      "expected": "MOSS-884",
+      "memoryQuery": "Cypress 演示访问口令",
+      "memories": [
+        "用户为 Cypress 演示设置的访问口令是 MOSS-884。",
+        "用户不希望在周末接收常规报告。",
+        "Meridian 报告需要导出为 PDF。"
+      ]
+    },
+    {
+      "caseId": "recovery-transient-tool",
+      "layer": "recovery_correctness",
+      "scenario": "transient_tool",
+      "prompt": "调用 flaky_lookup 查询 recovery_key。若工具明确返回 TRANSIENT_FAILURE，重试同一查询一次；成功后只输出值。",
+      "expected": "RECOVERED-118"
+    },
+    {
+      "caseId": "recovery-ack-loss-boundary",
+      "layer": "recovery_correctness",
+      "scenario": "ack_loss",
+      "prompt": "调用 commit_once 提交 operation-77。若返回 ACK_LOST，不要再次提交，必须调用 inspect_commit 检查；若已提交，只输出 COMMITTED-77。",
+      "expected": "COMMITTED-77"
+    },
+    {
+      "caseId": "recovery-checkpoint-resume",
+      "layer": "recovery_correctness",
+      "scenario": "checkpoint_resume",
+      "prompt": "调用 checkpoint_lookup 查询 resume_key，拿到结果后只输出值。",
+      "expected": "RESUMED-305"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-43__q0023",
+  "sampleId": "conv-43",
+  "questionIndex": 23,
+  "question": "When is Tim attending a book conference?",
+  "answer": "September 2023",
+  "adversarialAnswer": null,
+  "category": 2,
+  "categoryName": "temporal",
+  "evidence": [
+    "D7:6"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D11:24",
+      "D15:30",
+      "D20:41",
+      "D26:6",
+      "D26:30",
+      "D22:13",
+      "D14:12",
+      "D3:30",
+      "D6:8",
+      "D2:7"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1820.575,
+    "injectedChars": 2999,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 80,
+      "completion_tokens": 4,
+      "total_tokens": 84
+    },
+    "latencyMs": 1230,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 893,
+      "completion_tokens": 3,
+      "total_tokens": 896
+    },
+    "latencyMs": 915,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2999
+  },
+  "f1Delta": 0.0
+}

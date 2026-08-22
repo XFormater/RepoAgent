@@ -1,0 +1,274 @@
+{
+  "benchmark": "SWE-bench Lite pinned dev subset",
+  "model": "deepseek-v4-pro",
+  "total": 10,
+  "completed": 10,
+  "resolved": 0,
+  "resolve_rate": 0.0,
+  "results": [
+    {
+      "instance_id": "marshmallow-code__marshmallow-1359",
+      "resolved": false,
+      "model_patch": "diff --git a/src/marshmallow/fields.py b/src/marshmallow/fields.py\nindex 0b18e7dd..0727ae4e 100644\n--- a/src/marshmallow/fields.py\n+++ b/src/marshmallow/fields.py\n@@ -1114,7 +1114,11 @@ class DateTime(Field):\n         super()._bind_to_schema(field_name, schema)\n         self.format = (\n             self.format\n-            or getattr(schema.opts, self.SCHEMA_OPTS_VAR_NAME)\n+            or (\n+                getattr(schema.opts, self.SCHEMA_OPTS_VAR_NAME)\n+                if isinstance(schema, SchemaABC)\n+                else None\n+            )\n             or self.DEFAULT_FORMAT\n         )\n \n",
+      "report": {
+        "marshmallow-code__marshmallow-1359": {
+          "patch_is_None": false,
+          "patch_exists": true,
+          "patch_successfully_applied": true,
+          "resolved": false,
+          "tests_status": {
+            "FAIL_TO_PASS": {
+              "success": [],
+              "failure": [
+                "tests/test_fields.py::TestParentAndName::test_datetime_list_inner_format"
+              ]
+            },
+            "PASS_TO_PASS": {
+              "success": [
+                "tests/test_fields.py::test_field_aliases[Integer-Integer]",
+                "tests/test_fields.py::test_field_aliases[String-String]",
+                "tests/test_fields.py::test_field_aliases[Boolean-Boolean]",
+                "tests/test_fields.py::test_field_aliases[Url-Url]",
+                "tests/test_fields.py::TestField::test_repr",
+                "tests/test_fields.py::TestField::test_error_raised_if_uncallable_validator_passed",
+                "tests/test_fields.py::TestField::test_error_raised_if_missing_is_set_on_required_field",
+                "tests/test_fields.py::TestField::test_custom_field_receives_attr_and_obj",
+                "tests/test_fields.py::TestField::test_custom_field_receives_data_key_if_set",
+                "tests/test_fields.py::TestField::test_custom_field_follows_data_key_if_set",
+                "tests/test_fields.py::TestParentAndName::test_simple_field_parent_and_name",
+                "tests/test_fields.py::TestParentAndName::test_unbound_field_root_returns_none",
+                "tests/test_fields.py::TestParentAndName::test_list_field_inner_parent_and_name",
+                "tests/test_fields.py::TestParentAndName::test_tuple_field_inner_parent_and_name",
+                "tests/test_fields.py::TestParentAndName::test_mapping_field_inner_parent_and_name",
+                "tests/test_fields.py::TestParentAndName::test_simple_field_root",
+                "tests/test_fields.py::TestParentAndName::test_list_field_inner_root",
+                "tests/test_fields.py::TestParentAndName::test_tuple_field_inner_root",
+                "tests/test_fields.py::TestParentAndName::test_list_root_inheritance",
+                "tests/test_fields.py::TestParentAndName::test_dict_root_inheritance",
+                "tests/test_fields.py::TestMetadata::test_extra_metadata_may_be_added_to_field[String]",
+                "tests/test_fields.py::TestMetadata::test_extra_metadata_may_be_added_to_field[Integer]",
+                "tests/test_fields.py::TestMetadata::test_extra_metadata_may_be_added_to_field[Boolean]",
+                "tests/test_fields.py::TestMetadata::test_extra_metadata_may_be_added_to_field[Float]",
+                "tests/test_fields.py::TestMetadata::test_extra_metadata_may_be_added_to_field[Number]",
+                "tests/test_fields.py::TestMetadata::test_extra_metadata_may_be_added_to_field[DateTime]",
+                "tests/test_fields.py::TestMetadata::test_extra_metadata_may_be_added_to_field[Time]",
+                "tests/test_fields.py::TestMetadata::test_extra_metadata_may_be_added_to_field[Date]",
+                "tests/test_fields.py::TestMetadata::test_extra_metadata_may_be_added_to_field[TimeDelta]",
+                "tests/test_fields.py::TestMetadata::test_extra_metadata_may_be_added_to_field[Dict]",
+                "tests/test_fields.py::TestMetadata::test_extra_metadata_may_be_added_to_field[Url]",
+                "tests/test_fields.py::TestMetadata::test_extra_metadata_may_be_added_to_field[Email]",
+                "tests/test_fields.py::TestMetadata::test_extra_metadata_may_be_added_to_field[UUID]",
+                "tests/test_fields.py::TestMetadata::test_extra_metadata_may_be_added_to_field[Decimal]",
+                "tests/test_fields.py::TestErrorMessages::test_default_error_messages_get_merged_with_parent_error_messages_cstm_msg",
+                "tests/test_fields.py::TestErrorMessages::test_default_error_messages_get_merged_with_parent_error_messages",
+                "tests/test_fields.py::TestErrorMessages::test_make_error[required-Missing",
+                "tests/test_fields.py::TestErrorMessages::test_make_error[null-Field",
+                "tests/test_fields.py::TestErrorMessages::test_make_error[custom-Custom",
+                "tests/test_fields.py::TestErrorMessages::test_make_error[validator_failed-Invalid",
+                "tests/test_fields.py::TestErrorMessages::test_fail[required-Missing",
+                "tests/test_fields.py::TestErrorMessages::test_fail[null-Field",
+                "tests/test_fields.py::TestErrorMessages::test_fail[custom-Custom",
+                "tests/test_fields.py::TestErrorMessages::test_fail[validator_failed-Invalid",
+                "tests/test_fields.py::TestErrorMessages::test_make_error_key_doesnt_exist",
+                "tests/test_fields.py::TestNestedField::test_nested_only_and_exclude_as_string[only]",
+                "tests/test_fields.py::TestNestedField::test_nested_only_and_exclude_as_string[exclude]",
+                "tests/test_fields.py::TestNestedField::test_nested_unknown_override[None-exclude]",
+                "tests/test_fields.py::TestNestedField::test_nested_unknown_override[None-include]",
+                "tests/test_fields.py::TestNestedField::test_nested_unknown_override[None-raise]",
+                "tests/test_fields.py::TestNestedField::test_nested_unknown_override[exclude-exclude]",
+                "tests/test_fields.py::TestNestedField::test_nested_unknown_override[exclude-include]",
+                "tests/test_fields.py::TestNestedField::test_nested_unknown_override[exclude-raise]",
+                "tests/test_fields.py::TestNestedField::test_nested_unknown_override[include-exclude]",
+                "tests/test_fields.py::TestNestedField::test_nested_unknown_override[include-include]",
+                "tests/test_fields.py::TestNestedField::test_nested_unknown_override[include-raise]",
+                "tests/test_fields.py::TestNestedField::test_nested_unknown_override[raise-exclude]",
+                "tests/test_fields.py::TestNestedField::test_nested_unknown_override[raise-include]",
+                "tests/test_fields.py::TestNestedField::test_nested_unknown_override[raise-raise]",
+                "tests/test_fields.py::TestListNested::test_list_nested_only_exclude_dump_only_load_only_propagated_to_nested[only]",
+                "tests/test_fields.py::TestListNested::test_list_nested_only_exclude_dump_only_load_only_propagated_to_nested[exclude]",
+                "tests/test_fields.py::TestListNested::test_list_nested_only_exclude_dump_only_load_only_propagated_to_nested[dump_only]",
+                "tests/test_fields.py::TestListNested::test_list_nested_only_exclude_dump_only_load_only_propagated_to_nested[load_only]",
+                "tests/test_fields.py::TestListNested::test_list_nested_only_and_exclude_merged_with_nested[only-expected0]",
+                "tests/test_fields.py::TestListNested::test_list_nested_only_and_exclude_merged_with_nested[exclude-expected1]",
+                "tests/test_fields.py::TestListNested::test_list_nested_partial_propagated_to_nested",
+                "tests/test_fields.py::TestTupleNested::test_tuple_nested_only_exclude_dump_only_load_only_propagated_to_nested[dump_only]",
+                "tests/test_fields.py::TestTupleNested::test_tuple_nested_only_exclude_dump_only_load_only_propagated_to_nested[load_only]",
+                "tests/test_fields.py::TestTupleNested::test_tuple_nested_partial_propagated_to_nested",
+                "tests/test_fields.py::TestDictNested::test_dict_nested_only_exclude_dump_only_load_only_propagated_to_nested[only]",
+                "tests/test_fields.py::TestDictNested::test_dict_nested_only_exclude_dump_only_load_only_propagated_to_nested[exclude]",
+                "tests/test_fields.py::TestDictNested::test_dict_nested_only_exclude_dump_only_load_only_propagated_to_nested[dump_only]",
+                "tests/test_fields.py::TestDictNested::test_dict_nested_only_exclude_dump_only_load_only_propagated_to_nested[load_only]",
+                "tests/test_fields.py::TestDictNested::test_dict_nested_only_and_exclude_merged_with_nested[only-expected0]",
+                "tests/test_fields.py::TestDictNested::test_dict_nested_only_and_exclude_merged_with_nested[exclude-expected1]",
+                "tests/test_fields.py::TestDictNested::test_dict_nested_partial_propagated_to_nested"
+              ],
+              "failure": []
+            },
+            "FAIL_TO_FAIL": {
+              "success": [],
+              "failure": []
+            },
+            "PASS_TO_FAIL": {
+              "success": [],
+              "failure": []
+            }
+          }
+        }
+      },
+      "stop_reason": "completed",
+      "error": null,
+      "latency_ms": 574054
+    },
+    {
+      "instance_id": "pvlib__pvlib-python-1154",
+      "resolved": false,
+      "model_patch": "",
+      "report": {},
+      "stop_reason": "error",
+      "error": "RuntimeError: skopeo image copy failed: time=\"2026-08-13T01:36:24+08:00\" level=fatal msg=\"initializing source docker://swebench/sweb.eval.x86_64.pvlib_1776_pvlib-python-1154:latest: pinging container registry registry-1.docker.io: Get \\\"https://registry-1.docker.io/v2/\\\": proxyconnect tcp: dial tcp 127.0.0.1:7890: connect: connection refused\"\n",
+      "latency_ms": 93
+    },
+    {
+      "instance_id": "pvlib__pvlib-python-1606",
+      "resolved": false,
+      "model_patch": "",
+      "report": {},
+      "stop_reason": "error",
+      "error": "RuntimeError: skopeo image copy failed: time=\"2026-08-13T01:36:24+08:00\" level=fatal msg=\"initializing source docker://swebench/sweb.eval.x86_64.pvlib_1776_pvlib-python-1606:latest: pinging container registry registry-1.docker.io: Get \\\"https://registry-1.docker.io/v2/\\\": proxyconnect tcp: dial tcp 127.0.0.1:7890: connect: connection refused\"\n",
+      "latency_ms": 77
+    },
+    {
+      "instance_id": "pvlib__pvlib-python-1707",
+      "resolved": false,
+      "model_patch": "",
+      "report": {},
+      "stop_reason": "error",
+      "error": "RuntimeError: skopeo image copy failed: time=\"2026-08-13T01:36:22+08:00\" level=info msg=\"Reading blob body from https://registry-1.docker.io/v2/swebench/sweb.eval.x86_64.pvlib_1776_pvlib-python-1707/blobs/sha256:1b8ef5c261a284c8529b4106f24b814c09f8eacf9bfa571dc557c365c35243e3 failed (unexpected EOF), reconnecting after 86103343 bytes…\"\ntime=\"2026-08-13T01:36:24+08:00\" level=fatal msg=\"writing blob: writing to temporary on-disk layer: happened during read: unexpected EOF (while reconnecting: Get \\\"https://registry-1.docker.io/v2/swebench/sweb.eval.x86_64.pvlib_1776_pvlib-python-1707/blobs/sha256:1b8ef5c261a284c8529b4106f24b814c09f8eacf9bfa571dc557c365c35243e3\\\": proxyconnect tcp: dial tcp 127.0.0.1:7890: connect: connection refused)\"\n",
+      "latency_ms": 476176
+    },
+    {
+      "instance_id": "pydicom__pydicom-1139",
+      "resolved": false,
+      "model_patch": "",
+      "report": {},
+      "stop_reason": "error",
+      "error": "RuntimeError: skopeo image copy failed: time=\"2026-08-13T01:36:24+08:00\" level=fatal msg=\"initializing source docker://swebench/sweb.eval.x86_64.pydicom_1776_pydicom-1139:latest: pinging container registry registry-1.docker.io: Get \\\"https://registry-1.docker.io/v2/\\\": proxyconnect tcp: dial tcp 127.0.0.1:7890: connect: connection refused\"\n",
+      "latency_ms": 82
+    },
+    {
+      "instance_id": "pydicom__pydicom-1413",
+      "resolved": false,
+      "model_patch": "",
+      "report": {},
+      "stop_reason": "error",
+      "error": "RuntimeError: skopeo image copy failed: time=\"2026-08-13T01:36:24+08:00\" level=fatal msg=\"initializing source docker://swebench/sweb.eval.x86_64.pydicom_1776_pydicom-1413:latest: pinging container registry registry-1.docker.io: Get \\\"https://registry-1.docker.io/v2/\\\": proxyconnect tcp: dial tcp 127.0.0.1:7890: connect: connection refused\"\n",
+      "latency_ms": 93
+    },
+    {
+      "instance_id": "pylint-dev__astroid-1333",
+      "resolved": false,
+      "model_patch": "",
+      "report": {},
+      "stop_reason": "error",
+      "error": "RuntimeError: skopeo image copy failed: time=\"2026-08-13T01:36:24+08:00\" level=fatal msg=\"initializing source docker://swebench/sweb.eval.x86_64.pylint-dev_1776_astroid-1333:latest: pinging container registry registry-1.docker.io: Get \\\"https://registry-1.docker.io/v2/\\\": proxyconnect tcp: dial tcp 127.0.0.1:7890: connect: connection refused\"\n",
+      "latency_ms": 85
+    },
+    {
+      "instance_id": "pylint-dev__astroid-1866",
+      "resolved": false,
+      "model_patch": "",
+      "report": {},
+      "stop_reason": "error",
+      "error": "RuntimeError: skopeo image copy failed: time=\"2026-08-13T01:36:24+08:00\" level=fatal msg=\"initializing source docker://swebench/sweb.eval.x86_64.pylint-dev_1776_astroid-1866:latest: pinging container registry registry-1.docker.io: Get \\\"https://registry-1.docker.io/v2/\\\": proxyconnect tcp: dial tcp 127.0.0.1:7890: connect: connection refused\"\n",
+      "latency_ms": 80
+    },
+    {
+      "instance_id": "pyvista__pyvista-4315",
+      "resolved": false,
+      "model_patch": "",
+      "report": {},
+      "stop_reason": "error",
+      "error": "RuntimeError: skopeo image copy failed: time=\"2026-08-13T01:36:24+08:00\" level=fatal msg=\"initializing source docker://swebench/sweb.eval.x86_64.pyvista_1776_pyvista-4315:latest: pinging container registry registry-1.docker.io: Get \\\"https://registry-1.docker.io/v2/\\\": proxyconnect tcp: dial tcp 127.0.0.1:7890: connect: connection refused\"\n",
+      "latency_ms": 84
+    },
+    {
+      "instance_id": "sqlfluff__sqlfluff-1517",
+      "resolved": false,
+      "model_patch": "",
+      "report": {
+        "sqlfluff__sqlfluff-1517": {
+          "patch_is_None": false,
+          "patch_exists": true,
+          "patch_successfully_applied": true,
+          "resolved": false,
+          "tests_status": {
+            "FAIL_TO_PASS": {
+              "success": [],
+              "failure": [
+                "test/dialects/ansi_test.py::test__dialect__ansi_multiple_semicolons[select"
+              ]
+            },
+            "PASS_TO_PASS": {
+              "success": [
+                "test/dialects/ansi_test.py::test__dialect__ansi__file_lex[a",
+                "test/dialects/ansi_test.py::test__dialect__ansi__file_lex[b.c-res1]",
+                "test/dialects/ansi_test.py::test__dialect__ansi__file_lex[abc",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[SelectKeywordSegment-select]",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[NakedIdentifierSegment-online_sales]",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[BareFunctionSegment-current_timestamp]",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[FunctionSegment-current_timestamp()]",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[NumericLiteralSegment-1000.0]",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[ExpressionSegment-online_sales",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[IntervalExpressionSegment-INTERVAL",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[ExpressionSegment-CASE",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[ExpressionSegment-CAST(ROUND(online_sales",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[ExpressionSegment-name",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[SelectClauseElementSegment-MIN",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[ExpressionSegment-DATE_ADD(CURRENT_DATE('America/New_York'),",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[ExpressionSegment-my_array[1]]",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[ExpressionSegment-my_array[OFFSET(1)]]",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[ExpressionSegment-my_array[5:8]]",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[ExpressionSegment-4",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[ExpressionSegment-bits[OFFSET(0)]",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[SelectClauseElementSegment-(count_18_24",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[ExpressionSegment-count_18_24",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[SelectStatementSegment-SELECT",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[SelectClauseElementSegment-t.val/t.id]",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[SelectClauseElementSegment-CAST(num",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[SelectClauseElementSegment-a.*]",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[SelectClauseElementSegment-a.b.*]",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[SelectClauseElementSegment-a.b.c.*]",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[ObjectReferenceSegment-a..c.*]",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[SelectClauseElementSegment--some_variable]",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[SelectClauseElementSegment--",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[ExpressionSegment-concat(left(uaid,",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[ExpressionSegment-c",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[SelectClauseElementSegment-c",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[ExpressionSegment-NULL::INT]",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[SelectClauseElementSegment-NULL::INT",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_parses[TruncateStatementSegment-TRUNCATE",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_not_match[ObjectReferenceSegment-\\n",
+                "test/dialects/ansi_test.py::test__dialect__ansi_specific_segment_not_parse[SELECT",
+                "test/dialects/ansi_test.py::test__dialect__ansi_is_whitespace",
+                "test/dialects/ansi_test.py::test__dialect__ansi_parse_indented_joins[select",
+                "test/dialects/ansi_test.py::test__dialect__ansi_multiple_semicolons[;;-Line"
+              ],
+              "failure": []
+            },
+            "FAIL_TO_FAIL": {
+              "success": [],
+              "failure": []
+            },
+            "PASS_TO_FAIL": {
+              "success": [],
+              "failure": []
+            }
+          }
+        }
+      },
+      "stop_reason": "max_iterations",
+      "error": null,
+      "latency_ms": 597892
+    }
+  ]
+}

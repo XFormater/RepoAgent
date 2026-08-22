@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-47__q0029",
+  "sampleId": "conv-47",
+  "questionIndex": 29,
+  "question": "When did James depart for his trip to Canada?",
+  "answer": "July 11, 2022",
+  "adversarialAnswer": null,
+  "category": 2,
+  "categoryName": "temporal",
+  "evidence": [
+    "D16:9"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D20:20",
+      "D13:6",
+      "D28:21",
+      "D13:4",
+      "D19:12",
+      "D11:7",
+      "D17:4",
+      "D17:17",
+      "D24:21",
+      "D8:33"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1173.021,
+    "injectedChars": 2293,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 82,
+      "completion_tokens": 3,
+      "total_tokens": 85
+    },
+    "latencyMs": 1016,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 715,
+      "completion_tokens": 3,
+      "total_tokens": 718
+    },
+    "latencyMs": 941,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2293
+  },
+  "f1Delta": 0.0
+}

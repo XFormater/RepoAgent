@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-42__q0130",
+  "sampleId": "conv-42",
+  "questionIndex": 130,
+  "question": "What is displayed on Joanna's cork board for motivation and creativity?",
+  "answer": "inspiring quotes, photos, and little keepsakes",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D15:7"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D15:7",
+      "D22:23",
+      "D22:3",
+      "D22:12",
+      "D22:7",
+      "D22:15",
+      "D24:2",
+      "D22:5",
+      "D22:13",
+      "D23:25"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 629.684,
+    "injectedChars": 1870,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 85,
+      "completion_tokens": 4,
+      "total_tokens": 89
+    },
+    "latencyMs": 988,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "Inspiring quotes and pictures",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 609,
+      "completion_tokens": 5,
+      "total_tokens": 614
+    },
+    "latencyMs": 1249,
+    "answer": "Inspiring quotes and pictures",
+    "f1": 0.5,
+    "injectedChars": 1870
+  },
+  "f1Delta": 0.5
+}

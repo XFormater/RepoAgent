@@ -1,0 +1,55 @@
+{
+  "caseId": "context-recent-constraint",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 2381,
+  "error": null,
+  "passed": true,
+  "expected": "LANTERN-284",
+  "contextCaseType": "latest_authority",
+  "contextBlockLimit": 1200,
+  "sourceInputSha256": "bf6d6a471069bcccc5c788bd766256c21c49ee5f0d868e61ec70b693625d24a4",
+  "sourceInputMessages": 38,
+  "variantOrder": [
+    "governance_off",
+    "governance_on"
+  ],
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "LANTERN-284",
+    "normalizedAnswer": "LANTERN-284",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 3717,
+      "completion_tokens": 4,
+      "total_tokens": 3721,
+      "cached_tokens": 3200,
+      "provider_tokens": 3721
+    },
+    "modelInputMessages": 38,
+    "estimatedInputTokens": 3782,
+    "providerPromptTokens": 3717
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": true,
+    "answer": "LANTERN-284",
+    "normalizedAnswer": "LANTERN-284",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1078,
+      "completion_tokens": 4,
+      "total_tokens": 1082,
+      "cached_tokens": 1024,
+      "provider_tokens": 1082
+    },
+    "modelInputMessages": 12,
+    "estimatedInputTokens": 1104,
+    "providerPromptTokens": 1078
+  },
+  "qualityDelta": 0,
+  "estimatedTokenReduction": 0.708090957165521,
+  "providerPromptTokenReduction": 0.7099811676082863
+}

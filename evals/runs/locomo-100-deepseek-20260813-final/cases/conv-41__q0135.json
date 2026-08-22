@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-41__q0135",
+  "sampleId": "conv-41",
+  "questionIndex": 135,
+  "question": "Why does Maria think it's important for younger generations to visit military memorials?",
+  "answer": "To remember and appreciate those who served",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D27:12"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D27:12",
+      "D21:24",
+      "D27:14",
+      "D17:1",
+      "D21:25",
+      "D5:2",
+      "D20:3",
+      "D14:6",
+      "D7:3",
+      "D9:12"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 1,
+    "evidenceRecall": 1.0,
+    "evidenceHit": true,
+    "latencyMs": 531.927,
+    "injectedChars": 2544,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "To understand the sacrifices made for their freedom",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 88,
+      "completion_tokens": 8,
+      "total_tokens": 96
+    },
+    "latencyMs": 1084,
+    "answer": "To understand the sacrifices made for their freedom",
+    "f1": 0.15384615384615383,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "To remember and appreciate those who served.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 776,
+      "completion_tokens": 8,
+      "total_tokens": 784
+    },
+    "latencyMs": 1002,
+    "answer": "To remember and appreciate those who served.",
+    "f1": 1.0,
+    "injectedChars": 2544
+  },
+  "f1Delta": 0.8461538461538461
+}

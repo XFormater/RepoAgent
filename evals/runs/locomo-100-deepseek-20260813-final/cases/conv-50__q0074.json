@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-50__q0074",
+  "sampleId": "conv-50",
+  "questionIndex": 74,
+  "question": "What advice did Calvin receive from the producer at the music festival?",
+  "answer": "to stay true to himself and sound unique",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D3:7"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D7:15",
+      "D7:3",
+      "D23:6",
+      "D9:13",
+      "D7:11",
+      "D13:16",
+      "D25:28",
+      "D12:11",
+      "D23:8",
+      "D3:5"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 968.601,
+    "injectedChars": 2559,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 85,
+      "completion_tokens": 3,
+      "total_tokens": 88
+    },
+    "latencyMs": 1020,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 774,
+      "completion_tokens": 3,
+      "total_tokens": 777
+    },
+    "latencyMs": 889,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2559
+  },
+  "f1Delta": 0.0
+}

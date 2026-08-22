@@ -18,6 +18,7 @@ from nanobot.runtime_context import (
     RuntimeContextProvider,
     resolve_runtime_context,
 )
+from nanobot.security.logical_vfs import current_vfs, current_vfs_identity
 from nanobot.session.manager import Session
 from nanobot.utils.helpers import estimate_message_tokens
 from nanobot.utils.llm_runtime import LLMRuntime
@@ -201,7 +202,14 @@ class ContextOrchestrator:
             )
 
     def core_memory_block(self) -> RuntimeContextBlock | None:
-        content = self.builder.memory.read_memory().strip()
+        memory = self.builder.memory
+        vfs = current_vfs()
+        identity = current_vfs_identity()
+        if vfs is not None and vfs.enabled and identity is not None:
+            from nanobot.agent.memory import MemoryStore
+
+            memory = MemoryStore(vfs.user_root(identity))
+        content = memory.read_memory().strip()
         if not content:
             return None
         return RuntimeContextBlock(

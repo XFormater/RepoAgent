@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-50__q0156",
+  "sampleId": "conv-50",
+  "questionIndex": 156,
+  "question": "Where did Dave take a stunning photo of a waterfall?",
+  "answer": "Nearby park",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D30:15"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D12:6",
+      "D4:17",
+      "D25:17",
+      "D28:32",
+      "D9:18",
+      "D25:25",
+      "D16:18",
+      "D30:12",
+      "D14:11",
+      "D18:12"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 573.399,
+    "injectedChars": 2805,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 83,
+      "completion_tokens": 3,
+      "total_tokens": 86
+    },
+    "latencyMs": 757,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 864,
+      "completion_tokens": 3,
+      "total_tokens": 867
+    },
+    "latencyMs": 1058,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2805
+  },
+  "f1Delta": 0.0
+}

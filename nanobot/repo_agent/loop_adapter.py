@@ -49,6 +49,12 @@ async def run_repository_turn(loop: AgentLoop, ctx: TurnContext) -> None:
             sender_id=ctx.msg.sender_id,
             turn_id=ctx.turn_id,
             workspace=workspace,
+            tenant_id=str(ctx.msg.metadata.get("tenant_id", "default")),
+            user_id=str(
+                ctx.msg.metadata.get("user_id")
+                or ctx.msg.sender_id
+                or ctx.delivery.route.chat_id
+            ),
         )
         result = await loop._run_agent_loop(
             cast(list[dict[str, Any]], messages),
@@ -93,6 +99,7 @@ async def run_repository_turn(loop: AgentLoop, ctx: TurnContext) -> None:
         runtime=runtime,
         invoke=invoke_repository_agent,
         on_update=ctx.on_progress,
+        tenant_id=str(ctx.msg.metadata.get("tenant_id", "default")),
     )
     ctx.final_content = result.final_content
     ctx.all_messages = result.messages

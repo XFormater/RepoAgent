@@ -21,6 +21,7 @@ from nanobot.runtime_context import (
     RuntimeContextBlock,
     append_runtime_context,
 )
+from nanobot.security.logical_vfs import current_vfs, current_vfs_identity
 from nanobot.utils.helpers import (
     detect_image_mime,
     load_bundled_template,
@@ -72,6 +73,20 @@ class ContextBuilder:
         self.memory = MemoryStore(workspace)
         self.skills = SkillsLoader(workspace, disabled_skills=set(disabled_skills) if disabled_skills else None)
 
+    def _active_skill_loader(self) -> SkillsLoader:
+        vfs = current_vfs()
+        identity = current_vfs_identity()
+        if vfs is not None and vfs.enabled and identity is not None:
+            return self.skills.with_workspace_skill_root(vfs.user_skills_root(identity))
+        return self.skills
+
+    def _active_memory_store(self) -> MemoryStore:
+        vfs = current_vfs()
+        identity = current_vfs_identity()
+        if vfs is not None and vfs.enabled and identity is not None:
+            return MemoryStore(vfs.user_root(identity))
+        return self.memory
+
     def build_system_prompt(
         self,
         *,
@@ -94,28 +109,30 @@ class ContextBuilder:
 
         parts.append(render_template("agent/tool_contract.md"))
 
+        memory_store = self._active_memory_store()
         if include_core_memory_in_system:
-            memory = self.memory.read_memory()
+            memory = memory_store.read_memory()
             if memory and not self._is_template_content(memory, "memory/MEMORY.md"):
                 parts.append(f"# Memory\n\n## Long-term Memory\n{memory}")
 
-        active_skills = self.skills.get_always_skills()
+        skills = self._active_skill_loader()
+        active_skills = skills.get_always_skills()
         active_skills.extend(
             name
             for name in (active_skill_names or ())
             if name not in active_skills
         )
         if active_skills:
-            active_content = self.skills.load_skills_for_context(active_skills)
+            active_content = skills.load_skills_for_context(active_skills)
             if active_content:
                 parts.append(f"# Active Skills\n\n{active_content}")
 
-        skills_summary = self.skills.build_skills_summary(exclude=set(active_skills))
+        skills_summary = skills.build_skills_summary(exclude=set(active_skills))
         if skills_summary:
             parts.append(render_template("agent/skills_section.md", skills_summary=skills_summary))
 
         if include_memory_recent_history:
-            entries = self.memory.read_recent_history_for_prompt(
+            entries = memory_store.read_recent_history_for_prompt(
                 since_cursor=self.memory.get_last_dream_cursor(),
                 session_key=session_key,
                 unified_session=unified_session,
@@ -228,8 +245,9 @@ class ContextBuilder:
     ) -> list[dict[str, Any]]:
         """Build the complete message list for an LLM call."""
         root = workspace or self.workspace
+        skills = self._active_skill_loader()
         active_skill_names = (
-            self.skills.get_explicitly_invoked_skills(current_message)
+            skills.get_explicitly_invoked_skills(current_message)
             if current_role == "user"
             else []
         )

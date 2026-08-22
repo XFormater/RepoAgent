@@ -1,0 +1,68 @@
+{
+  "caseId": "conv-43__q0026",
+  "sampleId": "conv-43",
+  "questionIndex": 26,
+  "question": "Which TV series does Tim mention watching?",
+  "answer": "That, Wheel of Time",
+  "adversarialAnswer": null,
+  "category": 1,
+  "categoryName": "multi_hop",
+  "evidence": [
+    "D17:1",
+    "D17:11",
+    "D26:36"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D2:15",
+      "D26:34",
+      "D12:7",
+      "D2:3",
+      "D2:5",
+      "D2:13",
+      "D15:17",
+      "D18:15",
+      "D14:18",
+      "D22:17"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1475.989,
+    "injectedChars": 1740,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_off",
+    "memory_on"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 80,
+      "completion_tokens": 3,
+      "total_tokens": 83
+    },
+    "latencyMs": 991,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 589,
+      "completion_tokens": 3,
+      "total_tokens": 592
+    },
+    "latencyMs": 3869,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 1740
+  },
+  "f1Delta": 0.0
+}

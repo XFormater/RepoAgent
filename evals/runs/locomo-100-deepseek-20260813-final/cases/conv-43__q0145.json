@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-43__q0145",
+  "sampleId": "conv-43",
+  "questionIndex": 145,
+  "question": "Where was the forest picture shared by John on December 1,2023 taken?",
+  "answer": "near his hometown",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D20:28"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D18:12",
+      "D22:6",
+      "D3:23",
+      "D22:9",
+      "D22:5",
+      "D26:15",
+      "D20:36",
+      "D26:23",
+      "D26:9",
+      "D12:26"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 850.467,
+    "injectedChars": 2461,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 89,
+      "completion_tokens": 3,
+      "total_tokens": 92
+    },
+    "latencyMs": 1004,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 738,
+      "completion_tokens": 3,
+      "total_tokens": 741
+    },
+    "latencyMs": 1176,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2461
+  },
+  "f1Delta": 0.0
+}

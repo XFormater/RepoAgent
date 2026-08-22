@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-44__q0063",
+  "sampleId": "conv-44",
+  "questionIndex": 63,
+  "question": "What kind of pastries did Andrew and his girlfriend have at the cafe?",
+  "answer": "croissants, muffins, and tarts",
+  "adversarialAnswer": null,
+  "category": 4,
+  "categoryName": "single_hop",
+  "evidence": [
+    "D3:17"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D3:15",
+      "D4:24",
+      "D18:11",
+      "D25:1",
+      "D20:30",
+      "D21:3",
+      "D13:14",
+      "D6:3",
+      "D17:1",
+      "D20:31"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1176.321,
+    "injectedChars": 2504,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 87,
+      "completion_tokens": 3,
+      "total_tokens": 90
+    },
+    "latencyMs": 1050,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 775,
+      "completion_tokens": 3,
+      "total_tokens": 778
+    },
+    "latencyMs": 1140,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 2504
+  },
+  "f1Delta": 0.0
+}

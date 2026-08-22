@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-49__q0163",
+  "sampleId": "conv-49",
+  "questionIndex": 163,
+  "question": "What novel is Sam reading that he finds gripping?",
+  "answer": "No information available",
+  "adversarialAnswer": "The Great Gatsby",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D4:10"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D15:17",
+      "D20:14",
+      "D4:11",
+      "D5:14",
+      "D15:13",
+      "D16:17",
+      "D15:7",
+      "D21:3",
+      "D21:15",
+      "D24:4"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 285.081,
+    "injectedChars": 1618,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 100,
+      "completion_tokens": 3,
+      "total_tokens": 103
+    },
+    "latencyMs": 523,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 574,
+      "completion_tokens": 3,
+      "total_tokens": 577
+    },
+    "latencyMs": 1031,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 1618
+  },
+  "f1Delta": 0.0
+}

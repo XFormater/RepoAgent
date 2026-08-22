@@ -1,0 +1,112 @@
+{"timestamp": "2026-08-13T10:00:35.363446+00:00", "event": "run_started", "selectedQuestions": 100}
+{"timestamp": "2026-08-13T10:00:35.665377+00:00", "event": "conversation_ingested", "sampleId": "conv-26", "records": 419}
+{"timestamp": "2026-08-13T10:00:46.393024+00:00", "event": "case_completed", "caseId": "conv-26__q0015", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:00:46.393883+00:00", "event": "case_completed", "caseId": "conv-26__q0027", "memoryOffF1": 0.4, "memoryOnF1": 0.4, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:00:46.394593+00:00", "event": "case_completed", "caseId": "conv-26__q0031", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:00:46.395419+00:00", "event": "case_completed", "caseId": "conv-26__q0036", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:00:46.398498+00:00", "event": "case_completed", "caseId": "conv-26__q0039", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:00:46.399050+00:00", "event": "case_completed", "caseId": "conv-26__q0084", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:00:46.399781+00:00", "event": "case_completed", "caseId": "conv-26__q0107", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:00:46.400744+00:00", "event": "case_completed", "caseId": "conv-26__q0128", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:00:46.401602+00:00", "event": "case_completed", "caseId": "conv-26__q0169", "memoryOffF1": 0.0, "memoryOnF1": 1.0, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:00:46.402525+00:00", "event": "case_completed", "caseId": "conv-26__q0186", "memoryOffF1": 0.0, "memoryOnF1": 1.0, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:00:46.611350+00:00", "event": "conversation_ingested", "sampleId": "conv-30", "records": 369}
+{"timestamp": "2026-08-13T10:00:54.810054+00:00", "event": "case_completed", "caseId": "conv-30__q0000", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:00:54.810740+00:00", "event": "case_completed", "caseId": "conv-30__q0004", "memoryOffF1": 0.41666666666666663, "memoryOnF1": 0.16666666666666666, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:00:54.811599+00:00", "event": "case_completed", "caseId": "conv-30__q0018", "memoryOffF1": 1.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:00:54.812756+00:00", "event": "case_completed", "caseId": "conv-30__q0021", "memoryOffF1": 0.0, "memoryOnF1": 0.5, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:00:54.813914+00:00", "event": "case_completed", "caseId": "conv-30__q0022", "memoryOffF1": 0.0, "memoryOnF1": 0.5, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:00:54.815021+00:00", "event": "case_completed", "caseId": "conv-30__q0058", "memoryOffF1": 0.0, "memoryOnF1": 0.36363636363636365, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:00:54.816221+00:00", "event": "case_completed", "caseId": "conv-30__q0080", "memoryOffF1": 0.25, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:00:54.817326+00:00", "event": "case_completed", "caseId": "conv-30__q0081", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:00:54.818423+00:00", "event": "case_completed", "caseId": "conv-30__q0091", "memoryOffF1": 1.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:00:54.819522+00:00", "event": "case_completed", "caseId": "conv-30__q0098", "memoryOffF1": 0.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:00:55.179909+00:00", "event": "conversation_ingested", "sampleId": "conv-41", "records": 663}
+{"timestamp": "2026-08-13T10:01:03.458453+00:00", "event": "case_completed", "caseId": "conv-41__q0042", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:01:03.459073+00:00", "event": "case_completed", "caseId": "conv-41__q0043", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:03.459953+00:00", "event": "case_completed", "caseId": "conv-41__q0062", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:03.461009+00:00", "event": "case_completed", "caseId": "conv-41__q0077", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:03.462222+00:00", "event": "case_completed", "caseId": "conv-41__q0092", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:03.463376+00:00", "event": "case_completed", "caseId": "conv-41__q0102", "memoryOffF1": 0.0, "memoryOnF1": 1.0, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:01:03.464481+00:00", "event": "case_completed", "caseId": "conv-41__q0129", "memoryOffF1": 0.5555555555555556, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:03.465563+00:00", "event": "case_completed", "caseId": "conv-41__q0135", "memoryOffF1": 0.15384615384615383, "memoryOnF1": 1.0, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:01:03.466605+00:00", "event": "case_completed", "caseId": "conv-41__q0161", "memoryOffF1": 1.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:03.467743+00:00", "event": "case_completed", "caseId": "conv-41__q0175", "memoryOffF1": 0.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:03.812302+00:00", "event": "conversation_ingested", "sampleId": "conv-42", "records": 629}
+{"timestamp": "2026-08-13T10:01:11.989514+00:00", "event": "case_completed", "caseId": "conv-42__q0025", "memoryOffF1": 0.0, "memoryOnF1": 0.18181818181818182, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:01:11.990146+00:00", "event": "case_completed", "caseId": "conv-42__q0049", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:11.990931+00:00", "event": "case_completed", "caseId": "conv-42__q0050", "memoryOffF1": 0.0, "memoryOnF1": 0.3333333333333333, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:11.991851+00:00", "event": "case_completed", "caseId": "conv-42__q0064", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:11.992811+00:00", "event": "case_completed", "caseId": "conv-42__q0093", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:11.993884+00:00", "event": "case_completed", "caseId": "conv-42__q0114", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:11.994882+00:00", "event": "case_completed", "caseId": "conv-42__q0130", "memoryOffF1": 0.0, "memoryOnF1": 0.5, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:01:11.995574+00:00", "event": "case_completed", "caseId": "conv-42__q0170", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:11.996535+00:00", "event": "case_completed", "caseId": "conv-42__q0243", "memoryOffF1": 0.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:11.997654+00:00", "event": "case_completed", "caseId": "conv-42__q0249", "memoryOffF1": 1.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:12.363182+00:00", "event": "conversation_ingested", "sampleId": "conv-43", "records": 680}
+{"timestamp": "2026-08-13T10:01:20.877388+00:00", "event": "case_completed", "caseId": "conv-43__q0023", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:20.878005+00:00", "event": "case_completed", "caseId": "conv-43__q0026", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:20.878747+00:00", "event": "case_completed", "caseId": "conv-43__q0032", "memoryOffF1": 1.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:20.879502+00:00", "event": "case_completed", "caseId": "conv-43__q0092", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:20.880240+00:00", "event": "case_completed", "caseId": "conv-43__q0125", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:20.881036+00:00", "event": "case_completed", "caseId": "conv-43__q0145", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:20.882021+00:00", "event": "case_completed", "caseId": "conv-43__q0154", "memoryOffF1": 0.28571428571428575, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:20.882766+00:00", "event": "case_completed", "caseId": "conv-43__q0182", "memoryOffF1": 1.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:20.883457+00:00", "event": "case_completed", "caseId": "conv-43__q0202", "memoryOffF1": 0.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:20.884014+00:00", "event": "case_completed", "caseId": "conv-43__q0241", "memoryOffF1": 0.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:21.250599+00:00", "event": "conversation_ingested", "sampleId": "conv-44", "records": 675}
+{"timestamp": "2026-08-13T10:01:29.143527+00:00", "event": "case_completed", "caseId": "conv-44__q0035", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:29.144327+00:00", "event": "case_completed", "caseId": "conv-44__q0037", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:29.145344+00:00", "event": "case_completed", "caseId": "conv-44__q0051", "memoryOffF1": 0.0, "memoryOnF1": 0.0625, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:29.146418+00:00", "event": "case_completed", "caseId": "conv-44__q0057", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:29.147168+00:00", "event": "case_completed", "caseId": "conv-44__q0063", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:29.148166+00:00", "event": "case_completed", "caseId": "conv-44__q0103", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:01:29.148921+00:00", "event": "case_completed", "caseId": "conv-44__q0110", "memoryOffF1": 0.0, "memoryOnF1": 1.0, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:01:29.149651+00:00", "event": "case_completed", "caseId": "conv-44__q0121", "memoryOffF1": 0.4615384615384615, "memoryOnF1": 1.0, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:01:29.150404+00:00", "event": "case_completed", "caseId": "conv-44__q0141", "memoryOffF1": 0.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:29.151248+00:00", "event": "case_completed", "caseId": "conv-44__q0149", "memoryOffF1": 0.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:29.517041+00:00", "event": "conversation_ingested", "sampleId": "conv-47", "records": 689}
+{"timestamp": "2026-08-13T10:01:37.754700+00:00", "event": "case_completed", "caseId": "conv-47__q0005", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:37.755484+00:00", "event": "case_completed", "caseId": "conv-47__q0011", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:37.756301+00:00", "event": "case_completed", "caseId": "conv-47__q0017", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:37.759424+00:00", "event": "case_completed", "caseId": "conv-47__q0029", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:37.760011+00:00", "event": "case_completed", "caseId": "conv-47__q0072", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:37.760793+00:00", "event": "case_completed", "caseId": "conv-47__q0075", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:37.761611+00:00", "event": "case_completed", "caseId": "conv-47__q0083", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:37.762537+00:00", "event": "case_completed", "caseId": "conv-47__q0102", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:37.763261+00:00", "event": "case_completed", "caseId": "conv-47__q0177", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:01:37.765816+00:00", "event": "case_completed", "caseId": "conv-47__q0184", "memoryOffF1": 1.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:38.318355+00:00", "event": "conversation_ingested", "sampleId": "conv-48", "records": 681}
+{"timestamp": "2026-08-13T10:01:47.266323+00:00", "event": "case_completed", "caseId": "conv-48__q0023", "memoryOffF1": 0.16666666666666666, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:47.266984+00:00", "event": "case_completed", "caseId": "conv-48__q0051", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:47.270526+00:00", "event": "case_completed", "caseId": "conv-48__q0073", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:47.271226+00:00", "event": "case_completed", "caseId": "conv-48__q0093", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:47.272243+00:00", "event": "case_completed", "caseId": "conv-48__q0130", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:47.273340+00:00", "event": "case_completed", "caseId": "conv-48__q0146", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:47.274472+00:00", "event": "case_completed", "caseId": "conv-48__q0170", "memoryOffF1": 0.22222222222222224, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:47.275696+00:00", "event": "case_completed", "caseId": "conv-48__q0172", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:47.276540+00:00", "event": "case_completed", "caseId": "conv-48__q0197", "memoryOffF1": 1.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:47.277368+00:00", "event": "case_completed", "caseId": "conv-48__q0215", "memoryOffF1": 0.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:47.566394+00:00", "event": "conversation_ingested", "sampleId": "conv-49", "records": 509}
+{"timestamp": "2026-08-13T10:01:55.101985+00:00", "event": "case_completed", "caseId": "conv-49__q0019", "memoryOffF1": 0.07142857142857142, "memoryOnF1": 0.11764705882352941, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:01:55.102772+00:00", "event": "case_completed", "caseId": "conv-49__q0058", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:55.103759+00:00", "event": "case_completed", "caseId": "conv-49__q0077", "memoryOffF1": 0.041666666666666664, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:55.104758+00:00", "event": "case_completed", "caseId": "conv-49__q0086", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:55.105542+00:00", "event": "case_completed", "caseId": "conv-49__q0093", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:55.106524+00:00", "event": "case_completed", "caseId": "conv-49__q0103", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:55.107650+00:00", "event": "case_completed", "caseId": "conv-49__q0131", "memoryOffF1": 1.0, "memoryOnF1": 1.0, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:01:55.108794+00:00", "event": "case_completed", "caseId": "conv-49__q0157", "memoryOffF1": 1.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:55.109746+00:00", "event": "case_completed", "caseId": "conv-49__q0163", "memoryOffF1": 1.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:01:55.110518+00:00", "event": "case_completed", "caseId": "conv-49__q0189", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:01:55.428795+00:00", "event": "conversation_ingested", "sampleId": "conv-50", "records": 568}
+{"timestamp": "2026-08-13T10:02:03.267773+00:00", "event": "case_completed", "caseId": "conv-50__q0016", "memoryOffF1": 0.0, "memoryOnF1": 0.25, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:02:03.268608+00:00", "event": "case_completed", "caseId": "conv-50__q0030", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:02:03.269184+00:00", "event": "case_completed", "caseId": "conv-50__q0072", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:02:03.269740+00:00", "event": "case_completed", "caseId": "conv-50__q0074", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:02:03.270464+00:00", "event": "case_completed", "caseId": "conv-50__q0077", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": true}
+{"timestamp": "2026-08-13T10:02:03.271423+00:00", "event": "case_completed", "caseId": "conv-50__q0138", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:02:03.272529+00:00", "event": "case_completed", "caseId": "conv-50__q0156", "memoryOffF1": 0.0, "memoryOnF1": 0.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:02:03.273645+00:00", "event": "case_completed", "caseId": "conv-50__q0186", "memoryOffF1": 0.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:02:03.274770+00:00", "event": "case_completed", "caseId": "conv-50__q0198", "memoryOffF1": 1.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:02:03.275935+00:00", "event": "case_completed", "caseId": "conv-50__q0203", "memoryOffF1": 1.0, "memoryOnF1": 1.0, "evidenceHit": false}
+{"timestamp": "2026-08-13T10:02:03.277901+00:00", "event": "run_completed", "evaluatedQuestions": 100, "memoryOnMeanF1": 0.30375601604278074}

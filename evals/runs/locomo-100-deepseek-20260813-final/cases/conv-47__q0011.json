@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-47__q0011",
+  "sampleId": "conv-47",
+  "questionIndex": 11,
+  "question": "How was John feeling on April 10, 2022?",
+  "answer": "seeking solitude",
+  "adversarialAnswer": null,
+  "category": 2,
+  "categoryName": "temporal",
+  "evidence": [
+    "D6:7"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D16:4",
+      "D1:19",
+      "D3:13",
+      "D6:5",
+      "D11:10",
+      "D16:6",
+      "D21:12",
+      "D13:13",
+      "D31:12",
+      "D1:37"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 1492.361,
+    "injectedChars": 1779,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 85,
+      "completion_tokens": 3,
+      "total_tokens": 88
+    },
+    "latencyMs": 1010,
+    "answer": "No information available",
+    "f1": 0.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 579,
+      "completion_tokens": 4,
+      "total_tokens": 583
+    },
+    "latencyMs": 1177,
+    "answer": "No information available.",
+    "f1": 0.0,
+    "injectedChars": 1779
+  },
+  "f1Delta": 0.0
+}

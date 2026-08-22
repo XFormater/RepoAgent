@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-42__q0249",
+  "sampleId": "conv-42",
+  "questionIndex": 249,
+  "question": "What game is Joanna currently playing and recommends to others on November 7, 2022?",
+  "answer": "No information available",
+  "adversarialAnswer": "\"Xenoblade Chronicles\"",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D27:23"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D23:12",
+      "D24:10",
+      "D23:6",
+      "D1:6",
+      "D23:9",
+      "D24:14",
+      "D1:4",
+      "D23:25",
+      "D10:5",
+      "D25:28"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 199.979,
+    "injectedChars": 1675,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 112,
+      "completion_tokens": 3,
+      "total_tokens": 115
+    },
+    "latencyMs": 539,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 608,
+      "completion_tokens": 3,
+      "total_tokens": 611
+    },
+    "latencyMs": 1275,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 1675
+  },
+  "f1Delta": 0.0
+}

@@ -9,7 +9,7 @@ import json
 import os
 import re
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, Iterable, cast
 
 import httpx
 
@@ -21,8 +21,11 @@ from nanobot.repo_agent.repository import RepositoryError, read_worktree_diff
 class _RepositoryTool(Tool):
     _plugin_discoverable = False
 
-    def __init__(self, cache_root: Path):
-        self.cache_root = cache_root.resolve()
+    def __init__(self, cache_root: Path | Iterable[Path]):
+        roots = [cache_root] if isinstance(cache_root, Path) else list(cache_root)
+        self.cache_roots = tuple(path.resolve() for path in roots)
+        if not self.cache_roots:
+            raise ValueError("repository tools require at least one allowed root")
 
     @property
     def read_only(self) -> bool:
@@ -33,7 +36,7 @@ class _RepositoryTool(Tool):
         if context is None or context.workspace is None:
             raise ValueError("repository tool requires an active repository workspace")
         workspace = context.workspace.resolve()
-        if workspace != self.cache_root and self.cache_root not in workspace.parents:
+        if not any(workspace == root or root in workspace.parents for root in self.cache_roots):
             raise ValueError("active repository workspace is outside the repository cache")
         return workspace
 
@@ -369,7 +372,7 @@ class GitHubIssueTool(_RepositoryTool):
         return json.dumps(payload, ensure_ascii=False, indent=2)
 
 
-def repository_tools(cache_root: Path) -> list[Tool]:
+def repository_tools(cache_root: Path | Iterable[Path]) -> list[Tool]:
     return [
         RepositoryTreeTool(cache_root),
         RepositoryReadTool(cache_root),

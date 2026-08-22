@@ -2307,6 +2307,44 @@ idempotency, and Worker leases:
 [Production Multi-Agent Harness](./multi-agent-harness.md) for roles, state transitions,
 context isolation, failure recovery, metrics, and the deployment checklist.
 
+### Logical VFS
+
+The logical VFS gives each tenant/user a deterministic namespace for project
+downloads, task workspaces and private skills. It is enabled by default and is
+an application-level policy layer; use Harness `workerExecutionBackend: "bwrap"`
+for OS-level process and mount isolation as well.
+
+```json
+{
+  "vfs": {
+    "enabled": true,
+    "root": ".nanobot/vfs",
+    "maxUserBytes": 5368709120,
+    "maxUserFiles": 100000,
+    "maxTaskBytes": 1073741824,
+    "maxTaskFiles": 50000,
+    "taskTtlSeconds": 604800,
+    "projectTtlSeconds": 2592000
+  }
+}
+```
+
+| Option | Default | Description |
+|---|---:|---|
+| `vfs.enabled` | `true` | Enables user/task namespace mapping and quota checks. |
+| `vfs.root` | `.nanobot/vfs` | Root directory; relative paths are below the configured workspace. |
+| `vfs.maxUserBytes` / `maxUserFiles` | 5 GiB / 100000 | Per-user aggregate quota. |
+| `vfs.maxTaskBytes` / `maxTaskFiles` | 1 GiB / 50000 | Per-task quota. |
+| `vfs.taskTtlSeconds` | 604800 | Retention window used by `cleanup_expired()`. |
+| `vfs.projectTtlSeconds` | 2592000 | Retention window for inactive project namespaces. |
+
+For the OpenAI-compatible API, the ingress layer can provide `X-Nanobot-Tenant`
+and `X-Nanobot-User`. These values are validated and converted into hashed VFS,
+session and upload namespaces. In production they must be injected by a trusted
+gateway/identity provider; they are not an authentication mechanism by
+themselves. Without the headers, `session_id` is used as the user namespace for
+backward-compatible single-user deployments.
+
 ## Tool Hint Max Length
 
 Tool hints are the short progress messages shown when the agent calls tools (e.g. `$ cd …/project && npm test`). By default, these are truncated at 40 characters, which can make long commands hard to read.

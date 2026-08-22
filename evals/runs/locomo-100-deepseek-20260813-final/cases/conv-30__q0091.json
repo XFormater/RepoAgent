@@ -1,0 +1,66 @@
+{
+  "caseId": "conv-30__q0091",
+  "sampleId": "conv-30",
+  "questionIndex": 91,
+  "question": "How is Jon's store doing?",
+  "answer": "No information available",
+  "adversarialAnswer": "The store is doing great.",
+  "category": 5,
+  "categoryName": "adversarial",
+  "evidence": [
+    "D4:2"
+  ],
+  "retrieval": {
+    "retrievedIds": [
+      "D6:10",
+      "D1:18",
+      "D5:19",
+      "D14:4",
+      "D2:1",
+      "D7:6",
+      "D18:7",
+      "D13:12",
+      "D2:2",
+      "D6:9"
+    ],
+    "retrievedCount": 10,
+    "evidenceHits": 0,
+    "evidenceRecall": 0.0,
+    "evidenceHit": false,
+    "latencyMs": 207.803,
+    "injectedChars": 2358,
+    "degraded": false,
+    "degradationReason": null
+  },
+  "variantOrder": [
+    "memory_on",
+    "memory_off"
+  ],
+  "memoryOff": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 100,
+      "completion_tokens": 4,
+      "total_tokens": 104
+    },
+    "latencyMs": 952,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 0
+  },
+  "memoryOn": {
+    "rawAnswer": "No information available.",
+    "finishReason": "stop",
+    "usage": {
+      "prompt_tokens": 729,
+      "completion_tokens": 4,
+      "total_tokens": 733
+    },
+    "latencyMs": 1009,
+    "answer": "No information available",
+    "f1": 1.0,
+    "injectedChars": 2358
+  },
+  "f1Delta": 0.0
+}

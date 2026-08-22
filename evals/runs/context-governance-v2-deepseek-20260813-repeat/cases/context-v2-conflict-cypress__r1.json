@@ -1,0 +1,49 @@
+{
+  "caseId": "context-v2-conflict-cypress",
+  "layer": "context_governance",
+  "scenario": "history_ablation",
+  "repetition": 1,
+  "latencyMs": 1889,
+  "error": null,
+  "passed": true,
+  "expected": "FERN-221",
+  "contextCaseType": "conflict_override",
+  "contextBlockLimit": 1200,
+  "control": {
+    "variant": "governance_off",
+    "correct": true,
+    "answer": "FERN-221",
+    "normalizedAnswer": "FERN-221",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 5163,
+      "completion_tokens": 4,
+      "total_tokens": 5167,
+      "cached_tokens": 5120,
+      "provider_tokens": 5167
+    },
+    "modelInputMessages": 54,
+    "estimatedInputTokens": 5257,
+    "providerPromptTokens": 5163
+  },
+  "treatment": {
+    "variant": "governance_on",
+    "correct": true,
+    "answer": "FERN-221",
+    "normalizedAnswer": "FERN-221",
+    "stopReason": "completed",
+    "usage": {
+      "prompt_tokens": 1080,
+      "completion_tokens": 4,
+      "total_tokens": 1084,
+      "cached_tokens": 1024,
+      "provider_tokens": 1084
+    },
+    "modelInputMessages": 12,
+    "estimatedInputTokens": 1106,
+    "providerPromptTokens": 1080
+  },
+  "qualityDelta": 0,
+  "estimatedTokenReduction": 0.7896138482023968,
+  "providerPromptTokenReduction": 0.7908192911098199
+}

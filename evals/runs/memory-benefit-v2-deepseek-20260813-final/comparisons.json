@@ -1,0 +1,39 @@
+{
+  "contextGovernance": {
+    "pairedCases": 0,
+    "controlAccuracy": 0.0,
+    "treatmentAccuracy": 0.0,
+    "meanEstimatedTokenReduction": 0.0
+  },
+  "memoryBenefit": {
+    "pairedCases": 20,
+    "controlAccuracy": 0.4,
+    "treatmentAccuracy": 1.0,
+    "accuracyGain": 0.6,
+    "retrievalHitRate": 1.0,
+    "harmfulRegressionRate": 0.0,
+    "slices": {
+      "benefit_required": {
+        "cases": 12,
+        "controlAccuracy": 0.0,
+        "treatmentAccuracy": 1.0,
+        "accuracyGain": 1.0,
+        "harmfulRegressionRate": 0.0
+      },
+      "conflict_override": {
+        "cases": 4,
+        "controlAccuracy": 1.0,
+        "treatmentAccuracy": 1.0,
+        "accuracyGain": 0.0,
+        "harmfulRegressionRate": 0.0
+      },
+      "irrelevant_non_regression": {
+        "cases": 4,
+        "controlAccuracy": 1.0,
+        "treatmentAccuracy": 1.0,
+        "accuracyGain": 0.0,
+        "harmfulRegressionRate": 0.0
+      }
+    }
+  }
+}
