@@ -1,0 +1,569 @@
+nanobot/agent/context.py:87
+  83|     def _active_memory_store(self) -> MemoryStore:
+  84|         vfs = current_vfs()
+  85|         identity = current_vfs_identity()
+  86|         if vfs is not None and vfs.enabled and identity is not None:
+> 87|             return MemoryStore(vfs.user_root(identity))
+  88|         return self.memory
+  89| 
+  90|     def build_system_prompt(
+  91|         self,
+  92|         *,
+  93|         active_skill_names: Sequence[str] | None = None,
+  94|         channel: str | None = None,
+  95|         session_summary: str | None = None,
+
+nanobot/agent/context_orchestrator.py:211
+  207|         identity = current_vfs_identity()
+  208|         if vfs is not None and vfs.enabled and identity is not None:
+  209|             from nanobot.agent.memory import MemoryStore
+  210| 
+> 211|             memory = MemoryStore(vfs.user_root(identity))
+  212|         content = memory.read_memory().strip()
+  213|         if not content:
+  214|             return None
+  215|         return RuntimeContextBlock(
+  216|             source="core_memory",
+  217|             content=(
+  218|                 "<core_long_term_memory>\n"
+  219|                 "Curated durable memory loaded at agent startup; data and standing "
+
+nanobot/agent/loop.py:340
+  336|         self.channels_config = channels_config
+  337|         self.restart_mode = restart_mode
+  338|         self._runtime_model_publisher = runtime_model_publisher
+  339|         self.workspace = workspace
+> 340|         self.vfs = LogicalVFS(workspace, vfs_config or LogicalVFSConfig())
+  341|         if self.vfs.enabled:
+  342|             try:
+  343|                 removed = self.vfs.cleanup_expired()
+  344|                 if removed:
+  345|                     logger.info("Logical VFS cleaned {} expired namespace(s)", removed)
+  346|             except OSError as exc:
+  347|                 logger.warning("Logical VFS cleanup deferred: {}", exc)
+  348|         initial_model = model or provider.get_default_model()
+
+nanobot/agent/loop.py:341
+  337|         self.restart_mode = restart_mode
+  338|         self._runtime_model_publisher = runtime_model_publisher
+  339|         self.workspace = workspace
+  340|         self.vfs = LogicalVFS(workspace, vfs_config or LogicalVFSConfig())
+> 341|         if self.vfs.enabled:
+  342|             try:
+  343|                 removed = self.vfs.cleanup_expired()
+  344|                 if removed:
+  345|                     logger.info("Logical VFS cleaned {} expired namespace(s)", removed)
+  346|             except OSError as exc:
+  347|                 logger.warning("Logical VFS cleanup deferred: {}", exc)
+  348|         initial_model = model or provider.get_default_model()
+  349|         self.max_iterations = (
+
+nanobot/agent/loop.py:343
+  339|         self.workspace = workspace
+  340|         self.vfs = LogicalVFS(workspace, vfs_config or LogicalVFSConfig())
+  341|         if self.vfs.enabled:
+  342|             try:
+> 343|                 removed = self.vfs.cleanup_expired()
+  344|                 if removed:
+  345|                     logger.info("Logical VFS cleaned {} expired namespace(s)", removed)
+  346|             except OSError as exc:
+  347|                 logger.warning("Logical VFS cleanup deferred: {}", exc)
+  348|         initial_model = model or provider.get_default_model()
+  349|         self.max_iterations = (
+  350|             max_iterations if max_iterations is not None else defaults.max_tool_iterations
+  351|         )
+
+nanobot/agent/loop.py:583
+  579|             from nanobot.repo_agent.orchestrator import RepositoryOrchestrator
+  580|             from nanobot.repo_agent.repository import RepositoryManager
+  581|             from nanobot.repo_agent.tools import repository_tools
+  582| 
+> 583|             repository_manager = RepositoryManager(workspace, repository_agent_config, vfs=self.vfs)
+  584|             for tool in repository_tools(repository_manager.allowed_roots):
+  585|                 self.tools.register(tool)
+  586|             self.repository_orchestrator = RepositoryOrchestrator(
+  587|                 config=repository_agent_config,
+  588|                 workspace=workspace,
+  589|                 tools=self.tools,
+  590|                 harness=harness,
+  591|                 vfs=self.vfs,
+
+nanobot/agent/loop.py:591
+  587|                 config=repository_agent_config,
+  588|                 workspace=workspace,
+  589|                 tools=self.tools,
+  590|                 harness=harness,
+> 591|                 vfs=self.vfs,
+  592|             )
+  593|         self._runtime_vars: dict[str, Any] = {}
+  594|         self._current_iteration: int = 0
+  595|         self.commands = CommandRouter()
+  596|         register_builtin_commands(self.commands)
+  597| 
+  598|     @classmethod
+  599|     def from_config(
+
+nanobot/agent/loop.py:657
+  653|             preset_snapshot_loader=preset_snapshot_loader,
+  654|             repository_agent_config=config.repository_agent,
+  655|             memory_config=config.memory,
+  656|             harness_config=config.harness,
+> 657|             vfs_config=config.vfs,
+  658|             **extra,
+  659|         )
+  660| 
+  661|     def _sync_subagent_runtime_limits(self) -> None:
+  662|         """Keep subagent runtime limits aligned with mutable loop settings."""
+  663|         self.subagents.max_iterations = self.max_iterations
+  664| 
+  665|     def invalidate_runtime_config(self) -> None:
+
+nanobot/agent/loop.py:875
+  871|             session_id=ctx.session.key,
+  872|             agent_id=str(ctx.msg.metadata.get("agent_id", "main")),
+  873|             task_id=(str(ctx.msg.metadata["task_id"]) if ctx.msg.metadata.get("task_id") else None),
+  874|         )
+> 875|         with self.vfs.bind(identity):
+  876|             return self.context_orchestrator.build_messages(
+  877|                 history=ctx.history,
+  878|                 current_message=ctx.msg.content,
+  879|                 media=ctx.msg.media if ctx.kind is TurnKind.USER and ctx.msg.media else None,
+  880|                 channel=ctx.delivery.route.channel,
+  881|                 session_summary=ctx.pending_summary,
+  882|                 workspace=scope.project_path,
+  883|                 runtime_context_blocks=ctx.runtime_context_blocks,
+
+nanobot/agent/loop.py:1224
+  1220|                 if (metadata or {}).get("task_id")
+  1221|                 else None
+  1222|             ),
+  1223|         )
+> 1224|         vfs_tokens = bind_vfs(self.vfs, vfs_identity)
+  1225|         workspace_token = bind_workspace_scope(effective_scope)
+  1226|         turn_scope_stack = ExitStack()
+  1227|         # Compute lazily because create_goal may create goal metadata during this run.
+  1228|         def _goal_continue() -> str | None:
+  1229|             _goal_lines = goal_state_runtime_lines(session.metadata if session is not None else None)
+  1230|             if not _goal_lines:
+  1231|                 return None
+  1232|             return (
+
+nanobot/agent/loop.py:1345
+  1341|             self.schedule_background,
+  1342|             self.runtime_for_session,
+  1343|             active_session_keys=self._pending_queues.keys(),
+  1344|         )
+> 1345|         if self.vfs.enabled and now >= self._next_vfs_cleanup_at:
+  1346|             self._next_vfs_cleanup_at = now + 300
+  1347|             try:
+  1348|                 removed = self.vfs.cleanup_expired()
+  1349|                 if removed:
+  1350|                     logger.info("Logical VFS cleanup removed {} expired namespace(s)", removed)
+  1351|             except OSError as exc:
+  1352|                 logger.warning("Logical VFS periodic cleanup failed: {}", exc)
+  1353| 
+
+nanobot/agent/loop.py:1348
+  1344|         )
+  1345|         if self.vfs.enabled and now >= self._next_vfs_cleanup_at:
+  1346|             self._next_vfs_cleanup_at = now + 300
+  1347|             try:
+> 1348|                 removed = self.vfs.cleanup_expired()
+  1349|                 if removed:
+  1350|                     logger.info("Logical VFS cleanup removed {} expired namespace(s)", removed)
+  1351|             except OSError as exc:
+  1352|                 logger.warning("Logical VFS periodic cleanup failed: {}", exc)
+  1353| 
+  1354|     async def run(self) -> None:
+  1355|         """Run the agent loop, dispatching messages as tasks to stay responsive to /stop."""
+  1356|         self._running = True
+
+nanobot/agent/loop.py:1976
+  1972|             session_id=ctx.session_key,
+  1973|             agent_id=str(ctx.msg.metadata.get("agent_id", "main")),
+  1974|             task_id=(str(ctx.msg.metadata["task_id"]) if ctx.msg.metadata.get("task_id") else None),
+  1975|         )
+> 1976|         with self.vfs.bind(vfs_identity):
+  1977|             if ctx.kind is TurnKind.USER or is_subagent:
+  1978|                 ctx.runtime_context_blocks = await self._resolve_runtime_context_for_turn(ctx)
+  1979|             if ctx.kind is TurnKind.USER:
+  1980|                 memory_block = await retrieve_for_turn(self, ctx)
+  1981|                 if memory_block is not None:
+  1982|                     ctx.runtime_context_blocks.append(memory_block)
+  1983|                     self.context_orchestrator.metrics.blocks([memory_block])
+  1984|             core_memory = self.context_orchestrator.core_memory_block()
+
+nanobot/agent/tools/filesystem.py:557
+  553|             fp = self._resolve_write(path)
+  554|             vfs = current_vfs()
+  555|             identity = current_vfs_identity()
+  556|             if vfs is not None and identity is not None:
+> 557|                 vfs.enforce_write(identity, fp, len(content.encode("utf-8")))
+  558|             fp.parent.mkdir(parents=True, exist_ok=True)
+  559|             fp.write_text(content, encoding="utf-8")
+  560|             self._file_states.record_write(fp)
+  561|             return f"Successfully wrote {len(content)} characters to {fp}"
+  562|         except PermissionError as e:
+  563|             return ToolResult.error(f"Error: {e}")
+  564|         except Exception as e:
+  565|             return ToolResult.error(f"Error writing file: {e}")
+
+nanobot/agent/tools/filesystem.py:945
+  941|                     return ToolResult.error(f"Error: Cannot create file — {path} already exists and is not empty.")
+  942|                 vfs = current_vfs()
+  943|                 identity = current_vfs_identity()
+  944|                 if vfs is not None and identity is not None:
+> 945|                     vfs.enforce_write(identity, fp, len(new_text.encode("utf-8")))
+  946|                 fp.write_text(new_text, encoding="utf-8")
+  947|                 self._file_states.record_write(fp)
+  948|                 return f"Successfully edited {fp}"
+  949| 
+  950|             # Read-before-edit check
+  951|             warning = self._file_states.check_read(fp)
+  952| 
+  953|             raw = fp.read_bytes()
+
+nanobot/agent/tools/filesystem.py:1037
+  1033| 
+  1034|             vfs = current_vfs()
+  1035|             identity = current_vfs_identity()
+  1036|             if vfs is not None and identity is not None:
+> 1037|                 vfs.enforce_write(identity, fp, len(new_content.encode("utf-8")))
+  1038| 
+  1039|             fp.write_bytes(new_content.encode("utf-8"))
+  1040|             self._file_states.record_write(fp)
+  1041|             msg = f"Successfully edited {fp}"
+  1042|             if warning:
+  1043|                 msg = f"{warning}\n{msg}"
+  1044|             return msg
+  1045|         except PermissionError as e:
+
+nanobot/agent/tools/shell.py:367
+  363|             vfs = current_vfs()
+  364|             identity = current_vfs_identity()
+  365|             if vfs is not None and identity is not None:
+  366|                 try:
+> 367|                     vfs.check_quota(identity, root=Path(prepared.cwd))
+  368|                 except VFSQuotaError as exc:
+  369|                     logger.warning("VFS quota exceeded after shell command: {}", exc)
+  370|                     return ToolResult.error(f"Error: {exc}")
+  371| 
+  372|             max_len = clamp_session_int(max_output_chars, self._MAX_OUTPUT, 1000, MAX_OUTPUT_CHARS)
+  373|             if len(result) > max_len:
+  374|                 half = max_len // 2
+  375|                 result = (
+
+nanobot/agent/tools/shell.py:418
+  414|             vfs = current_vfs()
+  415|             identity = current_vfs_identity()
+  416|             if vfs is not None and identity is not None:
+  417|                 try:
+> 418|                     vfs.check_quota(identity, root=Path(prepared.cwd))
+  419|                 except VFSQuotaError as exc:
+  420|                     logger.warning("VFS quota exceeded after shell session: {}", exc)
+  421|                     return ToolResult.error(f"Error: {exc}")
+  422|             return ToolResult.error(result) if poll.timed_out else result
+  423|         except Exception as exc:
+  424|             return ToolResult.error(f"Error executing command: {exc}")
+  425| 
+  426|     def _resolve_timeout(self, timeout: int | None) -> int | None:
+
+nanobot/cli/gateway_runtime.py:784
+  780|                             {
+  781|                                 "status": "ready" if ready else "unavailable",
+  782|                                 "harness": components,
+  783|                                 "vfs": {
+> 784|                                     "enabled": bool(getattr(agent.vfs, "enabled", False)),
+  785|                                     "metrics": agent.vfs.snapshot() if hasattr(agent, "vfs") else {},
+  786|                                 },
+  787|                             }
+  788|                         )
+  789|                         status = "200 OK" if ready else "503 Service Unavailable"
+  790|                         content_type = "application/json"
+  791|                     else:
+  792|                         body = "Not Found"
+
+nanobot/cli/gateway_runtime.py:785
+  781|                                 "status": "ready" if ready else "unavailable",
+  782|                                 "harness": components,
+  783|                                 "vfs": {
+  784|                                     "enabled": bool(getattr(agent.vfs, "enabled", False)),
+> 785|                                     "metrics": agent.vfs.snapshot() if hasattr(agent, "vfs") else {},
+  786|                                 },
+  787|                             }
+  788|                         )
+  789|                         status = "200 OK" if ready else "503 Service Unavailable"
+  790|                         content_type = "application/json"
+  791|                     else:
+  792|                         body = "Not Found"
+  793|                         status = "404 Not Found"
+
+nanobot/repo_agent/orchestrator.py:1058
+  1054|         on_update: Callable[[str], Awaitable[None]] | None = None,
+  1055|         tenant_id: str = "default",
+  1056|     ) -> RepositoryTurnResult:
+  1057|         """Run one repository turn inside its user-scoped logical VFS."""
+> 1058|         if self.manager.vfs is None or not self.manager.vfs.enabled:
+  1059|             return await self._run_scoped(
+  1060|                 request=request,
+  1061|                 actor=actor,
+  1062|                 session_key=session_key,
+  1063|                 initial_messages=initial_messages,
+  1064|                 runtime=runtime,
+  1065|                 invoke=invoke,
+  1066|                 on_update=on_update,
+
+nanobot/repo_agent/orchestrator.py:1073
+  1069|             tenant_id=tenant_id,
+  1070|             user_id=actor or session_key,
+  1071|             session_id=session_key,
+  1072|         )
+> 1073|         with self.manager.vfs.bind(identity), self.manager.bind_vfs_identity(identity):
+  1074|             return await self._run_scoped(
+  1075|                 request=request,
+  1076|                 actor=actor,
+  1077|                 session_key=session_key,
+  1078|                 initial_messages=initial_messages,
+  1079|                 runtime=runtime,
+  1080|                 invoke=invoke,
+  1081|                 on_update=on_update,
+
+nanobot/repo_agent/repository.py:59
+  55|         self._base_cache_root = (self.workspace / config.cache_dir).resolve()
+  56|         if self._base_cache_root != self.workspace and self.workspace not in self._base_cache_root.parents:
+  57|             raise ValueError("repository cache directory must remain inside the workspace")
+  58|         self._base_cache_root.mkdir(parents=True, exist_ok=True)
+> 59|         self.vfs = vfs
+  60|         self._scope: ContextVar[VFSIdentity | None] = ContextVar(
+  61|             "repository_manager_vfs_identity", default=None
+  62|         )
+  63| 
+  64|     @property
+  65|     def cache_root(self) -> Path:
+  66|         """Return the active user-scoped cache, or the legacy root."""
+  67|         identity = self._scope.get()
+
+nanobot/repo_agent/repository.py:68
+  64|     @property
+  65|     def cache_root(self) -> Path:
+  66|         """Return the active user-scoped cache, or the legacy root."""
+  67|         identity = self._scope.get()
+> 68|         if self.vfs is not None and self.vfs.enabled and identity is not None:
+  69|             root = self.vfs.repository_root(identity)
+  70|             root.mkdir(parents=True, exist_ok=True)
+  71|             return root
+  72|         return self._base_cache_root
+  73| 
+  74|     @property
+  75|     def allowed_roots(self) -> list[Path]:
+  76|         """Roots that repository read tools may safely resolve below."""
+
+nanobot/repo_agent/repository.py:69
+  65|     def cache_root(self) -> Path:
+  66|         """Return the active user-scoped cache, or the legacy root."""
+  67|         identity = self._scope.get()
+  68|         if self.vfs is not None and self.vfs.enabled and identity is not None:
+> 69|             root = self.vfs.repository_root(identity)
+  70|             root.mkdir(parents=True, exist_ok=True)
+  71|             return root
+  72|         return self._base_cache_root
+  73| 
+  74|     @property
+  75|     def allowed_roots(self) -> list[Path]:
+  76|         """Roots that repository read tools may safely resolve below."""
+  77|         roots = [self._base_cache_root]
+
+nanobot/repo_agent/repository.py:78
+  74|     @property
+  75|     def allowed_roots(self) -> list[Path]:
+  76|         """Roots that repository read tools may safely resolve below."""
+  77|         roots = [self._base_cache_root]
+> 78|         if self.vfs is not None and self.vfs.enabled:
+  79|             roots.append(self.vfs.root)
+  80|         return roots
+  81| 
+  82|     @contextmanager
+  83|     def bind_vfs_identity(self, identity: VFSIdentity) -> Any:
+  84|         token = self._scope.set(identity)
+  85|         try:
+  86|             yield
+
+nanobot/repo_agent/repository.py:79
+  75|     def allowed_roots(self) -> list[Path]:
+  76|         """Roots that repository read tools may safely resolve below."""
+  77|         roots = [self._base_cache_root]
+  78|         if self.vfs is not None and self.vfs.enabled:
+> 79|             roots.append(self.vfs.root)
+  80|         return roots
+  81| 
+  82|     @contextmanager
+  83|     def bind_vfs_identity(self, identity: VFSIdentity) -> Any:
+  84|         token = self._scope.set(identity)
+  85|         try:
+  86|             yield
+  87|         finally:
+
+nanobot/security/logical_vfs.py:145
+  141|     @property
+  142|     def enabled(self) -> bool:
+  143|         return self.config.enabled
+  144| 
+> 145|     def user_root(self, identity: VFSIdentity) -> Path:
+  146|         return self.root / "tenants" / identity.tenant_key / "users" / identity.user_key
+  147| 
+  148|     def repository_root(self, identity: VFSIdentity) -> Path:
+  149|         return self.user_root(identity) / "projects"
+  150| 
+  151|     def user_skills_root(self, identity: VFSIdentity) -> Path:
+  152|         root = self.user_root(identity) / "skills"
+  153|         root.mkdir(parents=True, exist_ok=True)
+
+nanobot/security/logical_vfs.py:149
+  145|     def user_root(self, identity: VFSIdentity) -> Path:
+  146|         return self.root / "tenants" / identity.tenant_key / "users" / identity.user_key
+  147| 
+  148|     def repository_root(self, identity: VFSIdentity) -> Path:
+> 149|         return self.user_root(identity) / "projects"
+  150| 
+  151|     def user_skills_root(self, identity: VFSIdentity) -> Path:
+  152|         root = self.user_root(identity) / "skills"
+  153|         root.mkdir(parents=True, exist_ok=True)
+  154|         return root
+  155| 
+  156|     def task_root(self, identity: VFSIdentity) -> Path:
+  157|         if not identity.task_key:
+
+nanobot/security/logical_vfs.py:152
+  148|     def repository_root(self, identity: VFSIdentity) -> Path:
+  149|         return self.user_root(identity) / "projects"
+  150| 
+  151|     def user_skills_root(self, identity: VFSIdentity) -> Path:
+> 152|         root = self.user_root(identity) / "skills"
+  153|         root.mkdir(parents=True, exist_ok=True)
+  154|         return root
+  155| 
+  156|     def task_root(self, identity: VFSIdentity) -> Path:
+  157|         if not identity.task_key:
+  158|             raise VFSIdentityError("task_id is required for a task workspace")
+  159|         return self.user_root(identity) / "tasks" / identity.task_key
+  160| 
+
+nanobot/security/logical_vfs.py:159
+  155| 
+  156|     def task_root(self, identity: VFSIdentity) -> Path:
+  157|         if not identity.task_key:
+  158|             raise VFSIdentityError("task_id is required for a task workspace")
+> 159|         return self.user_root(identity) / "tasks" / identity.task_key
+  160| 
+  161|     def workspace(
+  162|         self,
+  163|         identity: VFSIdentity,
+  164|         kind: VFSWorkspaceKind,
+  165|         name: str = "default",
+  166|         *,
+  167|         create: bool = True,
+
+nanobot/security/logical_vfs.py:215
+  211| 
+  212|     def snapshot(self) -> dict[str, int]:
+  213|         return dict(self.counters)
+  214| 
+> 215|     def check_quota(
+  216|         self,
+  217|         identity: VFSIdentity,
+  218|         *,
+  219|         root: Path | None = None,
+  220|         additional_bytes: int = 0,
+  221|         additional_files: int = 0,
+  222|     ) -> VFSUsage:
+  223|         usage = self.usage(root or self.user_root(identity))
+
+nanobot/security/logical_vfs.py:223
+  219|         root: Path | None = None,
+  220|         additional_bytes: int = 0,
+  221|         additional_files: int = 0,
+  222|     ) -> VFSUsage:
+> 223|         usage = self.usage(root or self.user_root(identity))
+  224|         user_root = self.user_root(identity).resolve(strict=False)
+  225|         task_limit = identity.task_id is not None
+  226|         if root is not None:
+  227|             try:
+  228|                 root.resolve(strict=False).relative_to(user_root / "tasks")
+  229|             except ValueError:
+  230|                 pass
+  231|             else:
+
+nanobot/security/logical_vfs.py:224
+  220|         additional_bytes: int = 0,
+  221|         additional_files: int = 0,
+  222|     ) -> VFSUsage:
+  223|         usage = self.usage(root or self.user_root(identity))
+> 224|         user_root = self.user_root(identity).resolve(strict=False)
+  225|         task_limit = identity.task_id is not None
+  226|         if root is not None:
+  227|             try:
+  228|                 root.resolve(strict=False).relative_to(user_root / "tasks")
+  229|             except ValueError:
+  230|                 pass
+  231|             else:
+  232|                 task_limit = True
+
+nanobot/security/logical_vfs.py:240
+  236|             self.metric("quota_exceeded")
+  237|             raise VFSQuotaError(f"VFS byte quota exceeded ({max_bytes} bytes)")
+  238|         if usage.files + max(0, additional_files) > max_files:
+  239|             self.metric("quota_exceeded")
+> 240|             raise VFSQuotaError(f"VFS file quota exceeded ({max_files} files)")
+  241|         return usage
+  242| 
+  243|     def enforce_write(self, identity: VFSIdentity, path: Path, new_size: int) -> None:
+  244|         """Check a prospective write when *path* belongs to this identity."""
+  245|         path = path.resolve(strict=False)
+  246|         user_root = self.user_root(identity).resolve(strict=False)
+  247|         quota_root = user_root
+  248|         task_root: Path | None = None
+
+nanobot/security/logical_vfs.py:243
+  239|             self.metric("quota_exceeded")
+  240|             raise VFSQuotaError(f"VFS file quota exceeded ({max_files} files)")
+  241|         return usage
+  242| 
+> 243|     def enforce_write(self, identity: VFSIdentity, path: Path, new_size: int) -> None:
+  244|         """Check a prospective write when *path* belongs to this identity."""
+  245|         path = path.resolve(strict=False)
+  246|         user_root = self.user_root(identity).resolve(strict=False)
+  247|         quota_root = user_root
+  248|         task_root: Path | None = None
+  249|         if identity.task_id:
+  250|             task_root = self.task_root(identity).resolve(strict=False)
+  251|         else:
+
+nanobot/security/logical_vfs.py:246
+  242| 
+  243|     def enforce_write(self, identity: VFSIdentity, path: Path, new_size: int) -> None:
+  244|         """Check a prospective write when *path* belongs to this identity."""
+  245|         path = path.resolve(strict=False)
+> 246|         user_root = self.user_root(identity).resolve(strict=False)
+  247|         quota_root = user_root
+  248|         task_root: Path | None = None
+  249|         if identity.task_id:
+  250|             task_root = self.task_root(identity).resolve(strict=False)
+  251|         else:
+  252|             # Repository turns may only know their physical task workspace.
+  253|             # Recover the task namespace from the canonical ``tasks/<id>``
+  254|             # segment so task quotas still apply without trusting path input.
+
+nanobot/security/logical_vfs.py:283
+  279|             try:
+  280|                 old_size = path.stat().st_size
+  281|             except OSError:
+  282|                 old_size = 0
+> 283|         self.check_quota(
+  284|             identity,
+  285|             root=quota_root,
+  286|             additional_bytes=max(0, new_size - old_size),
+  287|             additional_files=0 if existed else 1,
+  288|         )
+  289| 
+  290|     def is_read_only_path(self, path: Path) -> bool:
+  291|         """Return whether *path* is in a shared, read-only skill namespace."""

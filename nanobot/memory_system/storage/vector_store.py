@@ -1,7 +1,7 @@
 """VectorStore interface, in-memory backend, and Qdrant adapter."""
 
 # Qdrant is an optional lazy import and its generated models vary across releases.
-# pyright: reportMissingImports=false, reportUnknownMemberType=false, reportUnknownVariableType=false, reportUnknownArgumentType=false
+# pyright: reportMissingImports=false, reportUnknownMemberType=false, reportUnknownVariableType=false, reportUnknownArgumentType=false, reportArgumentType=false, reportAttributeAccessIssue=false
 
 from __future__ import annotations
 

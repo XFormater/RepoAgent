@@ -26,6 +26,7 @@ from nanobot.memory_system.retrieve.warm_cache import InMemoryWarmCache, RedisWa
 from nanobot.memory_system.short_term.redis_memory import RedisShortTermMemory
 from nanobot.memory_system.storage.embedding import (
     HashEmbeddingProvider,
+    LexicalHashEmbeddingProvider,
     OpenAIEmbeddingProvider,
 )
 from nanobot.memory_system.storage.graph_store import InMemoryGraphStore, Neo4jGraphStore
@@ -33,7 +34,11 @@ from nanobot.memory_system.storage.metadata_store import (
     InMemoryMetadataStore,
     PostgresMetadataStore,
 )
-from nanobot.memory_system.storage.reranker import CrossEncoderReranker, IdentityReranker
+from nanobot.memory_system.storage.reranker import (
+    CrossEncoderReranker,
+    IdentityReranker,
+    LexicalReranker,
+)
 from nanobot.memory_system.storage.vector_store import InMemoryVectorStore, QdrantVectorStore
 
 if TYPE_CHECKING:
@@ -160,16 +165,17 @@ def build_memory_service(
 ) -> LongTermMemoryService:
     """Build production adapters lazily; network connections occur on first use."""
     storage = settings.storage
-    embedding = (
-        HashEmbeddingProvider(storage.embedding.dimension)
-        if storage.embedding.provider == "hash"
-        else OpenAIEmbeddingProvider(
+    if storage.embedding.provider == "hash":
+        embedding = HashEmbeddingProvider(storage.embedding.dimension)
+    elif storage.embedding.provider == "lexical_hash":
+        embedding = LexicalHashEmbeddingProvider(storage.embedding.dimension)
+    else:
+        embedding = OpenAIEmbeddingProvider(
             model=storage.embedding.model,
             dimension=storage.embedding.dimension,
             api_key=storage.embedding.api_key,
             base_url=storage.embedding.base_url,
         )
-    )
     vector_store = (
         InMemoryVectorStore()
         if storage.vector_db.type == "memory"
@@ -224,14 +230,15 @@ def build_memory_service(
             socket_timeout=storage.redis.socket_timeout,
         )
     )
-    reranker = (
-        IdentityReranker()
-        if settings.retrieve.reranker.model == "identity"
-        else CrossEncoderReranker(
+    if settings.retrieve.reranker.model == "identity":
+        reranker = IdentityReranker()
+    elif settings.retrieve.reranker.model == "lexical":
+        reranker = LexicalReranker()
+    else:
+        reranker = CrossEncoderReranker(
             settings.retrieve.reranker.model,
             max_batch_size=settings.retrieve.reranker.max_batch_size,
         )
-    )
     extraction_model = settings.record.llm.model or default_model
 
     async def invoke_extractor(messages: list[dict[str, str]]) -> str:

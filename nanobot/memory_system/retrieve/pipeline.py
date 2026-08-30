@@ -54,17 +54,32 @@ class RetrievePipeline:
                 span.set_attribute("memory.user_id", user_id)
                 span.set_attribute("memory.deep", deep)
             cache_task = asyncio.create_task(self._get_warm_cache(user_id))
-            query_vector = (await self.embedding.embed([query_text]))[0]
-            recalled = await self.vector_store.search(
-                query_vector,
-                self.config.vector.top_k,
-                filters={"user_id": user_id},
+            vector_task = asyncio.create_task(self._vector_recall(user_id, query_text))
+            lexical_task = (
+                asyncio.create_task(
+                    self.metadata_store.search_text(
+                        user_id,
+                        query_text,
+                        top_k=self.config.lexical.top_k,
+                        min_confidence=self.config.min_confidence,
+                    )
+                )
+                if self.config.lexical.enabled
+                else None
             )
-            recalled = [
+            vector_recalled = await vector_task
+            vector_recalled = [
                 item
-                for item in recalled
+                for item in vector_recalled
                 if item.score >= self.config.vector.score_threshold
             ]
+            lexical_recalled = await lexical_task if lexical_task is not None else []
+            lexical_recalled = [
+                item
+                for item in lexical_recalled
+                if item.score >= self.config.lexical.min_score
+            ]
+            recalled = self._fuse_recall(vector_recalled, lexical_recalled)
             cache_records = await cache_task
             graph_records: list[MemoryRecord] = []
             degraded = False
@@ -104,6 +119,10 @@ class RetrievePipeline:
                 return RetrievalResult(
                     degraded=degraded,
                     degradation_reason=degradation_reason,
+                    vector_candidate_count=len(vector_recalled),
+                    lexical_candidate_count=len(lexical_recalled),
+                    graph_candidate_count=len(graph_records),
+                    cache_candidate_count=len(cache_records),
                 )
 
             try:
@@ -151,7 +170,47 @@ class RetrievePipeline:
                 memories=selected,
                 degraded=degraded,
                 degradation_reason=degradation_reason,
+                vector_candidate_count=len(vector_recalled),
+                lexical_candidate_count=len(lexical_recalled),
+                graph_candidate_count=len(graph_records),
+                cache_candidate_count=len(cache_records),
             )
+
+    async def _vector_recall(self, user_id: str, query_text: str) -> list[SearchResult]:
+        query_vector = (await self.embedding.embed([query_text]))[0]
+        return await self.vector_store.search(
+            query_vector,
+            self.config.vector.top_k,
+            filters={"user_id": user_id},
+        )
+
+    def _fuse_recall(
+        self,
+        vector_results: list[SearchResult],
+        lexical_results: list[SearchResult],
+    ) -> list[SearchResult]:
+        if not self.config.lexical.enabled:
+            return vector_results
+        records: dict[str, MemoryRecord] = {}
+        scores: dict[str, float] = {}
+        k = self.config.lexical.rrf_k
+        for weight, results in (
+            (self.config.lexical.vector_weight, vector_results),
+            (self.config.lexical.lexical_weight, lexical_results),
+        ):
+            for rank, result in enumerate(results, 1):
+                records.setdefault(result.record.id, result.record)
+                scores[result.record.id] = scores.get(result.record.id, 0.0) + weight / (
+                    k + rank
+                )
+        return [
+            SearchResult(record=records[record_id], score=score)
+            for record_id, score in sorted(
+                scores.items(),
+                key=lambda item: item[1],
+                reverse=True,
+            )
+        ]
 
     async def _get_warm_cache(self, user_id: str) -> list[MemoryRecord]:
         if not self.config.cache.warm_cache_enabled:
@@ -189,6 +248,7 @@ class RetrievePipeline:
         subgraphs = await self.graph_store.multi_hop_query(
             entity_ids,
             self.config.graph.max_depth,
+            self.config.graph.max_paths,
         )
         direct = [
             memory

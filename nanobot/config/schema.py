@@ -144,7 +144,7 @@ class AgentDefaults(Base):
     context_block_limit: int | None = None
     temperature: float = 0.1
     fallback_models: list[FallbackCandidate] = Field(default_factory=list)
-    max_tool_iterations: int = 200
+    max_tool_iterations: int = Field(default=30, ge=1, le=200)
     max_concurrent_subagents: int = Field(default=1, ge=1)
     fail_on_tool_error: bool = True
     max_tool_result_chars: int = 16_000

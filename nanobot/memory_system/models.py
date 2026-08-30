@@ -181,6 +181,10 @@ class RetrievalResult(BaseModel):
     cache_memories: list[MemoryRecord] = Field(default_factory=list)
     degraded: bool = False
     degradation_reason: str | None = None
+    vector_candidate_count: int = Field(default=0, ge=0)
+    lexical_candidate_count: int = Field(default=0, ge=0)
+    graph_candidate_count: int = Field(default=0, ge=0)
+    cache_candidate_count: int = Field(default=0, ge=0)
 
     @property
     def records(self) -> list[MemoryRecord]:

@@ -61,3 +61,14 @@ set -a; source .env; set +a
 See `docs/locomo-memory-benchmark.md` for the protocol, baseline, and reporting
 limitations. A 100-question result must be labeled LoCoMo-100 smoke rather than
 an official full-dataset score.
+
+Run the persistent four-database hybrid profile with DeepSeek V4 Flash:
+
+```bash
+set -a; source .env; set +a
+.venv/bin/python scripts/run_locomo_hybrid_eval.py
+```
+
+This profile uses the same fixed selection and scorer. It additionally verifies
+PostgreSQL, Qdrant, Neo4j, and Redis for every indexed conversation and records
+candidate counts and degradation in the run artifact.

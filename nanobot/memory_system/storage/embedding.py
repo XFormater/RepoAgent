@@ -8,6 +8,8 @@ import math
 from abc import ABC, abstractmethod
 from typing import Any
 
+from nanobot.memory_system.storage.lexical import lexical_tokens
+
 
 class EmbeddingProvider(ABC):
     @property
@@ -38,6 +40,36 @@ class HashEmbeddingProvider(EmbeddingProvider):
                 digest = hashlib.sha256(token.encode("utf-8")).digest()
                 index = int.from_bytes(digest[:4], "big") % self._dimension
                 values[index] += -1.0 if digest[4] & 1 else 1.0
+            norm = math.sqrt(sum(value * value for value in values)) or 1.0
+            vectors.append([value / norm for value in values])
+        return vectors
+
+
+class LexicalHashEmbeddingProvider(EmbeddingProvider):
+    """Sparse lexical feature hashing for deterministic local semantic recall.
+
+    Unlike :class:`HashEmbeddingProvider`, features are non-negative so shared
+    words cannot cancel each other. Word bigrams preserve a small amount of
+    phrase structure without downloading an embedding model.
+    """
+
+    def __init__(self, dimension: int = 2048) -> None:
+        self._dimension = dimension
+
+    @property
+    def dimension(self) -> int:
+        return self._dimension
+
+    async def embed(self, texts: list[str]) -> list[list[float]]:
+        vectors: list[list[float]] = []
+        for text in texts:
+            tokens = lexical_tokens(text)
+            features = [*tokens, *(f"{left}\x1f{right}" for left, right in zip(tokens, tokens[1:]))]
+            values = [0.0] * self._dimension
+            for feature in features:
+                digest = hashlib.blake2b(feature.encode("utf-8"), digest_size=8).digest()
+                index = int.from_bytes(digest, "big") % self._dimension
+                values[index] += 1.0
             norm = math.sqrt(sum(value * value for value in values)) or 1.0
             vectors.append([value / norm for value in values])
         return vectors

@@ -43,15 +43,25 @@ class VectorRetrieveConfig(Base):
     hnsw_ef: int = Field(default=128, ge=8)
 
 
+class LexicalRetrieveConfig(Base):
+    enabled: bool = False
+    top_k: int = Field(default=30, ge=1, le=200)
+    min_score: float = Field(default=0.0, ge=0.0)
+    rrf_k: int = Field(default=60, ge=1, le=1000)
+    vector_weight: float = Field(default=1.0, ge=0.0, le=10.0)
+    lexical_weight: float = Field(default=1.5, ge=0.0, le=10.0)
+
+
 class GraphRetrieveConfig(Base):
     enabled: bool = True
     max_depth: int = Field(default=2, ge=1, le=4)
+    max_paths: int = Field(default=100, ge=1, le=2000)
     timeout_ms: int = Field(default=100, ge=1)
 
 
 class RerankerConfig(Base):
     model: str = "BAAI/bge-reranker-v2-m3"
-    top_n: int = Field(default=5, ge=1, le=32)
+    top_n: int = Field(default=5, ge=1, le=64)
     timeout_ms: int = Field(default=200, ge=1)
     fallback: Literal["original_order"] = "original_order"
     max_batch_size: int = Field(default=32, ge=1, le=128)
@@ -72,6 +82,7 @@ class RetrieveConfig(Base):
     max_injected_chars: int = Field(default=6000, ge=256, le=50_000)
     min_confidence: float = Field(default=0.6, ge=0.0, le=1.0)
     vector: VectorRetrieveConfig = Field(default_factory=VectorRetrieveConfig)
+    lexical: LexicalRetrieveConfig = Field(default_factory=LexicalRetrieveConfig)
     graph: GraphRetrieveConfig = Field(default_factory=GraphRetrieveConfig)
     reranker: RerankerConfig = Field(default_factory=RerankerConfig)
     cache: CacheConfig = Field(default_factory=CacheConfig)
@@ -139,7 +150,7 @@ class FileSyncConfig(Base):
 
 
 class EmbeddingConfig(Base):
-    provider: Literal["openai", "hash"] = "openai"
+    provider: Literal["openai", "hash", "lexical_hash"] = "openai"
     model: str = "text-embedding-3-large"
     dimension: int = Field(default=3072, ge=8)
     api_key: str | None = None

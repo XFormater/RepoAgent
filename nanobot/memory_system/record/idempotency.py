@@ -1,7 +1,7 @@
 """Batch idempotency keys and stores."""
 
 # Optional Redis/asyncpg clients are imported lazily and have version-dependent types.
-# pyright: reportMissingImports=false, reportUnknownMemberType=false, reportUnknownVariableType=false, reportUnknownArgumentType=false, reportOptionalMemberAccess=false
+# pyright: reportMissingImports=false, reportMissingTypeStubs=false, reportUnknownMemberType=false, reportUnknownVariableType=false, reportUnknownArgumentType=false, reportOptionalMemberAccess=false
 
 from __future__ import annotations
 

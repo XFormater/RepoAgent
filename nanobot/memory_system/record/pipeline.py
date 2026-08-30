@@ -176,6 +176,16 @@ class RecordPipeline:
             error=str(last_error) if last_error else "record failed",
         )
 
+    async def index_records(self, records: list[MemoryRecord]) -> tuple[str, ...]:
+        """Index already-extracted records through the production persistence path.
+
+        This is intended for imports and benchmark corpora where extraction is
+        deliberately evaluated separately. PostgreSQL remains authoritative and
+        Qdrant/Neo4j remain rebuildable projections.
+        """
+        entities, relations = self._build_graph(records)
+        return await self._write(records, entities, relations)
+
     async def _build_records(
         self,
         *,
@@ -289,34 +299,33 @@ class RecordPipeline:
                 logger.warning("memory_vector_write_failed", error=str(exc))
                 if self.config.mode == "synchronous":
                     raise
-        for entity in entities:
+        if entities:
             try:
                 await self._retry_backend(
                     "neo4j",
-                    lambda entity=entity: self.graph_store.upsert_entity(entity),
+                    lambda: self.graph_store.upsert_entities(entities),
                 )
             except Exception as exc:
-                if "neo4j" not in failed:
-                    failed.append("neo4j")
+                failed.append("neo4j")
                 logger.warning(
-                    "memory_graph_entity_write_failed",
-                    entity_id=entity.id,
+                    "memory_graph_entity_batch_write_failed",
+                    entity_count=len(entities),
                     error=str(exc),
                 )
                 if self.config.mode == "synchronous":
                     raise
-        for relation in relations:
+        if relations:
             try:
                 await self._retry_backend(
                     "neo4j",
-                    lambda relation=relation: self.graph_store.upsert_relation(relation),
+                    lambda: self.graph_store.upsert_relations(relations),
                 )
             except Exception as exc:
                 if "neo4j" not in failed:
                     failed.append("neo4j")
                 logger.warning(
-                    "memory_graph_relation_write_failed",
-                    relation_id=relation.id,
+                    "memory_graph_relation_batch_write_failed",
+                    relation_count=len(relations),
                     error=str(exc),
                 )
                 if self.config.mode == "synchronous":

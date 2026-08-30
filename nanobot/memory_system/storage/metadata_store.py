@@ -1,7 +1,7 @@
 """Relational metadata store with optimistic locking."""
 
 # asyncpg is optional and imported only when the PostgreSQL backend is selected.
-# pyright: reportMissingImports=false, reportUnknownMemberType=false, reportUnknownVariableType=false
+# pyright: reportMissingImports=false, reportMissingTypeStubs=false, reportUnknownMemberType=false, reportUnknownVariableType=false
 
 from __future__ import annotations
 
@@ -11,7 +11,8 @@ from abc import ABC, abstractmethod
 from datetime import UTC, datetime
 from typing import Any
 
-from nanobot.memory_system.models import MemoryRecord, MemoryStatus
+from nanobot.memory_system.models import MemoryRecord, MemoryStatus, SearchResult
+from nanobot.memory_system.storage.lexical import bm25_scores
 
 
 class OptimisticLockError(RuntimeError):
@@ -55,6 +56,16 @@ class MetadataStore(ABC):
 
     @abstractmethod
     async def get_by_ids(self, record_ids: list[str]) -> list[MemoryRecord]: ...
+
+    @abstractmethod
+    async def search_text(
+        self,
+        user_id: str,
+        query: str,
+        *,
+        top_k: int,
+        min_confidence: float,
+    ) -> list[SearchResult]: ...
 
     @abstractmethod
     async def filter_active(
@@ -135,6 +146,34 @@ class InMemoryMetadataStore(MetadataStore):
                 for record_id in record_ids
                 if record_id in self.records
             ]
+
+    async def search_text(
+        self,
+        user_id: str,
+        query: str,
+        *,
+        top_k: int,
+        min_confidence: float,
+    ) -> list[SearchResult]:
+        async with self._lock:
+            records = [
+                record.model_copy(deep=True)
+                for record in self.records.values()
+                if record.user_id == user_id
+                and record.status == MemoryStatus.ACTIVE
+                and record.confidence >= min_confidence
+            ]
+        scores = bm25_scores(query, [record.fact_text for record in records])
+        ranked = sorted(
+            (
+                SearchResult(record=record, score=score)
+                for record, score in zip(records, scores, strict=True)
+                if score > 0
+            ),
+            key=lambda item: item.score,
+            reverse=True,
+        )
+        return ranked[:top_k]
 
     async def find_warm_records(
         self,
@@ -345,6 +384,56 @@ class PostgresMetadataStore(MetadataStore):
             )
         return [_record_from_payload(row["payload"]) for row in rows]
 
+    async def search_text(
+        self,
+        user_id: str,
+        query: str,
+        *,
+        top_k: int,
+        min_confidence: float,
+    ) -> list[SearchResult]:
+        if not query.strip():
+            return []
+        pool = await self._ensure_pool()
+        async with pool.acquire() as connection:
+            rows = await connection.fetch(
+                """
+                WITH query AS (
+                    SELECT to_tsquery(
+                        'english',
+                        array_to_string(
+                            tsvector_to_array(to_tsvector('english', $2)),
+                            ' | '
+                        )
+                    ) AS terms
+                )
+                SELECT payload,
+                       ts_rank_cd(
+                           to_tsvector('english', content),
+                           query.terms,
+                           32
+                       ) AS score
+                  FROM agent_memory_records, query
+                 WHERE user_id=$1
+                   AND status='active'
+                   AND confidence >= $3
+                   AND to_tsvector('english', content) @@ query.terms
+                 ORDER BY score DESC, updated_at DESC
+                 LIMIT $4
+                """,
+                user_id,
+                query,
+                min_confidence,
+                top_k,
+            )
+        return [
+            SearchResult(
+                record=_record_from_payload(row["payload"]),
+                score=float(row["score"]),
+            )
+            for row in rows
+        ]
+
     async def filter_active(
         self,
         records: list[MemoryRecord],
@@ -487,4 +576,6 @@ ON agent_memory_records(user_id, batch_id, content_hash)
 WHERE batch_id <> '' AND content_hash <> '';
 CREATE INDEX IF NOT EXISTS idx_agent_memory_entities
 ON agent_memory_records USING GIN(entities);
+CREATE INDEX IF NOT EXISTS idx_agent_memory_content_fts
+ON agent_memory_records USING GIN(to_tsvector('english', content));
 """

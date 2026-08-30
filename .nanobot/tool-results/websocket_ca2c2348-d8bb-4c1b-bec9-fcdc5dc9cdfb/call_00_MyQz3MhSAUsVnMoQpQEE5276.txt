@@ -1,0 +1,495 @@
+nanobot/agent/memory.py:753
+  750| 
+  751|     @staticmethod
+  752|     def dream_session_key() -> str:
+> 753|         """Return a unique session key for a Dream run, e.g. ``dream:20260528-100000``."""
+  754|         return f"dream:{datetime.now():%Y%m%d-%H%M%S}"
+  755| 
+  756|     @staticmethod
+  757|     def build_dream_commit_message(prefix: str, diff_body: str) -> str:
+  758|         """Build a Dream commit message grounded in the real working-tree diff.
+  759| 
+  760|         *diff_body* is a structured, machine-derived summary of the actual file
+  761|         changes (see :meth:`dream_content_diff` /
+  762|         :meth:`GitStore.summarize_working_tree`). The LLM narrative is
+  763|         deliberately excluded so the audit record (``/dream-log``) reflects the
+  764|         filesystem's truth, not the model's self-report.
+  765| 
+
+nanobot/agent/tools/search.py:196
+  193|                     "type": "integer",
+  194|                     "description": "Skip the first N results before applying head_limit",
+  195|                     "minimum": 0,
+> 196|                     "maximum": 100000,
+  197|                 },
+  198|             },
+  199|         }
+  200| 
+  201|     def _iter_paths(self, root: Path, *, include_dirs: bool) -> Iterable[Path]:
+  202|         if root.is_file():
+  203|             yield root
+  204|             return
+  205|         if include_dirs:
+  206|             yield root
+  207|         for dirpath, dirnames, filenames in os.walk(root):
+  208|             dirnames[:] = sorted(d for d in dirnames if d not in self._IGNORE_DIRS)
+
+nanobot/agent/tools/search.py:399
+  396|                     "type": "integer",
+  397|                     "description": "Skip the first N results before applying head_limit",
+  398|                     "minimum": 0,
+> 399|                     "maximum": 100000,
+  400|                 },
+  401|             },
+  402|             "required": ["pattern"],
+  403|         }
+  404| 
+  405|     @staticmethod
+  406|     def _format_block(
+  407|         display_path: str,
+  408|         lines: list[str],
+  409|         match_line: int,
+  410|         before: int,
+  411|         after: int,
+
+nanobot/channels/email/runtime.py:140
+  137|         self._last_subject_by_chat: dict[str, str] = {}
+  138|         self._last_message_id_by_chat: dict[str, str] = {}
+  139|         self._processed_uids: set[str] = set()  # Capped to prevent unbounded growth
+> 140|         self._MAX_PROCESSED_UIDS = 100000
+  141| 
+  142|     async def start(self) -> None:
+  143|         """Start polling IMAP for inbound emails."""
+  144|         if not self.config.consent_granted:
+  145|             self.logger.warning(
+  146|                 "Email channel disabled: consent_granted is false. "
+  147|                 "Set channels.email.consentGranted=true after explicit user permission."
+  148|             )
+  149|             return
+  150| 
+  151|         if not self._validate_config():
+  152|             return
+
+nanobot/channels/msteams/tests/test_msteams.py:851
+  848|             "aud": "app-id",
+  849|             "serviceurl": service_url,
+  850|             "nbf": 1700000000,
+> 851|             "exp": 4100000000,
+  852|         },
+  853|         private_key,
+  854|         algorithm="RS256",
+  855|         headers={"kid": jwk["kid"]},
+  856|     )
+  857| 
+  858|     result = await ch._validate_inbound_auth(
+  859|         f"Bearer {token}",
+  860|         {"serviceUrl": service_url},
+  861|     )
+  862|     assert result is None
+  863| 
+
+nanobot/channels/msteams/tests/test_msteams.py:879
+  876|             "aud": "app-id",
+  877|             "serviceurl": "https://smba.trafficmanager.net/amer/tenant-a/",
+  878|             "nbf": 1700000000,
+> 879|             "exp": 4100000000,
+  880|         },
+  881|         private_key,
+  882|         algorithm="RS256",
+  883|         headers={"kid": jwk["kid"]},
+  884|     )
+  885| 
+  886|     with pytest.raises(ValueError, match="serviceUrl claim mismatch"):
+  887|         await ch._validate_inbound_auth(
+  888|             f"Bearer {token}",
+  889|             {"serviceUrl": "https://smba.trafficmanager.net/amer/tenant-b/"},
+  890|         )
+  891| 
+
+nanobot/channels/signal/tests/test_signal_channel.py:86
+  83| 
+  84| def _make_channel(
+  85|     *,
+> 86|     phone_number: str = "+10000000000",
+  87|     dm_enabled: bool = True,
+  88|     dm_policy: str = "open",
+  89|     dm_allow_from: list[str] | None = None,
+  90|     group_enabled: bool = False,
+  91|     group_policy: str = "open",
+  92|     group_allow_from: list[str] | None = None,
+  93|     require_mention: bool = True,
+  94|     group_buffer_size: int = 20,
+  95|     attachments_dir: str | None = None,
+  96| ) -> SignalChannel:
+  97|     config = SignalConfig(
+  98|         enabled=True,
+
+nanobot/channels/signal/tests/test_signal_channel.py:327
+  324| 
+  325| class TestAccountIdAliases:
+  326|     def test_phone_number_alias_registered_on_init(self):
+> 327|         ch = _make_channel(phone_number="+10000000000")
+  328|         assert ch._id_matches_account("+10000000000")
+  329| 
+  330|     def test_digit_only_variant_matches(self):
+  331|         ch = _make_channel(phone_number="+10000000000")
+  332|         assert ch._id_matches_account("10000000000")
+  333| 
+  334|     def test_remember_alias_adds_uuid(self):
+  335|         ch = _make_channel()
+  336|         ch._remember_account_id_alias("some-uuid-abc")
+  337|         assert ch._id_matches_account("some-uuid-abc")
+  338| 
+  339|     def test_non_matching_id_returns_false(self):
+
+nanobot/channels/signal/tests/test_signal_channel.py:328
+  325| class TestAccountIdAliases:
+  326|     def test_phone_number_alias_registered_on_init(self):
+  327|         ch = _make_channel(phone_number="+10000000000")
+> 328|         assert ch._id_matches_account("+10000000000")
+  329| 
+  330|     def test_digit_only_variant_matches(self):
+  331|         ch = _make_channel(phone_number="+10000000000")
+  332|         assert ch._id_matches_account("10000000000")
+  333| 
+  334|     def test_remember_alias_adds_uuid(self):
+  335|         ch = _make_channel()
+  336|         ch._remember_account_id_alias("some-uuid-abc")
+  337|         assert ch._id_matches_account("some-uuid-abc")
+  338| 
+  339|     def test_non_matching_id_returns_false(self):
+  340|         ch = _make_channel(phone_number="+10000000000")
+
+nanobot/channels/signal/tests/test_signal_channel.py:331
+  328|         assert ch._id_matches_account("+10000000000")
+  329| 
+  330|     def test_digit_only_variant_matches(self):
+> 331|         ch = _make_channel(phone_number="+10000000000")
+  332|         assert ch._id_matches_account("10000000000")
+  333| 
+  334|     def test_remember_alias_adds_uuid(self):
+  335|         ch = _make_channel()
+  336|         ch._remember_account_id_alias("some-uuid-abc")
+  337|         assert ch._id_matches_account("some-uuid-abc")
+  338| 
+  339|     def test_non_matching_id_returns_false(self):
+  340|         ch = _make_channel(phone_number="+10000000000")
+  341|         assert not ch._id_matches_account("+19999999999")
+  342| 
+  343|     def test_none_and_non_string_return_false(self):
+
+nanobot/channels/signal/tests/test_signal_channel.py:332
+  329| 
+  330|     def test_digit_only_variant_matches(self):
+  331|         ch = _make_channel(phone_number="+10000000000")
+> 332|         assert ch._id_matches_account("10000000000")
+  333| 
+  334|     def test_remember_alias_adds_uuid(self):
+  335|         ch = _make_channel()
+  336|         ch._remember_account_id_alias("some-uuid-abc")
+  337|         assert ch._id_matches_account("some-uuid-abc")
+  338| 
+  339|     def test_non_matching_id_returns_false(self):
+  340|         ch = _make_channel(phone_number="+10000000000")
+  341|         assert not ch._id_matches_account("+19999999999")
+  342| 
+  343|     def test_none_and_non_string_return_false(self):
+  344|         ch = _make_channel()
+
+nanobot/channels/signal/tests/test_signal_channel.py:340
+  337|         assert ch._id_matches_account("some-uuid-abc")
+  338| 
+  339|     def test_non_matching_id_returns_false(self):
+> 340|         ch = _make_channel(phone_number="+10000000000")
+  341|         assert not ch._id_matches_account("+19999999999")
+  342| 
+  343|     def test_none_and_non_string_return_false(self):
+  344|         ch = _make_channel()
+  345|         assert not ch._id_matches_account(None)
+  346| 
+  347| 
+  348| # ---------------------------------------------------------------------------
+  349| # _should_respond_in_group
+  350| # ---------------------------------------------------------------------------
+  351| 
+  352| 
+
+nanobot/channels/signal/tests/test_signal_channel.py:356
+  353| class TestShouldRespondInGroup:
+  354|     def _make_group_channel(self, require_mention: bool = True) -> SignalChannel:
+  355|         return _make_channel(
+> 356|             phone_number="+10000000000",
+  357|             group_enabled=True,
+  358|             require_mention=require_mention,
+  359|         )
+  360| 
+  361|     def test_no_require_mention_always_responds(self):
+  362|         ch = self._make_group_channel(require_mention=False)
+  363|         assert ch._should_respond_in_group("anything", []) is True
+  364| 
+  365|     def test_require_mention_with_no_mentions_returns_false(self):
+  366|         ch = self._make_group_channel(require_mention=True)
+  367|         assert ch._should_respond_in_group("hello", []) is False
+  368| 
+
+nanobot/channels/signal/tests/test_signal_channel.py:371
+  368| 
+  369|     def test_require_mention_with_bot_number_mention(self):
+  370|         ch = self._make_group_channel(require_mention=True)
+> 371|         mentions = [{"number": "+10000000000", "start": 0, "length": 12}]
+  372|         assert ch._should_respond_in_group("￼ hello", mentions) is True
+  373| 
+  374|     def test_require_mention_with_uuid_mention(self):
+  375|         ch = self._make_group_channel(require_mention=True)
+  376|         ch._remember_account_id_alias("bot-uuid-123")
+  377|         mentions = [{"uuid": "bot-uuid-123", "start": 0, "length": 8}]
+  378|         assert ch._should_respond_in_group("￼ hello", mentions) is True
+  379| 
+  380|     def test_identifier_less_leading_mention_accepted(self):
+  381|         ch = self._make_group_channel(require_mention=True)
+  382|         # Mention with no IDs but leading span — treated as bot mention
+  383|         mentions = [{"start": 0, "length": 1}]
+
+nanobot/channels/signal/tests/test_signal_channel.py:397
+  394| 
+  395|     def test_phone_number_in_text_triggers_response(self):
+  396|         ch = self._make_group_channel(require_mention=True)
+> 397|         assert ch._should_respond_in_group("hey +10000000000 help", []) is True
+  398| 
+  399| 
+  400| # ---------------------------------------------------------------------------
+  401| # _strip_bot_mention
+  402| # ---------------------------------------------------------------------------
+  403| 
+  404| 
+  405| class TestStripBotMention:
+  406|     def _make_channel_with_number(self) -> SignalChannel:
+  407|         return _make_channel(phone_number="+10000000000")
+  408| 
+  409|     def test_strips_mention_by_phone(self):
+
+nanobot/channels/signal/tests/test_signal_channel.py:407
+  404| 
+  405| class TestStripBotMention:
+  406|     def _make_channel_with_number(self) -> SignalChannel:
+> 407|         return _make_channel(phone_number="+10000000000")
+  408| 
+  409|     def test_strips_mention_by_phone(self):
+  410|         ch = self._make_channel_with_number()
+  411|         text = "￼ hello"
+  412|         mentions = [{"number": "+10000000000", "start": 0, "length": 1}]
+  413|         result = ch._strip_bot_mention(text, mentions)
+  414|         assert result == "hello"
+  415| 
+  416|     def test_strips_identifier_less_leading_mention(self):
+  417|         ch = self._make_channel_with_number()
+  418|         text = "￼ hello"
+  419|         mentions = [{"start": 0, "length": 1}]
+
+nanobot/channels/signal/tests/test_signal_channel.py:412
+  409|     def test_strips_mention_by_phone(self):
+  410|         ch = self._make_channel_with_number()
+  411|         text = "￼ hello"
+> 412|         mentions = [{"number": "+10000000000", "start": 0, "length": 1}]
+  413|         result = ch._strip_bot_mention(text, mentions)
+  414|         assert result == "hello"
+  415| 
+  416|     def test_strips_identifier_less_leading_mention(self):
+  417|         ch = self._make_channel_with_number()
+  418|         text = "￼ hello"
+  419|         mentions = [{"start": 0, "length": 1}]
+  420|         result = ch._strip_bot_mention(text, mentions)
+  421|         assert result == "hello"
+  422| 
+  423|     def test_strips_leading_placeholder_without_mention_metadata(self):
+  424|         ch = self._make_channel_with_number()
+
+nanobot/channels/signal/tests/test_signal_channel.py:719
+  716|         ch = _make_channel(
+  717|             group_enabled=True,
+  718|             group_policy="open",
+> 719|             phone_number="+10000000000",
+  720|             require_mention=True,
+  721|         )
+  722|         allowed, chat_id = self._call(
+  723|             ch,
+  724|             is_group_message=True,
+  725|             group_id="g1",
+  726|             message_text="hello @bot",
+  727|             mentions=[{"number": "+10000000000", "start": 6, "length": 4}],
+  728|         )
+  729|         assert allowed is True
+  730|         assert chat_id == "g1"
+  731| 
+
+nanobot/channels/signal/tests/test_signal_channel.py:727
+  724|             is_group_message=True,
+  725|             group_id="g1",
+  726|             message_text="hello @bot",
+> 727|             mentions=[{"number": "+10000000000", "start": 6, "length": 4}],
+  728|         )
+  729|         assert allowed is True
+  730|         assert chat_id == "g1"
+  731| 
+  732|     def test_group_open_without_mention_blocks(self):
+  733|         ch = _make_channel(group_enabled=True, group_policy="open", require_mention=True)
+  734|         allowed, _ = self._call(ch, is_group_message=True, group_id="g1", message_text="plain talk")
+  735|         assert allowed is False
+  736| 
+  737|     def test_group_command_bypasses_mention_requirement(self):
+  738|         ch = _make_channel(group_enabled=True, group_policy="open", require_mention=True)
+  739|         allowed, _ = self._call(ch, is_group_message=True, group_id="g1", message_text="/help")
+
+nanobot/channels/signal/tests/test_signal_channel.py:797
+  794|     async def test_dm_allowlist_rejected_triggers_pairing(self):
+  795|         # Denied DM senders go through super()._handle_message which checks
+  796|         # is_allowed → sends pairing code via self.send().
+> 797|         ch, handled = self._make_dm_channel(policy="allowlist", allow_from=["+10000000001"])
+  798|         ch._http = _FakeHTTPClient()  # type: ignore[attr-defined]
+  799|         params = _dm_envelope(source_number="+19995550002")
+  800|         await ch._handle_receive_notification(params)
+  801|         # The denied DM path calls super()._handle_message, not self._handle_message,
+  802|         # so the capture list stays empty. Verify pairing code was sent via HTTP.
+  803|         assert handled == []
+  804|         assert len(ch._http.posts) == 1  # type: ignore[attr-defined]
+  805|         sent_text = ch._http.posts[0]["json"]["params"]["message"]  # type: ignore[attr-defined]
+  806|         assert "pairing" in sent_text.lower() or "pair" in sent_text.lower()
+  807| 
+  808|     @pytest.mark.asyncio
+  809|     async def test_dm_paired_sender_allowed_without_allowlist_entry(self, monkeypatch):
+
+nanobot/channels/signal/tests/test_signal_channel.py:1038
+  1035|     @pytest.mark.asyncio
+  1036|     async def test_group_mention_triggers_response(self):
+  1037|         ch, handled = self._make_group_channel(require_mention=True)
+> 1038|         ch._remember_account_id_alias("+10000000000")
+  1039|         mentions = [{"number": "+10000000000", "start": 0, "length": 1}]
+  1040|         params = _group_envelope(group_id="grp==", message="￼ hello", mentions=mentions)
+  1041|         await ch._handle_receive_notification(params)
+  1042|         assert len(handled) == 1
+  1043| 
+  1044|     @pytest.mark.asyncio
+  1045|     async def test_group_v2_id_extracted(self):
+  1046|         ch, handled = self._make_group_channel(require_mention=False)
+  1047|         params = _group_envelope(group_id="grpV2==", message="hi", use_v2=True)
+  1048|         await ch._handle_receive_notification(params)
+  1049|         assert len(handled) == 1
+  1050|         assert handled[0]["chat_id"] == "grpV2=="
+
+nanobot/channels/signal/tests/test_signal_channel.py:1039
+  1036|     async def test_group_mention_triggers_response(self):
+  1037|         ch, handled = self._make_group_channel(require_mention=True)
+  1038|         ch._remember_account_id_alias("+10000000000")
+> 1039|         mentions = [{"number": "+10000000000", "start": 0, "length": 1}]
+  1040|         params = _group_envelope(group_id="grp==", message="￼ hello", mentions=mentions)
+  1041|         await ch._handle_receive_notification(params)
+  1042|         assert len(handled) == 1
+  1043| 
+  1044|     @pytest.mark.asyncio
+  1045|     async def test_group_v2_id_extracted(self):
+  1046|         ch, handled = self._make_group_channel(require_mention=False)
+  1047|         params = _group_envelope(group_id="grpV2==", message="hi", use_v2=True)
+  1048|         await ch._handle_receive_notification(params)
+  1049|         assert len(handled) == 1
+  1050|         assert handled[0]["chat_id"] == "grpV2=="
+  1051| 
+
+nanobot/channels/signal/tests/test_signal_channel.py:1083
+  1080|     async def test_bot_account_alias_learned_from_incoming(self):
+  1081|         ch, handled = self._make_group_channel(require_mention=False)
+  1082|         # If the bot's own UUID appears in an envelope we learn it
+> 1083|         params = _dm_envelope(source_number="+10000000000", source_uuid="new-bot-uuid")
+  1084|         # DMs from self are processed (learning alias), but DM policy is open
+  1085|         ch._handle_message = lambda **kw: handled.append(kw)  # type: ignore[method-assign]
+  1086|         ch._start_typing = lambda chat_id: None  # type: ignore[method-assign]
+  1087|         await ch._handle_receive_notification(params)
+  1088|         assert ch._id_matches_account("new-bot-uuid")
+  1089| 
+  1090| 
+  1091| # ---------------------------------------------------------------------------
+  1092| # Lifecycle / SSE
+  1093| # ---------------------------------------------------------------------------
+  1094| 
+  1095| 
+
+nanobot/channels/signal/tests/test_signal_channel.py:1496
+  1493| def test_config_allow_from_aggregates_dm_and_group() -> None:
+  1494|     config = SignalConfig(
+  1495|         enabled=True,
+> 1496|         phone_number="+10000000000",
+  1497|         dm=SignalDMConfig(enabled=True, policy="allowlist", allow_from=["+1111", "+2222"]),
+  1498|         group=SignalGroupConfig(enabled=True, policy="allowlist", allow_from=["+3333", "+1111"]),
+  1499|     )
+  1500|     combined = config.allow_from
+  1501|     assert "+1111" in combined
+  1502|     assert "+2222" in combined
+  1503|     assert "+3333" in combined
+  1504|     # Duplicates removed
+  1505|     assert combined.count("+1111") == 1
+  1506| 
+  1507| 
+  1508| def test_config_allow_from_wildcard_propagates() -> None:
+
+nanobot/channels/signal/tests/test_signal_channel.py:1511
+  1508| def test_config_allow_from_wildcard_propagates() -> None:
+  1509|     config = SignalConfig(
+  1510|         enabled=True,
+> 1511|         phone_number="+10000000000",
+  1512|         dm=SignalDMConfig(enabled=True, policy="open", allow_from=["*"]),
+  1513|         group=SignalGroupConfig(enabled=True, policy="open", allow_from=[]),
+  1514|     )
+  1515|     assert "*" in config.allow_from
+
+nanobot/channels/wecom/runtime.py:404
+  401|                 return None
+  402| 
+  403|             media_dir = get_media_dir("wecom")
+> 404|             fallback_name = fname or f"{media_type}_{hash(file_url) % 100000}"
+  405|             filename = _sanitize_filename(cast(str, filename or fallback_name), fallback=fallback_name)
+  406| 
+  407|             file_path = media_dir / filename
+  408|             await asyncio.to_thread(file_path.write_bytes, data)
+  409|             self.logger.debug("Downloaded {} to {}", media_type, file_path)
+  410|             return str(file_path)
+  411| 
+  412|         except Exception:
+  413|             self.logger.exception("Error downloading media")
+  414|             return None
+  415| 
+  416|     async def _upload_media_ws(
+
+nanobot/channels/weixin/runtime.py:1036
+  1033|             if not filename:
+  1034|                 ts = int(time.time())
+  1035|                 hash_seed = encrypt_query_param or full_url
+> 1036|                 h = abs(hash(hash_seed)) % 100000
+  1037|                 filename = f"{media_type}_{ts}_{h}{ext}"
+  1038|             safe_name = os.path.basename(filename)
+  1039|             file_path = media_dir / safe_name
+  1040|             file_path.write_bytes(data)
+  1041|             return str(file_path)
+  1042| 
+  1043|         except Exception:
+  1044|             self.logger.exception("Error downloading media")
+  1045|             return None
+  1046| 
+  1047|     # ------------------------------------------------------------------
+  1048|     # Outbound  (matches send.ts buildTextMessageReq + sendMessageWeixin)
+
+nanobot/security/logical_vfs.py:240
+  237|             raise VFSQuotaError(f"VFS byte quota exceeded ({max_bytes} bytes)")
+  238|         if usage.files + max(0, additional_files) > max_files:
+  239|             self.metric("quota_exceeded")
+> 240|             raise VFSQuotaError(f"VFS file quota exceeded ({max_files} files)")
+  241|         return usage
+  242| 
+  243|     def enforce_write(self, identity: VFSIdentity, path: Path, new_size: int) -> None:
+  244|         """Check a prospective write when *path* belongs to this identity."""
+  245|         path = path.resolve(strict=False)
+  246|         user_root = self.user_root(identity).resolve(strict=False)
+  247|         quota_root = user_root
+  248|         task_root: Path | None = None
+  249|         if identity.task_id:
+  250|             task_root = self.task_root(identity).resolve(strict=False)
+  251|         else:
+  252|             # Repository turns may only know their physical task workspace.

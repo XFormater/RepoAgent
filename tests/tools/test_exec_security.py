@@ -186,6 +186,23 @@ def test_exec_allows_reads_of_history_jsonl(command):
     assert result is None
 
 
+@pytest.mark.parametrize(
+    "command",
+    [
+        "find cache -depth -delete",
+        "python3 -c \"import shutil; shutil.rmtree('cache')\"",
+        "Remove-Item cache -Recurse",
+        "rd /s cache",
+    ],
+)
+def test_exec_blocks_recursive_deletion_bypasses(command):
+    """Equivalent recursive deletion must not bypass the built-in rm guard."""
+    tool = ExecTool()
+    result = tool._guard_command(command, "/tmp")
+    assert result is not None
+    assert "deny pattern filter" in result.lower()
+
+
 # --- #2826: working_dir must not escape the configured workspace ---------
 
 

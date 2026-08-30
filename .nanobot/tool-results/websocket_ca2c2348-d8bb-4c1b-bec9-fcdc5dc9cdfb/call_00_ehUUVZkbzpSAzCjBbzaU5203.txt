@@ -1,0 +1,1626 @@
+nanobot/agent/loop.py:67
+  61|     append_runtime_context,
+  62|     runtime_context_blocks_from_metadata,
+  63| )
+  64| from nanobot.security.logical_vfs import (
+  65|     LogicalVFS,
+  66|     LogicalVFSConfig,
+> 67|     VFSIdentity,
+  68|     bind_vfs,
+  69|     reset_vfs,
+  70| )
+  71| from nanobot.security.workspace_access import (
+  72|     WorkspaceScopeResolver,
+  73|     bind_workspace_scope,
+
+nanobot/agent/loop.py:863
+  857|         return False
+  858| 
+  859|     def _build_initial_messages(self, ctx: TurnContext) -> list[dict[str, Any]]:
+  860|         """Build the initial message list for the LLM turn."""
+  861|         assert ctx.session is not None
+  862|         scope = self.workspace_scopes.for_message(ctx.msg, ctx.session.metadata)
+> 863|         identity = VFSIdentity(
+  864|             tenant_id=str(ctx.msg.metadata.get("tenant_id", "default")),
+  865|             user_id=str(
+  866|                 ctx.msg.metadata.get("user_id")
+  867|                 or ctx.msg.sender_id
+  868|                 or ctx.delivery.route.chat_id
+  869|                 or ctx.session.key
+
+nanobot/agent/loop.py:1213
+  1207|                 request_context,
+  1208|                 tenant_id=request_context.tenant_id or str((metadata or {}).get("tenant_id", "default")),
+  1209|                 user_id=request_context.user_id or request_context.sender_id or chat_id,
+  1210|             )
+  1211|         file_state_token = bind_file_states(self._file_state_store.for_session(active_session_key))
+  1212|         request_token = bind_request_context(request_ctx)
+> 1213|         vfs_identity = VFSIdentity(
+  1214|             tenant_id=request_ctx.tenant_id,
+  1215|             user_id=str(request_ctx.user_id or request_ctx.sender_id or chat_id or active_session_key or "default"),
+  1216|             session_id=active_session_key,
+  1217|             agent_id=str((metadata or {}).get("agent_id", "main")),
+  1218|             task_id=(
+  1219|                 str((metadata or {}).get("task_id"))
+
+nanobot/agent/loop.py:1969
+  1963|                 session.provider_state = None
+  1964|                 self.sessions.save(session)
+  1965|             ctx.input_persisted_early = True
+  1966|         ctx.delivery.record_runtime(runtime)
+  1967| 
+  1968|         ctx.request_context = self._request_context_for_turn(ctx)
+> 1969|         vfs_identity = VFSIdentity(
+  1970|             tenant_id=ctx.request_context.tenant_id,
+  1971|             user_id=ctx.request_context.user_id or ctx.request_context.sender_id or ctx.session_key,
+  1972|             session_id=ctx.session_key,
+  1973|             agent_id=str(ctx.msg.metadata.get("agent_id", "main")),
+  1974|             task_id=(str(ctx.msg.metadata["task_id"]) if ctx.msg.metadata.get("task_id") else None),
+  1975|         )
+
+nanobot/agent/memory.py:753
+  747|     # ------------------------------------------------------------------
+  748|     # Dream helpers
+  749|     # ------------------------------------------------------------------
+  750| 
+  751|     @staticmethod
+  752|     def dream_session_key() -> str:
+> 753|         """Return a unique session key for a Dream run, e.g. ``dream:20260528-100000``."""
+  754|         return f"dream:{datetime.now():%Y%m%d-%H%M%S}"
+  755| 
+  756|     @staticmethod
+  757|     def build_dream_commit_message(prefix: str, diff_body: str) -> str:
+  758|         """Build a Dream commit message grounded in the real working-tree diff.
+  759| 
+
+nanobot/agent/runner.py:70
+  64| RetryWaitCallback = Callable[[str], Awaitable[None]]
+  65| CheckpointCallback = Callable[[dict[str, Any]], Awaitable[None]]
+  66| InjectionCallback = Callable[..., Awaitable[Iterable[Any] | None]]
+  67| 
+  68| _DEFAULT_ERROR_MESSAGE = "Sorry, I encountered an error calling the AI model."
+  69| _ARREARAGE_ERROR_MESSAGE = (
+> 70|     "The AI provider rejected the request because the API key is out of quota or the "
+  71|     "account is in arrears. Please top up / check the billing status of your API key and try again."
+  72| )
+  73| _PERSISTED_MODEL_ERROR_PLACEHOLDER = "[Assistant reply unavailable due to model error.]"
+  74| _MAX_EMPTY_RETRIES = 2
+  75| _MAX_LENGTH_RECOVERIES = 3
+  76| _MAX_INJECTIONS_PER_TURN = 3
+
+nanobot/agent/tools/search.py:196
+  190|                     "maximum": 1000,
+  191|                 },
+  192|                 "offset": {
+  193|                     "type": "integer",
+  194|                     "description": "Skip the first N results before applying head_limit",
+  195|                     "minimum": 0,
+> 196|                     "maximum": 100000,
+  197|                 },
+  198|             },
+  199|         }
+  200| 
+  201|     def _iter_paths(self, root: Path, *, include_dirs: bool) -> Iterable[Path]:
+  202|         if root.is_file():
+
+nanobot/agent/tools/search.py:296
+  290| class GrepTool(_SearchTool):
+  291|     """Search file contents using a regex-like pattern."""
+  292|     _scopes = {"core", "subagent"}
+  293| 
+  294|     _MAX_RESULT_CHARS = 128_000
+  295|     _MAX_FILE_BYTES = 2_000_000
+> 296|     _MAX_EXPLICIT_FILE_BYTES = 100_000_000
+  297| 
+  298|     @property
+  299|     def name(self) -> str:
+  300|         return "grep"
+  301| 
+  302|     @property
+
+nanobot/agent/tools/search.py:399
+  393|                     "maximum": 1000,
+  394|                 },
+  395|                 "offset": {
+  396|                     "type": "integer",
+  397|                     "description": "Skip the first N results before applying head_limit",
+  398|                     "minimum": 0,
+> 399|                     "maximum": 100000,
+  400|                 },
+  401|             },
+  402|             "required": ["pattern"],
+  403|         }
+  404| 
+  405|     @staticmethod
+
+nanobot/agent/tools/shell.py:367
+  361|             result = "\n".join(output_parts) if output_parts else "(no output)"
+  362| 
+  363|             vfs = current_vfs()
+  364|             identity = current_vfs_identity()
+  365|             if vfs is not None and identity is not None:
+  366|                 try:
+> 367|                     vfs.check_quota(identity, root=Path(prepared.cwd))
+  368|                 except VFSQuotaError as exc:
+  369|                     logger.warning("VFS quota exceeded after shell command: {}", exc)
+  370|                     return ToolResult.error(f"Error: {exc}")
+  371| 
+  372|             max_len = clamp_session_int(max_output_chars, self._MAX_OUTPUT, 1000, MAX_OUTPUT_CHARS)
+  373|             if len(result) > max_len:
+
+nanobot/agent/tools/shell.py:369
+  363|             vfs = current_vfs()
+  364|             identity = current_vfs_identity()
+  365|             if vfs is not None and identity is not None:
+  366|                 try:
+  367|                     vfs.check_quota(identity, root=Path(prepared.cwd))
+  368|                 except VFSQuotaError as exc:
+> 369|                     logger.warning("VFS quota exceeded after shell command: {}", exc)
+  370|                     return ToolResult.error(f"Error: {exc}")
+  371| 
+  372|             max_len = clamp_session_int(max_output_chars, self._MAX_OUTPUT, 1000, MAX_OUTPUT_CHARS)
+  373|             if len(result) > max_len:
+  374|                 half = max_len // 2
+  375|                 result = (
+
+nanobot/agent/tools/shell.py:418
+  412|             )
+  413|             result = format_session_poll(session_id, poll)
+  414|             vfs = current_vfs()
+  415|             identity = current_vfs_identity()
+  416|             if vfs is not None and identity is not None:
+  417|                 try:
+> 418|                     vfs.check_quota(identity, root=Path(prepared.cwd))
+  419|                 except VFSQuotaError as exc:
+  420|                     logger.warning("VFS quota exceeded after shell session: {}", exc)
+  421|                     return ToolResult.error(f"Error: {exc}")
+  422|             return ToolResult.error(result) if poll.timed_out else result
+  423|         except Exception as exc:
+  424|             return ToolResult.error(f"Error executing command: {exc}")
+
+nanobot/agent/tools/shell.py:420
+  414|             vfs = current_vfs()
+  415|             identity = current_vfs_identity()
+  416|             if vfs is not None and identity is not None:
+  417|                 try:
+  418|                     vfs.check_quota(identity, root=Path(prepared.cwd))
+  419|                 except VFSQuotaError as exc:
+> 420|                     logger.warning("VFS quota exceeded after shell session: {}", exc)
+  421|                     return ToolResult.error(f"Error: {exc}")
+  422|             return ToolResult.error(result) if poll.timed_out else result
+  423|         except Exception as exc:
+  424|             return ToolResult.error(f"Error executing command: {exc}")
+  425| 
+  426|     def _resolve_timeout(self, timeout: int | None) -> int | None:
+
+nanobot/channels/email/runtime.py:140
+  134|         super().__init__(config, bus)
+  135|         self.config: EmailConfig = config
+  136|         self._self_addresses = self._collect_self_addresses()
+  137|         self._last_subject_by_chat: dict[str, str] = {}
+  138|         self._last_message_id_by_chat: dict[str, str] = {}
+  139|         self._processed_uids: set[str] = set()  # Capped to prevent unbounded growth
+> 140|         self._MAX_PROCESSED_UIDS = 100000
+  141| 
+  142|     async def start(self) -> None:
+  143|         """Start polling IMAP for inbound emails."""
+  144|         if not self.config.consent_granted:
+  145|             self.logger.warning(
+  146|                 "Email channel disabled: consent_granted is false. "
+
+nanobot/channels/msteams/tests/test_msteams.py:851
+  845|     token = jwt.encode(
+  846|         {
+  847|             "iss": "https://api.botframework.com",
+  848|             "aud": "app-id",
+  849|             "serviceurl": service_url,
+  850|             "nbf": 1700000000,
+> 851|             "exp": 4100000000,
+  852|         },
+  853|         private_key,
+  854|         algorithm="RS256",
+  855|         headers={"kid": jwk["kid"]},
+  856|     )
+  857| 
+
+nanobot/channels/msteams/tests/test_msteams.py:879
+  873|     token = jwt.encode(
+  874|         {
+  875|             "iss": "https://api.botframework.com",
+  876|             "aud": "app-id",
+  877|             "serviceurl": "https://smba.trafficmanager.net/amer/tenant-a/",
+  878|             "nbf": 1700000000,
+> 879|             "exp": 4100000000,
+  880|         },
+  881|         private_key,
+  882|         algorithm="RS256",
+  883|         headers={"kid": jwk["kid"]},
+  884|     )
+  885| 
+
+nanobot/channels/signal/tests/test_signal_channel.py:86
+  80|     ch._start_typing = noop_typing  # type: ignore[method-assign]
+  81|     return ch, handled
+  82| 
+  83| 
+  84| def _make_channel(
+  85|     *,
+> 86|     phone_number: str = "+10000000000",
+  87|     dm_enabled: bool = True,
+  88|     dm_policy: str = "open",
+  89|     dm_allow_from: list[str] | None = None,
+  90|     group_enabled: bool = False,
+  91|     group_policy: str = "open",
+  92|     group_allow_from: list[str] | None = None,
+
+nanobot/channels/signal/tests/test_signal_channel.py:327
+  321| # Account ID alias / mention matching
+  322| # ---------------------------------------------------------------------------
+  323| 
+  324| 
+  325| class TestAccountIdAliases:
+  326|     def test_phone_number_alias_registered_on_init(self):
+> 327|         ch = _make_channel(phone_number="+10000000000")
+  328|         assert ch._id_matches_account("+10000000000")
+  329| 
+  330|     def test_digit_only_variant_matches(self):
+  331|         ch = _make_channel(phone_number="+10000000000")
+  332|         assert ch._id_matches_account("10000000000")
+  333| 
+
+nanobot/channels/signal/tests/test_signal_channel.py:328
+  322| # ---------------------------------------------------------------------------
+  323| 
+  324| 
+  325| class TestAccountIdAliases:
+  326|     def test_phone_number_alias_registered_on_init(self):
+  327|         ch = _make_channel(phone_number="+10000000000")
+> 328|         assert ch._id_matches_account("+10000000000")
+  329| 
+  330|     def test_digit_only_variant_matches(self):
+  331|         ch = _make_channel(phone_number="+10000000000")
+  332|         assert ch._id_matches_account("10000000000")
+  333| 
+  334|     def test_remember_alias_adds_uuid(self):
+
+nanobot/channels/signal/tests/test_signal_channel.py:331
+  325| class TestAccountIdAliases:
+  326|     def test_phone_number_alias_registered_on_init(self):
+  327|         ch = _make_channel(phone_number="+10000000000")
+  328|         assert ch._id_matches_account("+10000000000")
+  329| 
+  330|     def test_digit_only_variant_matches(self):
+> 331|         ch = _make_channel(phone_number="+10000000000")
+  332|         assert ch._id_matches_account("10000000000")
+  333| 
+  334|     def test_remember_alias_adds_uuid(self):
+  335|         ch = _make_channel()
+  336|         ch._remember_account_id_alias("some-uuid-abc")
+  337|         assert ch._id_matches_account("some-uuid-abc")
+
+nanobot/channels/signal/tests/test_signal_channel.py:332
+  326|     def test_phone_number_alias_registered_on_init(self):
+  327|         ch = _make_channel(phone_number="+10000000000")
+  328|         assert ch._id_matches_account("+10000000000")
+  329| 
+  330|     def test_digit_only_variant_matches(self):
+  331|         ch = _make_channel(phone_number="+10000000000")
+> 332|         assert ch._id_matches_account("10000000000")
+  333| 
+  334|     def test_remember_alias_adds_uuid(self):
+  335|         ch = _make_channel()
+  336|         ch._remember_account_id_alias("some-uuid-abc")
+  337|         assert ch._id_matches_account("some-uuid-abc")
+  338| 
+
+nanobot/channels/signal/tests/test_signal_channel.py:340
+  334|     def test_remember_alias_adds_uuid(self):
+  335|         ch = _make_channel()
+  336|         ch._remember_account_id_alias("some-uuid-abc")
+  337|         assert ch._id_matches_account("some-uuid-abc")
+  338| 
+  339|     def test_non_matching_id_returns_false(self):
+> 340|         ch = _make_channel(phone_number="+10000000000")
+  341|         assert not ch._id_matches_account("+19999999999")
+  342| 
+  343|     def test_none_and_non_string_return_false(self):
+  344|         ch = _make_channel()
+  345|         assert not ch._id_matches_account(None)
+  346| 
+
+nanobot/channels/signal/tests/test_signal_channel.py:356
+  350| # ---------------------------------------------------------------------------
+  351| 
+  352| 
+  353| class TestShouldRespondInGroup:
+  354|     def _make_group_channel(self, require_mention: bool = True) -> SignalChannel:
+  355|         return _make_channel(
+> 356|             phone_number="+10000000000",
+  357|             group_enabled=True,
+  358|             require_mention=require_mention,
+  359|         )
+  360| 
+  361|     def test_no_require_mention_always_responds(self):
+  362|         ch = self._make_group_channel(require_mention=False)
+
+nanobot/channels/signal/tests/test_signal_channel.py:371
+  365|     def test_require_mention_with_no_mentions_returns_false(self):
+  366|         ch = self._make_group_channel(require_mention=True)
+  367|         assert ch._should_respond_in_group("hello", []) is False
+  368| 
+  369|     def test_require_mention_with_bot_number_mention(self):
+  370|         ch = self._make_group_channel(require_mention=True)
+> 371|         mentions = [{"number": "+10000000000", "start": 0, "length": 12}]
+  372|         assert ch._should_respond_in_group("￼ hello", mentions) is True
+  373| 
+  374|     def test_require_mention_with_uuid_mention(self):
+  375|         ch = self._make_group_channel(require_mention=True)
+  376|         ch._remember_account_id_alias("bot-uuid-123")
+  377|         mentions = [{"uuid": "bot-uuid-123", "start": 0, "length": 8}]
+
+nanobot/channels/signal/tests/test_signal_channel.py:397
+  391|     def test_leading_placeholder_without_mentions_metadata(self):
+  392|         ch = self._make_group_channel(require_mention=True)
+  393|         assert ch._should_respond_in_group("￼ hello", []) is True
+  394| 
+  395|     def test_phone_number_in_text_triggers_response(self):
+  396|         ch = self._make_group_channel(require_mention=True)
+> 397|         assert ch._should_respond_in_group("hey +10000000000 help", []) is True
+  398| 
+  399| 
+  400| # ---------------------------------------------------------------------------
+  401| # _strip_bot_mention
+  402| # ---------------------------------------------------------------------------
+  403| 
+
+nanobot/channels/signal/tests/test_signal_channel.py:407
+  401| # _strip_bot_mention
+  402| # ---------------------------------------------------------------------------
+  403| 
+  404| 
+  405| class TestStripBotMention:
+  406|     def _make_channel_with_number(self) -> SignalChannel:
+> 407|         return _make_channel(phone_number="+10000000000")
+  408| 
+  409|     def test_strips_mention_by_phone(self):
+  410|         ch = self._make_channel_with_number()
+  411|         text = "￼ hello"
+  412|         mentions = [{"number": "+10000000000", "start": 0, "length": 1}]
+  413|         result = ch._strip_bot_mention(text, mentions)
+
+nanobot/channels/signal/tests/test_signal_channel.py:412
+  406|     def _make_channel_with_number(self) -> SignalChannel:
+  407|         return _make_channel(phone_number="+10000000000")
+  408| 
+  409|     def test_strips_mention_by_phone(self):
+  410|         ch = self._make_channel_with_number()
+  411|         text = "￼ hello"
+> 412|         mentions = [{"number": "+10000000000", "start": 0, "length": 1}]
+  413|         result = ch._strip_bot_mention(text, mentions)
+  414|         assert result == "hello"
+  415| 
+  416|     def test_strips_identifier_less_leading_mention(self):
+  417|         ch = self._make_channel_with_number()
+  418|         text = "￼ hello"
+
+nanobot/channels/signal/tests/test_signal_channel.py:719
+  713|         assert allowed is False
+  714| 
+  715|     def test_group_open_with_mention_allows(self):
+  716|         ch = _make_channel(
+  717|             group_enabled=True,
+  718|             group_policy="open",
+> 719|             phone_number="+10000000000",
+  720|             require_mention=True,
+  721|         )
+  722|         allowed, chat_id = self._call(
+  723|             ch,
+  724|             is_group_message=True,
+  725|             group_id="g1",
+
+nanobot/channels/signal/tests/test_signal_channel.py:727
+  721|         )
+  722|         allowed, chat_id = self._call(
+  723|             ch,
+  724|             is_group_message=True,
+  725|             group_id="g1",
+  726|             message_text="hello @bot",
+> 727|             mentions=[{"number": "+10000000000", "start": 6, "length": 4}],
+  728|         )
+  729|         assert allowed is True
+  730|         assert chat_id == "g1"
+  731| 
+  732|     def test_group_open_without_mention_blocks(self):
+  733|         ch = _make_channel(group_enabled=True, group_policy="open", require_mention=True)
+
+nanobot/channels/signal/tests/test_signal_channel.py:797
+  791|         assert len(handled) == 1
+  792| 
+  793|     @pytest.mark.asyncio
+  794|     async def test_dm_allowlist_rejected_triggers_pairing(self):
+  795|         # Denied DM senders go through super()._handle_message which checks
+  796|         # is_allowed → sends pairing code via self.send().
+> 797|         ch, handled = self._make_dm_channel(policy="allowlist", allow_from=["+10000000001"])
+  798|         ch._http = _FakeHTTPClient()  # type: ignore[attr-defined]
+  799|         params = _dm_envelope(source_number="+19995550002")
+  800|         await ch._handle_receive_notification(params)
+  801|         # The denied DM path calls super()._handle_message, not self._handle_message,
+  802|         # so the capture list stays empty. Verify pairing code was sent via HTTP.
+  803|         assert handled == []
+
+nanobot/channels/signal/tests/test_signal_channel.py:1038
+  1032|         await ch._handle_receive_notification(params)
+  1033|         assert handled == []
+  1034| 
+  1035|     @pytest.mark.asyncio
+  1036|     async def test_group_mention_triggers_response(self):
+  1037|         ch, handled = self._make_group_channel(require_mention=True)
+> 1038|         ch._remember_account_id_alias("+10000000000")
+  1039|         mentions = [{"number": "+10000000000", "start": 0, "length": 1}]
+  1040|         params = _group_envelope(group_id="grp==", message="￼ hello", mentions=mentions)
+  1041|         await ch._handle_receive_notification(params)
+  1042|         assert len(handled) == 1
+  1043| 
+  1044|     @pytest.mark.asyncio
+
+nanobot/channels/signal/tests/test_signal_channel.py:1039
+  1033|         assert handled == []
+  1034| 
+  1035|     @pytest.mark.asyncio
+  1036|     async def test_group_mention_triggers_response(self):
+  1037|         ch, handled = self._make_group_channel(require_mention=True)
+  1038|         ch._remember_account_id_alias("+10000000000")
+> 1039|         mentions = [{"number": "+10000000000", "start": 0, "length": 1}]
+  1040|         params = _group_envelope(group_id="grp==", message="￼ hello", mentions=mentions)
+  1041|         await ch._handle_receive_notification(params)
+  1042|         assert len(handled) == 1
+  1043| 
+  1044|     @pytest.mark.asyncio
+  1045|     async def test_group_v2_id_extracted(self):
+
+nanobot/channels/signal/tests/test_signal_channel.py:1083
+  1077|         assert handled[0]["metadata"]["group_id"] == "grp=="
+  1078| 
+  1079|     @pytest.mark.asyncio
+  1080|     async def test_bot_account_alias_learned_from_incoming(self):
+  1081|         ch, handled = self._make_group_channel(require_mention=False)
+  1082|         # If the bot's own UUID appears in an envelope we learn it
+> 1083|         params = _dm_envelope(source_number="+10000000000", source_uuid="new-bot-uuid")
+  1084|         # DMs from self are processed (learning alias), but DM policy is open
+  1085|         ch._handle_message = lambda **kw: handled.append(kw)  # type: ignore[method-assign]
+  1086|         ch._start_typing = lambda chat_id: None  # type: ignore[method-assign]
+  1087|         await ch._handle_receive_notification(params)
+  1088|         assert ch._id_matches_account("new-bot-uuid")
+  1089| 
+
+nanobot/channels/signal/tests/test_signal_channel.py:1496
+  1490| # ---------------------------------------------------------------------------
+  1491| 
+  1492| 
+  1493| def test_config_allow_from_aggregates_dm_and_group() -> None:
+  1494|     config = SignalConfig(
+  1495|         enabled=True,
+> 1496|         phone_number="+10000000000",
+  1497|         dm=SignalDMConfig(enabled=True, policy="allowlist", allow_from=["+1111", "+2222"]),
+  1498|         group=SignalGroupConfig(enabled=True, policy="allowlist", allow_from=["+3333", "+1111"]),
+  1499|     )
+  1500|     combined = config.allow_from
+  1501|     assert "+1111" in combined
+  1502|     assert "+2222" in combined
+
+nanobot/channels/signal/tests/test_signal_channel.py:1511
+  1505|     assert combined.count("+1111") == 1
+  1506| 
+  1507| 
+  1508| def test_config_allow_from_wildcard_propagates() -> None:
+  1509|     config = SignalConfig(
+  1510|         enabled=True,
+> 1511|         phone_number="+10000000000",
+  1512|         dm=SignalDMConfig(enabled=True, policy="open", allow_from=["*"]),
+  1513|         group=SignalGroupConfig(enabled=True, policy="open", allow_from=[]),
+  1514|     )
+  1515|     assert "*" in config.allow_from
+
+nanobot/channels/websocket/tests/test_websocket_integration.py:469
+  463| async def test_large_message(bus: MagicMock) -> None:
+  464|     ch = _ch(bus, 29921)
+  465|     t = asyncio.create_task(ch.start())
+  466|     try:
+  467|         async with WsTestClient("ws://127.0.0.1:29921/", client_id="big") as c:
+  468|             await c.recv_ready()
+> 469|             big = "x" * 100_000
+  470|             await c.send_text(big)
+  471|             await asyncio.sleep(0.2)
+  472|             assert bus.publish_inbound.call_args[0][0].content == big
+  473|     finally:
+  474|         await ch.stop()
+  475|         await t
+
+nanobot/channels/wecom/runtime.py:404
+  398|                     len(data),
+  399|                     WECOM_UPLOAD_MAX_BYTES,
+  400|                 )
+  401|                 return None
+  402| 
+  403|             media_dir = get_media_dir("wecom")
+> 404|             fallback_name = fname or f"{media_type}_{hash(file_url) % 100000}"
+  405|             filename = _sanitize_filename(cast(str, filename or fallback_name), fallback=fallback_name)
+  406| 
+  407|             file_path = media_dir / filename
+  408|             await asyncio.to_thread(file_path.write_bytes, data)
+  409|             self.logger.debug("Downloaded {} to {}", media_type, file_path)
+  410|             return str(file_path)
+
+nanobot/channels/weixin/runtime.py:1036
+  1030| 
+  1031|             media_dir = get_media_dir("weixin")
+  1032|             ext = _ext_for_type(media_type)
+  1033|             if not filename:
+  1034|                 ts = int(time.time())
+  1035|                 hash_seed = encrypt_query_param or full_url
+> 1036|                 h = abs(hash(hash_seed)) % 100000
+  1037|                 filename = f"{media_type}_{ts}_{h}{ext}"
+  1038|             safe_name = os.path.basename(filename)
+  1039|             file_path = media_dir / safe_name
+  1040|             file_path.write_bytes(data)
+  1041|             return str(file_path)
+  1042| 
+
+nanobot/channels/weixin/runtime.py:1215
+  1209| 
+  1210|         event = getattr(msg, "event", None)
+  1211|         progress_event = event if isinstance(event, ProgressEvent) else None
+  1212|         is_progress = progress_event is not None
+  1213| 
+  1214|         # Buffer tool hints to coalesce consecutive ones and avoid burning
+> 1215|         # WeChat iLink rate-limit quota (~7 msgs / 5 min).
+  1216|         if progress_event and progress_event.tool_hint:
+  1217|             if not self.send_tool_hints:
+  1218|                 return
+  1219|             self._pending_tool_hints.setdefault(msg.chat_id, []).append(msg.content)
+  1220|             self.logger.debug(
+  1221|                 "Buffered tool hint for {} (count={})",
+
+nanobot/memory_system/config.py:139
+  133|     context_ttl: int = Field(default=21_600, ge=60)
+  134|     max_messages: int = Field(default=200, ge=1, le=10_000)
+  135|     max_tool_result_chars: int = Field(default=20_000, ge=256, le=1_000_000)
+  136|     runtime_context_messages: int = Field(default=12, ge=0, le=100)
+  137|     runtime_context_tasks: int = Field(default=8, ge=0, le=100)
+  138|     runtime_context_tools: int = Field(default=12, ge=0, le=100)
+> 139|     runtime_context_max_chars: int = Field(default=12_000, ge=512, le=100_000)
+  140| 
+  141| 
+  142| class FileSyncConfig(Base):
+  143|     """Low-frequency projection from semantic memory into core MEMORY.md."""
+  144| 
+  145|     enabled: bool = True
+
+nanobot/memory_system/config.py:149
+  143|     """Low-frequency projection from semantic memory into core MEMORY.md."""
+  144| 
+  145|     enabled: bool = True
+  146|     cron: str = "0 3 * * 0"
+  147|     min_confidence: float = Field(default=0.85, ge=0.0, le=1.0)
+  148|     max_records: int = Field(default=100, ge=1, le=1000)
+> 149|     max_chars: int = Field(default=20_000, ge=1000, le=100_000)
+  150| 
+  151| 
+  152| class EmbeddingConfig(Base):
+  153|     provider: Literal["openai", "hash", "lexical_hash"] = "openai"
+  154|     model: str = "text-embedding-3-large"
+  155|     dimension: int = Field(default=3072, ge=8)
+
+nanobot/providers/base.py:271
+  265|     # Routing wrappers may preserve or discard an incoming provider-owned
+  266|     # continuation independently of the final fallback error's retry policy.
+  267|     preserve_provider_state_on_error: bool | None = field(default=None, repr=False)
+  268|     # Structured error metadata used by retry policy when finish_reason == "error".
+  269|     error_status_code: int | None = None
+  270|     error_kind: str | None = None  # e.g. "timeout", "connection"
+> 271|     error_type: str | None = None  # Provider/type semantic, e.g. insufficient_quota.
+  272|     error_code: str | None = None  # Provider/code semantic, e.g. rate_limit_exceeded.
+  273|     error_retry_after_s: float | None = None
+  274|     error_should_retry: bool | None = None
+  275| 
+  276|     @property
+  277|     def has_tool_calls(self) -> bool:
+
+nanobot/providers/base.py:330
+  324|         "速率限制",
+  325|         "访问量过大",
+  326|     )
+  327|     _RETRYABLE_STATUS_CODES = frozenset({408, 409, 429})
+  328|     _TRANSIENT_ERROR_KINDS = frozenset({"timeout", "connection"})
+  329|     _NON_RETRYABLE_429_ERROR_TOKENS = frozenset({
+> 330|         "insufficient_quota",
+  331|         "quota_exceeded",
+  332|         "quota_exhausted",
+  333|         "billing_hard_limit_reached",
+  334|         "insufficient_balance",
+  335|         "credit_balance_too_low",
+  336|         "billing_not_active",
+
+nanobot/providers/base.py:331
+  325|         "访问量过大",
+  326|     )
+  327|     _RETRYABLE_STATUS_CODES = frozenset({408, 409, 429})
+  328|     _TRANSIENT_ERROR_KINDS = frozenset({"timeout", "connection"})
+  329|     _NON_RETRYABLE_429_ERROR_TOKENS = frozenset({
+  330|         "insufficient_quota",
+> 331|         "quota_exceeded",
+  332|         "quota_exhausted",
+  333|         "billing_hard_limit_reached",
+  334|         "insufficient_balance",
+  335|         "credit_balance_too_low",
+  336|         "billing_not_active",
+  337|         "payment_required",
+
+nanobot/providers/base.py:332
+  326|     )
+  327|     _RETRYABLE_STATUS_CODES = frozenset({408, 409, 429})
+  328|     _TRANSIENT_ERROR_KINDS = frozenset({"timeout", "connection"})
+  329|     _NON_RETRYABLE_429_ERROR_TOKENS = frozenset({
+  330|         "insufficient_quota",
+  331|         "quota_exceeded",
+> 332|         "quota_exhausted",
+  333|         "billing_hard_limit_reached",
+  334|         "insufficient_balance",
+  335|         "credit_balance_too_low",
+  336|         "billing_not_active",
+  337|         "payment_required",
+  338|     })
+
+nanobot/providers/base.py:348
+  342|         "too_many_requests",
+  343|         "request_limit_exceeded",
+  344|         "requests_limit_exceeded",
+  345|         "overloaded_error",
+  346|     })
+  347|     _NON_RETRYABLE_429_TEXT_MARKERS = (
+> 348|         "insufficient_quota",
+  349|         "insufficient quota",
+  350|         "quota exceeded",
+  351|         "quota exhausted",
+  352|         "billing hard limit",
+  353|         "billing_hard_limit_reached",
+  354|         "billing not active",
+
+nanobot/providers/base.py:349
+  343|         "request_limit_exceeded",
+  344|         "requests_limit_exceeded",
+  345|         "overloaded_error",
+  346|     })
+  347|     _NON_RETRYABLE_429_TEXT_MARKERS = (
+  348|         "insufficient_quota",
+> 349|         "insufficient quota",
+  350|         "quota exceeded",
+  351|         "quota exhausted",
+  352|         "billing hard limit",
+  353|         "billing_hard_limit_reached",
+  354|         "billing not active",
+  355|         "insufficient balance",
+
+nanobot/providers/base.py:350
+  344|         "requests_limit_exceeded",
+  345|         "overloaded_error",
+  346|     })
+  347|     _NON_RETRYABLE_429_TEXT_MARKERS = (
+  348|         "insufficient_quota",
+  349|         "insufficient quota",
+> 350|         "quota exceeded",
+  351|         "quota exhausted",
+  352|         "billing hard limit",
+  353|         "billing_hard_limit_reached",
+  354|         "billing not active",
+  355|         "insufficient balance",
+  356|         "insufficient_balance",
+
+nanobot/providers/base.py:351
+  345|         "overloaded_error",
+  346|     })
+  347|     _NON_RETRYABLE_429_TEXT_MARKERS = (
+  348|         "insufficient_quota",
+  349|         "insufficient quota",
+  350|         "quota exceeded",
+> 351|         "quota exhausted",
+  352|         "billing hard limit",
+  353|         "billing_hard_limit_reached",
+  354|         "billing not active",
+  355|         "insufficient balance",
+  356|         "insufficient_balance",
+  357|         "credit balance too low",
+
+nanobot/providers/base.py:360
+  354|         "billing not active",
+  355|         "insufficient balance",
+  356|         "insufficient_balance",
+  357|         "credit balance too low",
+  358|         "payment required",
+  359|         "out of credits",
+> 360|         "out of quota",
+  361|         "exceeded your current quota",
+  362|     )
+  363|     _RETRYABLE_429_TEXT_MARKERS = (
+  364|         "rate limit",
+  365|         "rate_limit",
+  366|         "too many requests",
+
+nanobot/providers/base.py:361
+  355|         "insufficient balance",
+  356|         "insufficient_balance",
+  357|         "credit balance too low",
+  358|         "payment required",
+  359|         "out of credits",
+  360|         "out of quota",
+> 361|         "exceeded your current quota",
+  362|     )
+  363|     _RETRYABLE_429_TEXT_MARKERS = (
+  364|         "rate limit",
+  365|         "rate_limit",
+  366|         "too many requests",
+  367|         "retry after",
+
+nanobot/providers/base.py:556
+  550|             return True
+  551| 
+  552|         return cls._is_transient_error(response.content)
+  553| 
+  554|     @classmethod
+  555|     def is_arrearage_response(cls, response: LLMResponse) -> bool:
+> 556|         """Detect API-key arrearage / quota / billing errors that won't clear on retry.
+  557| 
+  558|         These surface as HTTP 402 or as billing semantic tokens (e.g.
+  559|         ``insufficient_quota``, ``payment_required``); reuses the same token and
+  560|         text markers the 429 retry policy treats as non-retryable.
+  561|         """
+  562|         if response.error_status_code is not None and int(response.error_status_code) == 402:
+
+nanobot/providers/base.py:559
+  553| 
+  554|     @classmethod
+  555|     def is_arrearage_response(cls, response: LLMResponse) -> bool:
+  556|         """Detect API-key arrearage / quota / billing errors that won't clear on retry.
+  557| 
+  558|         These surface as HTTP 402 or as billing semantic tokens (e.g.
+> 559|         ``insufficient_quota``, ``payment_required``); reuses the same token and
+  560|         text markers the 429 retry policy treats as non-retryable.
+  561|         """
+  562|         if response.error_status_code is not None and int(response.error_status_code) == 402:
+  563|             return True
+  564| 
+  565|         type_token = cls._normalize_error_token(response.error_type)
+
+nanobot/providers/fallback_provider.py:80
+  74|     "server error",
+  75|     "temporarily unavailable",
+  76|     "timeout",
+  77|     "timed out",
+  78|     "connection",
+  79|     "empty",  # API returned empty choices (e.g. DeepSeek peak hours), transient
+> 80|     "insufficient_quota",
+  81|     "insufficient quota",
+  82|     "quota_exceeded",
+  83|     "quota exceeded",
+  84|     "quota_exhausted",
+  85|     "quota exhausted",
+  86|     "billing_hard_limit",
+
+nanobot/providers/fallback_provider.py:81
+  75|     "temporarily unavailable",
+  76|     "timeout",
+  77|     "timed out",
+  78|     "connection",
+  79|     "empty",  # API returned empty choices (e.g. DeepSeek peak hours), transient
+  80|     "insufficient_quota",
+> 81|     "insufficient quota",
+  82|     "quota_exceeded",
+  83|     "quota exceeded",
+  84|     "quota_exhausted",
+  85|     "quota exhausted",
+  86|     "billing_hard_limit",
+  87|     "insufficient_balance",
+
+nanobot/providers/fallback_provider.py:82
+  76|     "timeout",
+  77|     "timed out",
+  78|     "connection",
+  79|     "empty",  # API returned empty choices (e.g. DeepSeek peak hours), transient
+  80|     "insufficient_quota",
+  81|     "insufficient quota",
+> 82|     "quota_exceeded",
+  83|     "quota exceeded",
+  84|     "quota_exhausted",
+  85|     "quota exhausted",
+  86|     "billing_hard_limit",
+  87|     "insufficient_balance",
+  88|     "balance",
+
+nanobot/providers/fallback_provider.py:83
+  77|     "timed out",
+  78|     "connection",
+  79|     "empty",  # API returned empty choices (e.g. DeepSeek peak hours), transient
+  80|     "insufficient_quota",
+  81|     "insufficient quota",
+  82|     "quota_exceeded",
+> 83|     "quota exceeded",
+  84|     "quota_exhausted",
+  85|     "quota exhausted",
+  86|     "billing_hard_limit",
+  87|     "insufficient_balance",
+  88|     "balance",
+  89|     "out of credits",
+
+nanobot/providers/fallback_provider.py:84
+  78|     "connection",
+  79|     "empty",  # API returned empty choices (e.g. DeepSeek peak hours), transient
+  80|     "insufficient_quota",
+  81|     "insufficient quota",
+  82|     "quota_exceeded",
+  83|     "quota exceeded",
+> 84|     "quota_exhausted",
+  85|     "quota exhausted",
+  86|     "billing_hard_limit",
+  87|     "insufficient_balance",
+  88|     "balance",
+  89|     "out of credits",
+  90| )
+
+nanobot/providers/fallback_provider.py:85
+  79|     "empty",  # API returned empty choices (e.g. DeepSeek peak hours), transient
+  80|     "insufficient_quota",
+  81|     "insufficient quota",
+  82|     "quota_exceeded",
+  83|     "quota exceeded",
+  84|     "quota_exhausted",
+> 85|     "quota exhausted",
+  86|     "billing_hard_limit",
+  87|     "insufficient_balance",
+  88|     "balance",
+  89|     "out of credits",
+  90| )
+  91| 
+
+nanobot/providers/openai_codex_provider.py:492
+  486|     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+  487| 
+  488| 
+  489| def _friendly_error(status_code: int, raw: str) -> str:
+  490|     _ = raw
+  491|     if status_code == 429:
+> 492|         return "ChatGPT usage quota exceeded or rate limit triggered. Please try again later."
+  493|     return f"HTTP {status_code}: Codex API request failed"
+  494| 
+  495| 
+  496| def _codex_error_response(exc: Exception) -> LLMResponse:
+  497|     """Convert Codex transport/API failures into actionable, retryable metadata."""
+  498|     exc_type = "CodexHTTPError" if isinstance(exc, _CodexHTTPError) else type(exc).__name__
+
+nanobot/providers/transcription.py:210
+  204|     language: str | None = None,
+  205| ) -> str:
+  206|     """POST an audio file for transcription, retrying on transient errors.
+  207| 
+  208|     Retries on connect/read/timeout failures and on 408/429/5xx responses.
+  209|     Other errors (including 4xx such as 401/403) return "" immediately — the
+> 210|     caller's config is wrong and retrying only wastes quota.
+  211| 
+  212|     When ``language`` is provided, it is forwarded as the ``language``
+  213|     multipart field on every attempt (the dict is rebuilt per attempt so the
+  214|     same field is present on retries).
+  215|     """
+  216|     try:
+
+nanobot/providers/xai_grok_provider.py:557
+  551|         message = "xAI rejected the login. Sign in again with `nanobot provider login xai-grok`."
+  552|     elif status_code == 403:
+  553|         message = "This xAI account or subscription cannot access the Grok subscription endpoint."
+  554|     elif status_code == 426:
+  555|         message = "xAI requires a newer Grok client version. Update nanobot and try again."
+  556|     elif status_code == 429:
+> 557|         message = "xAI usage quota or rate limit reached. Please try again later."
+  558|     else:
+  559|         message = f"xAI subscription endpoint returned HTTP {status_code}."
+  560|     if response_body:
+  561|         return f"{message} Response body: {response_body}"
+  562|     return message
+  563| 
+
+nanobot/repo_agent/config.py:136
+  130| 
+  131|     enabled: bool = False
+  132|     cache_dir: str = ".nanobot/repositories"
+  133|     state_dir: str = ".nanobot/repository-agent"
+  134|     allowed_hosts: list[str] = Field(default_factory=lambda: ["github.com"])
+  135|     max_repository_size_mb: int = Field(default=500, ge=1, le=10_000)
+> 136|     max_files: int = Field(default=50_000, ge=100, le=1_000_000)
+  137|     clone_depth: int = Field(default=1, ge=1, le=1_000)
+  138|     intent_strategy: Literal["llm", "hybrid", "rules"] = "hybrid"
+  139|     max_plan_steps: int = Field(default=8, ge=1, le=30)
+  140|     simple_max_iterations: int = Field(default=6, ge=1, le=20)
+  141|     deletion_approval_ttl_seconds: int = Field(default=600, ge=60, le=86_400)
+  142|     test_execution: Literal["disabled", "sandboxed", "host"] = "disabled"
+
+nanobot/repo_agent/orchestrator.py:46
+  40| )
+  41| from nanobot.repo_agent.policy import RepositoryRiskPolicy
+  42| from nanobot.repo_agent.registry import RepositoryExpertRegistry
+  43| from nanobot.repo_agent.repository import RepositoryError, RepositoryManager
+  44| from nanobot.repo_agent.research import RepositoryResearchOrchestrator
+  45| from nanobot.repo_agent.store import RepositoryStateStore
+> 46| from nanobot.security.logical_vfs import LogicalVFS, VFSIdentity
+  47| from nanobot.utils.llm_runtime import LLMRuntime
+  48| from nanobot.utils.prompt_templates import render_template
+  49| 
+  50| if TYPE_CHECKING:
+  51|     from nanobot.harness import HarnessService
+  52| 
+
+nanobot/repo_agent/orchestrator.py:1068
+  1062|                 session_key=session_key,
+  1063|                 initial_messages=initial_messages,
+  1064|                 runtime=runtime,
+  1065|                 invoke=invoke,
+  1066|                 on_update=on_update,
+  1067|             )
+> 1068|         identity = VFSIdentity(
+  1069|             tenant_id=tenant_id,
+  1070|             user_id=actor or session_key,
+  1071|             session_id=session_key,
+  1072|         )
+  1073|         with self.manager.vfs.bind(identity), self.manager.bind_vfs_identity(identity):
+  1074|             return await self._run_scoped(
+
+nanobot/repo_agent/repository.py:21
+  15| from pathlib import Path
+  16| from typing import Any
+  17| from urllib.parse import urlsplit
+  18| 
+  19| from nanobot.repo_agent.config import RepositoryAgentConfig
+  20| from nanobot.repo_agent.models import RepositoryRecord, RepositoryTask
+> 21| from nanobot.security.logical_vfs import LogicalVFS, VFSIdentity
+  22| 
+  23| _GITHUB_URL_RE = re.compile(
+  24|     r"https://github\.com/[A-Za-z0-9_.-]{1,100}/[A-Za-z0-9_.-]{1,100}(?:\.git)?",
+  25|     re.IGNORECASE,
+  26| )
+  27| _SEGMENT_RE = re.compile(r"^[A-Za-z0-9_.-]{1,100}$")
+
+nanobot/repo_agent/repository.py:60
+  54|         self.config = config
+  55|         self._base_cache_root = (self.workspace / config.cache_dir).resolve()
+  56|         if self._base_cache_root != self.workspace and self.workspace not in self._base_cache_root.parents:
+  57|             raise ValueError("repository cache directory must remain inside the workspace")
+  58|         self._base_cache_root.mkdir(parents=True, exist_ok=True)
+  59|         self.vfs = vfs
+> 60|         self._scope: ContextVar[VFSIdentity | None] = ContextVar(
+  61|             "repository_manager_vfs_identity", default=None
+  62|         )
+  63| 
+  64|     @property
+  65|     def cache_root(self) -> Path:
+  66|         """Return the active user-scoped cache, or the legacy root."""
+
+nanobot/repo_agent/repository.py:83
+  77|         roots = [self._base_cache_root]
+  78|         if self.vfs is not None and self.vfs.enabled:
+  79|             roots.append(self.vfs.root)
+  80|         return roots
+  81| 
+  82|     @contextmanager
+> 83|     def bind_vfs_identity(self, identity: VFSIdentity) -> Any:
+  84|         token = self._scope.set(identity)
+  85|         try:
+  86|             yield
+  87|         finally:
+  88|             self._scope.reset(token)
+  89| 
+
+nanobot/repo_agent/repository.py:232
+  226|                     )
+  227|         file_count = 0
+  228|         for root, directories, files in os.walk(source, followlinks=False):
+  229|             directories[:] = [name for name in directories if name != ".git"]
+  230|             for name in files:
+  231|                 file_count += 1
+> 232|                 if file_count > self.config.max_files:
+  233|                     raise RepositoryError(
+  234|                         f"仓库文件数超过限制 {self.config.max_files:,}。"
+  235|                     )
+  236|         return file_count, size_bytes
+  237| 
+  238|     async def _record_from_source(
+
+nanobot/repo_agent/repository.py:234
+  228|         for root, directories, files in os.walk(source, followlinks=False):
+  229|             directories[:] = [name for name in directories if name != ".git"]
+  230|             for name in files:
+  231|                 file_count += 1
+  232|                 if file_count > self.config.max_files:
+  233|                     raise RepositoryError(
+> 234|                         f"仓库文件数超过限制 {self.config.max_files:,}。"
+  235|                     )
+  236|         return file_count, size_bytes
+  237| 
+  238|     async def _record_from_source(
+  239|         self,
+  240|         parsed: ParsedRepositoryURL,
+
+nanobot/security/logical_vfs.py:6
+  1| """Logical, tenant-scoped filesystem namespaces for agent workspaces.
+  2| 
+  3| This module deliberately does not try to replace the host filesystem.  It
+  4| provides one canonical path/policy layer above it: every user/task workspace is
+  5| derived from an immutable identity, paths are resolved below that workspace,
+> 6| and quota/retention checks are performed before data is exposed to an agent.
+  7| Bubblewrap remains the process-level isolation mechanism when configured.
+  8| """
+  9| 
+  10| from __future__ import annotations
+  11| 
+  12| import hashlib
+
+nanobot/security/logical_vfs.py:28
+  22| 
+  23| from pydantic import Field
+  24| 
+  25| from nanobot.config_base import Base
+  26| 
+  27| 
+> 28| class LogicalVFSConfig(Base):
+  29|     """Configuration for the logical VFS layer."""
+  30| 
+  31|     enabled: bool = True
+  32|     root: str = ".nanobot/vfs"
+  33|     max_user_bytes: int = Field(default=5 * 1024**3, ge=1)
+  34|     max_user_files: int = Field(default=100_000, ge=1)
+
+nanobot/security/logical_vfs.py:34
+  28| class LogicalVFSConfig(Base):
+  29|     """Configuration for the logical VFS layer."""
+  30| 
+  31|     enabled: bool = True
+  32|     root: str = ".nanobot/vfs"
+  33|     max_user_bytes: int = Field(default=5 * 1024**3, ge=1)
+> 34|     max_user_files: int = Field(default=100_000, ge=1)
+  35|     max_task_bytes: int = Field(default=1 * 1024**3, ge=1)
+  36|     max_task_files: int = Field(default=50_000, ge=1)
+  37|     task_ttl_seconds: int = Field(default=7 * 24 * 3600, ge=60)
+  38|     project_ttl_seconds: int = Field(default=30 * 24 * 3600, ge=60)
+  39| 
+  40| 
+
+nanobot/security/logical_vfs.py:46
+  40| 
+  41| class VFSPathError(PermissionError):
+  42|     """A path is outside the current logical namespace."""
+  43| 
+  44| 
+  45| class VFSQuotaError(RuntimeError):
+> 46|     """A write would exceed a logical VFS quota."""
+  47| 
+  48| 
+  49| class VFSIdentityError(ValueError):
+  50|     """An identity component is empty or unsafe."""
+  51| 
+  52| 
+
+nanobot/security/logical_vfs.py:49
+  43| 
+  44| 
+  45| class VFSQuotaError(RuntimeError):
+  46|     """A write would exceed a logical VFS quota."""
+  47| 
+  48| 
+> 49| class VFSIdentityError(ValueError):
+  50|     """An identity component is empty or unsafe."""
+  51| 
+  52| 
+  53| VFSAccess = Literal["read", "write"]
+  54| VFSWorkspaceKind = Literal["project", "task", "skill", "shared_skill"]
+  55| 
+
+nanobot/security/logical_vfs.py:60
+  54| VFSWorkspaceKind = Literal["project", "task", "skill", "shared_skill"]
+  55| 
+  56| 
+  57| def _component(value: str, label: str) -> str:
+  58|     value = str(value or "").strip()
+  59|     if not value:
+> 60|         raise VFSIdentityError(f"{label} must not be empty")
+  61|     # Do not expose raw channel/user identifiers in directory names.  This also
+  62|     # makes separators, dot segments and Unicode normalization irrelevant to
+  63|     # the physical path boundary.
+  64|     return hashlib.sha256(value.encode("utf-8")).hexdigest()[:24]
+  65| 
+  66| 
+
+nanobot/security/logical_vfs.py:68
+  62|     # makes separators, dot segments and Unicode normalization irrelevant to
+  63|     # the physical path boundary.
+  64|     return hashlib.sha256(value.encode("utf-8")).hexdigest()[:24]
+  65| 
+  66| 
+  67| @dataclass(frozen=True, slots=True)
+> 68| class VFSIdentity:
+  69|     tenant_id: str = "default"
+  70|     user_id: str = "default"
+  71|     session_id: str | None = None
+  72|     agent_id: str | None = None
+  73|     task_id: str | None = None
+  74| 
+
+nanobot/security/logical_vfs.py:96
+  90|     """A physical directory plus its logical namespace and permissions."""
+  91| 
+  92|     root: Path
+  93|     virtual_path: str
+  94|     kind: VFSWorkspaceKind
+  95|     read_only: bool
+> 96|     identity: VFSIdentity
+  97| 
+  98|     def resolve(self, path: str | Path = ".", *, access: VFSAccess = "read") -> Path:
+  99|         if access == "write" and self.read_only:
+  100|             raise VFSPathError(f"{self.kind} workspace is read-only")
+  101|         raw = Path(path)
+  102|         if raw.is_absolute():
+
+nanobot/security/logical_vfs.py:123
+  117|     files: int
+  118| 
+  119| 
+  120| _CURRENT_VFS: ContextVar["LogicalVFS | None"] = ContextVar(
+  121|     "nanobot_logical_vfs", default=None
+  122| )
+> 123| _CURRENT_IDENTITY: ContextVar[VFSIdentity | None] = ContextVar(
+  124|     "nanobot_logical_vfs_identity", default=None
+  125| )
+  126| 
+  127| 
+  128| class LogicalVFS:
+  129|     """Resolve and govern user/task namespaces below one configured root."""
+
+nanobot/security/logical_vfs.py:128
+  122| )
+  123| _CURRENT_IDENTITY: ContextVar[VFSIdentity | None] = ContextVar(
+  124|     "nanobot_logical_vfs_identity", default=None
+  125| )
+  126| 
+  127| 
+> 128| class LogicalVFS:
+  129|     """Resolve and govern user/task namespaces below one configured root."""
+  130| 
+  131|     def __init__(self, workspace: Path, config: LogicalVFSConfig | None = None):
+  132|         self.host_workspace = Path(workspace).expanduser().resolve(strict=False)
+  133|         self.config = config or LogicalVFSConfig()
+  134|         configured = Path(self.config.root).expanduser()
+
+nanobot/security/logical_vfs.py:145
+  139|         self.counters: Counter[str] = Counter()
+  140| 
+  141|     @property
+  142|     def enabled(self) -> bool:
+  143|         return self.config.enabled
+  144| 
+> 145|     def user_root(self, identity: VFSIdentity) -> Path:
+  146|         return self.root / "tenants" / identity.tenant_key / "users" / identity.user_key
+  147| 
+  148|     def repository_root(self, identity: VFSIdentity) -> Path:
+  149|         return self.user_root(identity) / "projects"
+  150| 
+  151|     def user_skills_root(self, identity: VFSIdentity) -> Path:
+
+nanobot/security/logical_vfs.py:148
+  142|     def enabled(self) -> bool:
+  143|         return self.config.enabled
+  144| 
+  145|     def user_root(self, identity: VFSIdentity) -> Path:
+  146|         return self.root / "tenants" / identity.tenant_key / "users" / identity.user_key
+  147| 
+> 148|     def repository_root(self, identity: VFSIdentity) -> Path:
+  149|         return self.user_root(identity) / "projects"
+  150| 
+  151|     def user_skills_root(self, identity: VFSIdentity) -> Path:
+  152|         root = self.user_root(identity) / "skills"
+  153|         root.mkdir(parents=True, exist_ok=True)
+  154|         return root
+
+nanobot/security/logical_vfs.py:151
+  145|     def user_root(self, identity: VFSIdentity) -> Path:
+  146|         return self.root / "tenants" / identity.tenant_key / "users" / identity.user_key
+  147| 
+  148|     def repository_root(self, identity: VFSIdentity) -> Path:
+  149|         return self.user_root(identity) / "projects"
+  150| 
+> 151|     def user_skills_root(self, identity: VFSIdentity) -> Path:
+  152|         root = self.user_root(identity) / "skills"
+  153|         root.mkdir(parents=True, exist_ok=True)
+  154|         return root
+  155| 
+  156|     def task_root(self, identity: VFSIdentity) -> Path:
+  157|         if not identity.task_key:
+
+nanobot/security/logical_vfs.py:156
+  150| 
+  151|     def user_skills_root(self, identity: VFSIdentity) -> Path:
+  152|         root = self.user_root(identity) / "skills"
+  153|         root.mkdir(parents=True, exist_ok=True)
+  154|         return root
+  155| 
+> 156|     def task_root(self, identity: VFSIdentity) -> Path:
+  157|         if not identity.task_key:
+  158|             raise VFSIdentityError("task_id is required for a task workspace")
+  159|         return self.user_root(identity) / "tasks" / identity.task_key
+  160| 
+  161|     def workspace(
+  162|         self,
+
+nanobot/security/logical_vfs.py:158
+  152|         root = self.user_root(identity) / "skills"
+  153|         root.mkdir(parents=True, exist_ok=True)
+  154|         return root
+  155| 
+  156|     def task_root(self, identity: VFSIdentity) -> Path:
+  157|         if not identity.task_key:
+> 158|             raise VFSIdentityError("task_id is required for a task workspace")
+  159|         return self.user_root(identity) / "tasks" / identity.task_key
+  160| 
+  161|     def workspace(
+  162|         self,
+  163|         identity: VFSIdentity,
+  164|         kind: VFSWorkspaceKind,
+
+nanobot/security/logical_vfs.py:163
+  157|         if not identity.task_key:
+  158|             raise VFSIdentityError("task_id is required for a task workspace")
+  159|         return self.user_root(identity) / "tasks" / identity.task_key
+  160| 
+  161|     def workspace(
+  162|         self,
+> 163|         identity: VFSIdentity,
+  164|         kind: VFSWorkspaceKind,
+  165|         name: str = "default",
+  166|         *,
+  167|         create: bool = True,
+  168|     ) -> VFSWorkspace:
+  169|         name_key = _component(name, "workspace name")
+
+nanobot/security/logical_vfs.py:187
+  181|             read_only = False
+  182|         elif kind == "shared_skill":
+  183|             root = self.root / "shared" / "skills" / name_key
+  184|             virtual = f"/shared/skills/{name_key}"
+  185|             read_only = True
+  186|         else:  # pragma: no cover - Literal protects normal callers
+> 187|             raise VFSIdentityError(f"unsupported workspace kind: {kind}")
+  188|         if create:
+  189|             root.mkdir(parents=True, exist_ok=True)
+  190|         return VFSWorkspace(root, virtual, kind, read_only, identity)
+  191| 
+  192|     def usage(self, root: Path) -> VFSUsage:
+  193|         root = root.resolve(strict=False)
+
+nanobot/security/logical_vfs.py:215
+  209|     def metric(self, name: str, amount: int = 1) -> None:
+  210|         self.counters[name] += amount
+  211| 
+  212|     def snapshot(self) -> dict[str, int]:
+  213|         return dict(self.counters)
+  214| 
+> 215|     def check_quota(
+  216|         self,
+  217|         identity: VFSIdentity,
+  218|         *,
+  219|         root: Path | None = None,
+  220|         additional_bytes: int = 0,
+  221|         additional_files: int = 0,
+
+nanobot/security/logical_vfs.py:217
+  211| 
+  212|     def snapshot(self) -> dict[str, int]:
+  213|         return dict(self.counters)
+  214| 
+  215|     def check_quota(
+  216|         self,
+> 217|         identity: VFSIdentity,
+  218|         *,
+  219|         root: Path | None = None,
+  220|         additional_bytes: int = 0,
+  221|         additional_files: int = 0,
+  222|     ) -> VFSUsage:
+  223|         usage = self.usage(root or self.user_root(identity))
+
+nanobot/security/logical_vfs.py:234
+  228|                 root.resolve(strict=False).relative_to(user_root / "tasks")
+  229|             except ValueError:
+  230|                 pass
+  231|             else:
+  232|                 task_limit = True
+  233|         max_bytes = self.config.max_task_bytes if task_limit else self.config.max_user_bytes
+> 234|         max_files = self.config.max_task_files if task_limit else self.config.max_user_files
+  235|         if usage.bytes + max(0, additional_bytes) > max_bytes:
+  236|             self.metric("quota_exceeded")
+  237|             raise VFSQuotaError(f"VFS byte quota exceeded ({max_bytes} bytes)")
+  238|         if usage.files + max(0, additional_files) > max_files:
+  239|             self.metric("quota_exceeded")
+  240|             raise VFSQuotaError(f"VFS file quota exceeded ({max_files} files)")
+
+nanobot/security/logical_vfs.py:236
+  230|                 pass
+  231|             else:
+  232|                 task_limit = True
+  233|         max_bytes = self.config.max_task_bytes if task_limit else self.config.max_user_bytes
+  234|         max_files = self.config.max_task_files if task_limit else self.config.max_user_files
+  235|         if usage.bytes + max(0, additional_bytes) > max_bytes:
+> 236|             self.metric("quota_exceeded")
+  237|             raise VFSQuotaError(f"VFS byte quota exceeded ({max_bytes} bytes)")
+  238|         if usage.files + max(0, additional_files) > max_files:
+  239|             self.metric("quota_exceeded")
+  240|             raise VFSQuotaError(f"VFS file quota exceeded ({max_files} files)")
+  241|         return usage
+  242| 
+
+nanobot/security/logical_vfs.py:237
+  231|             else:
+  232|                 task_limit = True
+  233|         max_bytes = self.config.max_task_bytes if task_limit else self.config.max_user_bytes
+  234|         max_files = self.config.max_task_files if task_limit else self.config.max_user_files
+  235|         if usage.bytes + max(0, additional_bytes) > max_bytes:
+  236|             self.metric("quota_exceeded")
+> 237|             raise VFSQuotaError(f"VFS byte quota exceeded ({max_bytes} bytes)")
+  238|         if usage.files + max(0, additional_files) > max_files:
+  239|             self.metric("quota_exceeded")
+  240|             raise VFSQuotaError(f"VFS file quota exceeded ({max_files} files)")
+  241|         return usage
+  242| 
+  243|     def enforce_write(self, identity: VFSIdentity, path: Path, new_size: int) -> None:
+
+nanobot/security/logical_vfs.py:238
+  232|                 task_limit = True
+  233|         max_bytes = self.config.max_task_bytes if task_limit else self.config.max_user_bytes
+  234|         max_files = self.config.max_task_files if task_limit else self.config.max_user_files
+  235|         if usage.bytes + max(0, additional_bytes) > max_bytes:
+  236|             self.metric("quota_exceeded")
+  237|             raise VFSQuotaError(f"VFS byte quota exceeded ({max_bytes} bytes)")
+> 238|         if usage.files + max(0, additional_files) > max_files:
+  239|             self.metric("quota_exceeded")
+  240|             raise VFSQuotaError(f"VFS file quota exceeded ({max_files} files)")
+  241|         return usage
+  242| 
+  243|     def enforce_write(self, identity: VFSIdentity, path: Path, new_size: int) -> None:
+  244|         """Check a prospective write when *path* belongs to this identity."""
+
+nanobot/security/logical_vfs.py:239
+  233|         max_bytes = self.config.max_task_bytes if task_limit else self.config.max_user_bytes
+  234|         max_files = self.config.max_task_files if task_limit else self.config.max_user_files
+  235|         if usage.bytes + max(0, additional_bytes) > max_bytes:
+  236|             self.metric("quota_exceeded")
+  237|             raise VFSQuotaError(f"VFS byte quota exceeded ({max_bytes} bytes)")
+  238|         if usage.files + max(0, additional_files) > max_files:
+> 239|             self.metric("quota_exceeded")
+  240|             raise VFSQuotaError(f"VFS file quota exceeded ({max_files} files)")
+  241|         return usage
+  242| 
+  243|     def enforce_write(self, identity: VFSIdentity, path: Path, new_size: int) -> None:
+  244|         """Check a prospective write when *path* belongs to this identity."""
+  245|         path = path.resolve(strict=False)
+
+nanobot/security/logical_vfs.py:240
+  234|         max_files = self.config.max_task_files if task_limit else self.config.max_user_files
+  235|         if usage.bytes + max(0, additional_bytes) > max_bytes:
+  236|             self.metric("quota_exceeded")
+  237|             raise VFSQuotaError(f"VFS byte quota exceeded ({max_bytes} bytes)")
+  238|         if usage.files + max(0, additional_files) > max_files:
+  239|             self.metric("quota_exceeded")
+> 240|             raise VFSQuotaError(f"VFS file quota exceeded ({max_files} files)")
+  241|         return usage
+  242| 
+  243|     def enforce_write(self, identity: VFSIdentity, path: Path, new_size: int) -> None:
+  244|         """Check a prospective write when *path* belongs to this identity."""
+  245|         path = path.resolve(strict=False)
+  246|         user_root = self.user_root(identity).resolve(strict=False)
+
+nanobot/security/logical_vfs.py:243
+  237|             raise VFSQuotaError(f"VFS byte quota exceeded ({max_bytes} bytes)")
+  238|         if usage.files + max(0, additional_files) > max_files:
+  239|             self.metric("quota_exceeded")
+  240|             raise VFSQuotaError(f"VFS file quota exceeded ({max_files} files)")
+  241|         return usage
+  242| 
+> 243|     def enforce_write(self, identity: VFSIdentity, path: Path, new_size: int) -> None:
+  244|         """Check a prospective write when *path* belongs to this identity."""
+  245|         path = path.resolve(strict=False)
+  246|         user_root = self.user_root(identity).resolve(strict=False)
+  247|         quota_root = user_root
+  248|         task_root: Path | None = None
+  249|         if identity.task_id:
+
+nanobot/security/logical_vfs.py:247
+  241|         return usage
+  242| 
+  243|     def enforce_write(self, identity: VFSIdentity, path: Path, new_size: int) -> None:
+  244|         """Check a prospective write when *path* belongs to this identity."""
+  245|         path = path.resolve(strict=False)
+  246|         user_root = self.user_root(identity).resolve(strict=False)
+> 247|         quota_root = user_root
+  248|         task_root: Path | None = None
+  249|         if identity.task_id:
+  250|             task_root = self.task_root(identity).resolve(strict=False)
+  251|         else:
+  252|             # Repository turns may only know their physical task workspace.
+  253|             # Recover the task namespace from the canonical ``tasks/<id>``
+
+nanobot/security/logical_vfs.py:254
+  248|         task_root: Path | None = None
+  249|         if identity.task_id:
+  250|             task_root = self.task_root(identity).resolve(strict=False)
+  251|         else:
+  252|             # Repository turns may only know their physical task workspace.
+  253|             # Recover the task namespace from the canonical ``tasks/<id>``
+> 254|             # segment so task quotas still apply without trusting path input.
+  255|             tasks_root = (user_root / "tasks").resolve(strict=False)
+  256|             try:
+  257|                 relative = path.relative_to(tasks_root)
+  258|             except ValueError:
+  259|                 pass
+  260|             else:
+
+nanobot/security/logical_vfs.py:269
+  263|         if task_root is not None:
+  264|             try:
+  265|                 path.relative_to(task_root)
+  266|             except ValueError:
+  267|                 pass
+  268|             else:
+> 269|                 quota_root = task_root
+  270|         try:
+  271|             path.relative_to(quota_root)
+  272|         except ValueError:
+  273|             # Legacy workspaces remain governed by WorkspaceScope.  The VFS
+  274|             # quota applies only after a path has entered a VFS namespace.
+  275|             return
+
+nanobot/security/logical_vfs.py:271
+  265|                 path.relative_to(task_root)
+  266|             except ValueError:
+  267|                 pass
+  268|             else:
+  269|                 quota_root = task_root
+  270|         try:
+> 271|             path.relative_to(quota_root)
+  272|         except ValueError:
+  273|             # Legacy workspaces remain governed by WorkspaceScope.  The VFS
+  274|             # quota applies only after a path has entered a VFS namespace.
+  275|             return
+  276|         old_size = 0
+  277|         existed = path.exists()
+
+nanobot/security/logical_vfs.py:274
+  268|             else:
+  269|                 quota_root = task_root
+  270|         try:
+  271|             path.relative_to(quota_root)
+  272|         except ValueError:
+  273|             # Legacy workspaces remain governed by WorkspaceScope.  The VFS
+> 274|             # quota applies only after a path has entered a VFS namespace.
+  275|             return
+  276|         old_size = 0
+  277|         existed = path.exists()
+  278|         if existed:
+  279|             try:
+  280|                 old_size = path.stat().st_size
+
+nanobot/security/logical_vfs.py:283
+  277|         existed = path.exists()
+  278|         if existed:
+  279|             try:
+  280|                 old_size = path.stat().st_size
+  281|             except OSError:
+  282|                 old_size = 0
+> 283|         self.check_quota(
+  284|             identity,
+  285|             root=quota_root,
+  286|             additional_bytes=max(0, new_size - old_size),
+  287|             additional_files=0 if existed else 1,
+  288|         )
+  289| 
+
+nanobot/security/logical_vfs.py:285
+  279|             try:
+  280|                 old_size = path.stat().st_size
+  281|             except OSError:
+  282|                 old_size = 0
+  283|         self.check_quota(
+  284|             identity,
+> 285|             root=quota_root,
+  286|             additional_bytes=max(0, new_size - old_size),
+  287|             additional_files=0 if existed else 1,
+  288|         )
+  289| 
+  290|     def is_read_only_path(self, path: Path) -> bool:
+  291|         """Return whether *path* is in a shared, read-only skill namespace."""
+
+nanobot/security/logical_vfs.py:302
+  296|         )
+  297|         return any(
+  298|             resolved == shared_root or shared_root in resolved.parents
+  299|             for shared_root in shared_roots
+  300|         )
+  301| 
+> 302|     def cleanup_task(self, identity: VFSIdentity) -> bool:
+  303|         root = self.task_root(identity)
+  304|         if not root.exists():
+  305|             return False
+  306|         self._safe_remove(root)
+  307|         self.metric("task_cleanup")
+  308|         return True
+
+nanobot/security/logical_vfs.py:358
+  352|         if resolved.is_dir() and not resolved.is_symlink():
+  353|             shutil.rmtree(resolved)
+  354|         elif resolved.exists() or resolved.is_symlink():
+  355|             resolved.unlink()
+  356| 
+  357|     @contextmanager
+> 358|     def bind(self, identity: VFSIdentity) -> Iterator[None]:
+  359|         vfs_token = _CURRENT_VFS.set(self)
+  360|         identity_token = _CURRENT_IDENTITY.set(identity)
+  361|         try:
+  362|             yield
+  363|         finally:
+  364|             _CURRENT_IDENTITY.reset(identity_token)
+
+nanobot/security/logical_vfs.py:368
+  362|             yield
+  363|         finally:
+  364|             _CURRENT_IDENTITY.reset(identity_token)
+  365|             _CURRENT_VFS.reset(vfs_token)
+  366| 
+  367| 
+> 368| def bind_vfs(vfs: LogicalVFS, identity: VFSIdentity) -> tuple[Token[LogicalVFS | None], Token[VFSIdentity | None]]:
+  369|     return _CURRENT_VFS.set(vfs), _CURRENT_IDENTITY.set(identity)
+  370| 
+  371| 
+  372| def reset_vfs(tokens: tuple[Token[LogicalVFS | None], Token[VFSIdentity | None]]) -> None:
+  373|     vfs_token, identity_token = tokens
+  374|     _CURRENT_IDENTITY.reset(identity_token)
+
+nanobot/security/logical_vfs.py:372
+  366| 
+  367| 
+  368| def bind_vfs(vfs: LogicalVFS, identity: VFSIdentity) -> tuple[Token[LogicalVFS | None], Token[VFSIdentity | None]]:
+  369|     return _CURRENT_VFS.set(vfs), _CURRENT_IDENTITY.set(identity)
+  370| 
+  371| 
+> 372| def reset_vfs(tokens: tuple[Token[LogicalVFS | None], Token[VFSIdentity | None]]) -> None:
+  373|     vfs_token, identity_token = tokens
+  374|     _CURRENT_IDENTITY.reset(identity_token)
+  375|     _CURRENT_VFS.reset(vfs_token)
+  376| 
+  377| 
+  378| def current_vfs() -> LogicalVFS | None:
+
+nanobot/security/logical_vfs.py:382
+  376| 
+  377| 
+  378| def current_vfs() -> LogicalVFS | None:
+  379|     return _CURRENT_VFS.get()
+  380| 
+  381| 
+> 382| def current_vfs_identity() -> VFSIdentity | None:
+  383|     return _CURRENT_IDENTITY.get()
+
+nanobot/utils/document.py:48
+  42| 
+  43| _MAX_TEXT_LENGTH = 200_000
+  44| _MAX_EXTRACT_FILE_SIZE = 50 * 1024 * 1024  # 50 MB
+  45| _MAX_OFFICE_ARCHIVE_MEMBERS = 10_000
+  46| _MAX_OFFICE_UNCOMPRESSED_SIZE = 256 * 1024 * 1024  # 256 MB
+  47| _MAX_OFFICE_MEMBER_SIZE = 128 * 1024 * 1024  # 128 MB
+> 48| _MAX_DOCX_TABLE_CELLS = 100_000
+  49| _MAX_DOCX_TABLE_DEPTH = 8
+  50| _MAX_PDF_CONTENT_STREAM_SIZE = 32 * 1024 * 1024  # 32 MB per page
+  51| _MAX_PDF_ATTACHMENT_PAGES = 100
+  52| 
+  53| 
+  54| class _TextCollector:

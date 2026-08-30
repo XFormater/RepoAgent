@@ -220,8 +220,12 @@ class ExecTool(Tool):
         self.sandbox = sandbox
         self.deny_patterns = (deny_patterns or []) + [
             r"\brm\s+-[rf]{1,2}\b",          # rm -r, rm -rf, rm -fr
+            r"\bfind\b[^\r\n|;&]*\s-delete\b",  # find ... -delete
+            r"\bshutil\.rmtree\s*\(",       # Python recursive deletion
+            r"\bremove-item\b[^\r\n|;&]*\s-(?:recurse|r)\b",  # PowerShell recursive deletion
             r"\bdel\s+/[fq]\b",              # del /f, del /q
             r"\brmdir\s+/s\b",               # rmdir /s
+            r"\brd\s+/s\b",                  # rd /s
             r"(?:^|[;&|]\s*)format(?!=)\b",   # format (as standalone command only)
             r"\b(mkfs|diskpart)\b",          # disk operations
             r"\bdd\s+if=",                   # dd
@@ -316,6 +320,10 @@ class ExecTool(Tool):
         if isinstance(prepared, str):
             return prepared
 
+        quota_error = self._vfs_quota_error(prepared.cwd, before_execution=True)
+        if quota_error is not None:
+            return quota_error
+
         if yield_time_ms is not None:
             return await self._execute_session(prepared, yield_time_ms, max_output_chars)
 
@@ -360,14 +368,9 @@ class ExecTool(Tool):
 
             result = "\n".join(output_parts) if output_parts else "(no output)"
 
-            vfs = current_vfs()
-            identity = current_vfs_identity()
-            if vfs is not None and identity is not None:
-                try:
-                    vfs.check_quota(identity, root=Path(prepared.cwd))
-                except VFSQuotaError as exc:
-                    logger.warning("VFS quota exceeded after shell command: {}", exc)
-                    return ToolResult.error(f"Error: {exc}")
+            quota_error = self._vfs_quota_error(prepared.cwd, before_execution=False)
+            if quota_error is not None:
+                return quota_error
 
             max_len = clamp_session_int(max_output_chars, self._MAX_OUTPUT, 1000, MAX_OUTPUT_CHARS)
             if len(result) > max_len:
@@ -411,17 +414,47 @@ class ExecTool(Tool):
                 ),
             )
             result = format_session_poll(session_id, poll)
-            vfs = current_vfs()
-            identity = current_vfs_identity()
-            if vfs is not None and identity is not None:
-                try:
-                    vfs.check_quota(identity, root=Path(prepared.cwd))
-                except VFSQuotaError as exc:
-                    logger.warning("VFS quota exceeded after shell session: {}", exc)
-                    return ToolResult.error(f"Error: {exc}")
+            quota_error = self._vfs_quota_error(
+                prepared.cwd,
+                before_execution=False,
+                background_session=True,
+            )
+            if quota_error is not None:
+                return quota_error
             return ToolResult.error(result) if poll.timed_out else result
         except Exception as exc:
             return ToolResult.error(f"Error executing command: {exc}")
+
+    @staticmethod
+    def _vfs_quota_error(
+        cwd: str,
+        *,
+        before_execution: bool,
+        background_session: bool = False,
+    ) -> str | None:
+        """Return a precise quota error without hiding command side effects."""
+        vfs = current_vfs()
+        identity = current_vfs_identity()
+        if vfs is None or identity is None:
+            return None
+        try:
+            vfs.check_quota(identity, root=Path(cwd))
+        except VFSQuotaError as exc:
+            if before_execution:
+                logger.warning("Blocking shell command because VFS quota is already exceeded: {}", exc)
+                return ToolResult.error(
+                    f"Error: command was not executed because {exc}. "
+                    "This is a hard safety boundary. Do not retry with alternate shell commands "
+                    "or deletion tricks; ask the user or administrator to approve cleanup through "
+                    "a dedicated maintenance path."
+                )
+            logger.warning("VFS quota exceeded after shell command: {}", exc)
+            session_note = " The shell session may still be running." if background_session else ""
+            return ToolResult.error(
+                f"Error: the command executed, but {exc}.{session_note} "
+                "Side effects were not rolled back; inspect the workspace before retrying."
+            )
+        return None
 
     def _resolve_timeout(self, timeout: int | None) -> int | None:
         """Resolve the effective hard timeout in seconds (None = no limit).

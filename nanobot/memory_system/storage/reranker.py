@@ -10,6 +10,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from nanobot.memory_system.models import RankedResult
+from nanobot.memory_system.storage.lexical import bm25_scores
 
 
 class Reranker(ABC):
@@ -34,6 +35,27 @@ class IdentityReranker(Reranker):
             RankedResult(text=text, score=float(len(candidates) - index), source_index=index)
             for index, text in enumerate(candidates[:top_n])
         ]
+
+
+class LexicalReranker(Reranker):
+    """Dependency-free BM25 reranker for local and constrained deployments."""
+
+    async def rerank(
+        self,
+        query: str,
+        candidates: list[str],
+        top_n: int,
+    ) -> list[RankedResult]:
+        scores = bm25_scores(query, candidates)
+        ranked = sorted(
+            (
+                RankedResult(text=text, score=scores[index], source_index=index)
+                for index, text in enumerate(candidates)
+            ),
+            key=lambda item: item.score,
+            reverse=True,
+        )
+        return ranked[:top_n]
 
 
 class CrossEncoderReranker(Reranker):

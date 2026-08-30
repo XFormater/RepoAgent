@@ -1,7 +1,7 @@
 """GraphStore interface, in-memory backend, and Neo4j adapter."""
 
 # Neo4j is an optional lazy import and exposes dynamic graph value objects.
-# pyright: reportMissingImports=false, reportUnknownMemberType=false, reportUnknownVariableType=false, reportUnknownArgumentType=false
+# pyright: reportMissingImports=false, reportUnknownMemberType=false, reportUnknownVariableType=false, reportUnknownArgumentType=false, reportArgumentType=false
 
 from __future__ import annotations
 
@@ -41,11 +41,20 @@ class GraphStore(ABC):
     @abstractmethod
     async def upsert_relation(self, relation: Relation) -> None: ...
 
+    async def upsert_entities(self, entities: list[Entity]) -> None:
+        for entity in entities:
+            await self.upsert_entity(entity)
+
+    async def upsert_relations(self, relations: list[Relation]) -> None:
+        for relation in relations:
+            await self.upsert_relation(relation)
+
     @abstractmethod
     async def multi_hop_query(
         self,
         entity_ids: list[str],
         max_depth: int,
+        max_paths: int = 100,
     ) -> list[SubGraph]: ...
 
 
@@ -73,7 +82,9 @@ class InMemoryGraphStore(GraphStore):
         self,
         entity_ids: list[str],
         max_depth: int,
+        max_paths: int = 100,
     ) -> list[SubGraph]:
+        del max_paths
         async with self._lock:
             frontier = set(entity_ids)
             visited = set(frontier)
@@ -189,10 +200,67 @@ class Neo4jGraphStore(GraphStore):
                 source_memory_id=relation.source_memory_id,
             )
 
+    async def upsert_entities(self, entities: list[Entity]) -> None:
+        """Upsert a batch with one Cypher query per safe node label."""
+        if not entities:
+            return
+        await self._ensure_schema()
+        grouped: dict[str, list[dict[str, object]]] = {}
+        for entity in entities:
+            label = entity.entity_type if entity.entity_type in _NODE_TYPES else "Concept"
+            grouped.setdefault(label, []).append(
+                {
+                    "id": entity.id,
+                    "name": entity.name,
+                    "attributes_json": json.dumps(entity.attributes, ensure_ascii=False),
+                }
+            )
+        async with self._driver.session(database=self._database) as session:
+            for label, rows in grouped.items():
+                result = await session.run(
+                    f"UNWIND $rows AS row MERGE (e:{label} {{id: row.id}}) "
+                    "ON CREATE SET e.version=1 "
+                    "SET e.name=row.name, e.attributes_json=row.attributes_json",
+                    rows=rows,
+                )
+                await result.consume()
+
+    async def upsert_relations(self, relations: list[Relation]) -> None:
+        """Upsert a batch with one Cypher query per allow-listed edge type."""
+        if not relations:
+            return
+        await self._ensure_schema()
+        grouped: dict[str, list[dict[str, object]]] = {}
+        for relation in relations:
+            relation_type = (
+                relation.relation_type
+                if relation.relation_type in _RELATION_TYPES
+                else "RELATES_TO"
+            )
+            grouped.setdefault(relation_type, []).append(
+                {
+                    "id": relation.id,
+                    "source": relation.source_entity_id,
+                    "target": relation.target_entity_id,
+                    "weight": relation.weight,
+                    "source_memory_id": relation.source_memory_id,
+                }
+            )
+        async with self._driver.session(database=self._database) as session:
+            for relation_type, rows in grouped.items():
+                result = await session.run(
+                    "UNWIND $rows AS row MATCH (s {id: row.source}), (t {id: row.target}) "
+                    f"MERGE (s)-[r:{relation_type} {{id: row.id}}]->(t) "
+                    "SET r.weight=row.weight, r.source_memory_id=row.source_memory_id",
+                    rows=rows,
+                )
+                await result.consume()
+
     async def multi_hop_query(
         self,
         entity_ids: list[str],
         max_depth: int,
+        max_paths: int = 100,
     ) -> list[SubGraph]:
         if not entity_ids:
             return []
@@ -202,12 +270,16 @@ class Neo4jGraphStore(GraphStore):
             "MATCH p=(start)-[rels*1.."
             f"{depth}"
             "]-(neighbor) WHERE start.id IN $entity_ids "
-            "RETURN nodes(p) AS nodes, relationships(p) AS relationships LIMIT 100"
+            "RETURN nodes(p) AS nodes, relationships(p) AS relationships LIMIT $max_paths"
         )
         entities: dict[str, Entity] = {}
         relations: dict[str, Relation] = {}
         async with self._driver.session(database=self._database) as session:
-            result = await session.run(query, entity_ids=entity_ids)
+            result = await session.run(
+                query,
+                entity_ids=entity_ids,
+                max_paths=min(max(max_paths, 1), 2000),
+            )
             async for row in result:
                 for node in row["nodes"]:
                     data = dict(node)
