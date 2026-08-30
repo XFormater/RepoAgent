@@ -71,6 +71,10 @@ class RepositoryOrchestrator:
         r"^/repo(?:\s+(?P<action>close|save|patch|fork|pr|status))?(?:\s+(?P<arg>\S+))?\s*$",
         re.IGNORECASE,
     )
+    _RESEARCH_COMMAND_RE = re.compile(
+        r"^/rere(?:\s+(?P<query>[\s\S]+?))?\s*$",
+        re.IGNORECASE,
+    )
     _APPROVE_RE = re.compile(
         r"^(?:/approve|/repo\s+approve|确认提交|确认创建)\s+([A-Za-z0-9_-]{1,100})\s*$",
         re.IGNORECASE,
@@ -110,8 +114,9 @@ class RepositoryOrchestrator:
         re.IGNORECASE,
     )
     _RESEARCH_ACTION_RE = re.compile(
-        r"(?:寻找|查找|搜索|检索|推荐|调研|研究|比较|筛选|find|search|discover|"
-        r"recommend|survey|research|compare)",
+        r"(?:寻找|查找|搜索|检索|推荐|调研|研究|比较|对比|筛选|下载|克隆|整理|"
+        r"总结|汇总|盘点|评估|find|search|discover|recommend|survey|research|"
+        r"compare|download|clone|summari[sz]e|curate|shortlist|evaluate)",
         re.IGNORECASE,
     )
     _RESEARCH_TARGET_RE = re.compile(
@@ -177,6 +182,7 @@ class RepositoryOrchestrator:
         return bool(
             self.manager.extract_url(request)
             or self.is_research_request(request)
+            or self._RESEARCH_COMMAND_RE.fullmatch(stripped)
             or self._COMMAND_RE.fullmatch(stripped)
             or self._APPROVE_RE.fullmatch(stripped)
             or self._REJECT_RE.fullmatch(stripped)
@@ -195,7 +201,8 @@ class RepositoryOrchestrator:
         """Return whether a slash command belongs to the repository workflow."""
         stripped = request.strip()
         return bool(
-            self._COMMAND_RE.fullmatch(stripped)
+            self._RESEARCH_COMMAND_RE.fullmatch(stripped)
+            or self._COMMAND_RE.fullmatch(stripped)
             or self._APPROVE_RE.fullmatch(stripped)
             or self._REJECT_RE.fullmatch(stripped)
             or self._DELETE_APPROVE_RE.fullmatch(stripped)
@@ -1052,6 +1059,8 @@ class RepositoryOrchestrator:
         runtime: LLMRuntime,
         invoke: RepositoryAgentInvoker,
         on_update: Callable[[str], Awaitable[None]] | None = None,
+        on_stream: Callable[[str], Awaitable[None]] | None = None,
+        on_stream_end: Callable[..., Awaitable[None]] | None = None,
         tenant_id: str = "default",
     ) -> RepositoryTurnResult:
         """Run one repository turn inside its user-scoped logical VFS."""
@@ -1064,6 +1073,8 @@ class RepositoryOrchestrator:
                 runtime=runtime,
                 invoke=invoke,
                 on_update=on_update,
+                on_stream=on_stream,
+                on_stream_end=on_stream_end,
             )
         identity = VFSIdentity(
             tenant_id=tenant_id,
@@ -1079,6 +1090,8 @@ class RepositoryOrchestrator:
                 runtime=runtime,
                 invoke=invoke,
                 on_update=on_update,
+                on_stream=on_stream,
+                on_stream_end=on_stream_end,
             )
 
     async def _run_scoped(
@@ -1091,7 +1104,19 @@ class RepositoryOrchestrator:
         runtime: LLMRuntime,
         invoke: RepositoryAgentInvoker,
         on_update: Callable[[str], Awaitable[None]] | None = None,
+        on_stream: Callable[[str], Awaitable[None]] | None = None,
+        on_stream_end: Callable[..., Awaitable[None]] | None = None,
     ) -> RepositoryTurnResult:
+        research_command = self._RESEARCH_COMMAND_RE.fullmatch(request.strip())
+        force_research = research_command is not None
+        if research_command is not None:
+            request = (research_command.group("query") or "").strip()
+            if not request:
+                return self._synthetic(
+                    initial_messages,
+                    "请在命令后提供研究需求，例如："
+                    "`/rere 下载并分析 3 个自回归图像生成开源项目`。",
+                )
         command_result = await self._handle_command(
             request=request,
             actor=actor,
@@ -1114,7 +1139,7 @@ class RepositoryOrchestrator:
                 + "；".join(risk.reasons),
                 stop_reason="policy_denied",
             )
-        if self.is_research_request(request):
+        if force_research or self.is_research_request(request):
             try:
                 task = await self.research.run(
                     direction=request,
@@ -1123,6 +1148,8 @@ class RepositoryOrchestrator:
                     runtime=runtime,
                     invoke=invoke,
                     on_update=on_update,
+                    on_report_stream=on_stream,
+                    on_report_stream_end=on_stream_end,
                 )
             except Exception as exc:
                 return self._synthetic(

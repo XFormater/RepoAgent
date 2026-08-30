@@ -1,0 +1,2 @@
+{"_type": "metadata", "key": "websocket:b45b2a1a-acc9-40e0-8f6e-33e03b02c828", "created_at": "2026-08-30T11:45:19.702814", "updated_at": "2026-08-30T11:45:19.778690", "metadata": {"webui": true, "workspace_scope": {"project_path": "/root/GitHubResearch_Agent", "access_mode": "restricted"}, "pending_user_turn": true}, "last_consolidated": 0}
+{"role": "user", "content": "下载并总结5个图像分割的开源项目", "timestamp": "2026-08-30T11:45:19.778667"}

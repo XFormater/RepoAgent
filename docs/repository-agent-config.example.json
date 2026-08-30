@@ -35,6 +35,7 @@
     "testExecution": "disabled",
     "research": {
       "enabled": true,
+      "repositoryCacheDir": null,
       "searchResultsPerQuery": 10,
       "maxCandidates": 20,
       "maxRepositories": 5,

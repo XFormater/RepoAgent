@@ -1193,6 +1193,10 @@
             "title": "長期目標",
             "description": "持続的な複数ステップの目標として扱うようエージェントに伝えます。"
           },
+          "rere": {
+            "title": "リポジトリ調査",
+            "description": "この依頼を Repository Research Orchestrator で実行します。"
+          },
           "trigger": {
             "title": "ローカルトリガーを作成",
             "description": "このチャットセッションに紐づく CLI トリガーを作成します。"

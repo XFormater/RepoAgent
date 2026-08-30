@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import json
 import re
+from collections.abc import Awaitable, Callable
 from typing import Any, cast
 
 from loguru import logger
 
+from nanobot.agent.progress_hook import AgentProgressHook
 from nanobot.agent.runner import AgentRunner, AgentRunSpec
 from nanobot.agent.tools.registry import ToolRegistry
 from nanobot.repo_agent.config import RepositoryAgentConfig
@@ -68,6 +70,10 @@ def extract_json_object(text: str | None) -> dict[str, Any]:
 
 
 class RepositoryControlClient:
+    # These calls expose no tools. Four iterations allow all automatic
+    # length-recovery continuations plus a terminal response.
+    _MAX_ITERATIONS = 4
+
     def __init__(self) -> None:
         self.runner = AgentRunner()
         self.no_tools = ToolRegistry()
@@ -78,7 +84,41 @@ class RepositoryControlClient:
         *,
         runtime: LLMRuntime,
         max_tokens: int,
+        progress_callback: Callable[..., Awaitable[None]] | None = None,
+        stream_callback: Callable[[str], Awaitable[None]] | None = None,
+        stream_end_callback: Callable[..., Awaitable[None]] | None = None,
     ) -> str:
+        async def reasoning_progress(
+            content: str,
+            *,
+            reasoning: bool = False,
+            reasoning_end: bool = False,
+            **_: object,
+        ) -> None:
+            # Machine-readable control output should not leak into the trace;
+            # forward only the model's reasoning stream.
+            if progress_callback is not None and (reasoning or reasoning_end):
+                await progress_callback(
+                    content,
+                    reasoning=reasoning,
+                    reasoning_end=reasoning_end,
+                )
+
+        async def discard_control_output(_: str) -> None:
+            # Force the provider's streaming path so reasoning arrives live;
+            # the complete machine-readable output is returned by the runner.
+            return None
+
+        visible_progress = reasoning_progress if progress_callback is not None else None
+        progress_hook = AgentProgressHook(
+            on_progress=visible_progress,
+            on_stream=stream_callback
+            if stream_callback is not None
+            else discard_control_output
+            if progress_callback is not None
+            else None,
+            on_stream_end=stream_end_callback if stream_callback is not None else None,
+        )
         result = await self.runner.run(
             AgentRunSpec(
                 initial_messages=[{"role": "system", "content": prompt}],
@@ -87,10 +127,12 @@ class RepositoryControlClient:
                     temperature=0.0,
                     max_tokens=max_tokens,
                 ),
-                max_iterations=1,
+                max_iterations=self._MAX_ITERATIONS,
                 max_tool_result_chars=4_000,
                 fail_on_tool_error=True,
                 finalize_on_max_iterations=False,
+                progress_callback=visible_progress,
+                hook=progress_hook,
             )
         )
         if result.stop_reason == "error":

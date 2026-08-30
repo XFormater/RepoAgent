@@ -1,0 +1,2 @@
+{"_type": "metadata", "key": "websocket:1e9ab8ff-79c1-4741-a55b-081935514719", "created_at": "2026-08-30T13:44:43.183777", "updated_at": "2026-08-30T13:44:43.292675", "metadata": {"webui": true, "workspace_scope": {"project_path": "/root/GitHubResearch_Agent", "access_mode": "restricted"}, "pending_user_turn": true}, "last_consolidated": 0}
+{"role": "user", "content": "下载并总结5个图像生成的开源项目", "timestamp": "2026-08-30T13:44:43.292652"}

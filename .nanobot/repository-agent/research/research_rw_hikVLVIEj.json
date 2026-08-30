@@ -1,0 +1,14 @@
+{
+  "research_id": "research_rw_hikVLVIEj",
+  "session_key": "benchmark:orchestrator:1788063445",
+  "actor": "user",
+  "direction": "研究并比较以下三个指定的 GitHub 开源项目：ShareLab-SII/UniAR、amazon-far/BAR、stepfun-ai/NextStep-1。只选择这三个项目，不要替换候选。下载源码并进行实现级分析。\n\n# Fixed-corpus token benchmark prompt\n\nAnalyze exactly these three 2026 autoregressive image-generation repositories:\n\n1. `ShareLab-SII/UniAR` — local source: `research/autoregressive_image_generation_2026/UniAR`\n2. `amazon-far/BAR` — local source: `research/autoregressive_image_generation_2026/BAR`\n3. `stepfun-ai/NextStep-1` — local source: `research/autoregressive_image_generation_2026/NextStep-1`\n\nProduce a Chinese technical report. Do not stop at README summaries. For every repository,\ninspect implementation files and cite repository-relative paths. Cover:\n\n- why it qualifies as a 2026 autoregressive image-generation project;\n- visual token representation and tokenizer/decoder design;\n- autoregressive factorization, prediction target, attention or decoding strategy;\n- training pipeline, losses and important configuration;\n- inference entry point and sampling procedure;\n- released checkpoints/code completeness and practical hardware requirements;\n- technical strengths, limitations and reproducibility risks.\n\nFinish with a cross-project comparison of architecture, generation paradigm, training and\ninference cost, openness, reproducibility, and suitable use cases. Clearly separate claims\nverified in source code from claims found only in documentation.",
+  "queries": [],
+  "candidates": [],
+  "selected": [],
+  "analyses": [],
+  "status": "failed",
+  "report": null,
+  "created_at": "2026-08-30T04:17:26.062504Z",
+  "updated_at": "2026-08-30T04:17:41.764608Z"
+}

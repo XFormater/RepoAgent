@@ -6,6 +6,8 @@ from pathlib import Path
 import pytest
 
 from nanobot.agent.tools.context import RequestContext, request_context
+from nanobot.repo_agent.config import RepositoryAgentConfig, RepositoryResearchConfig
+from nanobot.repo_agent.repository import RepositoryManager
 from nanobot.repo_agent.tools import (
     RepositoryDiffTool,
     RepositoryReadTool,
@@ -48,6 +50,40 @@ async def test_repository_tools_are_bound_to_active_workspace(tmp_path: Path) ->
     assert "app.py" in tree
     assert "app.py:1" in search
     assert "1|def answer" in content
+
+
+@pytest.mark.asyncio
+async def test_repository_tools_allow_research_repository_cache(
+    tmp_path: Path,
+) -> None:
+    manager = RepositoryManager(
+        tmp_path,
+        RepositoryAgentConfig(
+            research=RepositoryResearchConfig(
+                repository_cache_dir="research/repositories"
+            )
+        ),
+    )
+    repo = (
+        tmp_path
+        / "research"
+        / "repositories"
+        / "owner"
+        / "repo"
+        / "source"
+    )
+    repo.mkdir(parents=True)
+    (repo / "README.md").write_text("# Research repo\n", encoding="utf-8")
+    context = RequestContext(channel="cli", chat_id="chat", workspace=repo)
+
+    with request_context(context):
+        tree = await RepositoryTreeTool(manager.allowed_roots).execute()
+        content = await RepositoryReadTool(manager.allowed_roots).execute(
+            path="README.md"
+        )
+
+    assert "README.md" in tree
+    assert "1|# Research repo" in content
 
 
 @pytest.mark.asyncio

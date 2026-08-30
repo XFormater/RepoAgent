@@ -113,6 +113,7 @@ class RepositoryResearchConfig(Base):
     """Academic-direction GitHub discovery and comparative analysis settings."""
 
     enabled: bool = True
+    repository_cache_dir: str | None = None
     search_results_per_query: int = Field(default=10, ge=1, le=100)
     max_candidates: int = Field(default=20, ge=1, le=100)
     max_repositories: int = Field(default=5, ge=1, le=20)

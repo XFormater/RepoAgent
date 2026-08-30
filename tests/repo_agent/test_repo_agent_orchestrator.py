@@ -4,7 +4,7 @@ import re
 import subprocess
 from pathlib import Path
 from typing import cast
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
@@ -43,6 +43,69 @@ def test_academic_project_search_routes_without_github_url(
     assert not orchestrator.is_research_request(
         "https://github.com/owner/repo 分析项目架构"
     )
+
+
+@pytest.mark.parametrize(
+    "user_text",
+    [
+        "下载并总结 5 个图像生成开源项目",
+        "整理五个图像分割 GitHub 项目并比较实现",
+        "盘点并评估几个开源代码仓库",
+        "clone and summarize 5 open-source image generation projects",
+        "curate a shortlist of GitHub repositories for image segmentation",
+    ],
+)
+def test_repository_collection_requests_route_to_research_orchestrator(
+    tmp_path: Path,
+    user_text: str,
+) -> None:
+    orchestrator = RepositoryOrchestrator(
+        config=RepositoryAgentConfig(enabled=True),
+        workspace=tmp_path,
+        tools=ToolRegistry(),
+    )
+
+    assert orchestrator.is_research_request(user_text)
+    assert orchestrator.can_handle(user_text, "websocket:test")
+
+
+def test_explicit_research_command_always_routes_to_repository_orchestrator(
+    tmp_path: Path,
+) -> None:
+    orchestrator = RepositoryOrchestrator(
+        config=RepositoryAgentConfig(enabled=True),
+        workspace=tmp_path,
+        tools=ToolRegistry(),
+    )
+    orchestrator.config.research.enabled = False
+
+    command = "/rere 分析三个指定实现"
+    assert not orchestrator.is_research_request(command)
+    assert orchestrator.is_command_request(command)
+    assert orchestrator.can_handle(command, "websocket:test")
+
+
+@pytest.mark.asyncio
+async def test_explicit_research_command_forces_workflow_execution(tmp_path: Path) -> None:
+    orchestrator = RepositoryOrchestrator(
+        config=RepositoryAgentConfig(enabled=True),
+        workspace=tmp_path,
+        tools=ToolRegistry(),
+    )
+    task = MagicMock(report="forced report", research_id="research-forced")
+    orchestrator.research.run = AsyncMock(return_value=task)  # type: ignore[method-assign]
+
+    result = await orchestrator._run_scoped(
+        request="/rere 分析三个指定候选",
+        actor="user",
+        session_key="websocket:test",
+        initial_messages=[],
+        runtime=MagicMock(),
+        invoke=AsyncMock(),
+    )
+
+    assert "forced report" in result.final_content
+    assert orchestrator.research.run.await_args.kwargs["direction"] == "分析三个指定候选"
 
 
 def _git(cwd: Path, *args: str) -> str:

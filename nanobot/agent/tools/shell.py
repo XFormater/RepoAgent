@@ -435,10 +435,10 @@ class ExecTool(Tool):
         """Return a precise quota error without hiding command side effects."""
         vfs = current_vfs()
         identity = current_vfs_identity()
-        if vfs is None or identity is None:
+        if vfs is None or identity is None or not vfs.enabled:
             return None
         try:
-            vfs.check_quota(identity, root=Path(cwd))
+            vfs.check_quota(identity, root=vfs.shell_quota_root(cwd))
         except VFSQuotaError as exc:
             if before_execution:
                 logger.warning("Blocking shell command because VFS quota is already exceeded: {}", exc)

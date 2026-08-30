@@ -3023,6 +3023,9 @@ async def test_commands_api_returns_slash_command_metadata(bus: MagicMock) -> No
         assert commands["/history"]["accepts_args"] is True
         assert commands["/goal"]["lifecycle"] == "agent_turn_with_args"
         assert commands["/goal"]["accepts_args"] is True
+        assert commands["/rere"]["lifecycle"] == "agent_turn_with_args"
+        assert commands["/rere"]["arg_hint"] == "<request>"
+        assert commands["/rere"]["accepts_args"] is True
         assert all("description" in row for row in body["commands"])
     finally:
         await channel.stop()

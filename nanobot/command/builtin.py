@@ -113,6 +113,15 @@ BUILTIN_COMMAND_SPECS: tuple[BuiltinCommandSpec, ...] = (
         accepts_args=True,
     ),
     BuiltinCommandSpec(
+        "/rere",
+        "Repository research",
+        "Run the Repository Research Orchestrator for this request.",
+        "search",
+        "<request>",
+        lifecycle="agent_turn_with_args",
+        accepts_args=True,
+    ),
+    BuiltinCommandSpec(
         "/trigger",
         "Create named local trigger",
         "Create a named CLI trigger bound to this chat session.",

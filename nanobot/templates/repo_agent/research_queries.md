@@ -11,7 +11,14 @@ Return one JSON object only:
 
 Rules:
 - Preserve the user's exact research meaning.
-- Include established English terminology, acronyms, and important method names.
+- Return English-language GitHub search phrases only, even when the user asks
+  in another language.
+- Translate descriptive constraints into established English terminology,
+  acronyms, and important method names.
+- Treat requested project counts as selection limits, not search terms. If the
+  user asks for three RAG projects, search for RAG project concepts and let the
+  workflow select three results later; do not include `three`, `3`, or similar
+  count words in the search phrases.
 - Queries must describe software or research implementations, not papers alone.
 - Do not include GitHub qualifiers such as stars:, language:, or archived:.
 - Do not invent constraints the user did not request.
@@ -20,3 +27,6 @@ Rules:
 
 Research direction:
 {{ direction }}
+
+Requested repository count, if explicitly specified:
+{{ requested_count or "not specified" }}

@@ -80,6 +80,27 @@ def test_quota_is_enforced_for_user_and_task_writes(tmp_path: Path) -> None:
         vfs.enforce_write(task_identity, task_target, 6)
 
 
+def test_quota_limits_can_be_disabled_for_vfs(tmp_path: Path) -> None:
+    vfs = LogicalVFS(
+        tmp_path,
+        LogicalVFSConfig(
+            max_user_bytes=None,
+            max_user_files=None,
+            max_task_bytes=None,
+            max_task_files=None,
+        ),
+    )
+    identity = VFSIdentity(user_id="alice", task_id="t1")
+    workspace = vfs.workspace(identity, "task", "work")
+    target = workspace.resolve("large.txt", access="write")
+    target.write_text("x" * 32, encoding="utf-8")
+
+    vfs.enforce_write(identity, target, 10_000)
+    usage = vfs.check_quota(identity, root=workspace.root, additional_files=10_000)
+
+    assert usage.files == 1
+
+
 def test_cleanup_expired_task_namespace(tmp_path: Path) -> None:
     vfs = LogicalVFS(tmp_path, LogicalVFSConfig(task_ttl_seconds=60))
     identity = VFSIdentity(user_id="alice", task_id="old-task")

@@ -1,5 +1,7 @@
 """Safe GitHub repository intake and isolated task workspaces."""
 
+# pyright: reportPrivateUsage=false
+
 from __future__ import annotations
 
 import asyncio
@@ -60,10 +62,55 @@ class RepositoryManager:
         self._scope: ContextVar[VFSIdentity | None] = ContextVar(
             "repository_manager_vfs_identity", default=None
         )
+        self._cache_root_override: ContextVar[Path | None] = ContextVar(
+            "repository_manager_cache_root_override", default=None
+        )
+
+    def resolve_cache_dir(self, raw_path: str) -> Path:
+        path = Path(raw_path).expanduser()
+        resolved = (path if path.is_absolute() else self.workspace / path).resolve(
+            strict=False
+        )
+        if resolved != self.workspace and self.workspace not in resolved.parents:
+            raise ValueError("repository cache directory must remain inside the workspace")
+        resolved.mkdir(parents=True, exist_ok=True)
+        return resolved
+
+    def session_cache_root(self, session_key: str) -> Path:
+        """Return the per-session repository cache root below the base cache root.
+
+        The session key is hashed so channel/user identifiers never leak into
+        directory names and path separators or dot segments cannot escape the
+        base cache root. The directory is created lazily on first use.
+        """
+        key = hashlib.sha256((session_key or "").encode("utf-8")).hexdigest()[:24]
+        root = (self._base_cache_root / key).resolve()
+        if self._base_cache_root not in root.parents:
+            raise RepositoryError("仓库缓存路径越界。")
+        return root
+
+    def research_cache_root(self, session_key: str) -> Path | None:
+        """Resolve the cache root for a research run.
+
+        Precedence: configured ``repository_cache_dir`` > active VFS identity >
+        per-session folder below the base cache root. Returns ``None`` when an
+        active VFS identity should own the cache (the caller then leaves the
+        cache root unbound so the VFS scope applies).
+        """
+        if self.config.research.repository_cache_dir:
+            return self.resolve_cache_dir(self.config.research.repository_cache_dir)
+        identity = self._scope.get()
+        if self.vfs is not None and self.vfs.enabled and identity is not None:
+            return None
+        return self.session_cache_root(session_key)
 
     @property
     def cache_root(self) -> Path:
         """Return the active user-scoped cache, or the legacy root."""
+        override = self._cache_root_override.get()
+        if override is not None:
+            override.mkdir(parents=True, exist_ok=True)
+            return override
         identity = self._scope.get()
         if self.vfs is not None and self.vfs.enabled and identity is not None:
             root = self.vfs.repository_root(identity)
@@ -75,6 +122,11 @@ class RepositoryManager:
     def allowed_roots(self) -> list[Path]:
         """Roots that repository read tools may safely resolve below."""
         roots = [self._base_cache_root]
+        if self.config.research.repository_cache_dir:
+            roots.append(self.resolve_cache_dir(self.config.research.repository_cache_dir))
+        override = self._cache_root_override.get()
+        if override is not None:
+            roots.append(override)
         if self.vfs is not None and self.vfs.enabled:
             roots.append(self.vfs.root)
         return roots
@@ -86,6 +138,17 @@ class RepositoryManager:
             yield
         finally:
             self._scope.reset(token)
+
+    @contextmanager
+    def bind_cache_root(self, cache_root: Path) -> Any:
+        resolved = cache_root.resolve(strict=False)
+        if resolved != self.workspace and self.workspace not in resolved.parents:
+            raise RepositoryError("仓库缓存路径越界。")
+        token = self._cache_root_override.set(resolved)
+        try:
+            yield
+        finally:
+            self._cache_root_override.reset(token)
 
     @staticmethod
     def extract_url(text: str) -> str | None:

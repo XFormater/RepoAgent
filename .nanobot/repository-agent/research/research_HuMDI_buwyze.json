@@ -1,0 +1,263 @@
+{
+  "research_id": "research_HuMDI_buwyze",
+  "session_key": "benchmark:orchestrator:1788063500",
+  "actor": "user",
+  "direction": "研究并比较以下三个指定的 GitHub 开源项目：ShareLab-SII/UniAR、amazon-far/BAR、stepfun-ai/NextStep-1。只选择这三个项目，不要替换候选。下载源码并进行实现级分析。\n\n# Fixed-corpus token benchmark prompt\n\nAnalyze exactly these three 2026 autoregressive image-generation repositories:\n\n1. `ShareLab-SII/UniAR` — local source: `research/autoregressive_image_generation_2026/UniAR`\n2. `amazon-far/BAR` — local source: `research/autoregressive_image_generation_2026/BAR`\n3. `stepfun-ai/NextStep-1` — local source: `research/autoregressive_image_generation_2026/NextStep-1`\n\nProduce a Chinese technical report. Do not stop at README summaries. For every repository,\ninspect implementation files and cite repository-relative paths. Cover:\n\n- why it qualifies as a 2026 autoregressive image-generation project;\n- visual token representation and tokenizer/decoder design;\n- autoregressive factorization, prediction target, attention or decoding strategy;\n- training pipeline, losses and important configuration;\n- inference entry point and sampling procedure;\n- released checkpoints/code completeness and practical hardware requirements;\n- technical strengths, limitations and reproducibility risks.\n\nFinish with a cross-project comparison of architecture, generation paradigm, training and\ninference cost, openness, reproducibility, and suitable use cases. Clearly separate claims\nverified in source code from claims found only in documentation.",
+  "queries": [
+    "repo:ShareLab-SII/UniAR",
+    "repo:amazon-far/BAR",
+    "repo:stepfun-ai/NextStep-1",
+    "repo:research/autoregressive_image_generation_2026"
+  ],
+  "candidates": [
+    {
+      "full_name": "stepfun-ai/NextStep-1",
+      "url": "https://github.com/stepfun-ai/NextStep-1",
+      "description": "[🚀 ICLR 2026 Oral] NextStep-1: SOTA Autogressive Image Generation with Continuous Tokens. A research project developed by the StepFun’s Multimodal Intelligence team.",
+      "stars": 696,
+      "forks": 26,
+      "open_issues": 0,
+      "language": "Python",
+      "license": "Apache-2.0",
+      "topics": [],
+      "default_branch": "main",
+      "updated_at": "2026-08-21T09:07:37Z",
+      "archived": false,
+      "relevance_score": 0.3277,
+      "selection_reason": "匹配关键词：2026, at, generation, in, it, nextstep-1, or, research；stars=696；license=Apache-2.0"
+    },
+    {
+      "full_name": "amazon-far/BAR",
+      "url": "https://github.com/amazon-far/BAR",
+      "description": "[ICML 2026] code & model for arxiv paper \"Autoregressive Image Generation with Masked Bit Modeling\"",
+      "stars": 60,
+      "forks": 2,
+      "open_issues": 7,
+      "language": "Python",
+      "license": "Apache-2.0",
+      "topics": [],
+      "default_branch": "main",
+      "updated_at": "2026-07-28T18:15:38Z",
+      "archived": false,
+      "relevance_score": 0.2958,
+      "selection_reason": "匹配关键词：2026, amazon-far, as, at, autoregressive, bar, code, for；stars=60；license=Apache-2.0"
+    },
+    {
+      "full_name": "ShareLab-SII/UniAR",
+      "url": "https://github.com/ShareLab-SII/UniAR",
+      "description": "[ICML 2026] The official implementation of paper \"Unified Multimodal Autoregressive Modeling with Shared Context—Visual Tokenizer is Key to Unification\"",
+      "stars": 54,
+      "forks": 0,
+      "open_issues": 1,
+      "language": "Python",
+      "license": null,
+      "topics": [
+        "autoregressive-image-generation",
+        "unified-multimodal-models",
+        "unified-multimodal-understanding-and-generation",
+        "visual-tokenizer"
+      ],
+      "default_branch": "main",
+      "updated_at": "2026-08-29T16:11:54Z",
+      "archived": false,
+      "relevance_score": 0.2692,
+      "selection_reason": "匹配关键词：2026, and, at, autoregressive, generation, image-generation, implementation, in；stars=54；license=未声明"
+    }
+  ],
+  "selected": [
+    {
+      "full_name": "stepfun-ai/NextStep-1",
+      "url": "https://github.com/stepfun-ai/NextStep-1",
+      "description": "[🚀 ICLR 2026 Oral] NextStep-1: SOTA Autogressive Image Generation with Continuous Tokens. A research project developed by the StepFun’s Multimodal Intelligence team.",
+      "stars": 696,
+      "forks": 26,
+      "open_issues": 0,
+      "language": "Python",
+      "license": "Apache-2.0",
+      "topics": [],
+      "default_branch": "main",
+      "updated_at": "2026-08-21T09:07:37Z",
+      "archived": false,
+      "relevance_score": 0.3277,
+      "selection_reason": "匹配关键词：2026, at, generation, in, it, nextstep-1, or, research；stars=696；license=Apache-2.0"
+    },
+    {
+      "full_name": "amazon-far/BAR",
+      "url": "https://github.com/amazon-far/BAR",
+      "description": "[ICML 2026] code & model for arxiv paper \"Autoregressive Image Generation with Masked Bit Modeling\"",
+      "stars": 60,
+      "forks": 2,
+      "open_issues": 7,
+      "language": "Python",
+      "license": "Apache-2.0",
+      "topics": [],
+      "default_branch": "main",
+      "updated_at": "2026-07-28T18:15:38Z",
+      "archived": false,
+      "relevance_score": 0.2958,
+      "selection_reason": "匹配关键词：2026, amazon-far, as, at, autoregressive, bar, code, for；stars=60；license=Apache-2.0"
+    },
+    {
+      "full_name": "ShareLab-SII/UniAR",
+      "url": "https://github.com/ShareLab-SII/UniAR",
+      "description": "[ICML 2026] The official implementation of paper \"Unified Multimodal Autoregressive Modeling with Shared Context—Visual Tokenizer is Key to Unification\"",
+      "stars": 54,
+      "forks": 0,
+      "open_issues": 1,
+      "language": "Python",
+      "license": null,
+      "topics": [
+        "autoregressive-image-generation",
+        "unified-multimodal-models",
+        "unified-multimodal-understanding-and-generation",
+        "visual-tokenizer"
+      ],
+      "default_branch": "main",
+      "updated_at": "2026-08-29T16:11:54Z",
+      "archived": false,
+      "relevance_score": 0.2692,
+      "selection_reason": "匹配关键词：2026, and, at, autoregressive, generation, image-generation, implementation, in；stars=54；license=未声明"
+    }
+  ],
+  "analyses": [
+    {
+      "candidate": {
+        "full_name": "stepfun-ai/NextStep-1",
+        "url": "https://github.com/stepfun-ai/NextStep-1",
+        "description": "[🚀 ICLR 2026 Oral] NextStep-1: SOTA Autogressive Image Generation with Continuous Tokens. A research project developed by the StepFun’s Multimodal Intelligence team.",
+        "stars": 696,
+        "forks": 26,
+        "open_issues": 0,
+        "language": "Python",
+        "license": "Apache-2.0",
+        "topics": [],
+        "default_branch": "main",
+        "updated_at": "2026-08-21T09:07:37Z",
+        "archived": false,
+        "relevance_score": 0.3277,
+        "selection_reason": "匹配关键词：2026, at, generation, in, it, nextstep-1, or, research；stars=696；license=Apache-2.0"
+      },
+      "repository": {
+        "repository_id": "2627ab7216f88d252245",
+        "url": "https://github.com/stepfun-ai/NextStep-1",
+        "owner": "stepfun-ai",
+        "name": "NextStep-1",
+        "default_branch": "main",
+        "commit_sha": "a3303b62e11fc7cd473ba0e4b1f32eda73f4acc0",
+        "local_path": "/root/GitHubResearch_Agent/research/autoregressive_image_generation_2026/experiment/orchestrator-cache/stepfun-ai/nextstep-1/source",
+        "file_count": 1180,
+        "size_bytes": 60751107,
+        "loaded_at": "2026-08-30T04:18:48.542361Z"
+      },
+      "summary": "## 阶段性分析报告：stepfun-ai/NextStep-1（部分源码证据）\n\n### 1. 已完成的检查与已确认结论\n\n基于已读取的源码文件，可确认以下内容，均**区分文档声明与源码证据**：\n\n#### 1.1 与研究方向的相关性\n\n- **文档声明**：README.md 第 11 行明确称：“NextStep-1 是一个 14B 参数的自回归模型，直接使用连续图像 token……使用标准 LM head 处理文本、一个 157M 参数的 flow matching head 处理视觉”。第 27 行声明入选 ICLR 2026 Oral。\n- **源码证据**：\n  - `nextstep/models/nextstep/modeling_nextstep.py` 第 526 行：`class NextStepModel(NextStepMixin, Qwen2Model, GenerationMixin)`，继承自 Qwen2 语言模型并混入 `GenerationMixin`，说明其采用自回归生成框架。\n  - 第 457 行：`class NextStepConfig(Qwen2Config)`，模型类型为 `\"nextstep\"`（第 459 行）。\n  - 第 568-574 行：实例化 `FlowMatchingHead`，位于 `image_head`。\n- **结论**：该仓库在源码层面确实是一个“自回归图像生成”项目，不是纯 README 项目。但其 14B/157M 参数量尚未从已读源码量确认，需进一步查看 `nextstep/model_zoos.py` 和 configs。\n\n#### 1.2 视觉 token 表示与 tokenizer/decoder 设计\n\n- **源码证据**：\n  - `nextstep/models/nextstep/modeling_nextstep_vae.py` 第 16-29 行：`AutoEncoderParams` 定义 `z_channels=16`、`ch_mult=[1,2,4,4]`、默认 `resolution=256`，说明 latent 通道为 16。\n  - 第 32-64 行：`AutoencoderKL` 继承 Diffusers 的 `AutoencoderKL`，使用 `use_quant_conv=False, use_post_quant_conv=False`（第 62-63 行），**证明不使用 VQ/discrete token**，而是连续 latent。\n  - 第 79-91 行：`patchify` 将 latent 按 `patch_size` 切块；第 108-130 行重写 `encode`，支持 patchify 和 `encoder_norm`。\n- **结论（源码已验证）**：视觉 token 是连续 VAE latent，非离散 token；它支持 patchify 与归一化。但 `psz`/patch 具体值、VAE 权重路径需结合 configs 和 `model_zoos.py` 确认。\n\n#### 1.3 自回归分解 / 预测目标 / 注意力策略\n\n- **源码证据**：\n  - `FlowMatchingHead.forward`（`modeling_nextstep.py` 第 236-253 行）执行 flow matching 训练：随机采样 `t`（sigmoid 变换），构造 `xt = t*target + (1-t)*noise`，预测目标 `ut = target - noise`（第 241 行），损失为 MSE（第 250-252 行）。\n  - `modeling_nextstep.py` 第 596-598 行：`image_token_embed_dim = num_channels * patch_size**2`。\n  - 第 565-566 行：`image_in_projector` 和 `image_out_projector` 将图像 token 映射到 LLM hidden size。\n  - 注意力：`NextStepModel` 继承 Qwen2，声明 `_supports_flash_attn_2 = True`（第 531 行），但未读到自定义 attention 实现；config 有 `o_attention_bias`、`attention_use_qk_norm` 标志（第 518-519 行）。\n- **结论（源码已验证）**：图像生成头预测 flow velocity；loss 是条件 flow matching 的 MSE。但尚未验证“联合文本+图像序列的完整 AR factorization”以及注意力修改是否正确，需继续阅读模型 forward 逻辑。\n\n#### 1.4 采样过程\n\n- **源码证据**：\n  - `modeling_nextstep.py` 第 314-372 行 `FlowMatchingHead.sample`：\n    - 支持 CFG（`get_velocity_from_cfg`，第 271-290 行）、`cfg_mul` 为 1/2/3。\n    - 采样循环使用 `timesteps_shift`、`num_sampling_steps`（第 340-344 行）。\n    - 支持 ODE / SDE / Flow-CPS 三种 solver（第 348-365 行）。\n- **结论（源码已验证）**：图像 token 的生成是 flow matching 采样，不是离散采样。但顶层推理入口需要继续读 `inference/`。\n\n#### 1.5 训练相关（尚未源码验证）\n\n- **文档声明**：README.md 第 219-231 行显示训练命令 `smartrun -m configs.nextstep_qwen14b_512px` 等；第 225 行注明单机 `torchrun --nproc_per_node=8`；第 155 行说明实际训练数据约 10 亿张 image 且为私有。\n- **源码已见文件但未读**：`nextstep/engine/train_nextstep_ds.py`、`nextstep/engine/training_args.py`、`configs/nextstep_qwen14b_256px.py`、`configs/nextstep_qwen14b_512px.py`。这些是训练 main entry 的核心，需继续分析。\n- **已见但未细读的数据模块**：`nextstep/datasets/image_text_wds.py`、`image_editing_interleave.py`、`video_interleave.py`、`mixed_dataset.py`。\n\n#### 1.6 推理入口与 checkpoint\n\n- **文档声明**：README.md 第 143 行 `python3 inference/inference.py`；第 269 行 `python3 nextstep/deepspeed/zero_to_fp32.py` 用于将 DeepSpeed shard 转 HF 格式。\n- **源码已见文件但未读**：`inference/inference.py`、`inference/gen_pipeline.py`、`inference/nextstep_model.py`。该文件决定顶层调用流程。\n- **模型下载**：README.md 第 127-136 行给出模型表，权重托管于 HuggingFace；`download_models.sh` 存在但未读。\n\n### 2. 已确认但需谨慎对待的文档声明\n\n| 内容 | 状态 |\n|---|---|\n| NextStep-1 是 14B 参数 AR 模型，图像头 157M | 文档声明，未在已读代码中量化 |\n| ICLR 2026 Oral | 仅 README/news，未从源码文件验证 |\n| 训练数据约 10 亿张私有图片 | 仅 README 声明 |\n| 8 卡 torchrun 训练配置 | README 有示例，configs 未读 |\n| 实际预训练精度/序列长/训练步数 | 尚未从 engine/configs 验证 |\n\n### 3. 下一步需要继续核查的源码（关键缺口）\n\n1. **模型前向/生成主流程**：`modeling_nextstep.py` 第 700 行之后（global forward、generation、joint text/image sequence 的 AR factorization、attention/decoding）。\n2. **训练入口与损失汇总**：`nextstep/engine/train_nextstep_ds.py`、`nextstep/engine/training_args.py`。\n3. **推理流程**：`inference/inference.py`、`inference/gen_pipeline.py`、`inference/nextstep_model.py`。\n4. **tokenizer 实现**：`nextstep/models/nextstep/tokenization_nextstep.py`。\n5. **详细配置**：`configs/nextstep_qwen14b_256px.py`、`configs/nextstep_qwen14b_512px.py`、`configs/data/*.py`。\n6. **数据 pipeline**：`nextstep/datasets/image_text_wds.py`、`mixed_dataset.py`。\n7. **模型 zoo 与 checkpoint 约定**：`nextstep/model_zoos.py`，用于核实 14B 底座与 VAE 路径。\n\n### 4. 结论（截至目前）\n\nNextStep-1 仓库**确实是 2026 年自回归图像生成项目的源码实现**，且核心创新——连续图像 token + flow matching head——已在 `modeling_nextstep.py` 和 `modeling_nextstep_vae.py` 中获得源码验证。但“训练细节、推理入口、checkpoint 兼容性、硬件要求、完整损失与数据 pipeline”等内容仍缺少源码级证据，当前分析尚未完成任务。建议继续进行上述 7 个关键文件的源码核查，再与本系列中 UniAR、BAR 做横向对比。",
+      "tools_used": [
+        "repo_tree",
+        "repo_git_history",
+        "repo_tree",
+        "repo_tree",
+        "repo_read",
+        "repo_read",
+        "repo_read",
+        "repo_read",
+        "repo_read",
+        "repo_read"
+      ],
+      "error": null
+    },
+    {
+      "candidate": {
+        "full_name": "amazon-far/BAR",
+        "url": "https://github.com/amazon-far/BAR",
+        "description": "[ICML 2026] code & model for arxiv paper \"Autoregressive Image Generation with Masked Bit Modeling\"",
+        "stars": 60,
+        "forks": 2,
+        "open_issues": 7,
+        "language": "Python",
+        "license": "Apache-2.0",
+        "topics": [],
+        "default_branch": "main",
+        "updated_at": "2026-07-28T18:15:38Z",
+        "archived": false,
+        "relevance_score": 0.2958,
+        "selection_reason": "匹配关键词：2026, amazon-far, as, at, autoregressive, bar, code, for；stars=60；license=Apache-2.0"
+      },
+      "repository": {
+        "repository_id": "2b0ad5b84187ab8d3b30",
+        "url": "https://github.com/amazon-far/BAR",
+        "owner": "amazon-far",
+        "name": "BAR",
+        "default_branch": "main",
+        "commit_sha": "7460bb3193f40161d3e7c31f047999b100735b18",
+        "local_path": "/root/GitHubResearch_Agent/research/autoregressive_image_generation_2026/experiment/orchestrator-cache/amazon-far/bar/source",
+        "file_count": 44,
+        "size_bytes": 995734,
+        "loaded_at": "2026-08-30T04:18:38.267972Z"
+      },
+      "summary": "## amazon-far/BAR 技术评估（基于已获取源码证据）\n\n> 说明：本轮工具预算在读取 `modeling/tokenizer.py`、`modeling/quantizer.py`、`scripts/train_bar.py`、`scripts/train_bar_fsq.py`、`sample_imagenet.py`、各 YAML 配置及 `modeling/modules/losses.py` 之前耗尽。以下结论中，凡来自源码逐行核验的会标明行号；仅来自 README/文档的会明确标注“据 README”。\n\n---\n\n### 1. 相关性：是否属于 2026 自回归图像生成项目\n\n**结论：是。** 仓库标题即 “Autoregressive Image Generation with Masked Bit Modeling”，README 第 1 行声明为 ICML 2026，arXiv 链接指向 2602.09024。源码中确有因果注意力 + 自回归 Transformer 生成管线：\n\n- `modeling/generator.py:13-18` 构建因果注意力掩码 `build_causal_mask`，用于自回归生成；\n- `modeling/generator.py:282-300` `forward` 采用 orders 对 token 序列做排序后送入 `forward_fn`；\n- `modeling/generator.py:191-226` `sample_orders` 支持随机/栅格顺序，是典型自回归 “next-token” 训练范式。\n\n但需注意：BAR 的离散 token 预测不是标准的大词表线性头分类，而是把每个 token 的二进制位交给一个轻量级条件掩码解码器（MBM head）迭代生成，因此是 “自回归上下文建模 + 每个 token 内部迭代位解码” 的混合结构。\n\n---\n\n### 2. 视觉 token 表示与 tokenizer/decoder 设计\n\n**源码证据：**\n\n- `modeling/generator.py:129-136`：  \n  - `base_vq_split_channel = config.model.vq_model.token_size`\n  - `vq_split_channel = base_vq_split_channel * patch_size_sq`\n  - `lm_head = MaskBitModelingHead(target_codebook_size=..., seq_len=self.vq_split_channel)`\n\n  这说明一个“生成器 token”被展开为 `base_vq_split_channel` 个离散分量（每个分量用 `target_codebook_size` 编码），patch_size>1 时是对 patch 内多个位置的组合。\n\n- `modeling/mbm_head.py:71-95`：MBM head 的 `target_codebook_size` 默认为 2，`input_embed = nn.Embedding(target_codebook_size + 1, ...)`，输出 `seq_len * target_codebook_size`。即 **每个分量正交化为若干二进制位**，而不是单个大词表索引。这解释了 README 第 51-58 行 “Masked Bit Modeling” 的机制。\n\n- README 中的 tokenizer/config 名（`configs/tokenizer/bar_fsq_16bits.yaml`、`bar_fsq_10bits_res512.yaml`）以及 README 第 41-49 行框架说明显示：视觉 token 由 **FSQ（Finite Scalar Quantization）** 产生，按位宽预算配置（16 bits / 10 bits）。但 `modeling/quantizer.py` 和 `modeling/tokenizer.py` 尚未读到，**FSQ 的具体 codebook 构造、维度、解码上采样路径暂不能由源码证实**，只能算文档层面的推断。\n\n- 检查点命名：README 第 253/279 行使用 `bar_fsq_16bits_ft.bin`、`bar_sfq_10bits_res512.bin`，进一步说明以 bit budget 作为核心 tokenizer 度量单位，与 README 图 1 “Unified Bit Budget” 的设计一致（文档结论，非源码核验）。\n\n---\n\n### 3. 自回归分解、预测目标、注意力与解码策略\n\n**上下文建模（BAR generator）：**\n\n- `modeling/generator.py:104-119`：每个 block 使用 `Block(..., qk_norm=True, use_swiglu=True, use_adaln=True, rope=..., target_aware_rope=True)`，即 RMSNorm + SwiGLU + AdaLN + 2D RoPE，且有 target-aware RoPE。\n- `modeling/generator.py:163-165`：`register_buffer('causal_mask', build_causal_mask(max_seq_len))`，确认因果注意力。\n- `modeling/generator.py:151-156`：条件类别和 token 分量合并到统一 embedding 空间；`input_embeddings` 逐分量嵌入后用 Linear 合并。\n- `modeling/generator.py:228-239` `shuffle/unshuffle`，`241-269` `_downsample_tokens/_upsample_tokens`，以及 `315-330` 起步的 `forward_fn`，是训练时把图像 latent 展开成序列并按 order 排列、patch 合并/恢复的机制。\n\n**token 预测头（MBM head）：**\n\n- `modeling/mbm_head.py:191-208`：训练时先把目标 token 掩码（bit-level mask），输入 MBM 小 Transformer 预测被掩码位；用 `CrossEntropyLoss(reduction=\"none\")`；权重：被掩码位置 1.0、未掩码位置 0.1（第 204-207 行）。这既施加了生成压力，又对未掩码位做轻微正则。\n- 时间步采样：`119-131` logit-normal（`N(0, 0.8²) -> sigmoid`）；`133-146` identity 映射 `t→mask_ratio`，扩散式语义为 `t=0` 全掩码、`t=1` 无掩码。\n- 掩码：`148-171` 对输入 token 随机掩码，固定使用 `mask_token_id` 而非随机 token。\n\n**采样：**\n\n- `modeling/mbm_head.py:235-342` 实现迭代解码：`tokens_allocation` 必须非递减、和为 `seq_len`（`276-290` 的校验），例如 README 用 `[2,2,5,7]` 表示 4 步分别揭掩 2/2/5/7 位。\n- `299-341`：每步用当前 `mask_ratio` 做 forward，`_sample_tokens` 用 Gumbel + 温度退火采样（`305-306` 从 `randomize_temperature` 线性衰减到 0），然后仅更新当前 mask 位；尚未到末步时按置信度保留低置信度 token 为 mask，形成少步迭代解码。\n- `312-318`：支持 CFG，条件与无条件 logits 合并。\n\n**这是“因果 AR + 每 token 内掩码位解码”的混合范式。** 预测目标不是单一 softmax 类别，而是 token 分量对应的二进制位（target_codebook_size=2），源码可验证。\n\n---\n\n### 4. 训练管线、损失与配置\n\n**已由源码证实：**\n\n- MBM head 损失为 bit-level 加权交叉熵：`modeling/mbm_head.py:202-208`。\n- 训练阶段支持 `orders` 预采样（推荐）或按 `random_ratio` 采样（`generator.py:282-298`），表明训练时使用了 order 随机化/栅格化混合。\n\n**尚未逐行核验：**\n\n- `scripts/train_bar.py`、`scripts/train_bar_fsq.py`：README 第 93-150 行给出命令，涉及 accelerate、webdataset 读取、pretokenization（NPZ）与直接 wds 两种方式；但实际 training loop、优化器、权重更新不在本轮已读范围内。\n- `configs/generator/*.yaml`、`configs/tokenizer/*.yaml`：具体 hidden size、depth、heads、FSQ codebook、batch size 等数值没有读取，只能引用 README 第 60-70 行模型表。\n- `modeling/modules/losses.py`、`perceptual_loss.py`、`discriminator_dino.py`：文件存在（文件树），推测 tokenizer 训练有 GAN/感知损失，但没有源码证据，不写为已证实结论。\n\n**据 README：**\n\n- 训练命令默认每机 8 卡、`training.per_gpu_batch_size=$((2048 / (8*N)))`，意味着生成器训练全局 batch≈2048（文档）。\n- tokenizer 训练使用 `accelerate` 8 进程；数据读取为 webdataset 格式，需用户自行转换 ImageNet（README 第 97 行）。\n- 提供可选 pretokenization 脚本，把 ImageNet jpeg 转成 NPZ 缓存以加速生成器训练（README 第 111-123 行）。\n\n---\n\n### 5. 推理入口与采样流程\n\n**入口脚本：** `sample_imagenet.py`（文件树已确认存在），README 第 152-295 行说明用法。\n\n**源码层面已核验的采样核心：**\n\n- 前述 `MaskBitModelingHead.sample`（`modeling/mbm_head.py:235-342`）。\n- 关键推理可调参数：`guidance_scale`、`randomize_temperature`、`tokens_allocation`。README 对每个模型的推荐值：\n  - BAR-B/4：guidance 9.6、温度 1.4、`[64,64,64,64]`（README 176-178）\n  - BAR-B/2：guidance 5.5、温度 2.0、`[16,16,16,16]`\n  - BAR-B：guidance 5.0、温度 2.5、`[2,2,5,7]`\n  - BAR-L：guidance 5.3、温度 3.0、`[2,2,5,7]`\n  - BAR-L-res512：guidance 4.2、温度 2.8、`[2,2,2,4]`\n\n  这些数值属于 README 文档，不是本仓库 YAML 源码默认值。\n\n**评估：** README 使用 OpenAI guided-diffusion 的 `evaluator.py` 计算 FID/IS/sFID/Precision/Recall（README 第 158-163 行）。仓库还自带了 `evaluator/` 目录，但未读取其内容。\n\n---\n\n### 6. 已发布检查点 / 代码完整度 / 硬件要求\n\n**代码完整度（基于文件树 + 已读文件）：**\n\n- 核心实现较完整：generator、mbm_head、tokenizer、quantizer、训练/预 tokenization/采样脚本、评估器、webdataset 读取器、utils 均有对应文件。\n- 属于可运行的研究代码，但依赖用户自行准备数据、检查点、评估工具。\n\n**检查点（据 README）：**\n\n- 所有模型从 HuggingFace `FAR-Amazon/BAR-collections` 下载到 `assets/`（README 第 80-89 行）。\n- 模型表（README 第 60-70 行）：BAR-B/4 416M、BAR-B/2 415M、BAR-B 415M、BAR-L 1.1B、BAR-L-res512 1.1B；gFID 从 0.99 到 2.34。\n- 本地 `assets/` 仅含两张 teaser 图（文件树），**没有随仓库发布二进制权重**，需联网下载。\n\n**硬件（据 README）：**\n\n- 训练：示例为 8 卡加速（`--num_processes=8`），多机可扩展；生成器全局 batch≈2048，说明训练需多卡（至少 A100 级别）。1.1B 模型训练成本很高。\n- 采样：示例为单卡 `torchrun --nproc_per_node=1`（README 第 170-171 行等），但模型本身 415M–1.1B、与 512×512 解码相关，至少需要一张中高端 GPU。\n- tokenizer 训练同样走 8 卡示例；未提供单卡低资源方案。\n\n---\n\n### 7. 优点、局限与可复现风险\n\n**优点：**\n\n1. 源码中 MBM head 与生成器结构清晰分层，causal mask、order 机制、AdaLN/RoPE 初始化都可直接复现。\n2. “位预算统一” 的研究问题明确：用 FSQ tokenizer 的 10/16 bit 配置和 `target_codebook_size=2` 的位解码，从实现上将离散 tokenizer 的熵/容量问题显式化，而不是单纯堆 codebook。\n3. 采样迭代步数由 `tokens_allocation` 单参数控制，且代码对非法 schedule 做完整校验（`modeling/mbm_head.py:274-290`），工程化尚可。\n4. Apache-2.0 许可、提供模型 Zoo 与 HF 下载方式，开源友好度中上。\n\n**局限 / 风险：**\n\n1. 关键底层模块缺源码证据：FSQ codebook 构建、tokenizer 上采样解码器、感知/判别器损失、训练循环、学习率与 batch size 的具体值，在本轮均未核验到。因此 “tokenizer 训练到什么指标、FID 是否完全可复现” 目前无法由源码背书。\n2. 生成器中的 AdaLN 时间步 embedding、条件 embedding 如何进入 Block 内部（`Block.forward` 的具体签名），`modeling/modules/blocks.py` 尚未读取，需继续核验。\n3. README 的数值指标（gFID 0.99 等）属于文档宣称；代码中未看到内置留存结果 JSON/日志，无法从仓库侧面交叉验证。\n4. 数据依赖外部 webdataset 转换脚本（README 引用其它仓库），是复现第一步的额外成本与不确定性。\n5. 训练/采样关键超参（CFG scale、temperature、tokens_allocation）多数通过命令覆盖，而不是全部落在 config 中，容易造成配置漂移和复现偏差。\n6. 单文件 `sample_imagenet.py` 未读取，生成后是否必须额外调用 guided-diffusion evaluator、NPZ 输出格式是否稳定，仍未确认。\n\n---\n\n### 8. 跨项目比较\n\n本任务只分配了 amazon-far/BAR 一个仓库，因此本报告不完成三项目横向比较，也不做胜负判断。parent synthesizer 会综合 UniAR、BAR、NextStep-1 的分析。\n\n基于本仓库证据，可将 BAR 暂定性为：\n\n- **架构**：因果自回归 Transformer（SwiGLU + AdaLN + 2D RoPE，支持 patch 合并）+ token 内位级 MBM 解码头，而非单一大 softmax 下一个 token。\n- **生成范式**：AR 上下文建模 + 每 token 少步迭代揭掩（MBM），介于标准 AR 与范掩码模型之间。\n- **训练/推理成本**：训练多卡、生成器全局 batch≈2048；推理单卡可跑但模型较大；迭代步数少（4 步位解码），相比单 token 64+ 步 AR 有采样效率优势。\n- **开放性**：Apache-2.0 + HF 检查点，代码框架完整；但数据格式与评估脚本需外部依赖。\n- **适用场景**：ImageNet 256/512 类条件高质量生成基准研究，离散 tokenizer 与连续 tokenizer 的对比研究，以及低步数离散生成实验。\n\n**建议下一步（若继续深度分析本仓库）**：优先读取 `modeling/tokenizer.py`、`modeling/quantizer.py`、`modeling/modules/losses.py`、`modeling/modules/discriminator_dino.py` 与 `scripts/train_bar*.py`，再读 `configs/tokenizer/bar_fsq_16bits.yaml`、`configs/generator/bar_b.yaml` 以核验 token 维度、codebook、hidden/depth、batch、学习率与损失权重。",
+      "tools_used": [
+        "repo_tree",
+        "repo_git_history",
+        "repo_read",
+        "repo_read",
+        "repo_read",
+        "repo_read",
+        "repo_read",
+        "repo_read"
+      ],
+      "error": null
+    },
+    {
+      "candidate": {
+        "full_name": "ShareLab-SII/UniAR",
+        "url": "https://github.com/ShareLab-SII/UniAR",
+        "description": "[ICML 2026] The official implementation of paper \"Unified Multimodal Autoregressive Modeling with Shared Context—Visual Tokenizer is Key to Unification\"",
+        "stars": 54,
+        "forks": 0,
+        "open_issues": 1,
+        "language": "Python",
+        "license": null,
+        "topics": [
+          "autoregressive-image-generation",
+          "unified-multimodal-models",
+          "unified-multimodal-understanding-and-generation",
+          "visual-tokenizer"
+        ],
+        "default_branch": "main",
+        "updated_at": "2026-08-29T16:11:54Z",
+        "archived": false,
+        "relevance_score": 0.2692,
+        "selection_reason": "匹配关键词：2026, and, at, autoregressive, generation, image-generation, implementation, in；stars=54；license=未声明"
+      },
+      "repository": {
+        "repository_id": "21b75e2f9bb146fce925",
+        "url": "https://github.com/ShareLab-SII/UniAR",
+        "owner": "ShareLab-SII",
+        "name": "UniAR",
+        "default_branch": "main",
+        "commit_sha": "92d8718d4cf282254ae63a4944b07edba0ce7abf",
+        "local_path": "/root/GitHubResearch_Agent/research/autoregressive_image_generation_2026/experiment/orchestrator-cache/sharelab-sii/uniar/source",
+        "file_count": 477,
+        "size_bytes": 79290021,
+        "loaded_at": "2026-08-30T04:18:49.574697Z"
+      },
+      "summary": "## UniAR（ShareLab-SII/UniAR）源码级分析\n\n### 1. 本次分析覆盖范围与证据声明\n\n已检查内容：\n- `README.md`（全 250 行）\n- `uniar/__init__.py`（1–57 行）\n- `uniar/configuration_uniar.py`（1–61 行）\n- `uniar/modeling_uniar.py`（1–560 行）\n- 仓库目录树（`uniar/`、`train/`、`inference/`、`eval/`、`scripts/`）\n\n未能检查的内容（受工具调用次数限制）：\n- `uniar/vision_encoder/bsq.py`、`uniar/vision_encoder/modeling_vision_encoder.py` 的具体量化实现\n- `uniar/modeling_vision_decoder.py` 的具体视觉解码器实现\n- `inference/chat.py`、`inference/generate.py`、`inference/generate_batch.py` 的命令行入口细节\n- `train/rl/train_grpo.py`、`train/rl/dataset.py`、`train/rl/reward_funcs.py` 的具体损失与训练超参\n\n以下结论会区分“源码已验证”和“仅来自 README/文档/元数据”。\n\n---\n\n### 2. 与研究方向的相关性：明确符合\n\n该仓库是 2026 年的自回归图像生成项目，证据充分：\n\n- README 自述为 ICML 2026，论文 arXiv:2606.18249，项目定位是统一多模态自回归模型（理解、生成、编辑）。\n  - `README.md:44-46`：`UniAR is a unified autoregressive multimodal model that handles image understanding, image generation, and image editing in a single Transformer`\n  - `README.md:55-57`：2026 年 5 月 ICML 2026 接收，6 月发布代码，7 月发布 demo\n- 源码实现了视觉 token 的条件自回归生成：\n  - `uniar/modeling_uniar.py:257-417` 定义了 `generate_visual()`，逐 token 循环生成 BSQ 视觉码\n  - `uniar/modeling_uniar.py:79-124` 的 `UniARForConditionalGeneration` 继承 Qwen3VL 生成模型，并增加视觉 token 预测头 `output_layer_vistok`\n\n**结论**：无论从论文时间、项目目标还是源码实现看，UniAR 都符合“2026 自回归图像生成”的研究方向。\n\n---\n\n### 3. 视觉 token 表示与 tokenizer/decoder 设计\n\n#### 3.1 token 表示：多级 Binary Spherical Quantization 视觉码\n\n源码层面可以看到预测目标的维度结构：\n\n- 预测头输出维度：\n  - `uniar/modeling_uniar.py:55-59`\n  ```python\n  pred_level = 1 + len(vision_config.deepstack_visual_indexes)\n  vispred_output_dim = (\n      vision_config.bsq_dim * 2 * vision_config.spatial_merge_size ** 2 * pred_level\n  )\n  ```\n  说明视觉 token 由：\n  - `pred_level`：多级特征（1 个主级 + 若干 deepstack 级）\n  - `bsq_dim`：BSQ 二进制维度\n  - `spatial_merge_size ** 2`：空间合并大小\n  - 最后的 `* 2`：每个 bit 预测二分类 logits\n\n- 生成时把预测 logits reshape 为：\n  - `uniar/modeling_uniar.py:383-384`\n  ```python\n  num_levels = 1 + num_deepstack\n  vistok_shape = (-1, num_levels, spatial_merge_unit, vision_cfg.bsq_dim, 2)\n  ```\n  最后维度 `2` 表明这是一个按 bit 的二进制 Softmax 预测，即一个视觉 token 内同时预测多个二进制码。\n\n- 预测结果转整数索引：\n  - `uniar/modeling_uniar.py:411-417`\n  ```python\n  vistok_all = vistok_all * 2 - 1  # {0,1} -> {-1,+1}\n  return self.visual.bsq.codes_to_indexes(cond_codes)\n  ```\n  `codes_to_indexes` 位于 `uniar/vision_encoder/` 中，本次未深入检查。\n\nREADME 中提到的“2^64 codes”“32x visual compression”“1024x1024 只需 256 AR tokens”属于文档声明：\n- `README.md:49-50`\n- 本文未在已检查源码中直接验证具体码本大小和压缩倍率。\n\n#### 3.2 视觉编码器：替换 Qwen3-VL 默认视觉塔\n\n- `UniARModel` 继承 `Qwen3VLModel`，但替换视觉塔为 `UniARVisionModel`：\n  - `uniar/modeling_uniar.py:39-52`\n  ```python\n  class UniARModel(Qwen3VLModel):\n      def __init__(self, config: UniARConfig):\n          super().__init__(config)\n          del self.visual\n          self.visual = UniARVisionModel._from_config(config.vision_config)\n  ```\n\n- 视觉码转特征函数被主模型直接调用：\n  - `uniar/modeling_uniar.py:392-400`\n  ```python\n  inputs_embeds_main, deepstack_visual_embeds = self.visual.bsq_indices_to_features(\n      vistok_pred.to(self.device),\n      spatial_merge_unit=spatial_merge_unit,\n      with_merger=True,\n  )\n  ```\n\n这验证了“生成的视觉码会被重新嵌入为主模型下一步输入”，也体现了共享单一视觉 tokenizer 的核心思想。\n\n#### 3.3 视觉解码器：源码未见完整验证\n\n- 仓库存在 `uniar/modeling_vision_decoder.py`，但本次未读取。\n- README 声称使用 “SD3-medium transformer” 作为 DiT-based 视觉解码器，见 `README.md:51`。\n- `uniar/__init__.py:42-46` 通过 `__getattr__` 延迟暴露 `UniARVisualDecoder`。\n- 目前只能确认存在该模块，不能确认其内部是否与 README 描述完全一致。\n\n---\n\n### 4. 自回归分解、预测目标与解码策略\n\n#### 4.1 自回归因子化\n\n主模型把视觉 token 作为自回归序列逐 token 采样：\n\n- `uniar/modeling_uniar.py:323-401`：\n  ```python\n  for i in iterator:\n      if i == 0:\n          # 文本前缀或输入图像 prefill\n      else:\n          # 使用上一步生成的视觉码作为 inputs_embeds\n      # 预测当前视觉 token 的 BSQ 二进制码\n      # 将预测码嵌入，进入下一步\n  ```\n\n- 只有第一个位置做文本/图像 prefill：\n  - `uniar/modeling_uniar.py:334-353`\n  - 后续步骤用 `inputs_embeds` 加上 `deepstack_visual_embeds`，见 `uniar/modeling_uniar.py:355-363`\n\n因此，生成顺序是：文本/图像前缀 → 视觉 token 1 → 视觉 token 2 → ... → 视觉 token N。\n\n#### 4.2 预测目标\n\n每个 AR step 预测的是“下一个视觉 token 的多级、空间合并、bit 序列”：\n\n- 采样使用二进制 Softmax：\n  - `uniar/modeling_uniar.py:387-389`\n  ```python\n  vistok_pred = torch.multinomial(\n      vistok_logits.flatten(0, -2).softmax(-1), num_samples=1\n  )\n  ```\n  这验证了“并行 bitwise 预测”，即一个视觉 token 的所有 bit/level 在同一 step 内并行采样。\n\n#### 4.3 注意力与 KV cache\n\n- 生成主模型使用 Qwen3-VL 的 text decoder layers，并维护 `past_key_values`：\n  - `uniar/modeling_uniar.py:172` 返回 `past_key_values`\n  - `uniar/modeling_uniar.py:356-363` 增量 step 传入上一次 `past_key_values`\n- 可选小型视觉解码器堆栈：\n  - `uniar/modeling_uniar.py:107-115`：`visual_decoder` 是一组 `Qwen3VLTextDecoderLayer`\n  - `uniar/modeling_uniar.py:149-158`：对 `hidden_states` 逐层做 causal attention，再送入 `output_layer_vistok`\n- 训练/采样时绕过 backbone 最后 RMSNorm，保证 `output_layer_vistok` 看到训练时一致的输入：\n  - `uniar/modeling_uniar.py:21-36` 的 `_skip_final_norm`\n  - `uniar/modeling_uniar.py:201-216` 的 `image_gen_step` 在 skip norm 下运行\n\n#### 4.4 CFG 解码\n\n- 源码实现了 classifier-free guidance：\n  - `uniar/modeling_uniar.py:304`\n  - `uniar/modeling_uniar.py:376-381`\n  ```python\n  cond_logits = vistok_logits[: bs // 2]\n  uncond_logits = vistok_logits[bs // 2:]\n  vistok_logits = uncond_logits + cfg * (cond_logits - uncond_logits)\n  ```\n- CFG 只在推理路径使用；RL rollout 明确使用 `cfg=1.0`：\n  - `uniar/modeling_uniar.py:471-480`\n\n#### 4.5 编辑模式\n\n编辑模式首步使用真实输入图像：\n\n- `uniar/modeling_uniar.py:220-255` `image_gen_step_with_input_image`\n- 从 `i>=1` 起回到 T2I 的视觉码增量生成：\n  - `uniar/modeling_uniar.py:239-241`\n\n---\n\n### 5. 训练管线、损失与关键配置\n\n#### 5.1 RL 训练路径\n\n源码中 `forward()` 有一个明确的视觉 token 预测训练分支：\n\n- `uniar/modeling_uniar.py:501-514`\n  ```python\n  is_vistok_pred: bool = False\n  online_rollout_codes=None\n  ```\n- 当 `is_vistok_pred=True` 时：\n  - 将 `online_rollout_codes` 转成图像嵌入：\n    - `uniar/modeling_uniar.py:539-545`\n  - 把图像嵌入 scatter 到 `image_token_id` 位置：\n    - `uniar/modeling_uniar.py:547-550`\n  - 得到视觉位置 mask 和 deepstack 多头特征：\n    - `uniar/modeling_uniar.py:552-553`\n\n这说明 RL 训练分支会把在线 rollout 得到的视觉码重新嵌入输入，再计算 vistok 预测 logits。\n\n#### 5.2 GRPO 与多 reward 系统\n\n目录结构验证了 GRPO + 多 reward server 的工程布局：\n\n- `train/rl/train_grpo.py`\n- `train/rl/dataset.py`\n- `train/rl/reward_funcs.py`\n- `train/rl/reward_server/`\n  - `decode/`：BSQ 视觉码 → 图像的解码服务\n  - `geneval/`、`hpsv2/`、`ocr/`、`unified_reward/`：奖励服务\n\nREADME 中称“UniAR uses GRPO with a multi-reward stack”：\n- `README.md:147`\n\n具体 loss 细节、GRPO 超参、data 格式未在本次已读源码中验证，因为 `train_grpo.py` 未展开。\n\n#### 5.3 RL rollout 接口\n\n- `generate_rollout()` 模拟 HuggingFace `generate()` 接口，方便 RL trainer 调用：\n  - `uniar/modeling_uniar.py:419-480`\n- 返回 raw binary codes，形状：\n  - `uniar/modeling_uniar.py:436-438`\n  ```python\n  (B, image_token_num, num_levels, spatial_merge_unit, bsq_dim)\n  ```\n\n---\n\n### 6. 推理入口与采样流程\n\n核心代码入口是建模层 `generate_visual()`：\n\n- `uniar/modeling_uniar.py:257-417`\n- 要求 `visual_transformer_decoder=True`：\n  - `uniar/modeling_uniar.py:299-302`\n  ```python\n  if not getattr(self.config, \"visual_transformer_decoder\", False):\n      raise NotImplementedError(...)\n  ```\n\n推理脚本入口（存在但本次未展开）：\n- `inference/chat.py`：理解对话\n- `inference/generate.py`：图像生成\n- `inference/generate_batch.py`：多节点多 GPU 批量生成\n- `inference/visual_inputs.py`\n\nREADME 给出的示例：\n- 理解：`python inference/chat.py`，见 `README.md:100-106`\n- 生成：`python inference/generate.py`，见 `README.md:110-116`\n\n脚本文件均存在，但具体 CLI 参数未本次验证。\n\n---\n\n### 7. 配置与依赖\n\n#### 7.1 UniAR 配置\n\n- `uniar/configuration_uniar.py:11-15`：`UniARConfig` 继承 `Qwen3VLConfig`\n- config 字段：\n  - `uniar/configuration_uniar.py:36-40`\n  ```python\n  vistok_pred\n  vistok_pred_layernorm\n  vistok_pred_use_mlp\n  visual_transformer_decoder\n  visual_transformer_decoder_depth\n  ```\n- 注册到 Transformers：\n  - `uniar/__init__.py:15-19`：注册 `AutoConfig`、`AutoModel`、`AutoModelForCausalLM`\n\n#### 7.2 运行依赖\n\nREADME 声明：\n- `README.md:71-78`\n  - Python 3.12\n  - CUDA 12.1+\n  - GPU >= 24 GB VRAM for inference\n  - 推荐 `flash-attn`\n\n这属于文档声明，不是源码硬约束。\n\n---\n\n### 8. 发布 checkpoint、代码完整度与硬件要求\n\n#### 8.1 Checkpoint\n\nREADME 列出两个下载命令：\n- `README.md:92-93`\n  - `UniAR-RL`\n  - `UniAR-SFT`\n- checkpoint 组件：\n  - `README.md:82-90`\n  - `ar_model`\n  - `bsq_encoder`\n  - `sd3_transformer`\n  - `sd3_pipeline`\n\n这些是文档声明；仓库内未发现权重文件本身。\n\n#### 8.2 代码完整度\n\n- 仓库约 477 个文件、约 75.6 MB，包含模型、推理、RL 训练、多个 reward server。\n- 但 README 明确表示视觉解码器训练代码尚未发布：\n  - `README.md:59-62`\n  ```markdown\n  ## TODO\n  - [ ] Release visual decoder training code.\n  ```\n- 本次未检查 `scripts/train/` 中实际可执行训练脚本的完整依赖链。\n\n#### 8.3 License 与开放度\n\n- GitHub 元数据显示 `license: null`。\n- 仓库根目录未在目录树中看到 `LICENSE` 文件。\n- 因此许可问题是不确定的，复用时需注意。\n\n---\n\n### 9. 优势、局限与可复现性\n\n#### 优势\n\n- **统一模型设计**：理解、生成、编辑共用同一个 AR Transformer，源码使用 Qwen3-VL、单套 `UniARVisionModel`。\n- **视觉码可重新嵌入**：生成后的视觉 token 直接作为下步输入，形成共享上下文：\n  - `uniar/modeling_uniar.py:392-400`\n- **并行 bitwise 预测**：一个 AR step 同时预测多级/空间合并的所有 bit，降低视觉 token 数量：\n  - `uniar/modeling_uniar.py:383-390`\n- **KV cache 可用**：生成循环使用增量 `past_key_values`，适合长序列生成：\n  - `uniar/modeling_uniar.py:356-363`\n- **支持 CFG**：有完整的 conditional/unconditional 推理分支：\n  - `uniar/modeling_uniar.py:376-381`\n\n#### 局限与风险\n\n- **视觉解码器细节未完全公开**：\n  - README 仅 TODO 说明“release visual decoder training code”尚未完成，`README.md:61-62`\n  - 可能导致无法从零复现完整训练。\n- **训练代码复杂**：GRPO 依赖多节点 decode/reward/train 服务，虽然源码存在，但工程复现成本高。\n- **未验证 tokenizer 内部实现**：\n  - `bsq.py` 和 `modeling_vision_encoder.py` 未展开，无法确认 BSQ 量化与 README 中声明完全一致。\n- **实际硬件门槛高**：\n  - README 声明推理至少 24 GB VRAM；训练会更高。\n- **训练损失未验证**：\n  - `train_grpo.py` 和 `reward_funcs.py` 尚未检查，无法在本次分析中确认 GRPO loss 细节。\n- **许可不明**：元数据显示 license=null，商业复用有风险。\n- **依赖 Transformers 版本**：代码继承 `Qwen3VLForConditionalGeneration`，对 Transformers 中 Qwen3-VL API 版本敏感：\n  - `uniar/modeling_uniar.py:9-15`\n\n---\n\n### 10. 当前分析结论与下一步\n\n已确认：\n- UniAR 是真实的 2026 年自回归图像生成/统一多模态实现。\n- 核心自回归生成逻辑、视觉 token 预测头、BSQ 二进制 softmax、CFG、KV cache、RL 前向路径均在源码中找到。\n- 具体 BSQ tokenizer 实现、视觉解码器、GRPO loss 和 CLI 入口还没验证。\n\n建议下一步：\n1. 展开 `uniar/vision_encoder/bsq.py`、`uniar/vision_encoder/modeling_vision_encoder.py`，验证 BSQ 量化和 `codes_to_indexes` / `bsq_indices_to_features`。\n2. 展开 `uniar/modeling_vision_decoder.py`，验证 SD3 视觉解码器与分辨率上采样。\n3. 展开 `train/rl/train_grpo.py`、`train/rl/reward_funcs.py`、`train/rl/dataset.py`，确认损失函数和训练超参。\n4. 展开 `inference/generate.py`、`inference/chat.py`，确认采样参数与入口行为。\n\n跨项目比较需由上层合成器完成；本分析仅基于 UniAR 仓库内部证据，未对其他两个候选仓库下结论。",
+      "tools_used": [
+        "repo_tree",
+        "repo_git_history",
+        "repo_tree",
+        "repo_tree",
+        "repo_read",
+        "repo_read",
+        "repo_read",
+        "repo_read",
+        "repo_read",
+        "repo_read"
+      ],
+      "error": null
+    }
+  ],
+  "status": "completed",
+  "report": "I reached the maximum number of tool call iterations (1) without completing the task. You can try breaking the task into smaller steps.",
+  "created_at": "2026-08-30T04:18:20.168404Z",
+  "updated_at": "2026-08-30T04:25:39.065639Z"
+}

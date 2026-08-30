@@ -37,14 +37,43 @@ asks it to find, research, recommend, or compare open-source projects:
 
 ```text
 寻找图神经网络用于药物发现的 GitHub 开源项目，分析代码并比较可复现性。
+
+“下载并总结 5 个开源项目”、“整理/盘点 GitHub 仓库”等同类集合研究请求也会
+直接路由到 Repository Research Orchestrator，而不会交给普通 Agent 自行克隆。
 ```
 
-The research workflow expands the topic into up to four GitHub search queries,
-uses GitHub's read-only Repository Search API, deduplicates and ranks candidates
-by topic relevance, popularity, freshness, and license metadata, then:
+To bypass natural-language routing and force this workflow, use:
+
+```text
+/rere 下载并分析 3 个 2026 年自回归图像生成开源项目
+```
+
+`/rere` without a research request returns a usage hint and does not
+fall back to the general-purpose agent.
+
+An explicit project count in Chinese or English is honored up to the configured
+`repositoryAgent.research.maxRepositories` safety ceiling. For example, `3 个`,
+`三个`, `3 projects`, and `three repositories` select three projects even when
+the configured ceiling is five. The WebUI publishes Harness initialization and
+workflow-stage progress immediately; reasoning from repository control calls is
+streamed while query planning and report synthesis are running.
+Query planning returns English-language search phrases, even when the user's
+request is Chinese, so discovery sees terms such as `RAG retrieval`, `vector
+search`, and `retrieval augmented generation` instead of the raw Chinese
+instruction.
+
+The research workflow expands the topic into up to four search queries, runs
+nanobot's native `web_search` to recall GitHub repository pages, resolves those
+URLs through GitHub's read-only repository metadata API, also runs GitHub's
+Repository Search API as a structured supplement, deduplicates and ranks
+candidates by topic relevance, popularity, freshness, and license metadata,
+then:
 
 1. selects a bounded number of repositories;
-2. shallow-clones them into the existing repository cache with size/file limits;
+2. shallow-clones them under the normal repository cache, which is the
+   user-scoped VFS `projects` directory when VFS is enabled. Leave
+   `repositoryAgent.research.repositoryCacheDir` unset/null for this default;
+   set it only when you intentionally want a non-VFS cache override;
 3. analyzes each clone with repository-only read tools;
 4. produces a comparison table, per-project evidence, recommendations, gaps,
    task ID, and successful local paths;
@@ -52,6 +81,8 @@ by topic relevance, popularity, freshness, and license metadata, then:
 
 Downloads and analyses use separate configurable concurrency limits. One failed
 clone or analysis produces a partial report as long as another project succeeds.
+The WebUI receives per-repository download start/success/failure progress
+messages and streams the final report text as it is generated.
 Set `GITHUB_TOKEN` (or change `research.githubTokenEnv`) to increase GitHub API
 rate limits. The token is sent only to the fixed GitHub Search API endpoint and
 is never included in clone URLs or model prompts.

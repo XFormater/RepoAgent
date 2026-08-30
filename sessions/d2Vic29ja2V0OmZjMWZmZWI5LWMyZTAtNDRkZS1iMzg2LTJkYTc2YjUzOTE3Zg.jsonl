@@ -1,0 +1,2 @@
+{"_type": "metadata", "key": "websocket:fc1ffeb9-c2e0-44de-b386-2da76b53917f", "created_at": "2026-08-30T12:36:03.484946", "updated_at": "2026-08-30T12:36:03.626129", "metadata": {"webui": true, "workspace_scope": {"project_path": "/root/GitHubResearch_Agent", "access_mode": "restricted"}, "pending_user_turn": true}, "last_consolidated": 0}
+{"role": "user", "content": "下载并分析2026年的3个高星RAG检索项目", "timestamp": "2026-08-30T12:36:03.626062"}

@@ -30,10 +30,11 @@ class LogicalVFSConfig(Base):
 
     enabled: bool = True
     root: str = ".nanobot/vfs"
-    max_user_bytes: int = Field(default=5 * 1024**3, ge=1)
-    max_user_files: int = Field(default=100_000, ge=1)
-    max_task_bytes: int = Field(default=1 * 1024**3, ge=1)
-    max_task_files: int = Field(default=50_000, ge=1)
+    quota_root: str | None = None
+    max_user_bytes: int | None = Field(default=5 * 1024**3, ge=1)
+    max_user_files: int | None = Field(default=100_000, ge=1)
+    max_task_bytes: int | None = Field(default=1 * 1024**3, ge=1)
+    max_task_files: int | None = Field(default=50_000, ge=1)
     task_ttl_seconds: int = Field(default=7 * 24 * 3600, ge=60)
     project_ttl_seconds: int = Field(default=30 * 24 * 3600, ge=60)
 
@@ -142,6 +143,21 @@ class LogicalVFS:
     def enabled(self) -> bool:
         return self.config.enabled
 
+    def shell_quota_root(self, cwd: str | Path) -> Path:
+        """Return the directory whose usage governs shell execution.
+
+        ``quota_root`` is resolved relative to the configured host workspace.
+        Leaving it unset preserves the legacy behavior of checking the shell's
+        current working directory.
+        """
+        configured = self.config.quota_root
+        if not configured:
+            return Path(cwd).expanduser().resolve(strict=False)
+        path = Path(configured).expanduser()
+        if not path.is_absolute():
+            path = self.host_workspace / path
+        return path.resolve(strict=False)
+
     def user_root(self, identity: VFSIdentity) -> Path:
         return self.root / "tenants" / identity.tenant_key / "users" / identity.user_key
 
@@ -232,10 +248,10 @@ class LogicalVFS:
                 task_limit = True
         max_bytes = self.config.max_task_bytes if task_limit else self.config.max_user_bytes
         max_files = self.config.max_task_files if task_limit else self.config.max_user_files
-        if usage.bytes + max(0, additional_bytes) > max_bytes:
+        if max_bytes is not None and usage.bytes + max(0, additional_bytes) > max_bytes:
             self.metric("quota_exceeded")
             raise VFSQuotaError(f"VFS byte quota exceeded ({max_bytes} bytes)")
-        if usage.files + max(0, additional_files) > max_files:
+        if max_files is not None and usage.files + max(0, additional_files) > max_files:
             self.metric("quota_exceeded")
             raise VFSQuotaError(f"VFS file quota exceeded ({max_files} files)")
         return usage

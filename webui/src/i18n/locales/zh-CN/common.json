@@ -1216,6 +1216,10 @@
             "title": "长期目标",
             "description": "让助手把当前请求当作需要多步骤持续推进的目标。"
           },
+          "rere": {
+            "title": "仓库深度研究",
+            "description": "使用 Repository Research Orchestrator 下载并深入分析开源项目。"
+          },
           "trigger": {
             "title": "创建本地触发器",
             "description": "创建绑定到当前聊天会话的 CLI 触发器。"

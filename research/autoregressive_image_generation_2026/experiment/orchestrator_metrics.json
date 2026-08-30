@@ -1,0 +1,61 @@
+{
+  "mode": "orchestrator",
+  "elapsed_seconds": 438.989,
+  "usage": {
+    "prompt_tokens": 182227,
+    "completion_tokens": 21824,
+    "total_tokens": 204051,
+    "provider_tokens": 204051,
+    "cached_tokens": 73728
+  },
+  "agent_runner_usage": {
+    "prompt_tokens": 167648,
+    "completion_tokens": 17024,
+    "total_tokens": 184672,
+    "provider_tokens": 184672,
+    "cached_tokens": 73216
+  },
+  "control_usage": {
+    "prompt_tokens": 14579,
+    "completion_tokens": 4800,
+    "total_tokens": 19379,
+    "cached_tokens": 512,
+    "provider_tokens": 19379
+  },
+  "agent_runs": 3,
+  "control_calls": 2,
+  "tool_calls": 28,
+  "tools": [
+    "repo_tree",
+    "repo_git_history",
+    "repo_tree",
+    "repo_tree",
+    "repo_read",
+    "repo_read",
+    "repo_read",
+    "repo_read",
+    "repo_read",
+    "repo_read",
+    "repo_tree",
+    "repo_git_history",
+    "repo_read",
+    "repo_read",
+    "repo_read",
+    "repo_read",
+    "repo_read",
+    "repo_read",
+    "repo_tree",
+    "repo_git_history",
+    "repo_tree",
+    "repo_tree",
+    "repo_read",
+    "repo_read",
+    "repo_read",
+    "repo_read",
+    "repo_read",
+    "repo_read"
+  ],
+  "report_chars": 169,
+  "stop_reason": "max_iterations",
+  "report_path": "research/autoregressive_image_generation_2026/experiment/orchestrator_report.md"
+}

@@ -1217,6 +1217,10 @@
             "title": "Long-running goal",
             "description": "Tell the agent to treat this as a sustained multi-step goal."
           },
+          "rere": {
+            "title": "Repository research",
+            "description": "Run the Repository Research Orchestrator for this request."
+          },
           "trigger": {
             "title": "Create local trigger",
             "description": "Create a CLI trigger bound to this chat session."

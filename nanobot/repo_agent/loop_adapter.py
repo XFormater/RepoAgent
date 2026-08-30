@@ -99,6 +99,8 @@ async def run_repository_turn(loop: AgentLoop, ctx: TurnContext) -> None:
         runtime=runtime,
         invoke=invoke_repository_agent,
         on_update=ctx.on_progress,
+        on_stream=ctx.on_stream,
+        on_stream_end=ctx.on_stream_end,
         tenant_id=str(ctx.msg.metadata.get("tenant_id", "default")),
     )
     ctx.final_content = result.final_content

@@ -1217,6 +1217,10 @@
             "title": "Objetivo de longa duração",
             "description": "Diz ao agente para tratar isto como um objetivo sustentado de várias etapas."
           },
+          "rere": {
+            "title": "Pesquisa de repositórios",
+            "description": "Executa o Repository Research Orchestrator para esta solicitação."
+          },
           "trigger": {
             "title": "Criar gatilho local",
             "description": "Cria um gatilho de CLI vinculado a esta sessão de conversa."

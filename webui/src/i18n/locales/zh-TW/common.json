@@ -1193,6 +1193,10 @@
             "title": "長期目標",
             "description": "請助理把這則請求當成需要多步驟持續推進的目標。"
           },
+          "rere": {
+            "title": "程式庫深度研究",
+            "description": "使用 Repository Research Orchestrator 下載並深入分析開源專案。"
+          },
           "trigger": {
             "title": "建立本機觸發器",
             "description": "建立綁定到目前對話的 CLI 觸發器。"
