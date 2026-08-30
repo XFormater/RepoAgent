@@ -1197,6 +1197,11 @@
             "title": "Nghiên cứu kho mã",
             "description": "Chạy Repository Research Orchestrator cho yêu cầu này."
           },
+          "redel": {
+            "title": "Xóa kho lưu trữ đã tải xuống",
+            "description": "Xóa mọi bản sao đã tải xuống của một kho lưu trữ (owner/repo)."
+          },
+
           "trigger": {
             "title": "Tạo trình kích hoạt cục bộ",
             "description": "Tạo trình kích hoạt CLI gắn với phiên chat này."

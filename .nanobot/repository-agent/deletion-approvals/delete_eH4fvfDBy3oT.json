@@ -1,0 +1,36 @@
+{
+  "approval_id": "delete_eH4fvfDBy3oT",
+  "requester_id": "user",
+  "targets": [
+    {
+      "repository_id": "2ef16ed493b5b9bf0a27",
+      "full_name": "Wechat-ggGitHub/Awesome-GitHub-Repo",
+      "url": "https://github.com/Wechat-ggGitHub/Awesome-GitHub-Repo",
+      "source_path": "/root/GitHubResearch_Agent/.nanobot/vfs/tenants/37a8eec1ce19687d132fe290/users/063bfdfec908a28b4d7a5784/projects/wechat-gggithub/awesome-github-repo/source",
+      "cache_path": "/root/GitHubResearch_Agent/.nanobot/vfs/tenants/37a8eec1ce19687d132fe290/users/063bfdfec908a28b4d7a5784/projects/wechat-gggithub/awesome-github-repo",
+      "commit_sha": "b580168c397e5345ddd1454272da90a115cc80b7"
+    },
+    {
+      "repository_id": "2ef16ed493b5b9bf0a27",
+      "full_name": "Wechat-ggGitHub/Awesome-GitHub-Repo",
+      "url": "https://github.com/Wechat-ggGitHub/Awesome-GitHub-Repo",
+      "source_path": "/root/GitHubResearch_Agent/.nanobot/vfs/tenants/37a8eec1ce19687d132fe290/users/0cdade17bd9e4e044bf62ecb/projects/wechat-gggithub/awesome-github-repo/source",
+      "cache_path": "/root/GitHubResearch_Agent/.nanobot/vfs/tenants/37a8eec1ce19687d132fe290/users/0cdade17bd9e4e044bf62ecb/projects/wechat-gggithub/awesome-github-repo",
+      "commit_sha": "b580168c397e5345ddd1454272da90a115cc80b7"
+    },
+    {
+      "repository_id": "2ef16ed493b5b9bf0a27",
+      "full_name": "Wechat-ggGitHub/Awesome-GitHub-Repo",
+      "url": "https://github.com/Wechat-ggGitHub/Awesome-GitHub-Repo",
+      "source_path": "/root/GitHubResearch_Agent/.nanobot/vfs/tenants/37a8eec1ce19687d132fe290/users/c9630b38edda236a3fa4fff4/projects/wechat-gggithub/awesome-github-repo/source",
+      "cache_path": "/root/GitHubResearch_Agent/.nanobot/vfs/tenants/37a8eec1ce19687d132fe290/users/c9630b38edda236a3fa4fff4/projects/wechat-gggithub/awesome-github-repo",
+      "commit_sha": "b580168c397e5345ddd1454272da90a115cc80b7"
+    }
+  ],
+  "binding_hash": "ec63542081cb3d0687d6e14e4dcdfb0fc5d3026788423ff1fecdea5e65677041",
+  "status": "pending",
+  "created_at": "2026-08-30T08:58:45.327273Z",
+  "expires_at": "2026-08-30T09:08:45.327202Z",
+  "decided_at": null,
+  "decided_by": null
+}

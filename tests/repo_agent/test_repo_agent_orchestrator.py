@@ -403,10 +403,14 @@ async def test_natural_language_delete_requires_approval_then_deletes_target(
         "kind": "repository_delete_approval",
         "data": {
             "approval_id": match.group(1),
-            "repository_full_name": record.full_name,
-            "commit_sha": record.commit_sha,
-            "source_path": str(record.path.resolve()),
-            "cache_path": str(orchestrator.manager.cache_path(record).resolve()),
+            "targets": [
+                {
+                    "repository_full_name": record.full_name,
+                    "commit_sha": record.commit_sha,
+                    "source_path": str(record.path.resolve()),
+                    "cache_path": str(record.path.resolve().parent),
+                }
+            ],
             "expires_at": agent_ui["data"]["expires_at"],
         },
     }

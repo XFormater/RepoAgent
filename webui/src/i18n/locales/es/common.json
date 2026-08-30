@@ -1198,6 +1198,11 @@
             "title": "Investigación de repositorios",
             "description": "Ejecuta Repository Research Orchestrator para esta solicitud."
           },
+          "redel": {
+            "title": "Eliminar repositorios descargados",
+            "description": "Elimina todas las copias descargadas de un repositorio (owner/repo)."
+          },
+
           "trigger": {
             "title": "Crear un activador local",
             "description": "Crea un activador de CLI vinculado a esta sesión de chat."

@@ -1221,6 +1221,11 @@
             "title": "Pesquisa de repositórios",
             "description": "Executa o Repository Research Orchestrator para esta solicitação."
           },
+          "redel": {
+            "title": "Excluir repositórios baixados",
+            "description": "Exclui todas as cópias baixadas de um repositório (owner/repo)."
+          },
+
           "trigger": {
             "title": "Criar gatilho local",
             "description": "Cria um gatilho de CLI vinculado a esta sessão de conversa."

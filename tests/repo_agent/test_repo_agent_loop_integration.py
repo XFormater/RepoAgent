@@ -127,6 +127,7 @@ async def test_delete_approval_slash_command_reaches_repository_workflow(
 ) -> None:
     source = tmp_path / ".nanobot" / "repositories" / "owner" / "repo" / "source"
     source.mkdir(parents=True)
+    (source / ".git").mkdir()
     record = RepositoryRecord(
         repository_id="repo",
         url="https://github.com/owner/repo",
@@ -140,10 +141,11 @@ async def test_delete_approval_slash_command_reaches_repository_workflow(
     )
     cache_path = source.parent
     resolve = AsyncMock(return_value=record)
-    delete = AsyncMock(return_value=cache_path)
+    delete = MagicMock(return_value=cache_path)
     monkeypatch.setattr(RepositoryManager, "resolve_cached_repository", resolve)
-    monkeypatch.setattr(RepositoryManager, "cache_path", lambda _self, _record: cache_path)
-    monkeypatch.setattr(RepositoryManager, "delete_cached_repository", delete)
+    monkeypatch.setattr(RepositoryManager, "list_vfs_repositories", AsyncMock(return_value=[]))
+    monkeypatch.setattr(RepositoryManager, "commit_sha_at", AsyncMock(return_value="a" * 40))
+    monkeypatch.setattr(RepositoryManager, "delete_repository_source", delete)
     provider = _provider()
     provider.chat_with_retry = AsyncMock()
     loop = AgentLoop(
@@ -183,5 +185,5 @@ async def test_delete_approval_slash_command_reaches_repository_workflow(
     assert completed is not None
     assert "Unknown command" not in completed.content
     assert "本地项目已删除" in completed.content
-    delete.assert_awaited_once_with(record)
+    delete.assert_called_once()
     provider.chat_with_retry.assert_not_awaited()

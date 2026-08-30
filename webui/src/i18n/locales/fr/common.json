@@ -1197,6 +1197,11 @@
             "title": "Recherche de dépôts",
             "description": "Exécute Repository Research Orchestrator pour cette demande."
           },
+          "redel": {
+            "title": "Supprimer les dépôts téléchargés",
+            "description": "Supprime toutes les copies téléchargées d'un dépôt (owner/repo)."
+          },
+
           "trigger": {
             "title": "Créer un déclencheur local",
             "description": "Crée un déclencheur CLI lié à cette session de chat."

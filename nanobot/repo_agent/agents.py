@@ -83,7 +83,7 @@ class RepositoryControlClient:
         prompt: str,
         *,
         runtime: LLMRuntime,
-        max_tokens: int,
+        max_tokens: int | None = None,
         progress_callback: Callable[..., Awaitable[None]] | None = None,
         stream_callback: Callable[[str], Awaitable[None]] | None = None,
         stream_end_callback: Callable[..., Awaitable[None]] | None = None,

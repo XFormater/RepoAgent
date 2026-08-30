@@ -535,6 +535,62 @@ class RepositoryResearchOrchestrator:
         all_queries = [*queries, *(f"web_search: {query}" for query in native_queries)]
         return all_queries, self.rank_candidates(direction, all_queries, candidates)
 
+    async def _dedup_and_fill(
+        self,
+        direction: str,
+        candidates: list[GitHubRepositoryCandidate],
+        runtime: LLMRuntime,
+        target: int,
+        on_progress: Callable[..., Awaitable[None]] | None,
+    ) -> list[GitHubRepositoryCandidate]:
+        """Dedup against already-downloaded VFS repos, then fill up to ``target``."""
+        try:
+            downloaded = {
+                record.full_name.casefold()
+                for record in await self.manager.list_vfs_repositories()
+            }
+        except Exception:
+            downloaded = set()
+        candidates = [
+            candidate
+            for candidate in candidates
+            if candidate.full_name.casefold() not in downloaded
+        ]
+        seen = {candidate.full_name.casefold() for candidate in candidates} | downloaded
+        rounds = 0
+        while len(candidates) < target and rounds < 3:
+            extra_queries = self._fallback_queries(direction)
+            if not extra_queries:
+                break
+            if on_progress:
+                await on_progress(
+                    f"去重后候选不足（{len(candidates)}/{target}），补充检索…"
+                )
+            results = await asyncio.gather(
+                *(self.github.search(query) for query in extra_queries),
+                return_exceptions=True,
+            )
+            _, native_more = await self.native_web_discover(
+                direction, extra_queries, on_progress
+            )
+            added: list[GitHubRepositoryCandidate] = list(native_more)
+            for result in results:
+                if not isinstance(result, BaseException):
+                    added.extend(result)
+            fresh = [
+                candidate
+                for candidate in added
+                if candidate.full_name.casefold() not in seen
+            ]
+            if not fresh:
+                break
+            for candidate in fresh:
+                seen.add(candidate.full_name.casefold())
+            candidates.extend(fresh)
+            candidates = self.rank_candidates(direction, [], candidates)
+            rounds += 1
+        return candidates
+
     async def _download(
         self,
         candidate: GitHubRepositoryCandidate,
@@ -660,7 +716,6 @@ class RepositoryResearchOrchestrator:
                     research_json=json.dumps(payload, ensure_ascii=False, default=str),
                 ),
                 runtime=runtime,
-                max_tokens=4_000,
                 progress_callback=on_progress,
                 stream_callback=on_stream,
                 stream_end_callback=on_stream_end,
@@ -783,6 +838,14 @@ class RepositoryResearchOrchestrator:
             selection_limit = min(
                 requested_count or self.research_config.max_repositories,
                 self.research_config.max_repositories,
+            )
+            fill_target = selection_limit if requested_count is not None else 0
+            task.candidates = await self._dedup_and_fill(
+                direction,
+                task.candidates,
+                runtime,
+                fill_target,
+                on_update,
             )
             task.selected = task.candidates[:selection_limit]
             if not task.selected:

@@ -195,9 +195,9 @@ class RepositoryStateStore:
                 self.append_audit(
                     event,
                     approval_id=approval.approval_id,
-                    repository=approval.repository_full_name,
-                    repository_id=approval.repository_id,
-                    cache_path=approval.cache_path,
+                    repository=",".join(target["full_name"] for target in approval.targets),
+                    repository_id=",".join(target["repository_id"] for target in approval.targets),
+                    cache_path=",".join(target["cache_path"] for target in approval.targets),
                     status=approval.status.value,
                     actor=approval.decided_by or approval.requester_id,
                 )

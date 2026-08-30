@@ -1221,6 +1221,11 @@
             "title": "Repository research",
             "description": "Run the Repository Research Orchestrator for this request."
           },
+          "redel": {
+            "title": "Delete downloaded repositories",
+            "description": "Delete every downloaded copy of a repository (owner/repo)."
+          },
+
           "trigger": {
             "title": "Create local trigger",
             "description": "Create a CLI trigger bound to this chat session."

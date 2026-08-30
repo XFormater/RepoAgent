@@ -265,16 +265,11 @@ class PublishApproval(BaseModel):
 
 
 class RepositoryDeletionApproval(BaseModel):
-    """Exact, expiring binding for deleting one local repository cache."""
+    """Exact, expiring binding for deleting one or more local repository caches."""
 
     approval_id: str = Field(default_factory=lambda: new_id("delete"))
     requester_id: str
-    repository_id: str
-    repository_full_name: str
-    repository_url: str
-    source_path: str
-    cache_path: str
-    commit_sha: str
+    targets: list[dict[str, str]]
     binding_hash: str = ""
     status: ApprovalStatus = ApprovalStatus.PENDING
     created_at: datetime = Field(default_factory=utc_now)
@@ -282,15 +277,8 @@ class RepositoryDeletionApproval(BaseModel):
     decided_at: datetime | None = None
     decided_by: str | None = None
 
-    def payload(self) -> dict[str, str]:
-        return {
-            "repository_id": self.repository_id,
-            "repository_full_name": self.repository_full_name,
-            "repository_url": self.repository_url,
-            "source_path": self.source_path,
-            "cache_path": self.cache_path,
-            "commit_sha": self.commit_sha,
-        }
+    def payload(self) -> dict[str, Any]:
+        return {"targets": self.targets}
 
     def approval_hash(self) -> str:
         data = json.dumps(

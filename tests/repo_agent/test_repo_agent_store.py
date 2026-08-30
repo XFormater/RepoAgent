@@ -35,12 +35,16 @@ def test_store_persists_deletion_approval(tmp_path: Path) -> None:
     store = RepositoryStateStore(tmp_path, ".state")
     approval = RepositoryDeletionApproval(
         requester_id="user",
-        repository_id="repo",
-        repository_full_name="owner/repo",
-        repository_url="https://github.com/owner/repo",
-        source_path=str(tmp_path / "cache" / "source"),
-        cache_path=str(tmp_path / "cache"),
-        commit_sha="a" * 40,
+        targets=[
+            {
+                "repository_id": "repo",
+                "full_name": "owner/repo",
+                "url": "https://github.com/owner/repo",
+                "source_path": str(tmp_path / "cache" / "source"),
+                "cache_path": str(tmp_path / "cache"),
+                "commit_sha": "a" * 40,
+            }
+        ],
         expires_at=utc_now() + timedelta(minutes=10),
     )
     approval.binding_hash = approval.approval_hash()
@@ -53,4 +57,4 @@ def test_store_persists_deletion_approval(tmp_path: Path) -> None:
 
     assert loaded is not None
     assert loaded.binding_hash == loaded.approval_hash()
-    assert loaded.repository_full_name == "owner/repo"
+    assert loaded.targets[0]["full_name"] == "owner/repo"

@@ -1,0 +1,14 @@
+{
+  "research_id": "research_d4p_354YB0tx",
+  "session_key": "websocket:61a53e27-9aa9-467a-891c-b3a09c5ac73c",
+  "actor": "anon-ad50f282dc62",
+  "direction": "我现在下载了哪些仓库",
+  "queries": [],
+  "candidates": [],
+  "selected": [],
+  "analyses": [],
+  "status": "cancelled",
+  "report": null,
+  "created_at": "2026-08-30T06:39:55.665639Z",
+  "updated_at": "2026-08-30T06:40:05.927642Z"
+}

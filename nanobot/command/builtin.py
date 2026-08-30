@@ -122,6 +122,22 @@ BUILTIN_COMMAND_SPECS: tuple[BuiltinCommandSpec, ...] = (
         accepts_args=True,
     ),
     BuiltinCommandSpec(
+        "/reget",
+        "List downloaded repositories",
+        "List the repositories already downloaded for the current user.",
+        "search",
+        lifecycle="agent_turn",
+    ),
+    BuiltinCommandSpec(
+        "/redel",
+        "Delete downloaded repositories",
+        "Delete every downloaded copy of a repository (owner/repo).",
+        "trash-2",
+        "<owner/repo>",
+        lifecycle="agent_turn",
+        accepts_args=True,
+    ),
+    BuiltinCommandSpec(
         "/trigger",
         "Create named local trigger",
         "Create a named CLI trigger bound to this chat session.",

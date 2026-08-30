@@ -1197,6 +1197,11 @@
             "title": "저장소 연구",
             "description": "이 요청을 Repository Research Orchestrator로 실행합니다."
           },
+          "redel": {
+            "title": "다운로드한 저장소 삭제",
+            "description": "저장소(owner/repo)의 다운로드된 사본을 모두 삭제합니다."
+          },
+
           "trigger": {
             "title": "로컬 트리거 만들기",
             "description": "이 채팅 세션에 연결된 CLI 트리거를 만듭니다."

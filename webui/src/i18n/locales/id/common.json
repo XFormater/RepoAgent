@@ -1197,6 +1197,11 @@
             "title": "Riset repositori",
             "description": "Jalankan Repository Research Orchestrator untuk permintaan ini."
           },
+          "redel": {
+            "title": "Hapus repositori yang diunduh",
+            "description": "Hapus semua salinan yang diunduh dari sebuah repositori (owner/repo)."
+          },
+
           "trigger": {
             "title": "Buat pemicu lokal",
             "description": "Buat pemicu CLI yang terikat ke sesi chat ini."

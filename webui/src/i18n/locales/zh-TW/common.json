@@ -1197,6 +1197,11 @@
             "title": "程式庫深度研究",
             "description": "使用 Repository Research Orchestrator 下載並深入分析開源專案。"
           },
+          "redel": {
+            "title": "刪除已下載的倉庫",
+            "description": "刪除某倉庫（owner/repo）已下載的所有副本。"
+          },
+
           "trigger": {
             "title": "建立本機觸發器",
             "description": "建立綁定到目前對話的 CLI 觸發器。"

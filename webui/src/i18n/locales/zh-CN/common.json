@@ -1220,6 +1220,11 @@
             "title": "仓库深度研究",
             "description": "使用 Repository Research Orchestrator 下载并深入分析开源项目。"
           },
+          "redel": {
+            "title": "删除已下载的仓库",
+            "description": "删除某仓库（owner/repo）已下载的所有副本。"
+          },
+
           "trigger": {
             "title": "创建本地触发器",
             "description": "创建绑定到当前聊天会话的 CLI 触发器。"

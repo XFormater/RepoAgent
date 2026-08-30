@@ -1197,6 +1197,11 @@
             "title": "リポジトリ調査",
             "description": "この依頼を Repository Research Orchestrator で実行します。"
           },
+          "redel": {
+            "title": "ダウンロード済みリポジトリを削除",
+            "description": "あるリポジトリ（owner/repo）のダウンロード済みコピーをすべて削除します。"
+          },
+
           "trigger": {
             "title": "ローカルトリガーを作成",
             "description": "このチャットセッションに紐づく CLI トリガーを作成します。"

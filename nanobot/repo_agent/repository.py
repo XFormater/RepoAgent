@@ -351,6 +351,78 @@ class RepositoryManager:
                 continue
         return records
 
+    async def list_all_cached_repositories(self) -> list[RepositoryRecord]:
+        """Read-only listing of downloaded repos, including per-session research downloads."""
+        records: list[RepositoryRecord] = []
+        if not self.cache_root.is_dir():
+            return records
+        sources = sorted(
+            {*self.cache_root.glob("*/*/source"), *self.cache_root.glob("*/*/*/source")}
+        )
+        for source in sources:
+            if not (source / ".git").is_dir():
+                continue
+            try:
+                origin = await self._run_git(["remote", "get-url", "origin"], cwd=source)
+                parsed = self.parse_url(origin)
+                if (
+                    source.parent.name.casefold() != parsed.name.casefold()
+                    or source.parent.parent.name.casefold() != parsed.owner.casefold()
+                ):
+                    continue
+                records.append(
+                    await self._record_from_source(parsed, source, measure=False)
+                )
+            except RepositoryError:
+                continue
+        return records
+
+    async def list_vfs_repositories(self) -> list[RepositoryRecord]:
+        """List every repository across all tenants/users under the VFS root."""
+        records: list[RepositoryRecord] = []
+        if self.vfs is None or not self.vfs.enabled:
+            return records
+        root = self.vfs.root
+        if not root.is_dir():
+            return records
+        sources = sorted(root.glob("tenants/*/users/*/projects/*/*/source"))
+        for source in sources:
+            if not (source / ".git").is_dir():
+                continue
+            try:
+                origin = await self._run_git(["remote", "get-url", "origin"], cwd=source)
+                parsed = self.parse_url(origin)
+                if (
+                    source.parent.name.casefold() != parsed.name.casefold()
+                    or source.parent.parent.name.casefold() != parsed.owner.casefold()
+                ):
+                    continue
+                records.append(
+                    await self._record_from_source(parsed, source, measure=False)
+                )
+            except RepositoryError:
+                continue
+        return records
+
+    async def commit_sha_at(self, source_path: str | Path) -> str:
+        """Return the current HEAD commit of a cloned source directory."""
+        output = await self._run_git(["rev-parse", "HEAD"], cwd=Path(source_path))
+        return output.strip()
+
+    def delete_repository_source(self, source_path: str | Path) -> Path:
+        """Validate and remove the cache root owning a cloned source directory."""
+        source = Path(source_path).resolve()
+        if source.name != "source":
+            raise RepositoryError("仓库缓存路径异常。")
+        root = source.parent
+        allowed = [self._base_cache_root]
+        if self.vfs is not None and self.vfs.enabled:
+            allowed.append(self.vfs.root)
+        if not any(base == root or base in root.parents for base in allowed):
+            raise RepositoryError("仓库缓存路径越界。")
+        self._remove_tree(root)
+        return root
+
     async def resolve_cached_repository(
         self,
         request: str,

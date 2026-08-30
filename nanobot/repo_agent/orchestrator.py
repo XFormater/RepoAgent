@@ -75,6 +75,10 @@ class RepositoryOrchestrator:
         r"^/rere(?:\s+(?P<query>[\s\S]+?))?\s*$",
         re.IGNORECASE,
     )
+    _REGET_COMMAND_RE = re.compile(
+        r"^/reget\s*$",
+        re.IGNORECASE,
+    )
     _APPROVE_RE = re.compile(
         r"^(?:/approve|/repo\s+approve|确认提交|确认创建)\s+([A-Za-z0-9_-]{1,100})\s*$",
         re.IGNORECASE,
@@ -93,8 +97,8 @@ class RepositoryOrchestrator:
         r"([A-Za-z0-9_-]{1,100})\s*$",
         re.IGNORECASE,
     )
-    _DELETE_COMMAND_RE = re.compile(
-        r"^/repo\s+delete(?:\s+(?P<target>.+?))?\s*$",
+    _REDEL_COMMAND_RE = re.compile(
+        r"^/redel(?:\s+(?P<target>\S+))?\s*$",
         re.IGNORECASE,
     )
     _DELETE_VERB_RE = re.compile(
@@ -111,6 +115,16 @@ class RepositoryOrchestrator:
     )
     _REMOTE_DELETE_HINT_RE = re.compile(
         r"(?:github\s*(?:上|远程|遠端)|远程仓库|遠端倉庫|remote\s+repo)",
+        re.IGNORECASE,
+    )
+    _LOCAL_CACHE_HINT_RE = re.compile(
+        r"(?:已下载|已下載|下载过|下载的|本地|缓存|快取|现有|已有|"
+        r"downloaded|cached|local|existing)",
+        re.IGNORECASE,
+    )
+    _LOCAL_LIST_ACTION_RE = re.compile(
+        r"(?:整理|列出|列举|清单|汇总|总结|盘点|概览|有哪些|"
+        r"list|show|summari[sz]e|organize|inventory|enumerate)",
         re.IGNORECASE,
     )
     _RESEARCH_ACTION_RE = re.compile(
@@ -170,11 +184,23 @@ class RepositoryOrchestrator:
         )
 
     def is_research_request(self, request: str) -> bool:
+        # Organizing/listing repositories already downloaded to the local cache
+        # is not GitHub discovery/download research.
+        if self.is_local_cache_list_request(request):
+            return False
         return bool(
             self.config.research.enabled
             and not self.manager.extract_url(request)
             and self._RESEARCH_ACTION_RE.search(request)
             and self._RESEARCH_TARGET_RE.search(request)
+        )
+
+    def is_local_cache_list_request(self, request: str) -> bool:
+        """Whether the request asks to list/summarize already-downloaded repos."""
+        return bool(
+            self._LOCAL_CACHE_HINT_RE.search(request)
+            and self._LOCAL_LIST_ACTION_RE.search(request)
+            and not self.manager.extract_url(request)
         )
 
     def can_handle(self, request: str, session_key: str) -> bool:
@@ -183,12 +209,13 @@ class RepositoryOrchestrator:
             self.manager.extract_url(request)
             or self.is_research_request(request)
             or self._RESEARCH_COMMAND_RE.fullmatch(stripped)
+            or self._REGET_COMMAND_RE.fullmatch(stripped)
             or self._COMMAND_RE.fullmatch(stripped)
             or self._APPROVE_RE.fullmatch(stripped)
             or self._REJECT_RE.fullmatch(stripped)
             or self._DELETE_APPROVE_RE.fullmatch(stripped)
             or self._DELETE_REJECT_RE.fullmatch(stripped)
-            or self._DELETE_COMMAND_RE.fullmatch(stripped)
+            or self._REDEL_COMMAND_RE.fullmatch(stripped)
             or self._is_local_delete_request(request, session_key)
             or (
                 self._DELETE_VERB_RE.search(request)
@@ -202,12 +229,13 @@ class RepositoryOrchestrator:
         stripped = request.strip()
         return bool(
             self._RESEARCH_COMMAND_RE.fullmatch(stripped)
+            or self._REGET_COMMAND_RE.fullmatch(stripped)
             or self._COMMAND_RE.fullmatch(stripped)
             or self._APPROVE_RE.fullmatch(stripped)
             or self._REJECT_RE.fullmatch(stripped)
             or self._DELETE_APPROVE_RE.fullmatch(stripped)
             or self._DELETE_REJECT_RE.fullmatch(stripped)
-            or self._DELETE_COMMAND_RE.fullmatch(stripped)
+            or self._REDEL_COMMAND_RE.fullmatch(stripped)
         )
 
     def _is_local_delete_request(self, request: str, session_key: str) -> bool:
@@ -720,27 +748,49 @@ class RepositoryOrchestrator:
         session_key: str,
         initial_messages: list[dict[str, Any]],
     ) -> RepositoryTurnResult:
-        active = self.store.active_repository(session_key)
+        target_name = request.strip()
         try:
-            record = await self.manager.resolve_cached_repository(
-                request,
-                active=active,
-            )
-            cache_path = self.manager.cache_path(record)
+            records = await self.manager.list_vfs_repositories()
         except RepositoryError as exc:
             return self._synthetic(
                 initial_messages,
                 f"无法准备删除：{exc}",
                 stop_reason="error",
             )
+        matched = [
+            record
+            for record in records
+            if record.full_name.casefold() == target_name.casefold()
+        ]
+        if not matched:
+            active = self.store.active_repository(session_key)
+            try:
+                record = await self.manager.resolve_cached_repository(
+                    target_name,
+                    active=active,
+                )
+            except RepositoryError as exc:
+                return self._synthetic(
+                    initial_messages,
+                    f"无法准备删除：{exc}",
+                    stop_reason="error",
+                )
+            matched = [record]
+        targets: list[dict[str, str]] = []
+        for record in matched:
+            targets.append(
+                {
+                    "repository_id": record.repository_id,
+                    "full_name": record.full_name,
+                    "url": record.url,
+                    "source_path": str(record.path.resolve()),
+                    "cache_path": str(record.path.resolve().parent),
+                    "commit_sha": record.commit_sha,
+                }
+            )
         approval = RepositoryDeletionApproval(
             requester_id=actor,
-            repository_id=record.repository_id,
-            repository_full_name=record.full_name,
-            repository_url=record.url,
-            source_path=str(record.path.resolve()),
-            cache_path=str(cache_path.resolve()),
-            commit_sha=record.commit_sha,
+            targets=targets,
             expires_at=utc_now()
             + timedelta(seconds=self.config.deletion_approval_ttl_seconds),
         )
@@ -749,13 +799,15 @@ class RepositoryOrchestrator:
             approval,
             event="repository.delete.approval_requested",
         )
+        listing = "\n".join(
+            f"- `{target['full_name']}` → `{target['source_path']}`"
+            for target in targets
+        )
         return self._synthetic(
             initial_messages,
             "准备删除本地下载项目（L3，必须人工确认）：\n\n"
-            f"- 项目：`{approval.repository_full_name}`\n"
-            f"- Commit：`{approval.commit_sha}`\n"
-            f"- 源码路径：`{approval.source_path}`\n"
-            f"- 删除范围：`{approval.cache_path}`\n"
+            f"- 命中 {len(targets)} 个项目\n"
+            f"{listing}\n\n"
             "- 删除范围包含只读源码缓存、隔离任务工作区和该项目的本地 Patch\n"
             "- 不会删除 GitHub 上的仓库或 Fork\n"
             "- 删除后系统无法恢复，只能重新 Clone\n\n"
@@ -766,10 +818,15 @@ class RepositoryOrchestrator:
                 "kind": "repository_delete_approval",
                 "data": {
                     "approval_id": approval.approval_id,
-                    "repository_full_name": approval.repository_full_name,
-                    "commit_sha": approval.commit_sha,
-                    "source_path": approval.source_path,
-                    "cache_path": approval.cache_path,
+                    "targets": [
+                        {
+                            "repository_full_name": target["full_name"],
+                            "commit_sha": target["commit_sha"],
+                            "source_path": target["source_path"],
+                            "cache_path": target["cache_path"],
+                        }
+                        for target in targets
+                    ],
                     "expires_at": approval.expires_at.isoformat(),
                 },
             },
@@ -790,7 +847,7 @@ class RepositoryOrchestrator:
             self.store.append_audit(
                 "repository.delete.approval_unauthorized",
                 approval_id=approval.approval_id,
-                repository=approval.repository_full_name,
+                repository=",".join(target["full_name"] for target in approval.targets),
                 actor=actor,
             )
             return self._synthetic(
@@ -824,7 +881,7 @@ class RepositoryOrchestrator:
                 )
             return self._synthetic(
                 initial_messages,
-                f"已取消删除，项目仍保留在：`{approval.source_path}`",
+                "已取消删除，项目仍保留。",
             )
         if approval.status not in {ApprovalStatus.PENDING, ApprovalStatus.APPROVED}:
             return self._synthetic(
@@ -832,40 +889,19 @@ class RepositoryOrchestrator:
                 f"删除审批状态为 `{approval.status.value}`，不能再次执行。",
             )
 
-        owner, name = approval.repository_full_name.split("/", 1)
-        approved_record = RepositoryRecord(
-            repository_id=approval.repository_id,
-            url=approval.repository_url,
-            owner=owner,
-            name=name,
-            default_branch="",
-            commit_sha=approval.commit_sha,
-            local_path=approval.source_path,
-            file_count=0,
-            size_bytes=0,
-        )
+        deleted: list[str] = []
         try:
-            current = await self.manager.resolve_cached_repository(approval.repository_url)
-            current_cache = self.manager.cache_path(current)
-            if (
-                current.repository_id != approval.repository_id
-                or current.full_name.casefold()
-                != approval.repository_full_name.casefold()
-                or current.commit_sha != approval.commit_sha
-                or current.path.resolve() != approved_record.path.resolve()
-                or current_cache.resolve() != Path(approval.cache_path).resolve()
-            ):
-                raise RepositoryError(
-                    "仓库缓存自审批后发生变化，旧删除审批已失效。"
-                )
-            approval.status = ApprovalStatus.APPROVED
-            approval.decided_at = approval.decided_at or utc_now()
-            approval.decided_by = actor
-            self.store.save_deletion_approval(
-                approval,
-                event="repository.delete.approval_approved",
-            )
-            deleted_path = await self.manager.delete_cached_repository(current)
+            for target in approval.targets:
+                source = Path(target["source_path"]).resolve()
+                if not source.is_dir() or not (source / ".git").is_dir():
+                    raise RepositoryError("删除目标已不存在。")
+                commit = await self.manager.commit_sha_at(source)
+                if commit != target["commit_sha"]:
+                    raise RepositoryError(
+                        "仓库缓存自审批后发生变化，旧删除审批已失效。"
+                    )
+                root = self.manager.delete_repository_source(source)
+                deleted.append(str(root))
         except RepositoryError as exc:
             approval.status = ApprovalStatus.REJECTED
             approval.decided_at = utc_now()
@@ -880,7 +916,15 @@ class RepositoryOrchestrator:
                 stop_reason="policy_denied",
             )
 
-        self.store.invalidate_repository(approval.repository_id)
+        for target in approval.targets:
+            self.store.invalidate_repository(target["repository_id"])
+        approval.status = ApprovalStatus.APPROVED
+        approval.decided_at = approval.decided_at or utc_now()
+        approval.decided_by = actor
+        self.store.save_deletion_approval(
+            approval,
+            event="repository.delete.approval_approved",
+        )
         approval.status = ApprovalStatus.EXECUTED
         self.store.save_deletion_approval(
             approval,
@@ -889,9 +933,8 @@ class RepositoryOrchestrator:
         return self._synthetic(
             initial_messages,
             "本地项目已删除：\n\n"
-            f"- 项目：`{approval.repository_full_name}`\n"
-            f"- 已删除路径：`{deleted_path}`\n"
-            "- GitHub 远程仓库未受影响\n"
+            + "\n".join(f"- `{path}`" for path in deleted)
+            + "\n- GitHub 远程仓库未受影响\n"
             "- 如需再次分析，请重新发送仓库 URL",
         )
 
@@ -918,7 +961,7 @@ class RepositoryOrchestrator:
                 actor=actor,
                 initial_messages=initial_messages,
             )
-        command = self._DELETE_COMMAND_RE.fullmatch(stripped)
+        command = self._REDEL_COMMAND_RE.fullmatch(stripped)
         if command is not None:
             target = (command.group("target") or "当前项目").strip()
             return await self._prepare_repository_deletion(
@@ -1094,6 +1137,51 @@ class RepositoryOrchestrator:
                 on_stream_end=on_stream_end,
             )
 
+    async def _list_downloaded_repositories(
+        self,
+        initial_messages: list[dict[str, Any]],
+    ) -> RepositoryTurnResult:
+        try:
+            records = await self.manager.list_all_cached_repositories()
+        except RepositoryError as exc:
+            return self._synthetic(
+                initial_messages,
+                f"列出已下载仓库失败：{exc}",
+                stop_reason="error",
+            )
+        if not records:
+            return self._synthetic(initial_messages, "当前没有已下载的仓库。")
+        lines = [f"- `{record.full_name}` → `{record.local_path}`" for record in records]
+        return self._synthetic(
+            initial_messages,
+            f"当前已下载 {len(records)} 个仓库：\n\n" + "\n".join(lines),
+        )
+
+    async def _list_all_vfs_repositories(
+        self,
+        initial_messages: list[dict[str, Any]],
+        runtime: LLMRuntime,
+    ) -> RepositoryTurnResult:
+        try:
+            records = await self.manager.list_vfs_repositories()
+        except RepositoryError as exc:
+            return self._synthetic(
+                initial_messages,
+                f"检索 VFS 项目失败：{exc}",
+                stop_reason="error",
+            )
+        if not records:
+            return self._synthetic(initial_messages, "VFS 文件夹下没有找到任何项目。")
+        unique: dict[str, str] = {}
+        for record in records:
+            unique.setdefault(record.full_name.casefold(), record.full_name)
+        names = sorted(unique.values(), key=str.casefold)
+        lines = [f"- `{name}`" for name in names]
+        return self._synthetic(
+            initial_messages,
+            f"VFS 下共找到 {len(names)} 个项目：\n\n" + "\n".join(lines),
+        )
+
     async def _run_scoped(
         self,
         *,
@@ -1107,6 +1195,8 @@ class RepositoryOrchestrator:
         on_stream: Callable[[str], Awaitable[None]] | None = None,
         on_stream_end: Callable[..., Awaitable[None]] | None = None,
     ) -> RepositoryTurnResult:
+        if self._REGET_COMMAND_RE.fullmatch(request.strip()):
+            return await self._list_all_vfs_repositories(initial_messages, runtime)
         research_command = self._RESEARCH_COMMAND_RE.fullmatch(request.strip())
         force_research = research_command is not None
         if research_command is not None:
@@ -1139,6 +1229,8 @@ class RepositoryOrchestrator:
                 + "；".join(risk.reasons),
                 stop_reason="policy_denied",
             )
+        if self.is_local_cache_list_request(request):
+            return await self._list_downloaded_repositories(initial_messages)
         if force_research or self.is_research_request(request):
             try:
                 task = await self.research.run(
