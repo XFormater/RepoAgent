@@ -7,12 +7,14 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import json
 from datetime import datetime
 from typing import Any, TypeVar
 
 from loguru import logger
 from pydantic import BaseModel
 
+from nanobot.harness.audit import payload_digest, redact_audit_value
 from nanobot.harness.models import (
     AgentInstance,
     AgentMessage,
@@ -54,6 +56,23 @@ CREATE TABLE IF NOT EXISTS harness_outbox (
   delivered_at timestamptz
 );
 CREATE INDEX IF NOT EXISTS harness_outbox_pending_idx ON harness_outbox(created_at) WHERE delivered_at IS NULL;
+CREATE TABLE IF NOT EXISTS harness_audit_events (
+  event_id bigserial PRIMARY KEY,
+  occurred_at timestamptz NOT NULL DEFAULT now(),
+  component text NOT NULL,
+  event_type text NOT NULL,
+  tenant_id text,
+  workflow_id text,
+  task_id text,
+  agent_id text,
+  session_key text,
+  trace_id text,
+  payload jsonb NOT NULL,
+  payload_sha256 text NOT NULL
+);
+CREATE INDEX IF NOT EXISTS harness_audit_trace_idx ON harness_audit_events(trace_id, event_id);
+CREATE INDEX IF NOT EXISTS harness_audit_workflow_idx ON harness_audit_events(workflow_id, event_id);
+CREATE INDEX IF NOT EXISTS harness_audit_session_idx ON harness_audit_events(session_key, event_id);
 ALTER TABLE harness_workflows ADD COLUMN IF NOT EXISTS tenant_id text NOT NULL DEFAULT 'default';
 ALTER TABLE harness_workflows ADD COLUMN IF NOT EXISTS scope_key text;
 ALTER TABLE harness_workflows ADD COLUMN IF NOT EXISTS version integer NOT NULL DEFAULT 1;
@@ -114,11 +133,32 @@ CREATE INDEX IF NOT EXISTS harness_workflows_retention_idx
   ON harness_workflows(tenant_id,state,created_at);
 """
 
+_MIGRATION_AUDIT_EVENTS = """
+CREATE TABLE IF NOT EXISTS harness_audit_events (
+  event_id bigserial PRIMARY KEY,
+  occurred_at timestamptz NOT NULL DEFAULT now(),
+  component text NOT NULL,
+  event_type text NOT NULL,
+  tenant_id text,
+  workflow_id text,
+  task_id text,
+  agent_id text,
+  session_key text,
+  trace_id text,
+  payload jsonb NOT NULL,
+  payload_sha256 text NOT NULL
+);
+CREATE INDEX IF NOT EXISTS harness_audit_trace_idx ON harness_audit_events(trace_id, event_id);
+CREATE INDEX IF NOT EXISTS harness_audit_workflow_idx ON harness_audit_events(workflow_id, event_id);
+CREATE INDEX IF NOT EXISTS harness_audit_session_idx ON harness_audit_events(session_key, event_id);
+"""
+
 _MIGRATIONS = (
     (1, _SCHEMA),
     (2, _MIGRATION_CONSTRAINTS),
     (3, _MIGRATION_SCHEDULING),
     (4, _MIGRATION_WORKFLOW_STATE),
+    (5, _MIGRATION_AUDIT_EVENTS),
 )
 
 
@@ -249,6 +289,42 @@ return 1
 
     def _mailbox_key(self, agent_id: str) -> str:
         return f"{self._prefix}:mailbox:{agent_id}"
+
+    async def record_audit_event(
+        self,
+        event_type: str,
+        *,
+        component: str,
+        tenant_id: str | None = None,
+        workflow_id: str | None = None,
+        task_id: str | None = None,
+        agent_id: str | None = None,
+        session_key: str | None = None,
+        trace_id: str | None = None,
+        payload: dict[str, Any] | None = None,
+    ) -> None:
+        """Append a redacted, durable audit event without mutating runtime state."""
+        value = redact_audit_value(payload or {})
+        if not isinstance(value, dict):  # defensive; redact_audit_value preserves mappings
+            raise TypeError("audit payload must be a mapping")
+        pool, _ = await self._clients()
+        async with pool.acquire() as connection:
+            await connection.execute(
+                """INSERT INTO harness_audit_events
+                     (component,event_type,tenant_id,workflow_id,task_id,agent_id,
+                      session_key,trace_id,payload,payload_sha256)
+                   VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9::jsonb,$10)""",
+                component,
+                event_type,
+                tenant_id,
+                workflow_id,
+                task_id,
+                agent_id,
+                session_key,
+                trace_id,
+                json.dumps(value, ensure_ascii=False, default=str),
+                payload_digest(value),
+            )
 
     @staticmethod
     def _mailbox_group() -> str:
@@ -664,6 +740,15 @@ return 1
                 message.model_dump_json(),
             )
         if row is not None and row["delivered_at"] is not None:
+            await self.record_audit_event(
+                "harness.mailbox.duplicate",
+                component="harness_mailbox",
+                tenant_id=message.tenant_id,
+                workflow_id=message.workflow_id,
+                task_id=message.task_id,
+                agent_id=message.sender_agent_id,
+                payload=message.model_dump(mode="json"),
+            )
             return False
         try:
             inserted = await self._deliver_message(redis, message)
@@ -678,6 +763,15 @@ return 1
                 message.idempotency_key,
                 exc,
             )
+            await self.record_audit_event(
+                "harness.outbox.deferred",
+                component="harness_mailbox",
+                tenant_id=message.tenant_id,
+                workflow_id=message.workflow_id,
+                task_id=message.task_id,
+                agent_id=message.sender_agent_id,
+                payload={"message": message.model_dump(mode="json"), "error": str(exc)},
+            )
             return True
         async with pool.acquire() as connection:
             await connection.execute(
@@ -685,6 +779,15 @@ return 1
                     WHERE idempotency_key=$1""",
                 message.idempotency_key,
             )
+        await self.record_audit_event(
+            "harness.outbox.delivered",
+            component="harness_mailbox",
+            tenant_id=message.tenant_id,
+            workflow_id=message.workflow_id,
+            task_id=message.task_id,
+            agent_id=message.sender_agent_id,
+            payload={"inserted": inserted, "message": message.model_dump(mode="json")},
+        )
         return inserted
 
     async def _deliver_message(self, redis: Any, message: AgentMessage) -> bool:
@@ -733,6 +836,15 @@ return 1
                         WHERE idempotency_key=$1""",
                     row["idempotency_key"],
                 )
+            await self.record_audit_event(
+                "harness.outbox.flushed",
+                component="harness_mailbox",
+                tenant_id=message.tenant_id,
+                workflow_id=message.workflow_id,
+                task_id=message.task_id,
+                agent_id=message.sender_agent_id,
+                payload={"message": message.model_dump(mode="json")},
+            )
             delivered += 1
         return delivered
 
@@ -798,6 +910,16 @@ return 1
         expired = [msg for msg in messages if msg not in valid]
         if expired:
             await self.ack_messages(agent_id, expired)
+        for message in valid:
+            await self.record_audit_event(
+                "harness.mailbox.claimed",
+                component="harness_mailbox",
+                tenant_id=message.tenant_id,
+                workflow_id=message.workflow_id,
+                task_id=message.task_id,
+                agent_id=agent_id,
+                payload={"consumer_id": consumer_id, "message": message.model_dump(mode="json")},
+            )
         return valid
 
     async def ack_messages(self, agent_id: str, messages: list[AgentMessage]) -> None:
@@ -806,6 +928,16 @@ return 1
             return
         _, redis = await self._clients()
         await redis.xack(self._mailbox_key(agent_id), self._mailbox_group(), *ids)
+        for message in messages:
+            await self.record_audit_event(
+                "harness.mailbox.acknowledged",
+                component="harness_mailbox",
+                tenant_id=message.tenant_id,
+                workflow_id=message.workflow_id,
+                task_id=message.task_id,
+                agent_id=agent_id,
+                payload={"delivery_id": message.delivery_id, "message_id": message.message_id},
+            )
 
     async def save_checkpoint(self, checkpoint: Checkpoint) -> None:
         pool, _ = await self._clients()

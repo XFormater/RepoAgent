@@ -280,24 +280,16 @@ class RepositoryResearchOrchestrator:
 
     @staticmethod
     def _native_search_queries(direction: str, queries: list[str]) -> list[str]:
-        lowered = direction.casefold()
-        anchors: list[str] = []
-        if (
-            "rag" in lowered
-            or "retrieval augmented generation" in lowered
-            or "retrieval-augmented generation" in lowered
-            or "检索增强" in direction
-            or "检索" in direction
-            or "向量" in direction
-        ):
-            anchors.extend(
-                [
-                    "RAGFlow LightRAG RAG-Anything retrieval augmented generation GitHub",
-                    "RAG retrieval augmented generation vector search framework GitHub",
-                ]
-            )
-        anchors.extend(f"site:github.com {query}" for query in queries)
-        return list(dict.fromkeys(anchors))[:4]
+        """Reuse only LLM-planned search corpus for native web discovery.
+
+        Static domain anchors contaminate an unrelated request whenever a
+        procedural word such as ``检索`` appears in it.  The query planner is
+        the sole component that translates the user's research direction into
+        searchable terminology; both GitHub Search and native web search must
+        consume that same bounded corpus.
+        """
+        del direction
+        return list(dict.fromkeys(query.strip() for query in queries if query.strip()))[:4]
 
     @classmethod
     def _github_repository_urls_from_text(cls, text: str) -> list[str]:
@@ -532,8 +524,10 @@ class RepositoryResearchOrchestrator:
                 candidates.extend(result)
         if not candidates:
             raise GitHubSearchError("；".join(errors) or "GitHub 搜索没有返回候选项目。")
-        all_queries = [*queries, *(f"web_search: {query}" for query in native_queries)]
-        return all_queries, self.rank_candidates(direction, all_queries, candidates)
+        # Native results are an additional candidate source, not additional
+        # relevance evidence. Ranking only against the LLM-planned corpus
+        # keeps source-specific wording from changing the user's intent.
+        return queries, self.rank_candidates(direction, queries, candidates)
 
     async def _dedup_and_fill(
         self,
@@ -724,6 +718,69 @@ class RepositoryResearchOrchestrator:
             logger.warning("Research synthesis failed; using deterministic report: {}", exc)
             return self._fallback_report(task)
 
+    async def enqueue_pool(
+        self,
+        *,
+        direction: str,
+        actor: str,
+        session_key: str,
+        tenant_id: str = "default",
+        trace_id: str | None = None,
+    ) -> RepositoryResearchTask:
+        """Create a durable POOL task; an independent Worker owns execution.
+
+        The Gateway intentionally does not execute discovery, cloning or source
+        analysis after this point.  The persisted research record is the
+        hand-off contract between the request process and the Worker process.
+        """
+        if self.harness is None:
+            raise RuntimeError("/rere requires the durable Harness backend")
+        from nanobot.harness import AgentRole, TaskExecutionMode
+
+        task = RepositoryResearchTask(
+            session_key=session_key,
+            actor=actor,
+            direction=direction.strip(),
+            trace_id=trace_id,
+        )
+        workflow, _owner = await self.harness.workflow(
+            scope_key=self.harness.research_scope(task.research_id),
+            goal=task.direction,
+            tenant_id=tenant_id,
+        )
+        task.workflow_id = workflow.workflow_id
+        self.store.save_research(task, event="repository_research.queued")
+        spec = self.harness.stage_spec(
+            name="research-pool-runner",
+            role=AgentRole.WORKER,
+            objective=(
+                "Run a bounded GitHub repository research workflow in an isolated "
+                "Worker process and return an evidence-backed report."
+            ),
+            tools=("repo_tree", "repo_search", "repo_read", "repo_git_history"),
+            max_iterations=max(4, self.research_config.analysis_iterations),
+        )
+        await self.harness.ensure_task(
+            workflow,
+            title="Run GitHub repository research",
+            task_input=task.direction,
+            metadata={
+                "domain": "repository_research",
+                "operation": "run",
+                "research_id": task.research_id,
+                "session_key": session_key,
+                "actor": actor,
+                "user_id": actor,
+                "tenant_id": tenant_id,
+                "trace_id": trace_id or "",
+            },
+            spec=spec,
+            idempotency_key=f"repository-research:run:{task.research_id}",
+            priority=100,
+            execution_mode=TaskExecutionMode.POOL,
+        )
+        return task
+
     async def run(
         self,
         *,
@@ -735,13 +792,16 @@ class RepositoryResearchOrchestrator:
         on_update: Callable[[str], Awaitable[None]] | None = None,
         on_report_stream: Callable[[str], Awaitable[None]] | None = None,
         on_report_stream_end: Callable[..., Awaitable[None]] | None = None,
+        existing_task: RepositoryResearchTask | None = None,
+        use_harness: bool = True,
     ) -> RepositoryResearchTask:
-        task = RepositoryResearchTask(
+        task = existing_task or RepositoryResearchTask(
             session_key=session_key,
             actor=actor,
             direction=direction.strip(),
         )
-        self.store.save_research(task, event="repository_research.created")
+        if existing_task is None:
+            self.store.save_research(task, event="repository_research.created")
         try:
             cache_root = self.manager.research_cache_root(session_key)
             cache_scope = (
@@ -760,6 +820,7 @@ class RepositoryResearchOrchestrator:
                     on_update=on_update,
                     on_report_stream=on_report_stream,
                     on_report_stream_end=on_report_stream_end,
+                    use_harness=use_harness,
                 )
         except asyncio.CancelledError:
             task.status = ResearchStatus.CANCELLED
@@ -782,8 +843,9 @@ class RepositoryResearchOrchestrator:
         on_update: Callable[..., Awaitable[None]] | None,
         on_report_stream: Callable[[str], Awaitable[None]] | None,
         on_report_stream_end: Callable[..., Awaitable[None]] | None,
+        use_harness: bool,
     ) -> RepositoryResearchTask:
-        harness = self.harness
+        harness = self.harness if use_harness else None
         harness_workflow = None
         harness_owner = None
         discovery_run: RepositoryHarnessRun | None = None

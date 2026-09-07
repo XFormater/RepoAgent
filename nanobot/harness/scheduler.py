@@ -33,6 +33,38 @@ class HarnessScheduler:
         self.metrics = metrics or HarnessMetrics()
         self.checkpoint_max_bytes = checkpoint_max_bytes
 
+    async def _audit_task(
+        self,
+        event_type: str,
+        task: Task,
+        *,
+        agent: AgentInstance | None = None,
+        lease: WorkerLease | None = None,
+        payload: dict[str, object] | None = None,
+    ) -> None:
+        metadata = task.metadata
+        trace_id = metadata.get("trace_id")
+        session_key = metadata.get("session_key")
+        await self.store.record_audit_event(
+            event_type,
+            component="harness_scheduler",
+            tenant_id=task.tenant_id,
+            workflow_id=task.workflow_id,
+            task_id=task.task_id,
+            agent_id=agent.instance_id if agent else task.assigned_agent_id,
+            session_key=session_key if isinstance(session_key, str) else None,
+            trace_id=trace_id if isinstance(trace_id, str) else None,
+            payload={
+                "state": task.state.value,
+                "attempt": task.attempt,
+                "title": task.title,
+                "metadata": metadata,
+                "lease_id": lease.lease_id if lease else task.lease_id,
+                "fencing_token": lease.fencing_token if lease else task.fencing_token,
+                **(payload or {}),
+            },
+        )
+
     async def ready_tasks(self, workflow_id: str) -> list[Task]:
         tasks = await self.store.list_tasks(workflow_id)
         succeeded = {task.task_id for task in tasks if task.state == TaskState.SUCCEEDED}
@@ -49,6 +81,7 @@ class HarnessScheduler:
                     task.state = TaskState.READY
                     task.updated_at = utcnow()
                     await self.store.put_task(task)
+                    await self._audit_task("harness.task.ready", task)
                 ready.append(task)
         return ready
 
@@ -89,6 +122,7 @@ class HarnessScheduler:
                     pass
             recovered += 1
             self.metrics.event("task.recovered")
+            await self._audit_task("harness.task.recovered", task, payload={"reason": task.error})
         return recovered
 
     @staticmethod
@@ -152,6 +186,13 @@ class HarnessScheduler:
                 pass
             raise
         self.metrics.event("task.assigned", role=spec.role.value)
+        await self._audit_task(
+            "harness.task.assigned",
+            task,
+            agent=agent,
+            lease=lease,
+            payload={"worker_id": worker_id, "role": spec.role.value},
+        )
         return lease
 
     async def heartbeat(self, lease: WorkerLease, ttl_seconds: int = 60) -> WorkerLease:
@@ -168,6 +209,10 @@ class HarnessScheduler:
             raise HarnessConflictError("worker lost an exclusive task resource")
         await self.store.update_lease(renewed)
         self.metrics.event("lease.heartbeat")
+        task = await self.store.get_task(lease.task_id)
+        await self._audit_task(
+            "harness.lease.heartbeat", task, lease=renewed, payload={"worker_id": renewed.worker_id}
+        )
         return renewed
 
     async def start(
@@ -182,6 +227,7 @@ class HarnessScheduler:
         task.updated_at = utcnow()
         await self.store.commit_task_agent(task, agent)
         self.metrics.event("task.started")
+        await self._audit_task("harness.task.started", task, agent=agent, lease=lease)
 
     async def checkpoint(
         self,
@@ -208,6 +254,14 @@ class HarnessScheduler:
             "checkpoint.saved",
             outcome="truncated" if truncated else "complete",
         )
+        task = await self.store.get_task(agent.current_task_id) if agent.current_task_id else None
+        if task is not None:
+            await self._audit_task(
+                "harness.checkpoint.saved",
+                task,
+                agent=agent,
+                payload={"checkpoint_id": checkpoint.checkpoint_id, "sequence": sequence},
+            )
         return checkpoint
 
     async def complete(
@@ -245,6 +299,13 @@ class HarnessScheduler:
         else:
             await self.ready_tasks(task.workflow_id)
         self.metrics.event("task.completed")
+        await self._audit_task(
+            "harness.task.completed",
+            task,
+            agent=agent,
+            lease=lease,
+            payload={"result": result, "outbox_message": result_message.model_dump(mode="json") if result_message else None},
+        )
 
     async def fail(
         self,
@@ -294,6 +355,13 @@ class HarnessScheduler:
             "task.failed",
             outcome="retry" if retrying else "dead_letter",
         )
+        await self._audit_task(
+            "harness.task.failed",
+            task,
+            agent=agent,
+            lease=lease,
+            payload={"error": error, "retrying": retrying},
+        )
         return task.state
 
     async def expire_deadlines(self, tenant_id: str, *, limit: int = 100) -> int:
@@ -318,6 +386,7 @@ class HarnessScheduler:
                 pass
             moved += 1
             self.metrics.event("task.dead_letter", outcome="deadline")
+            await self._audit_task("harness.task.dead_letter", task, payload={"reason": task.error})
         return moved
 
     async def cancel(
@@ -343,6 +412,7 @@ class HarnessScheduler:
         workflow.state = WorkflowState.CANCELLED
         await self.store.put_workflow(workflow)
         self.metrics.event("task.cancelled")
+        await self._audit_task("harness.task.cancelled", task, agent=agent, lease=lease)
 
     @staticmethod
     def _assert_fence(task: Task, agent: AgentInstance, lease: WorkerLease) -> None:

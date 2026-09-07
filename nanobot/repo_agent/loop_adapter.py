@@ -102,6 +102,11 @@ async def run_repository_turn(loop: AgentLoop, ctx: TurnContext) -> None:
         on_stream=ctx.on_stream,
         on_stream_end=ctx.on_stream_end,
         tenant_id=str(ctx.msg.metadata.get("tenant_id", "default")),
+        trace_id=(
+            str(ctx.msg.metadata["trace_id"])
+            if isinstance(ctx.msg.metadata.get("trace_id"), str)
+            else None
+        ),
     )
     ctx.final_content = result.final_content
     ctx.all_messages = result.messages

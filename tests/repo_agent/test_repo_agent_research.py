@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 
 from nanobot.agent.tools.registry import ToolRegistry
-from nanobot.harness import HarnessService, WorkflowState
+from nanobot.harness import HarnessService, TaskExecutionMode, WorkflowState
 from nanobot.providers.base import GenerationSettings, LLMProvider, LLMResponse
 from nanobot.repo_agent.agents import RepositoryControlClient
 from nanobot.repo_agent.config import RepositoryAgentConfig, RepositoryResearchConfig
@@ -81,6 +81,29 @@ def _research(tmp_path: Path) -> RepositoryResearchOrchestrator:
         tools=ToolRegistry(),
         client=RepositoryControlClient(),
     )
+
+
+@pytest.mark.asyncio
+async def test_research_enqueue_uses_durable_pool_task(tmp_path: Path) -> None:
+    research = _research(tmp_path)
+    service = HarnessService()
+    research.harness = RepositoryHarnessCoordinator(service)
+
+    queued = await research.enqueue_pool(
+        direction="分析两个 RAG 开源项目",
+        actor="user-a",
+        session_key="websocket:session-a",
+        tenant_id="tenant-a",
+        trace_id="trace-a",
+    )
+
+    assert queued.workflow_id is not None
+    tasks = await service.store.list_tasks(queued.workflow_id)
+    assert len(tasks) == 1
+    assert tasks[0].execution_mode is TaskExecutionMode.POOL
+    assert tasks[0].metadata["research_id"] == queued.research_id
+    assert tasks[0].metadata["trace_id"] == "trace-a"
+    assert research.store.load_research(queued.research_id) == queued
 
 
 def test_candidate_ranking_deduplicates_and_prefers_relevance(tmp_path: Path) -> None:
@@ -180,17 +203,16 @@ def test_query_sanitizer_treats_requested_count_as_selection_limit(
     )
 
 
-def test_native_search_queries_and_url_extraction_cover_rag_repository_recall() -> None:
+def test_native_search_queries_reuse_only_llm_planned_corpus() -> None:
     queries = RepositoryResearchOrchestrator._native_search_queries(
         "下载并分析2026年的3个高星RAG检索项目",
-        ["high star RAG retrieval projects"],
+        ["high star RAG retrieval projects", "RAG implementation Python"],
     )
 
-    assert queries[:2] == [
-        "RAGFlow LightRAG RAG-Anything retrieval augmented generation GitHub",
-        "RAG retrieval augmented generation vector search framework GitHub",
+    assert queries == [
+        "high star RAG retrieval projects",
+        "RAG implementation Python",
     ]
-    assert "site:github.com high star RAG retrieval projects" in queries
     assert RepositoryResearchOrchestrator._github_repository_urls_from_text(
         "1. RAGFlow https://github.com/infiniflow/ragflow\n"
         "2. topic https://github.com/topics/retrieval-augmented-generation\n"
@@ -268,10 +290,10 @@ async def test_discover_merges_native_web_search_repository_candidates(
         on_progress,
     )
 
-    assert any(query.startswith("web_search: ") for query in queries)
+    assert queries == ["RAG retrieval framework"]
     assert [candidate.full_name for candidate in candidates] == ["infiniflow/ragflow"]
     assert any("nanobot 原生 web_search" in update for update in updates)
-    web_search.execute.assert_awaited()
+    web_search.execute.assert_awaited_once_with(query="RAG retrieval framework", count=10)
 
 
 @pytest.mark.asyncio

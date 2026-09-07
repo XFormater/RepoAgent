@@ -336,6 +336,25 @@ class HarnessService:
         else:
             raise HarnessConflictError("could not attach task to workflow after CAS retries")
         self.metrics.event("task.created" if created else "task.reused", role=required_role.value)
+        trace_id = persisted.metadata.get("trace_id")
+        session_key = persisted.metadata.get("session_key")
+        await self.store.record_audit_event(
+            "harness.task.created" if created else "harness.task.reused",
+            component="harness_service",
+            tenant_id=persisted.tenant_id,
+            workflow_id=persisted.workflow_id,
+            task_id=persisted.task_id,
+            session_key=session_key if isinstance(session_key, str) else None,
+            trace_id=trace_id if isinstance(trace_id, str) else None,
+            payload={
+                "title": persisted.title,
+                "input": persisted.input,
+                "metadata": persisted.metadata,
+                "execution_mode": persisted.execution_mode.value,
+                "dependencies": sorted(persisted.dependencies),
+                "required_role": persisted.required_role.value,
+            },
+        )
         return persisted, created
 
     async def add_review_gate(
@@ -503,6 +522,15 @@ class HarnessService:
         )
         inserted = await self.store.send(message)
         self.metrics.event("message.sent", outcome="ok" if inserted else "duplicate")
+        await self.store.record_audit_event(
+            "harness.message.sent" if inserted else "harness.message.duplicate",
+            component="harness_service",
+            tenant_id=tenant_id,
+            workflow_id=workflow_id,
+            task_id=task_id,
+            agent_id=sender_agent_id,
+            payload=message.model_dump(mode="json"),
+        )
         return inserted
 
     async def complete_task(
@@ -678,10 +706,35 @@ class HarnessService:
             chars=len(context.render()),
             truncated=context.truncated,
         )
+        trace_id = task.metadata.get("trace_id")
+        session_key = task.metadata.get("session_key")
+        await self.store.record_audit_event(
+            "harness.context.projected",
+            component="harness_service",
+            tenant_id=task.tenant_id,
+            workflow_id=task.workflow_id,
+            task_id=task.task_id,
+            agent_id=agent.instance_id,
+            session_key=session_key if isinstance(session_key, str) else None,
+            trace_id=trace_id if isinstance(trace_id, str) else None,
+            payload={
+                "context": context.model_dump(mode="json"),
+                "message_ids": [message.message_id for message in context.messages],
+            },
+        )
         return context
 
     async def ack_context(self, context: RuntimeContext) -> None:
         await self.store.ack_messages(context.agent_id, context.messages)
+        await self.store.record_audit_event(
+            "harness.context.acknowledged",
+            component="harness_service",
+            tenant_id=context.tenant_id,
+            workflow_id=context.workflow_id,
+            task_id=context.task_id,
+            agent_id=context.agent_id,
+            payload={"message_ids": [message.message_id for message in context.messages]},
+        )
 
     async def flush_outbox(self, *, limit: int = 100) -> int:
         delivered = await self.store.flush_outbox(limit=limit)

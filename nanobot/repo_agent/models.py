@@ -112,6 +112,8 @@ class RepositoryResearchTask(BaseModel):
     session_key: str
     actor: str
     direction: str
+    workflow_id: str | None = None
+    trace_id: str | None = None
     queries: list[str] = Field(default_factory=list)
     candidates: list[GitHubRepositoryCandidate] = Field(default_factory=list)
     selected: list[GitHubRepositoryCandidate] = Field(default_factory=list)

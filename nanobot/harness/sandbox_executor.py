@@ -49,7 +49,12 @@ class HarnessProcessSandboxExecutor:
         self.project_root = Path(__file__).resolve().parents[2]
         self.settings = config.harness
 
-    def _sandbox_config(self, workspace: Path) -> dict[str, Any]:
+    def _sandbox_config(
+        self,
+        workspace: Path,
+        *,
+        repository_agent: bool = False,
+    ) -> dict[str, Any]:
         """Return the smallest config required by an isolated child runtime."""
         data = self.config.model_dump(mode="json", by_alias=True, exclude_none=True)
         # A child only needs the provider selected for this runtime. Never copy
@@ -88,6 +93,18 @@ class HarnessProcessSandboxExecutor:
         exec_config["allowedEnvKeys"] = []
         tools["exec"] = exec_config
 
+        # The child workspace is the checked-out repository, while the VFS
+        # repository cache remains rooted at the parent service workspace.
+        # Carry that root as an absolute path so repository read tools validate
+        # the mounted checkout against the real cache rather than resolving
+        # ``.nanobot/vfs`` relative to the child repository directory.
+        vfs = dict(data.get("vfs", {}))
+        if repository_agent:
+            configured_root = Path(str(vfs.get("root", ".nanobot/vfs"))).expanduser()
+            if not configured_root.is_absolute():
+                configured_root = self.config.workspace_path / configured_root
+            vfs["root"] = str(configured_root.resolve(strict=False))
+
         return {
             "agents": agents,
             "providers": data.get("providers", {}),
@@ -95,7 +112,16 @@ class HarnessProcessSandboxExecutor:
             "tools": tools,
             "memory": {"enabled": False},
             "harness": {"enabled": False, "backend": "memory"},
-            "repositoryAgent": {"enabled": False},
+            "vfs": vfs,
+            # Repository research analysis is read-only and its Harness
+            # AgentSpec allowlist remains enforced in the child. It is enabled
+            # only for a marked repository-research task so ordinary children
+            # retain the minimal tool catalog.
+            "repositoryAgent": (
+                data.get("repositoryAgent", {"enabled": False})
+                if repository_agent
+                else {"enabled": False}
+            ),
         }
 
     def _command(self, workspace: Path, config_path: Path) -> list[str]:
@@ -233,7 +259,15 @@ class HarnessProcessSandboxExecutor:
         with tempfile.TemporaryDirectory(prefix="github-research-agent-sandbox-") as raw_dir:
             config_path = Path(raw_dir) / "config.json"
             config_path.write_text(
-                json.dumps(self._sandbox_config(workspace), ensure_ascii=False),
+                json.dumps(
+                    self._sandbox_config(
+                        workspace,
+                        repository_agent=(
+                            context.task_metadata.get("domain") == "repository_research"
+                        ),
+                    ),
+                    ensure_ascii=False,
+                ),
                 encoding="utf-8",
             )
             config_path.chmod(0o600)

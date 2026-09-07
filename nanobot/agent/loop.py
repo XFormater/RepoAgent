@@ -480,6 +480,59 @@ class AgentLoop:
                 retention_days=(harness_settings.retention_days if harness_settings else 30),
             )
         self.harness = harness
+
+        async def _audit_bus_event(event_type: str, payload: dict[str, Any]) -> None:
+            await self.harness.store.record_audit_event(
+                event_type,
+                component="message_bus",
+                session_key=(
+                    str(payload["session_key"])
+                    if isinstance(payload.get("session_key"), str)
+                    else None
+                ),
+                trace_id=(
+                    str(payload["trace_id"])
+                    if isinstance(payload.get("trace_id"), str)
+                    else None
+                ),
+                payload=payload,
+            )
+
+        async def _audit_runtime_event(event: object) -> None:
+            event_context = getattr(event, "context", None)
+            metadata = getattr(event_context, "metadata", {}) if event_context is not None else {}
+            attributes = getattr(event_context, "attributes", {}) if event_context is not None else {}
+            payload = {
+                "event": type(event).__name__,
+                "channel": getattr(event_context, "channel", None),
+                "chat_id": getattr(event_context, "chat_id", None),
+                "session_key": getattr(event_context, "session_key", None),
+                "metadata": metadata,
+                "attributes": attributes,
+                "detail": {
+                    key: value
+                    for key, value in vars(event).items()
+                    if key != "context"
+                },
+            }
+            await self.harness.store.record_audit_event(
+                f"runtime.{type(event).__name__}",
+                component="runtime_event_bus",
+                session_key=(
+                    str(payload["session_key"])
+                    if isinstance(payload.get("session_key"), str)
+                    else None
+                ),
+                trace_id=(
+                    str(metadata["trace_id"])
+                    if isinstance(metadata, dict) and isinstance(metadata.get("trace_id"), str)
+                    else None
+                ),
+                payload=payload,
+            )
+
+        self.bus.set_audit_observer(_audit_bus_event)
+        self.runtime_events.subscribe(_audit_runtime_event)
         self.subagents = SubagentManager(
             workspace=workspace,
             bus=bus,

@@ -21,7 +21,7 @@ User session
 ```
 
 PostgreSQL is authoritative for AgentSpec, AgentInstance, Workflow, Task,
-Checkpoint and the durable message Outbox. Redis owns ephemeral coordination:
+Checkpoint, the durable message Outbox, and the append-only audit trail. Redis owns ephemeral coordination:
 Streams mailboxes, idempotency keys and expiring Worker leases.
 
 ## Logical VFS
@@ -81,6 +81,12 @@ Dynamic workflows are created unsealed. Completing the Planner or discovery stag
 not make the Workflow terminal while later Tasks are still being added. The orchestrator
 seals the DAG only after all expected Tasks exist; only a sealed all-successful Workflow
 may transition to `succeeded`.
+
+`/rere` is admitted as a `POOL` task. The Gateway persists the research request and
+returns its research/workflow IDs; the independently deployed `harness-worker` owns
+discovery, cloning, source analysis and synthesis. Repository source-analysis calls use
+the configured `bwrap` child backend when enabled. Query `/rere status <research-id>`
+to retrieve the persisted status or final report.
 
 ## Context isolation
 
@@ -211,7 +217,14 @@ performs the terminal-state check.
 
 The adapter bootstraps these tables idempotently on first connection:
 `harness_agent_specs`, `harness_agent_instances`, `harness_workflows`,
-`harness_tasks`, `harness_checkpoints`, and `harness_outbox`. The important constraints
+`harness_tasks`, `harness_checkpoints`, `harness_outbox`, and `harness_audit_events`.
+The audit table is append-only during normal maintenance and records redacted inbound/
+outbound bus payloads, runtime events, task lifecycle transitions, context projections,
+mailbox operations and repository-research progress. Use `trace_id`, `session_key`,
+`workflow_id`, and `task_id` together to reconstruct a full trace. Credential-shaped
+fields are redacted before storage; do not put secrets in prompts or task payloads.
+
+The important constraints
 are unique `(tenant_id, scope_key)` for a stable Supervisor, unique
 `(workflow_id, idempotency_key)` for Task replay, unique `(agent_id, sequence)` for
 checkpoints, and a primary-key idempotency key for Outbox delivery.

@@ -60,6 +60,22 @@ def test_sandbox_config_keeps_only_active_provider(tmp_path):
     }
 
 
+def test_repository_sandbox_keeps_parent_vfs_root_absolute(tmp_path):
+    project = tmp_path / "app"
+    config = Config.model_validate(
+        {
+            "agents": {"defaults": {"workspace": str(project)}},
+            "vfs": {"root": ".nanobot/vfs"},
+            "repositoryAgent": {"enabled": True},
+        }
+    )
+    executor = _executor(config, project)
+
+    isolated = executor._sandbox_config(project / "cache" / "owner" / "repo", repository_agent=True)
+
+    assert isolated["vfs"]["root"] == str((project / ".nanobot/vfs").resolve())
+
+
 def test_bwrap_command_isolates_process_and_mounts_only_task_workspace_rw(tmp_path):
     project = tmp_path / "app"
     workspace = project / "research" / "repo"

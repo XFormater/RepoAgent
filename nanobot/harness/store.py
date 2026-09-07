@@ -5,7 +5,7 @@ from __future__ import annotations
 import asyncio
 from collections import defaultdict
 from datetime import datetime
-from typing import Protocol
+from typing import Any, Protocol
 
 from nanobot.harness.models import (
     AgentInstance,
@@ -83,6 +83,19 @@ class HarnessStore(Protocol):
     async def release_resources(self, lease: WorkerLease) -> None: ...
     async def register_worker(self, worker: WorkerRegistration, *, ttl_seconds: int) -> None: ...
     async def list_workers(self, tenant_id: str, *, now: datetime) -> list[WorkerRegistration]: ...
+    async def record_audit_event(
+        self,
+        event_type: str,
+        *,
+        component: str,
+        tenant_id: str | None = None,
+        workflow_id: str | None = None,
+        task_id: str | None = None,
+        agent_id: str | None = None,
+        session_key: str | None = None,
+        trace_id: str | None = None,
+        payload: dict[str, Any] | None = None,
+    ) -> None: ...
     async def close(self) -> None: ...
 
 
@@ -102,6 +115,7 @@ class InMemoryHarnessStore:
         self.leases: dict[str, WorkerLease] = {}
         self.resource_leases: dict[str, tuple[str, datetime]] = {}
         self.workers: dict[str, WorkerRegistration] = {}
+        self.audit_events: list[dict[str, Any]] = []
         self._lock = asyncio.Lock()
 
     async def put_spec(self, spec: AgentSpec) -> None:
@@ -110,6 +124,39 @@ class InMemoryHarnessStore:
             if old is not None and old.version > spec.version:
                 raise HarnessConflictError("cannot replace an agent spec with an older version")
             self.specs[spec.spec_id] = spec
+
+    async def record_audit_event(
+        self,
+        event_type: str,
+        *,
+        component: str,
+        tenant_id: str | None = None,
+        workflow_id: str | None = None,
+        task_id: str | None = None,
+        agent_id: str | None = None,
+        session_key: str | None = None,
+        trace_id: str | None = None,
+        payload: dict[str, Any] | None = None,
+    ) -> None:
+        from nanobot.harness.audit import payload_digest, redact_audit_value
+
+        value = redact_audit_value(payload or {})
+        assert isinstance(value, dict)
+        async with self._lock:
+            self.audit_events.append(
+                {
+                    "event_type": event_type,
+                    "component": component,
+                    "tenant_id": tenant_id,
+                    "workflow_id": workflow_id,
+                    "task_id": task_id,
+                    "agent_id": agent_id,
+                    "session_key": session_key,
+                    "trace_id": trace_id,
+                    "payload": value,
+                    "payload_sha256": payload_digest(value),
+                }
+            )
 
     async def put_agent(self, agent: AgentInstance) -> None:
         async with self._lock:

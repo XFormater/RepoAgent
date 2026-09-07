@@ -1,0 +1,16 @@
+{
+  "research_id": "research_XFHrN339rWRG",
+  "session_key": "websocket:rere-pool-smoke-91d4054e5334",
+  "actor": "anon-1a53a3992d3d",
+  "direction": "检索并分析 GitHub 上一个轻量级 Python Markdown 文本分块开源仓库；只选择一个仓库，说明代码结构、核心入口与可复用设计。",
+  "workflow_id": "workflow_baadf8c240264777b89e2dd0f2f75927",
+  "trace_id": "27769e3411ad48bfb42da72190b2d374",
+  "queries": [],
+  "candidates": [],
+  "selected": [],
+  "analyses": [],
+  "status": "planning",
+  "report": null,
+  "created_at": "2026-09-07T08:36:46.941417Z",
+  "updated_at": "2026-09-07T08:36:46.984159Z"
+}

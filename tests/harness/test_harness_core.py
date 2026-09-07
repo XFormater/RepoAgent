@@ -3,6 +3,8 @@ from datetime import timedelta
 import pytest
 from pydantic import ValidationError
 
+from nanobot.bus.events import InboundMessage
+from nanobot.bus.queue import MessageBus
 from nanobot.harness import (
     AgentMessage,
     AgentRole,
@@ -39,6 +41,42 @@ def test_main_and_worker_roles_are_explicit_and_distinct():
     assert "delegate" not in worker.capabilities
     assert "spawn" not in worker.allowed_tools
     assert worker.context_policy.inherit_parent_messages == 0
+
+
+@pytest.mark.asyncio
+async def test_message_bus_audit_assigns_trace_and_records_lifecycle():
+    bus = MessageBus()
+    observed: list[tuple[str, dict[str, object]]] = []
+
+    async def audit(event_type: str, payload: dict[str, object]) -> None:
+        observed.append((event_type, payload))
+
+    bus.set_audit_observer(audit)
+    message = InboundMessage(channel="cli", sender_id="user", chat_id="chat", content="hello")
+    await bus.publish_inbound(message)
+    await bus.consume_inbound()
+
+    assert isinstance(message.metadata.get("trace_id"), str)
+    assert [item[0] for item in observed] == [
+        "bus.inbound.published",
+        "bus.inbound.consumed",
+    ]
+    assert observed[0][1]["content"] == "hello"
+
+
+@pytest.mark.asyncio
+async def test_durable_audit_redacts_credential_shaped_payloads():
+    service = HarnessService()
+    await service.store.record_audit_event(
+        "test.audit",
+        component="test",
+        payload={"api_key": "secret-value", "content": "Bearer abcdefghijklmnopqrst"},
+    )
+
+    event = service.store.audit_events[-1]
+    assert event["payload"]["api_key"] == "[REDACTED]"
+    assert "abcdefghijklmnopqrst" not in event["payload"]["content"]
+    assert len(event["payload_sha256"]) == 64
 
 
 def test_workflow_rejects_cycles():

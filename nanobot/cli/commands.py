@@ -336,6 +336,7 @@ def harness_worker(
     )
     from nanobot.harness.agent_executor import HarnessAgentExecutor
     from nanobot.harness.sandbox_executor import HarnessProcessSandboxExecutor
+    from nanobot.repo_agent.pool_executor import RepositoryResearchPoolExecutor
 
     runtime_config = _load_runtime_config(config, workspace)
     loop = AgentLoop.from_config(runtime_config, MessageBus())
@@ -347,11 +348,12 @@ def harness_worker(
         raise typer.Exit(1)
     resolved_worker_id = worker_id or f"{socket.gethostname()}-{uuid.uuid4().hex[:8]}"
     resolved_capacity = capacity or runtime_config.harness.worker_capacity
-    executor = (
+    fallback_executor = (
         HarnessProcessSandboxExecutor(loop, runtime_config)
         if runtime_config.harness.worker_execution_backend == "bwrap"
         else HarnessAgentExecutor(loop)
     )
+    executor = RepositoryResearchPoolExecutor(loop, fallback_executor)
 
     async def run() -> None:
         await loop._connect_mcp()

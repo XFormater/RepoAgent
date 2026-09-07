@@ -24,6 +24,9 @@ Rules:
 - Do not invent constraints the user did not request.
 - Optimize for diverse, source-inspectable candidate recall rather than a final
   recommendation based on popularity.
+- The returned phrases are used verbatim by both GitHub Search and nanobot's
+  native web search. Include every topical constraint needed for relevance;
+  no fixed domain anchors will be appended later.
 
 Research direction:
 {{ direction }}

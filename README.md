@@ -46,6 +46,7 @@
 | Connect Telegram, Discord, WeChat, Slack, Email, Mattermost, or another chat app | [Chat Apps](./docs/chat-apps.md) |
 | Configure providers, fallback models, Langfuse, MCP, web tools, or security | [Docs](./docs/README.md) and [Configuration](./docs/configuration.md) |
 | Understand or extend the internals | [Architecture](./docs/architecture.md) and [Development](./docs/development.md) |
+| Research GitHub implementations from cloned source evidence | [Repository Research](#-source-grounded-github-research) |
 | Deploy to the cloud or keep GitHubResearchAgent running as a service | [Deployment](./docs/deployment.md) |
 
 ## What can GitHubResearchAgent do?
@@ -67,9 +68,60 @@ candidate projects; downloaded source analysis provides the technical evidence.
 General research continues to use the web, local files, connected services, and
 other sources appropriate to the question.
 
+## 🔎 Source-grounded GitHub research
+
+`/rere` turns a natural-language technical direction into a bounded, auditable
+repository-research job. It is suited to requests such as “find one Python
+Markdown chunking implementation and explain the reusable design,” rather than
+repeating repository descriptions from search snippets.
+
+```text
+/rere 检索并源码分析一个 Python Markdown 文本分块仓库，说明入口、核心模块和可复用设计
+```
+
+The workflow is evidence-first:
+
+1. An LLM converts the user's constraints into a small English search corpus.
+   GitHub Search and native `web_search` use that corpus directly—no fixed topic
+   anchors are injected.
+2. The system ranks and selects a bounded set of candidates, then clones the
+   selected repositories into a user/task-scoped logical VFS.
+3. Read-only repository tools inspect the actual tree, files, code search results,
+   and Git history. Reports distinguish source-backed facts from search metadata
+   and explicitly record limitations.
+4. With the durable Harness enabled, the Gateway queues `/rere` immediately and
+   a separate POOL Worker owns discovery, download, analysis, synthesis, retries,
+   and recovery. Source-analysis calls can run again inside a `bwrap` process.
+
+Use `/rere status <research-id>` to retrieve the persisted state or final report.
+For reliable GitHub Search quotas, configure a read-only `GITHUB_TOKEN` in the
+service environment. See [Repository Agent](./docs/repository-agent.md) and
+[Production Multi-Agent Harness](./docs/multi-agent-harness.md) for the operating
+model and audit trail.
+
+## 🧩 Native runtime capabilities
+
+GitHubResearchAgent keeps the control plane self-hostable while offering native
+building blocks for broader agent work:
+
+- **Gateway and WebUI**: a WebSocket gateway, browser workbench, terminal mode,
+  chat-channel adapters, and an OpenAI-compatible API share one agent runtime.
+- **Native tools**: workspace-scoped file and coding tools, shell execution,
+  `web_search`, `web_fetch`, cron, image generation, and MCP integrations.
+- **Durable agent execution**: PostgreSQL/Redis-backed workflows, idempotent Tasks,
+  leases, retries, checkpoints, and a POOL Worker service for long-running work.
+- **Isolation and auditability**: task-scoped VFS namespaces, tool allowlists,
+  optional `bwrap` process isolation, and redacted append-only message/event audit
+  logs keyed by trace, workflow, task, and session IDs.
+- **Memory and orchestration**: persistent session history, long-term memory,
+  model presets/fallbacks, inline subagents, scheduled automations, and sustained
+  goals.
+
 ## 💡 Why GitHubResearchAgent
 
 - **Persistent workflows**: goals, memory, tools, and chat context survive long-running work.
+- **Source evidence over snippets**: repository research clones code and reports the
+  evidence path instead of treating GitHub search results as conclusions.
 - **Chat-native reach**: WebUI, API, Telegram, Feishu, Slack, Discord, Teams, email, and Mattermost.
 - **Model freedom**: OpenAI-compatible APIs, local LLMs, image generation, search, and fallbacks.
 - **Small core**: readable internals with MCP, memory, deployment, and automation built in.

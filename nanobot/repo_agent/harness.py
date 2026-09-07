@@ -62,11 +62,17 @@ class RepositoryHarnessCoordinator:
     def research_scope(research_id: str) -> str:
         return f"repository-research:{research_id}"
 
-    async def workflow(self, *, scope_key: str, goal: str) -> tuple[Workflow, AgentInstance]:
+    async def workflow(
+        self,
+        *,
+        scope_key: str,
+        goal: str,
+        tenant_id: str | None = None,
+    ) -> tuple[Workflow, AgentInstance]:
         workflow, owner, _ = await self.service.get_or_create_workflow(
             scope_key=scope_key,
             goal=goal,
-            tenant_id=self.tenant_id,
+            tenant_id=tenant_id or self.tenant_id,
             sealed=False,
         )
         return workflow, owner
@@ -155,7 +161,15 @@ class RepositoryHarnessCoordinator:
         resource_keys: frozenset[str] = frozenset(),
         review_target_task_id: str | None = None,
         priority: int = 0,
+        execution_mode: TaskExecutionMode = TaskExecutionMode.INLINE,
     ) -> Task:
+        # A POOL worker can be a separate process and therefore cannot rely on
+        # this coordinator's in-memory ``spec`` object.  Persist the selected
+        # domain spec id with the Task so the worker recreates an AgentInstance
+        # with the same capability boundary when it claims the work.
+        task_metadata = dict(metadata or {})
+        task_metadata.setdefault("agent_spec_id", spec.spec_id)
+        await self.service.register(spec)
         required_capabilities = {
             AgentRole.PLANNER: frozenset({"plan"}),
             AgentRole.REVIEWER: frozenset({"review", "verify"}),
@@ -165,8 +179,8 @@ class RepositoryHarnessCoordinator:
             workflow,
             title=title,
             task_input=task_input,
-            metadata=metadata,
-            execution_mode=TaskExecutionMode.INLINE,
+            metadata=task_metadata,
+            execution_mode=execution_mode,
             required_role=spec.role,
             required_capabilities=required_capabilities,
             dependencies=dependencies,

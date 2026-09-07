@@ -1105,6 +1105,7 @@ class RepositoryOrchestrator:
         on_stream: Callable[[str], Awaitable[None]] | None = None,
         on_stream_end: Callable[..., Awaitable[None]] | None = None,
         tenant_id: str = "default",
+        trace_id: str | None = None,
     ) -> RepositoryTurnResult:
         """Run one repository turn inside its user-scoped logical VFS."""
         if self.manager.vfs is None or not self.manager.vfs.enabled:
@@ -1118,6 +1119,8 @@ class RepositoryOrchestrator:
                 on_update=on_update,
                 on_stream=on_stream,
                 on_stream_end=on_stream_end,
+                tenant_id=tenant_id,
+                trace_id=trace_id,
             )
         identity = VFSIdentity(
             tenant_id=tenant_id,
@@ -1135,6 +1138,8 @@ class RepositoryOrchestrator:
                 on_update=on_update,
                 on_stream=on_stream,
                 on_stream_end=on_stream_end,
+                tenant_id=tenant_id,
+                trace_id=trace_id,
             )
 
     async def _list_downloaded_repositories(
@@ -1194,6 +1199,8 @@ class RepositoryOrchestrator:
         on_update: Callable[[str], Awaitable[None]] | None = None,
         on_stream: Callable[[str], Awaitable[None]] | None = None,
         on_stream_end: Callable[..., Awaitable[None]] | None = None,
+        tenant_id: str = "default",
+        trace_id: str | None = None,
     ) -> RepositoryTurnResult:
         if self._REGET_COMMAND_RE.fullmatch(request.strip()):
             return await self._list_all_vfs_repositories(initial_messages, runtime)
@@ -1206,6 +1213,21 @@ class RepositoryOrchestrator:
                     initial_messages,
                     "请在命令后提供研究需求，例如："
                     "`/rere 下载并分析 3 个自回归图像生成开源项目`。",
+                )
+            status_match = re.fullmatch(r"status\s+([A-Za-z0-9_-]{1,100})", request, re.IGNORECASE)
+            if status_match is not None:
+                task = self.store.load_research(status_match.group(1))
+                if task is None:
+                    return self._synthetic(initial_messages, "没有找到该研究任务。", stop_reason="error")
+                report = f"\n\n---\n\n{task.report.rstrip()}" if task.report else ""
+                return self._synthetic(
+                    initial_messages,
+                    f"研究任务：`{task.research_id}`\n\n"
+                    f"- 工作流：`{task.workflow_id or '未关联'}`\n"
+                    f"- 状态：`{task.status.value}`\n"
+                    f"- 已选仓库：{len(task.selected)}\n"
+                    f"- 已完成分析：{sum(1 for item in task.analyses if item.summary)}"
+                    f"{report}",
                 )
         command_result = await self._handle_command(
             request=request,
@@ -1233,15 +1255,12 @@ class RepositoryOrchestrator:
             return await self._list_downloaded_repositories(initial_messages)
         if force_research or self.is_research_request(request):
             try:
-                task = await self.research.run(
+                task = await self.research.enqueue_pool(
                     direction=request,
                     actor=actor,
                     session_key=session_key,
-                    runtime=runtime,
-                    invoke=invoke,
-                    on_update=on_update,
-                    on_report_stream=on_stream,
-                    on_report_stream_end=on_stream_end,
+                    tenant_id=tenant_id,
+                    trace_id=trace_id,
                 )
             except Exception as exc:
                 return self._synthetic(
@@ -1249,10 +1268,15 @@ class RepositoryOrchestrator:
                     f"GitHub 项目研究失败：{exc}",
                     stop_reason="error",
                 )
-            report = task.report or "研究流程已完成，但没有生成报告。"
+            if on_update:
+                await on_update("研究任务已进入独立 Worker 队列，Gateway 不再执行下载和分析。")
             return self._synthetic(
                 initial_messages,
-                f"{report.rstrip()}\n\n---\n研究任务：`{task.research_id}`"
+                "研究任务已提交到隔离的 Harness Worker。\n\n"
+                f"- 研究任务：`{task.research_id}`\n"
+                f"- 工作流：`{task.workflow_id}`\n"
+                "- 状态：`planning`（Worker 将执行发现、下载、源码分析和汇总）\n\n"
+                "可在后续会话中使用 `/rere status <研究任务ID>` 查询结果。"
             )
         url = self.manager.extract_url(request)
         record: RepositoryRecord | None

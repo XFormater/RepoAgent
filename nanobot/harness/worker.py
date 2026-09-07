@@ -23,7 +23,7 @@ from nanobot.harness.models import (
     WorkerState,
     utcnow,
 )
-from nanobot.harness.service import HarnessService
+from nanobot.harness.service import HarnessService, spec_for_role
 from nanobot.harness.store import HarnessConflictError
 
 TaskExecutor = Callable[[RuntimeContext, AgentSpec], Awaitable[str | ReviewResult]]
@@ -257,11 +257,21 @@ class HarnessPoolWorker:
     async def _execute_candidate(self, task: Task) -> bool:
         workflow = await self.service.store.get_workflow(task.workflow_id)
         supervisor = await self.service.store.get_agent(workflow.owner_agent_id)
-        agent = await self.service.spawn_agent(
-            workflow,
-            supervisor,
-            task.required_role,
+        spec_id = task.metadata.get("agent_spec_id")
+        spec = (
+            await self.service.store.get_spec(spec_id)
+            if isinstance(spec_id, str) and spec_id
+            else spec_for_role(task.required_role)
         )
+        if not self.service.scheduler.admits(spec, task):
+            logger.warning(
+                "Harness pool worker {} cannot admit task {} using spec {}",
+                self.worker_id,
+                task.task_id,
+                spec.spec_id,
+            )
+            return False
+        agent = await self.service.spawn_agent_from_spec(workflow, supervisor, spec)
         self._active_tasks.add(task.task_id)
         await self.heartbeat()
         try:

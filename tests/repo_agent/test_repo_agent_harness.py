@@ -3,6 +3,8 @@ from pathlib import Path
 import pytest
 
 from nanobot.harness import (
+    AgentRole,
+    HarnessPoolWorker,
     HarnessService,
     TaskExecutionMode,
     TaskState,
@@ -118,3 +120,43 @@ async def test_repository_plan_uses_shared_harness_dag_and_isolated_context(
 
     assert (await service.store.get_task(review_task.task_id)).state is TaskState.SUCCEEDED
     assert (await service.store.get_workflow(workflow.workflow_id)).state is WorkflowState.SUCCEEDED
+
+
+@pytest.mark.asyncio
+async def test_repository_pool_task_reuses_its_domain_agent_spec() -> None:
+    service = HarnessService()
+    coordinator = RepositoryHarnessCoordinator(service)
+    workflow, _ = await coordinator.workflow(
+        scope_key="repository-pool-spec",
+        goal="run repository research outside the gateway process",
+    )
+    spec = coordinator.stage_spec(
+        name="repository-research-pool",
+        role=AgentRole.WORKER,
+        objective="Analyze a repository with read-only tools.",
+        tools=("repo_tree", "repo_read"),
+    )
+    task = await coordinator.ensure_task(
+        workflow,
+        title="Research repository",
+        task_input="inspect one repository",
+        spec=spec,
+        idempotency_key="repository-pool-spec-task",
+        execution_mode=TaskExecutionMode.POOL,
+    )
+    assert task.metadata["agent_spec_id"] == spec.spec_id
+
+    async def executor(_context, _spec) -> str:
+        return "research complete"
+
+    pool = HarnessPoolWorker(
+        service=service,
+        worker_id="test-pool",
+        tenant_id="default",
+        roles=frozenset({AgentRole.WORKER}),
+        capabilities=frozenset({"repository"}),
+        executor=executor,
+        capacity=1,
+    )
+    assert await pool.run_batch() == 1
+    assert (await service.store.get_task(task.task_id)).state is TaskState.SUCCEEDED
