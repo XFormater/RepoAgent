@@ -16,6 +16,7 @@ from nanobot.repo_agent.models import (
     RepositoryRecord,
     RepositoryResearchTask,
     RepositoryTask,
+    ResearchStatus,
     TaskStatus,
     utc_now,
 )
@@ -131,6 +132,23 @@ class RepositoryStateStore:
         if not path.exists():
             return None
         return RepositoryResearchTask.model_validate_json(path.read_text(encoding="utf-8"))
+
+    def active_research(self, session_key: str) -> list[RepositoryResearchTask]:
+        """Return non-terminal research tasks for a session, newest first."""
+        active: list[RepositoryResearchTask] = []
+        for path in self.research_dir.glob("*.json"):
+            try:
+                task = RepositoryResearchTask.model_validate_json(path.read_text(encoding="utf-8"))
+            except Exception:
+                continue
+            if task.session_key == session_key and task.status not in {
+                ResearchStatus.COMPLETED,
+                ResearchStatus.PARTIAL,
+                ResearchStatus.FAILED,
+                ResearchStatus.CANCELLED,
+            }:
+                active.append(task)
+        return sorted(active, key=lambda item: item.updated_at, reverse=True)
 
     def load_task(self, task_id: str) -> RepositoryTask | None:
         path = self.task_dir / f"{self._safe_id(task_id)}.json"

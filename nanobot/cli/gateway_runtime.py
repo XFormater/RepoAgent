@@ -455,6 +455,14 @@ def _run_gateway(
         schedule_background=_schedule_webui_background,
     )
     webui_turn_coordinator.subscribe(runtime_events)
+    repository_progress_relay = None
+    if agent.repository_orchestrator is not None:
+        from nanobot.repo_agent.progress_relay import RepositoryResearchProgressRelay
+
+        repository_progress_relay = RepositoryResearchProgressRelay(
+            store=agent.harness.store,
+            bus=bus,
+        )
     from nanobot.bus.events import OutboundMessage
     from nanobot.session.keys import session_key_for_channel
 
@@ -935,6 +943,11 @@ def _run_gateway(
                     name="nanobot-local-triggers",
                 ),
             ]
+            if repository_progress_relay is not None:
+                tasks.append(asyncio.create_task(
+                    repository_progress_relay.run(),
+                    name="nanobot-repository-research-progress-relay",
+                ))
             if health_server_enabled:
                 tasks.append(asyncio.create_task(
                     _health_server(config.gateway.host, port),

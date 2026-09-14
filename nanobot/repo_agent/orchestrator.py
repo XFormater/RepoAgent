@@ -34,6 +34,7 @@ from nanobot.repo_agent.models import (
     RepositoryDeletionApproval,
     RepositoryRecord,
     RepositoryTask,
+    ResearchStatus,
     TaskComplexity,
     TaskStatus,
     utc_now,
@@ -60,6 +61,7 @@ class RepositoryTurnResult:
     had_injections: bool = False
     reset_provider_state: bool = False
     agent_ui: dict[str, Any] | None = None
+    deferred_to_worker: bool = False
 
 
 class RepositoryOrchestrator:
@@ -261,14 +263,20 @@ class RepositoryOrchestrator:
         *,
         stop_reason: str = "completed",
         agent_ui: dict[str, Any] | None = None,
+        deferred_to_worker: bool = False,
     ) -> RepositoryTurnResult:
         return RepositoryTurnResult(
             final_content=content,
             tools_used=[],
-            messages=[*initial_messages, {"role": "assistant", "content": content}],
+            messages=(
+                list(initial_messages)
+                if deferred_to_worker
+                else [*initial_messages, {"role": "assistant", "content": content}]
+            ),
             stop_reason=stop_reason,
             reset_provider_state=True,
             agent_ui=agent_ui,
+            deferred_to_worker=deferred_to_worker,
         )
 
     @staticmethod
@@ -288,6 +296,43 @@ class RepositoryOrchestrator:
 
     def close_session(self, session_key: str) -> None:
         self.store.clear_active_repository(session_key)
+
+    async def cancel_research(self, session_key: str, *, tenant_id: str = "default") -> int:
+        """Cancel active POOL research tasks owned by a WebSocket session."""
+        if self.harness is None:
+            return 0
+        cancelled = 0
+        for research in self.store.active_research(session_key):
+            harness_task_id = research.harness_task_id
+            # Recover the root task for records written by an older Gateway
+            # just before the explicit harness_task_id projection was added.
+            if not harness_task_id and research.workflow_id:
+                try:
+                    root = await self.harness.service.store.get_task_by_idempotency(
+                        research.workflow_id,
+                        f"repository-research:run:{research.research_id}",
+                    )
+                    harness_task_id = root.task_id if root is not None else None
+                except Exception:
+                    logger.exception(
+                        "Could not resolve Harness task for research {}",
+                        research.research_id,
+                    )
+            if not harness_task_id:
+                continue
+            try:
+                changed = await self.harness.service.cancel_task(
+                    harness_task_id,
+                    tenant_id=tenant_id,
+                )
+            except Exception:
+                logger.exception("Could not cancel research task {}", research.research_id)
+                continue
+            if changed:
+                research.status = ResearchStatus.CANCELLED
+                self.store.save_research(research, event="repository_research.cancelled")
+                cancelled += 1
+        return cancelled
 
     @staticmethod
     def _repository_summary(record: RepositoryRecord) -> str:
@@ -1272,11 +1317,8 @@ class RepositoryOrchestrator:
                 await on_update("研究任务已进入独立 Worker 队列，Gateway 不再执行下载和分析。")
             return self._synthetic(
                 initial_messages,
-                "研究任务已提交到隔离的 Harness Worker。\n\n"
-                f"- 研究任务：`{task.research_id}`\n"
-                f"- 工作流：`{task.workflow_id}`\n"
-                "- 状态：`planning`（Worker 将执行发现、下载、源码分析和汇总）\n\n"
-                "可在后续会话中使用 `/rere status <研究任务ID>` 查询结果。"
+                "",
+                deferred_to_worker=True,
             )
         url = self.manager.extract_url(request)
         record: RepositoryRecord | None

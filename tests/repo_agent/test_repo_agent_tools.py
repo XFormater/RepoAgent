@@ -87,6 +87,28 @@ async def test_repository_tools_allow_research_repository_cache(
 
 
 @pytest.mark.asyncio
+async def test_repository_read_supports_five_mb_files_in_segments(tmp_path: Path) -> None:
+    cache = tmp_path / "cache"
+    repo = cache / "owner" / "repo"
+    repo.mkdir(parents=True)
+    line = "x" * 1_000
+    target = repo / "large.py"
+    target.write_text("\n".join([line] * 3_100) + "\n", encoding="utf-8")
+    assert target.stat().st_size > 2 * 1024 * 1024
+    context = RequestContext(channel="cli", chat_id="chat", workspace=repo)
+
+    with request_context(context):
+        content = await RepositoryReadTool(cache).execute(
+            path="large.py",
+            start_line=2_500,
+            end_line=2_501,
+        )
+
+    assert content.startswith("2500|")
+    assert "2501|" in content
+
+
+@pytest.mark.asyncio
 async def test_repository_read_rejects_path_escape(tmp_path: Path) -> None:
     cache = tmp_path / "cache"
     repo = cache / "owner" / "repo"

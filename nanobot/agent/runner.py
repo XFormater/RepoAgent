@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import inspect
+import itertools
 import os
 from collections.abc import Awaitable, Callable, Iterable
 from copy import deepcopy
@@ -95,7 +96,7 @@ class AgentRunSpec:
     initial_messages: list[dict[str, Any]]
     tools: ToolRegistry
     runtime: LLMRuntime
-    max_iterations: int
+    max_iterations: int | None
     max_tool_result_chars: int
     hook: AgentHook | None = None
     error_message: str | None = _DEFAULT_ERROR_MESSAGE
@@ -482,7 +483,10 @@ class AgentRunner:
             inflight_start_index=len(spec.initial_messages),
         )
 
-        for iteration in range(spec.max_iterations):
+        iteration_range = (
+            itertools.count() if spec.max_iterations is None else range(spec.max_iterations)
+        )
+        for iteration in iteration_range:
             # Keep the persisted conversation untouched. Context governance
             # may repair or compact historical messages for the model, but
             # those synthetic edits must not shift the append boundary used
@@ -1253,7 +1257,7 @@ class AgentRunner:
             return None
 
         context = AgentHookContext(
-            iteration=spec.max_iterations,
+            iteration=spec.max_iterations or 0,
             messages=messages,
             response=response,
             usage=dict(raw_usage),
@@ -1291,14 +1295,15 @@ class AgentRunner:
 
     @staticmethod
     def _max_iterations_fallback(spec: AgentRunSpec) -> str:
+        limit = "unlimited" if spec.max_iterations is None else str(spec.max_iterations)
         if spec.max_iterations_message:
             return spec.max_iterations_message.format(
-                max_iterations=spec.max_iterations,
+                max_iterations=limit,
             )
         return render_template(
             "agent/max_iterations_message.md",
             strip=True,
-            max_iterations=spec.max_iterations,
+            max_iterations=limit,
         )
 
     def _usage_or_estimate(

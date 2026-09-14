@@ -17,6 +17,10 @@ from nanobot.agent.tools.base import Tool, ToolResult, tool_parameters
 from nanobot.agent.tools.context import current_request_context
 from nanobot.repo_agent.repository import RepositoryError, read_worktree_diff
 
+_MAX_REPOSITORY_READ_BYTES = 5 * 1024 * 1024
+_MAX_REPOSITORY_READ_LINES = 2_000
+_MAX_REPOSITORY_READ_OUTPUT_BYTES = 512 * 1024
+
 
 class _RepositoryTool(Tool):
     _plugin_discoverable = False
@@ -121,7 +125,10 @@ class RepositoryReadTool(_RepositoryTool):
 
     @property
     def description(self) -> str:
-        return "Read a UTF-8 source file with stable line numbers from the active repository."
+        return (
+            "Read a UTF-8 source file in line-numbered segments from the active repository. "
+            "Files up to 5 MB are supported; use start_line/end_line for successive segments."
+        )
 
     async def execute(
         self,
@@ -132,16 +139,43 @@ class RepositoryReadTool(_RepositoryTool):
         target = self._path(path)
         if not target.is_file():
             return ToolResult.error(f"File not found: {path}")
-        if target.stat().st_size > 2_000_000:
-            return ToolResult.error("File is larger than the 2 MB repository-read limit.")
+        size_bytes = target.stat().st_size
+        if size_bytes > _MAX_REPOSITORY_READ_BYTES:
+            return ToolResult.error(
+                "File is larger than the 5 MB repository-read limit; "
+                "use a smaller source file or preprocess it into segments."
+            )
         if end_line < start_line:
             return ToolResult.error("end_line must be greater than or equal to start_line")
-        lines = target.read_text(encoding="utf-8", errors="replace").splitlines()
-        selected = lines[start_line - 1 : min(end_line, start_line + 1999)]
-        return "\n".join(
-            f"{number}|{content}"
-            for number, content in enumerate(selected, start=start_line)
-        )
+        requested_end = min(end_line, start_line + _MAX_REPOSITORY_READ_LINES - 1)
+        rows: list[str] = []
+        output_bytes = 0
+        last_line = start_line - 1
+        truncated = False
+        with target.open("rb") as handle:
+            for number, raw_line in enumerate(handle, start=1):
+                if number < start_line:
+                    continue
+                if number > requested_end:
+                    break
+                content = raw_line.decode("utf-8", errors="replace").rstrip("\r\n")
+                row = f"{number}|{content}"
+                row_bytes = len(row.encode("utf-8")) + (1 if rows else 0)
+                if output_bytes + row_bytes > _MAX_REPOSITORY_READ_OUTPUT_BYTES:
+                    truncated = True
+                    break
+                rows.append(row)
+                output_bytes += row_bytes
+                last_line = number
+        if not rows:
+            return ""
+        output = "\n".join(rows)
+        if truncated or last_line < requested_end:
+            output += (
+                f"\n... segment truncated at line {last_line}; "
+                f"request start_line={last_line + 1} for the next segment"
+            )
+        return output
 
 
 @tool_parameters(

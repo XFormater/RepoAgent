@@ -326,6 +326,33 @@ return 1
                 payload_digest(value),
             )
 
+    async def latest_audit_event_id(self) -> int:
+        pool, _ = await self._clients()
+        async with pool.acquire() as connection:
+            return int(
+                await connection.fetchval("SELECT COALESCE(max(event_id), 0) FROM harness_audit_events")
+                or 0
+            )
+
+    async def list_audit_events_after(
+        self, event_id: int, *, event_types: frozenset[str], limit: int = 100
+    ) -> list[dict[str, Any]]:
+        if not event_types:
+            return []
+        pool, _ = await self._clients()
+        async with pool.acquire() as connection:
+            rows = await connection.fetch(
+                """SELECT event_id,event_type,tenant_id,workflow_id,task_id,agent_id,
+                          session_key,trace_id,payload
+                     FROM harness_audit_events
+                    WHERE event_id > $1 AND event_type = ANY($2::text[])
+                    ORDER BY event_id ASC LIMIT $3""",
+                event_id,
+                list(event_types),
+                limit,
+            )
+        return [dict(row) for row in rows]
+
     @staticmethod
     def _mailbox_group() -> str:
         return "agent-runtime"
@@ -975,6 +1002,17 @@ return 1
                 self._lease_key(lease.task_id), lease.model_dump_json(), px=ttl_ms, nx=True
             )
         )
+
+    async def get_lease(self, task_id: str) -> WorkerLease | None:
+        _, redis = await self._clients()
+        payload = await redis.get(self._lease_key(task_id))
+        if not payload:
+            return None
+        try:
+            return WorkerLease.model_validate_json(payload)
+        except Exception:
+            logger.warning("Discarding malformed Harness lease for task {}", task_id)
+            return None
 
     async def lease_active(self, task_id: str, *, now: datetime) -> bool:
         _, redis = await self._clients()

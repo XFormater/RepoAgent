@@ -27,7 +27,7 @@ async def run_repository_turn(loop: AgentLoop, ctx: TurnContext) -> None:
         *,
         runtime: LLMRuntime,
         tools: ToolRegistry,
-        max_iterations: int,
+        max_iterations: int | None,
         ephemeral: bool,
         stream: bool,
         workspace: Path,
@@ -113,5 +113,10 @@ async def run_repository_turn(loop: AgentLoop, ctx: TurnContext) -> None:
     ctx.stop_reason = result.stop_reason
     ctx.had_injections = result.had_injections
     ctx.agent_ui = result.agent_ui
+    # A /rere POOL turn returns immediately.  The Gateway-side durable-event
+    # relay owns all visible progress and the eventual report, so do not emit
+    # the legacy "task submitted" assistant message or persist an empty one.
+    if result.deferred_to_worker:
+        ctx.suppress_response = True
     if result.reset_provider_state and ctx.session is not None:
         ctx.session.provider_state = None

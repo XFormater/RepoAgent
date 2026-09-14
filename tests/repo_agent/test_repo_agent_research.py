@@ -125,7 +125,89 @@ def test_candidate_ranking_deduplicates_and_prefers_relevance(tmp_path: Path) ->
 
     assert [item.full_name for item in ranked].count("research/gnn-drug") == 1
     assert ranked[0].full_name == "research/gnn-drug"
-    assert ranked[0].relevance_score > ranked[1].relevance_score
+    assert all(item.full_name != "research/web-framework" for item in ranked)
+
+
+@pytest.mark.asyncio
+async def test_readme_selection_chooses_semantic_matches_before_download(
+    tmp_path: Path,
+) -> None:
+    research = _research(tmp_path)
+    candidates = [_candidate("first"), _candidate("second"), _candidate("third")]
+    research.github.readme = AsyncMock(  # type: ignore[method-assign]
+        side_effect=lambda candidate, **_: f"# {candidate.full_name}\nimage generation pipeline"
+    )
+    research.client.complete = AsyncMock(  # type: ignore[method-assign]
+        return_value=(
+            '{"selected": [{"full_name": "research/second", '
+            '"reason": "README describes the requested implementation"}, '
+            '{"full_name": "research/first", "reason": "README names the core method"}]}'
+        )
+    )
+
+    selected = await research.select_candidates_by_readme(
+        direction="image generation",
+        candidates=candidates,
+        selection_limit=2,
+        runtime=MagicMock(),
+    )
+
+    assert [candidate.full_name for candidate in selected] == [
+        "research/second",
+        "research/first",
+    ]
+    assert selected[0].selection_reason.startswith("README 语义筛选：")
+    prompt = research.client.complete.await_args.args[0]
+    assert "image generation pipeline" in prompt
+
+
+@pytest.mark.asyncio
+async def test_strict_ultrasound_gate_excludes_resource_lists(
+    tmp_path: Path,
+) -> None:
+    research = _research(tmp_path)
+    implementation = _candidate("ultrasound-reconstruction")
+    implementation.full_name = "lab/ultrasound-reconstruction"
+    implementation.url = "https://github.com/lab/ultrasound-reconstruction"
+    resource = _candidate("awesome-ultrasound")
+    resource.full_name = "lab/awesome-ultrasound"
+    resource.url = "https://github.com/lab/awesome-ultrasound"
+    readmes = {
+        implementation.full_name: """
+        # Ultrasound reconstruction implementation
+        ## Quickstart
+        pip install -e .
+        python reconstruct.py --input sample.rf
+        The beamforming and tomography modules reconstruct ultrasound images.
+        """,
+        resource.full_name: """
+        # Awesome ultrasound reconstruction
+        A curated collection list of papers, tools, and resources.
+        """,
+    }
+    research.github.readme = AsyncMock(  # type: ignore[method-assign]
+        side_effect=lambda candidate, **_: readmes[candidate.full_name]
+    )
+    research.client.complete = AsyncMock(  # type: ignore[method-assign]
+        return_value=(
+            '{"selected": [{"full_name": "lab/ultrasound-reconstruction", '
+            '"reason": "README contains a runnable reconstruction entry"}]}'
+        )
+    )
+
+    selected = await research.select_candidates_by_readme(
+        direction="下载并分析一个超声图像重建项目",
+        candidates=[implementation, resource],
+        selection_limit=1,
+        runtime=MagicMock(),
+    )
+
+    assert [candidate.full_name for candidate in selected] == [
+        "lab/ultrasound-reconstruction"
+    ]
+    assert resource.selection_reason.startswith("README 门槛淘汰：")
+    prompt = research.client.complete.await_args.args[0]
+    assert "lab/awesome-ultrasound" not in prompt
 
 
 def test_fallback_queries_use_explicit_repository_slugs(tmp_path: Path) -> None:

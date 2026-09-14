@@ -55,6 +55,14 @@ class RepositoryResearchPoolExecutor:
         task = orchestrator.store.load_research(research_id)
         if task is None:
             raise RuntimeError(f"repository research state {research_id!r} was not found")
+        attempt = 1
+        try:
+            harness_task = await self.loop.harness.store.get_task(context.task_id)
+            attempt = max(1, int(harness_task.attempt))
+        except Exception:
+            # The durable research record remains the source of truth if a
+            # custom HarnessStore does not expose task lookup.
+            pass
         actor = str(context.task_metadata.get("actor") or task.actor)
         session_key = str(context.task_metadata.get("session_key") or task.session_key)
         tenant_id = str(context.task_metadata.get("tenant_id") or context.tenant_id)
@@ -69,7 +77,34 @@ class RepositoryResearchPoolExecutor:
                 agent_id=context.agent_id,
                 session_key=session_key,
                 trace_id=task.trace_id,
-                payload={"content": content, "detail": detail},
+                payload={
+                    "research_id": task.research_id,
+                    "status": task.status.value,
+                    "content": content,
+                    "detail": detail,
+                    "attempt": attempt,
+                },
+            )
+
+        async def on_report_stream(content: str) -> None:
+            """Persist synthesis deltas so Gateway can relay them immediately."""
+            if not content:
+                return
+            await self.loop.harness.store.record_audit_event(
+                "repository_research.report_delta",
+                component="repository_research_worker",
+                tenant_id=tenant_id,
+                workflow_id=context.workflow_id,
+                task_id=context.task_id,
+                agent_id=context.agent_id,
+                session_key=session_key,
+                trace_id=task.trace_id,
+                payload={
+                    "research_id": task.research_id,
+                    "status": task.status.value,
+                    "content": content,
+                    "attempt": attempt,
+                },
             )
 
         identity = VFSIdentity(
@@ -82,6 +117,11 @@ class RepositoryResearchPoolExecutor:
         manager = orchestrator.manager
         vfs_scope = manager.vfs.bind(identity) if manager.vfs and manager.vfs.enabled else nullcontext()
         with vfs_scope, manager.bind_vfs_identity(identity):
+            if attempt > 1:
+                await on_update(
+                    f"上一轮研究尝试未完成；Worker 正在进行第 {attempt} 次尝试，"
+                    "将重新检索并分析候选仓库。"
+                )
             result = await orchestrator.research.run(
                 direction=task.direction,
                 actor=actor,
@@ -94,6 +134,7 @@ class RepositoryResearchPoolExecutor:
                     **kwargs,
                 ),
                 on_update=on_update,
+                on_report_stream=on_report_stream,
                 existing_task=task,
                 use_harness=False,
             )
@@ -117,7 +158,7 @@ class RepositoryResearchPoolExecutor:
         *,
         runtime: LLMRuntime,
         tools: ToolRegistry,
-        max_iterations: int,
+        max_iterations: int | None,
         ephemeral: bool,
         stream: bool,
         workspace: Path,

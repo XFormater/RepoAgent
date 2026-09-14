@@ -119,7 +119,9 @@ class RepositoryResearchConfig(Base):
     max_repositories: int = Field(default=5, ge=1, le=20)
     max_concurrent_downloads: int = Field(default=3, ge=1, le=10)
     max_concurrent_analyses: int = Field(default=2, ge=1, le=10)
-    analysis_iterations: int = Field(default=5, ge=1, le=15)
+    # None deliberately means no agent-iteration ceiling for source analysis.
+    # Runtime, cancellation and provider limits remain independent safeguards.
+    analysis_iterations: int | None = Field(default=None, ge=1)
     minimum_stars: int = Field(default=0, ge=0)
     require_license: bool = False
     github_token_env: str = "GITHUB_TOKEN"

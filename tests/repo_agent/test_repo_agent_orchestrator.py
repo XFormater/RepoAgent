@@ -86,14 +86,14 @@ def test_explicit_research_command_always_routes_to_repository_orchestrator(
 
 
 @pytest.mark.asyncio
-async def test_explicit_research_command_forces_workflow_execution(tmp_path: Path) -> None:
+async def test_explicit_research_command_defers_execution_to_pool_worker(tmp_path: Path) -> None:
     orchestrator = RepositoryOrchestrator(
         config=RepositoryAgentConfig(enabled=True),
         workspace=tmp_path,
         tools=ToolRegistry(),
     )
-    task = MagicMock(report="forced report", research_id="research-forced")
-    orchestrator.research.run = AsyncMock(return_value=task)  # type: ignore[method-assign]
+    task = MagicMock(research_id="research-forced", workflow_id="workflow-forced")
+    orchestrator.research.enqueue_pool = AsyncMock(return_value=task)  # type: ignore[method-assign]
 
     result = await orchestrator._run_scoped(
         request="/rere 分析三个指定候选",
@@ -104,8 +104,9 @@ async def test_explicit_research_command_forces_workflow_execution(tmp_path: Pat
         invoke=AsyncMock(),
     )
 
-    assert "forced report" in result.final_content
-    assert orchestrator.research.run.await_args.kwargs["direction"] == "分析三个指定候选"
+    assert result.final_content == ""
+    assert result.deferred_to_worker is True
+    assert orchestrator.research.enqueue_pool.await_args.kwargs["direction"] == "分析三个指定候选"
 
 
 def _git(cwd: Path, *args: str) -> str:

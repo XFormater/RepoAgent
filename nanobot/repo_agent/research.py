@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import asyncio
+import base64
 import json
-import math
 import os
 import re
 from collections.abc import Awaitable, Callable
@@ -43,11 +43,117 @@ class GitHubSearchError(RuntimeError):
     pass
 
 
+_ULTRASOUND_TERMS = (
+    "ultrasound",
+    "ultrasonic",
+    "ultrasonography",
+    "sonography",
+    "超声",
+)
+_RECONSTRUCTION_TERMS = (
+    "image reconstruction",
+    "reconstruction",
+    "beamforming",
+    "tomography",
+    "inverse imaging",
+    "reconstruct",
+    "重建",
+)
+_IMPLEMENTATION_TERMS = (
+    "pip install",
+    "conda install",
+    "uv pip",
+    "git clone",
+    "requirements.txt",
+    "setup.py",
+    "pyproject.toml",
+    "python ",
+    "python3",
+    "matlab",
+    "cuda",
+    "jupyter",
+    "quickstart",
+    "quick start",
+    "implementation",
+    "implementations",
+    "library",
+    "toolbox",
+    "framework",
+    "source code",
+    "sample data",
+    "example code",
+    "implemented in",
+    ".py",
+    ".m",
+    "/python/",
+    "/matlab/",
+)
+_RESOURCE_LIST_TERMS = (
+    "awesome",
+    "curated list",
+    "curated collection",
+    "collection list",
+    "list of tools",
+    "paper list",
+    "bibliography",
+    "survey",
+    "resource collection",
+    "resources",
+    "daily paper",
+    "literature review",
+    "collection of book",
+    "source code collection",
+)
+
+
+def _matching_terms(text: str, terms: tuple[str, ...]) -> list[str]:
+    lowered = text.casefold()
+    return [term for term in terms if term.casefold() in lowered]
+
+
+def _readme_implementation_gate(
+    candidate: GitHubRepositoryCandidate,
+    readme: str,
+) -> tuple[bool, str, dict[str, list[str]]]:
+    """Reject resource lists before semantic selection.
+
+    The GitHub Search API can match a README mention without returning the
+    matching context.  This gate restores that context and requires both the
+    requested modality/task and concrete source-code evidence.
+    """
+    metadata = " ".join(
+        [candidate.full_name, candidate.description, candidate.language or "", *candidate.topics]
+    )
+    evidence = " ".join([metadata, readme])
+    modality = _matching_terms(evidence, _ULTRASOUND_TERMS)
+    task = _matching_terms(evidence, _RECONSTRUCTION_TERMS)
+    implementation = _matching_terms(evidence, _IMPLEMENTATION_TERMS)
+    normalized_intro = re.sub(r"\s+", " ", evidence[:1_200]).casefold()
+    list_title = any(marker in normalized_intro for marker in _RESOURCE_LIST_TERMS)
+    dataset_only = "dataset" in normalized_intro and len(implementation) < 3
+    signals = {
+        "modality": modality,
+        "task": task,
+        "implementation": implementation,
+        "resource": _matching_terms(evidence, _RESOURCE_LIST_TERMS),
+    }
+    if not modality:
+        return False, "缺少超声模态证据", signals
+    if not task:
+        return False, "缺少图像重建/波束形成/断层成像任务证据", signals
+    if list_title or dataset_only:
+        return False, "资源/论文/数据集汇总仓库，缺少明确的实现主体", signals
+    if len(implementation) < 2:
+        return False, "缺少足够的源码运行、安装或入口证据", signals
+    return True, "通过超声模态、重建任务和源码实现证据门槛", signals
+
+
 class GitHubRepositorySearch:
     """Small, read-only client for GitHub's repository Search API."""
 
     api_url = "https://api.github.com/search/repositories"
     repository_api_url = "https://api.github.com/repos/{owner}/{name}"
+    readme_api_url = "https://api.github.com/repos/{owner}/{name}/readme"
 
     def __init__(self, config: RepositoryAgentConfig):
         self.config = config.research
@@ -182,6 +288,59 @@ class GitHubRepositorySearch:
         if candidate is None:
             raise GitHubSearchError("GitHub 仓库元数据缺少必要字段。")
         return candidate
+
+    async def readme(
+        self,
+        candidate: GitHubRepositoryCandidate,
+        *,
+        max_chars: int = 12_000,
+    ) -> str:
+        """Fetch a bounded README excerpt without cloning the repository.
+
+        README content is used only as semantic evidence for the second-stage
+        candidate selector.  It is deliberately bounded because it is
+        untrusted repository text and must not consume the whole model context.
+        """
+        parts = candidate.full_name.split("/", 1)
+        if len(parts) != 2:
+            raise GitHubSearchError(f"无效的 GitHub 仓库名称：{candidate.full_name}")
+        owner, name = parts
+        try:
+            async with httpx.AsyncClient(
+                timeout=self.config.request_timeout_seconds,
+                follow_redirects=False,
+                transport=PinnedDNSAsyncTransport(),
+            ) as client:
+                response = await client.get(
+                    self.readme_api_url.format(owner=owner, name=name),
+                    headers={
+                        **self._headers(),
+                        "Accept": "application/vnd.github+json",
+                    },
+                )
+        except httpx.HTTPError as exc:
+            raise GitHubSearchError(f"GitHub README 请求失败：{exc}") from exc
+        if response.status_code == 404:
+            return ""
+        if response.status_code != 200:
+            detail = response.text[:300]
+            raise GitHubSearchError(
+                f"GitHub README 获取失败（HTTP {response.status_code}）：{detail}"
+            )
+        payload_value: object = response.json()
+        if not isinstance(payload_value, dict):
+            return ""
+        payload = cast(dict[str, Any], payload_value)
+        content = payload.get("content")
+        if not isinstance(content, str):
+            return ""
+        try:
+            decoded = base64.b64decode(content.encode("ascii"), validate=False)
+            text = decoded.decode("utf-8", errors="replace")
+        except (ValueError, UnicodeError):
+            return ""
+        text = re.sub(r"\r\n?", "\n", text).strip()
+        return text[:max_chars]
 
 
 class RepositoryResearchOrchestrator:
@@ -363,6 +522,35 @@ class RepositoryResearchOrchestrator:
         stripped = re.sub(pattern, " ", query, flags=re.IGNORECASE)
         return re.sub(r"\s+", " ", stripped).strip(" -_,")
 
+    @staticmethod
+    def _constrain_queries(direction: str, queries: list[str]) -> list[str]:
+        """Keep modality/task constraints in every query for imaging requests."""
+        lowered = direction.casefold()
+        ultrasound_request = any(term in lowered for term in ("超声", "ultrasound", "ultrasonic"))
+        reconstruction_request = any(
+            term in lowered
+            for term in ("重建", "reconstruction", "beamforming", "tomography")
+        )
+        if not (ultrasound_request and reconstruction_request):
+            return queries
+        strict_defaults = [
+            "ultrasound image reconstruction implementation",
+            "ultrasound beamforming reconstruction code",
+            "ultrasound tomography reconstruction python",
+            "ultrasonic inverse imaging reconstruction",
+        ]
+        constrained: list[str] = []
+        for query in queries:
+            value = query.strip()
+            value_lower = value.casefold()
+            if not any(term in value_lower for term in _ULTRASOUND_TERMS if term.isascii()):
+                value = f"ultrasound {value}"
+            if not any(term in value.casefold() for term in _RECONSTRUCTION_TERMS if term.isascii()):
+                value = f"{value} reconstruction"
+            constrained.append(re.sub(r"\s+", " ", value).strip())
+        constrained.extend(strict_defaults)
+        return list(dict.fromkeys(constrained))[:4]
+
     async def expand_queries(
         self,
         direction: str,
@@ -392,7 +580,10 @@ class RepositoryResearchOrchestrator:
                 for value in cast(list[object], values)
                 if str(value).strip()
             ][:4]
-            return list(dict.fromkeys(queries)) or self._fallback_queries(direction)
+            return self._constrain_queries(
+                direction,
+                list(dict.fromkeys(queries)) or self._fallback_queries(direction),
+            )
         except Exception as exc:
             logger.warning("Research query expansion failed; using direction verbatim: {}", exc)
             return self._fallback_queries(direction)
@@ -450,6 +641,8 @@ class RepositoryResearchOrchestrator:
         direction: str,
         queries: list[str],
         candidates: list[GitHubRepositoryCandidate],
+        *,
+        limit: int | None = None,
     ) -> list[GitHubRepositoryCandidate]:
         terms = self._terms(direction, queries)
         unique: dict[str, GitHubRepositoryCandidate] = {}
@@ -473,37 +666,33 @@ class RepositoryResearchOrchestrator:
                 ]
             ).casefold()
             matched = sorted(term for term in terms if term in haystack)
-            relevance = len(matched) / max(1, len(terms))
-            popularity = min(1.0, math.log10(candidate.stars + 1) / 5)
-            freshness = 0.0
-            if candidate.updated_at is not None:
-                age_days = max(
-                    0.0,
-                    (datetime.now(candidate.updated_at.tzinfo) - candidate.updated_at).days,
-                )
-                freshness = max(0.0, 1.0 - age_days / 1825)
-            license_bonus = 0.05 if candidate.license else 0.0
-            candidate.relevance_score = round(
-                0.65 * relevance + 0.2 * popularity + 0.1 * freshness + license_bonus,
-                4,
-            )
+            key_relevance = len(matched) / max(1, len(terms))
+            if key_relevance <= 0:
+                # A popularity-only result is not a research candidate. If
+                # discovery cannot find enough relevant repositories, return
+                # fewer candidates instead of silently filling with unrelated
+                # high-star projects.
+                continue
+            # Candidate selection is relevance-first by design. Stars,
+            # freshness and license metadata are retained for display only;
+            # they must never allow an unrelated repository to outrank a
+            # technically relevant implementation.
+            candidate.relevance_score = round(key_relevance, 4)
             candidate.selection_reason = (
                 f"匹配关键词：{', '.join(matched[:8]) or '由 GitHub 搜索召回'}；"
                 f"stars={candidate.stars}；"
                 f"license={candidate.license or '未声明'}"
             )
             ranked.append(candidate)
-        ranked.sort(
-            key=lambda value: (value.relevance_score, value.stars, value.forks),
-            reverse=True,
-        )
-        return ranked[: self.research_config.max_candidates]
+        ranked.sort(key=lambda value: value.relevance_score, reverse=True)
+        return ranked[: limit or self.research_config.max_candidates]
 
     async def discover(
         self,
         direction: str,
         runtime: LLMRuntime,
         on_progress: Callable[..., Awaitable[None]] | None = None,
+        candidate_limit: int | None = None,
     ) -> tuple[list[str], list[GitHubRepositoryCandidate]]:
         queries = await self.expand_queries(direction, runtime, on_progress)
         native_queries, native_candidates = await self.native_web_discover(
@@ -527,11 +716,17 @@ class RepositoryResearchOrchestrator:
         # Native results are an additional candidate source, not additional
         # relevance evidence. Ranking only against the LLM-planned corpus
         # keeps source-specific wording from changing the user's intent.
-        return queries, self.rank_candidates(direction, queries, candidates)
+        return queries, self.rank_candidates(
+            direction,
+            queries,
+            candidates,
+            limit=candidate_limit,
+        )
 
     async def _dedup_and_fill(
         self,
         direction: str,
+        queries: list[str],
         candidates: list[GitHubRepositoryCandidate],
         runtime: LLMRuntime,
         target: int,
@@ -581,9 +776,170 @@ class RepositoryResearchOrchestrator:
             for candidate in fresh:
                 seen.add(candidate.full_name.casefold())
             candidates.extend(fresh)
-            candidates = self.rank_candidates(direction, [], candidates)
+            candidates = self.rank_candidates(
+                direction,
+                queries,
+                candidates,
+                limit=target,
+            )
             rounds += 1
         return candidates
+
+    async def select_candidates_by_readme(
+        self,
+        *,
+        direction: str,
+        candidates: list[GitHubRepositoryCandidate],
+        selection_limit: int,
+        runtime: LLMRuntime,
+        on_progress: Callable[..., Awaitable[None]] | None = None,
+    ) -> list[GitHubRepositoryCandidate]:
+        """Use README evidence to choose the final n repositories.
+
+        The search/ranking stage intentionally remains deterministic and
+        recall-oriented.  This stage is the only place where the model makes
+        a semantic choice among the 5n recalled projects.
+        """
+        if selection_limit <= 0 or not candidates:
+            return []
+        strict_implementation_request = (
+            any(term in direction.casefold() for term in ("超声", "ultrasound", "ultrasonic"))
+            and any(
+                term in direction.casefold()
+                for term in ("重建", "reconstruction", "beamforming", "tomography")
+            )
+        )
+        if len(candidates) <= selection_limit and not strict_implementation_request:
+            for candidate in candidates:
+                candidate.selection_reason = (
+                    candidate.selection_reason
+                    or "候选池不足 5n，按检索相关性直接保留。"
+                )
+            return candidates[:selection_limit]
+        if on_progress:
+            await on_progress(
+                f"正在读取 {len(candidates)} 个候选项目的 README，交给大模型筛选 {selection_limit} 个…"
+            )
+
+        async def fetch(candidate: GitHubRepositoryCandidate) -> tuple[GitHubRepositoryCandidate, str]:
+            try:
+                # Keep the aggregate selector prompt bounded when 5n is large;
+                # the excerpt still contains the README's purpose, methods and
+                # usage sections in the overwhelming majority of repositories.
+                return candidate, await self.github.readme(candidate, max_chars=6_000)
+            except Exception as exc:
+                logger.warning("README fetch failed for {}: {}", candidate.full_name, exc)
+                return candidate, ""
+
+        readme_results = await asyncio.gather(*(fetch(candidate) for candidate in candidates))
+        gate_results: dict[str, tuple[bool, str, dict[str, list[str]]]] = {}
+        has_readme_evidence = any(readme.strip() for _, readme in readme_results)
+        eligible_candidates: list[GitHubRepositoryCandidate] = []
+        for candidate, readme in readme_results:
+            gate_results[candidate.full_name.casefold()] = _readme_implementation_gate(
+                candidate,
+                readme,
+            )
+            accepted, reason, _signals = gate_results[candidate.full_name.casefold()]
+            if accepted:
+                eligible_candidates.append(candidate)
+            else:
+                candidate.selection_reason = f"README 门槛淘汰：{reason}"
+        if strict_implementation_request and has_readme_evidence:
+            candidates_for_selection = eligible_candidates
+            if on_progress:
+                await on_progress(
+                    f"README 实现门槛保留 {len(candidates_for_selection)}/{len(candidates)} 个候选，"
+                    f"再由大模型选择最多 {selection_limit} 个…"
+                )
+        else:
+            # If every README request failed, retain the metadata-ranked pool
+            # as an explicit availability fallback rather than pretending the
+            # implementation gate produced evidence.
+            candidates_for_selection = candidates
+        if not candidates_for_selection:
+            return []
+        effective_selection_limit = min(selection_limit, len(candidates_for_selection))
+        evidence = [
+            {
+                "full_name": candidate.full_name,
+                "url": candidate.url,
+                "description": candidate.description,
+                "language": candidate.language,
+                "topics": candidate.topics,
+                "stars": candidate.stars,
+                "license": candidate.license,
+                "relevance_score": candidate.relevance_score,
+                "readme_excerpt": readme,
+                "implementation_gate": gate_results.get(
+                    candidate.full_name.casefold(),
+                    (True, "README 不可用，使用元数据兜底", {}),
+                )[1],
+            }
+            for candidate, readme in readme_results
+            if candidate in candidates_for_selection
+        ]
+        try:
+            raw = await self.client.complete(
+                render_template(
+                    "repo_agent/research_selection.md",
+                    direction=direction,
+                    selection_count=effective_selection_limit,
+                    candidate_count=len(candidates_for_selection),
+                    candidates_json=json.dumps(evidence, ensure_ascii=False, default=str),
+                ),
+                runtime=runtime,
+                max_tokens=max(1200, selection_limit * 450),
+                progress_callback=on_progress,
+            )
+            payload = extract_json_object(raw)
+            selected_values = payload.get("selected")
+            if not isinstance(selected_values, list):
+                raise ValueError("README selector returned no selected list")
+            by_name = {
+                candidate.full_name.casefold(): candidate
+                for candidate in candidates_for_selection
+            }
+            selected: list[GitHubRepositoryCandidate] = []
+            for value in cast(list[object], selected_values):
+                if not isinstance(value, dict):
+                    continue
+                item = cast(dict[str, Any], value)
+                full_name = str(item.get("full_name") or "").strip()
+                candidate = by_name.get(full_name.casefold())
+                if candidate is None or candidate in selected:
+                    continue
+                reason = str(item.get("reason") or "").strip()
+                candidate.selection_reason = (
+                    f"README 语义筛选：{reason}"
+                    if reason
+                    else "README 语义筛选：模型判定与研究方向最匹配。"
+                )
+                selected.append(candidate)
+                if len(selected) >= selection_limit:
+                    break
+            if selected:
+                selected_names = {candidate.full_name.casefold() for candidate in selected}
+                # A partially valid model response should not silently reduce
+                # the requested n when enough ranked candidates are available.
+                for candidate in candidates_for_selection:
+                    if len(selected) >= effective_selection_limit:
+                        break
+                    if candidate.full_name.casefold() in selected_names:
+                        continue
+                    candidate.selection_reason = "README 语义筛选结果不足，按相关性排序补足。"
+                    selected.append(candidate)
+            if not selected:
+                raise ValueError("README selector returned no valid repository")
+            return selected[:effective_selection_limit]
+        except Exception as exc:
+            logger.warning("README candidate selection failed; using relevance fallback: {}", exc)
+            if on_progress:
+                await on_progress("README 语义筛选失败，按检索相关性排序兜底选择…")
+            fallback_candidates = candidates_for_selection
+            for candidate in fallback_candidates[:effective_selection_limit]:
+                candidate.selection_reason = "README 语义筛选不可用，按检索相关性排序兜底。"
+            return fallback_candidates[:effective_selection_limit]
 
     async def _download(
         self,
@@ -754,13 +1110,13 @@ class RepositoryResearchOrchestrator:
             name="research-pool-runner",
             role=AgentRole.WORKER,
             objective=(
-                "Run a bounded GitHub repository research workflow in an isolated "
+                "Run a GitHub repository research workflow in an isolated "
                 "Worker process and return an evidence-backed report."
             ),
             tools=("repo_tree", "repo_search", "repo_read", "repo_git_history"),
-            max_iterations=max(4, self.research_config.analysis_iterations),
+            max_iterations=None,
         )
-        await self.harness.ensure_task(
+        harness_task = await self.harness.ensure_task(
             workflow,
             title="Run GitHub repository research",
             task_input=task.direction,
@@ -778,6 +1134,21 @@ class RepositoryResearchOrchestrator:
             idempotency_key=f"repository-research:run:{task.research_id}",
             priority=100,
             execution_mode=TaskExecutionMode.POOL,
+        )
+        task.harness_task_id = harness_task.task_id
+        self.store.save_research(task)
+        await self.harness.service.store.record_audit_event(
+            "repository_research.queued",
+            component="repository_research_gateway",
+            tenant_id=tenant_id,
+            workflow_id=workflow.workflow_id,
+            session_key=session_key,
+            trace_id=trace_id,
+            payload={
+                "research_id": task.research_id,
+                "status": task.status.value,
+                "content": "研究任务已进入隔离 Harness Worker 队列。",
+            },
         )
         return task
 
@@ -867,10 +1238,11 @@ class RepositoryResearchOrchestrator:
                     name="research-discovery",
                     role=AgentRole.PLANNER,
                     objective=(
-                        "Expand the academic direction, search GitHub, rank candidates, "
-                        "and produce a bounded project shortlist."
+                        "Expand the academic direction, recall five times the requested "
+                        "repository count, inspect candidate READMEs, select the most "
+                        "relevant projects, and produce an evidence-backed shortlist."
                     ),
-                    max_iterations=4,
+                    max_iterations=None,
                 )
                 discovery_task = await harness.ensure_task(
                     harness_workflow,
@@ -889,27 +1261,48 @@ class RepositoryResearchOrchestrator:
                 )
             task.status = ResearchStatus.SEARCHING
             self.store.save_research(task, event="repository_research.searching")
-            if on_update:
-                await on_update("正在扩展检索词并搜索 GitHub 候选项目…")
-            task.queries, task.candidates = await self.discover(
-                direction,
-                runtime,
-                on_progress=on_update,
-            )
             requested_count = self.requested_repository_count(direction)
             selection_limit = min(
                 requested_count or self.research_config.max_repositories,
                 self.research_config.max_repositories,
             )
-            fill_target = selection_limit if requested_count is not None else 0
+            # Recall five times the final target so the README selector has a
+            # meaningful semantic choice.  The configured GitHub API limits
+            # cap this at 100 candidates, while normal requests remain 5n.
+            recall_limit = min(max(1, selection_limit) * 5, 100)
+            if on_update:
+                await on_update("正在扩展检索词并搜索 GitHub 候选项目…")
+                await on_update(f"目标召回最多 {recall_limit} 个候选项目…")
+            task.queries, task.candidates = await self.discover(
+                direction,
+                runtime,
+                on_progress=on_update,
+                candidate_limit=recall_limit,
+            )
+            fill_target = (
+                max(selection_limit, min(recall_limit, len(task.candidates)))
+                if requested_count is not None
+                else min(recall_limit, len(task.candidates))
+            )
             task.candidates = await self._dedup_and_fill(
                 direction,
+                task.queries,
                 task.candidates,
                 runtime,
+                # Explicit counts are filled to n when deduplication leaves
+                # too few candidates; otherwise discovery's available pool is
+                # retained without speculative searches.  A normal discovery
+                # result is still expanded to its 5n recall limit.
                 fill_target,
                 on_update,
             )
-            task.selected = task.candidates[:selection_limit]
+            task.selected = await self.select_candidates_by_readme(
+                direction=direction,
+                candidates=task.candidates,
+                selection_limit=selection_limit,
+                runtime=runtime,
+                on_progress=on_update,
+            )
             if not task.selected:
                 raise GitHubSearchError("候选筛选后没有可分析项目。")
             if discovery_run is not None:
@@ -919,6 +1312,7 @@ class RepositoryResearchOrchestrator:
                     json.dumps(
                         {
                             "queries": task.queries,
+                            "recalled_candidate_count": len(task.candidates),
                             "selected": [
                                 candidate.model_dump(mode="json")
                                 for candidate in task.selected
@@ -1052,7 +1446,7 @@ class RepositoryResearchOrchestrator:
                         "direct source evidence."
                     ),
                     tools=("repo_tree", "repo_search", "repo_read", "repo_git_history"),
-                    max_iterations=self.research_config.analysis_iterations,
+                    max_iterations=None,
                 )
                 for candidate, _record in valid:
                     download_task, _ = download_tasks[candidate.full_name]
@@ -1135,7 +1529,7 @@ class RepositoryResearchOrchestrator:
                     name="research-synthesizer",
                     role=AgentRole.WORKER,
                     objective="Synthesize a concise cross-project evidence-backed report.",
-                    max_iterations=3,
+                    max_iterations=None,
                 )
                 synthesis_task = await harness.ensure_task(
                     harness_workflow,

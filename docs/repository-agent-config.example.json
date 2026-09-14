@@ -41,7 +41,7 @@
       "maxRepositories": 5,
       "maxConcurrentDownloads": 3,
       "maxConcurrentAnalyses": 2,
-      "analysisIterations": 5,
+      "analysisIterations": null,
       "minimumStars": 0,
       "requireLicense": false,
       "githubTokenEnv": "GITHUB_TOKEN",

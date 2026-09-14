@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import inspect
 import os
 import subprocess
 import sys
@@ -229,6 +230,14 @@ async def cmd_stop(ctx: CommandContext) -> OutboundMessage:
     loop = ctx.loop
     msg = ctx.msg
     total = await loop._cancel_active_tasks(ctx.key)  # pyright: ignore[reportPrivateUsage]
+    repository_cancelled = 0
+    repository_orchestrator = getattr(loop, "repository_orchestrator", None)
+    if repository_orchestrator is not None:
+        cancel_research = getattr(repository_orchestrator, "cancel_research", None)
+        if callable(cancel_research):
+            cancellation = cancel_research(ctx.key)
+            if inspect.isawaitable(cancellation):
+                repository_cancelled = await cancellation
     # Also drain pending queue to prevent mid-turn injection deadlock
     pending = loop._pending_queues.pop(ctx.key, None)  # pyright: ignore[reportPrivateUsage]
     if pending is not None:
@@ -238,6 +247,7 @@ async def cmd_stop(ctx: CommandContext) -> OutboundMessage:
                 total += 1
             except Exception:
                 break
+    total += repository_cancelled
     content = f"Stopped {total} task(s)." if total else "No active task to stop."
     return OutboundMessage(
         channel=msg.channel, chat_id=msg.chat_id, content=content,

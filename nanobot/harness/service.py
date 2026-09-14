@@ -582,6 +582,59 @@ class HarnessService:
             logger.warning("Harness result delivery deferred for task {}: {}", task.task_id, exc)
             self.metrics.event("outbox.flush", outcome="deferred")
 
+    async def cancel_task(self, task_id: str, *, tenant_id: str = "default") -> bool:
+        """Cancel a queued or running task through the durable lease fence."""
+        task = await self.store.get_task(task_id)
+        if task.tenant_id != tenant_id:
+            raise PermissionError("task belongs to another tenant")
+        if task.state in {
+            TaskState.SUCCEEDED,
+            TaskState.FAILED,
+            TaskState.DEAD_LETTER,
+            TaskState.CANCELLED,
+        }:
+            return False
+        if task.assigned_agent_id:
+            agent = await self.store.get_agent(task.assigned_agent_id)
+            lease = await self.store.get_lease(task.task_id)
+            if lease is not None:
+                await self.scheduler.cancel(task, agent, lease)
+                return True
+
+        # A task can be cancelled between enqueue and lease assignment.
+        task.state = TaskState.CANCELLED
+        task.assigned_agent_id = None
+        task.lease_id = None
+        task.updated_at = utcnow()
+        await self.store.put_task(task)
+        workflow = await self.store.get_workflow(task.workflow_id)
+        workflow.state = WorkflowState.CANCELLED
+        await self.store.put_workflow(workflow)
+        await self.store.record_audit_event(
+            "harness.task.cancelled",
+            component="harness_service",
+            tenant_id=task.tenant_id,
+            workflow_id=task.workflow_id,
+            task_id=task.task_id,
+            session_key=(
+                str(task.metadata["session_key"])
+                if isinstance(task.metadata.get("session_key"), str)
+                else None
+            ),
+            trace_id=(
+                str(task.metadata["trace_id"])
+                if isinstance(task.metadata.get("trace_id"), str)
+                else None
+            ),
+            payload={
+                "state": task.state.value,
+                "attempt": task.attempt,
+                "title": task.title,
+                "metadata": task.metadata,
+            },
+        )
+        return True
+
     async def complete_review(
         self,
         *,

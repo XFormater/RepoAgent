@@ -24,6 +24,13 @@ Rules:
 - Do not invent constraints the user did not request.
 - Optimize for diverse, source-inspectable candidate recall rather than a final
   recommendation based on popularity.
+- For a modality-specific implementation request, every returned phrase must
+  preserve the modality and task constraints. For example, an ultrasound image
+  reconstruction request must keep both `ultrasound` (or `ultrasonic`) and a
+  reconstruction/beamforming/tomography term in every query.
+- Do not use `awesome`, `papers`, `survey`, `daily`, `bibliography`, or
+  `resources` as the primary query intent unless the user explicitly asks for
+  a literature or resource list.
 - The returned phrases are used verbatim by both GitHub Search and nanobot's
   native web search. Include every topical constraint needed for relevance;
   no fixed domain anchors will be appended later.

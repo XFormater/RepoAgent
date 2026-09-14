@@ -23,14 +23,14 @@ if TYPE_CHECKING:
 
 
 class _ToolCallBudget(AgentHook):
-    def __init__(self, maximum: int) -> None:
+    def __init__(self, maximum: int | None) -> None:
         super().__init__()
         self.maximum = maximum
         self.used = 0
 
     async def before_execute_tools(self, context: AgentHookContext) -> None:
         self.used += len(context.tool_calls)
-        if self.used > self.maximum:
+        if self.maximum is not None and self.used > self.maximum:
             raise RuntimeError(f"Harness tool-call budget exceeded ({self.used}/{self.maximum})")
 
 

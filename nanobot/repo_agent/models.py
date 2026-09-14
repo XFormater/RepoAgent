@@ -113,6 +113,7 @@ class RepositoryResearchTask(BaseModel):
     actor: str
     direction: str
     workflow_id: str | None = None
+    harness_task_id: str | None = None
     trace_id: str | None = None
     queries: list[str] = Field(default_factory=list)
     candidates: list[GitHubRepositoryCandidate] = Field(default_factory=list)

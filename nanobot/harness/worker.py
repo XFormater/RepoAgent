@@ -6,6 +6,7 @@ import asyncio
 import time
 from collections.abc import Awaitable, Callable
 from datetime import timedelta
+from typing import Any
 
 from loguru import logger
 
@@ -71,6 +72,8 @@ class HarnessWorker:
         outcome = "succeeded"
         self.agent = await self.service.store.get_agent(self.agent.instance_id)
         spec = await self.service.store.get_spec(self.agent.spec_id)
+        executor_task: asyncio.Task[Any] | None = None
+        cancel_watch: asyncio.Task[Any] | None = None
         try:
             lease = await self.service.scheduler.assign(
                 task=task,
@@ -112,7 +115,11 @@ class HarnessWorker:
                 outcome=isolation_mode,
             )
             async with asyncio.timeout(spec.resource_budget.max_runtime_seconds):
-                result = await self.executor(context, spec)
+                executor_task = asyncio.create_task(self.executor(context, spec))
+                cancel_watch = asyncio.create_task(
+                    self._watch_for_cancellation(task.task_id, executor_task)
+                )
+                result = await executor_task
             if heartbeat_task.done() and (heartbeat_error := heartbeat_task.exception()):
                 raise heartbeat_error
             if task.review_target_task_id is not None:
@@ -136,7 +143,13 @@ class HarnessWorker:
                 )
         except asyncio.CancelledError:
             outcome = "cancelled"
-            await self.service.scheduler.cancel(task, self.agent, lease)
+            try:
+                await self.service.scheduler.cancel(task, self.agent, lease)
+            except HarnessConflictError:
+                # The Gateway may have already committed cancellation. The
+                # durable state is authoritative and the child is already
+                # being terminated by the cancellation watcher.
+                pass
             raise
         except Exception as exc:
             outcome = "failed"
@@ -150,6 +163,13 @@ class HarnessWorker:
                     task.task_id,
                 )
         finally:
+            for background in (cancel_watch, executor_task):
+                if background is not None and not background.done():
+                    background.cancel()
+            if cancel_watch is not None:
+                await asyncio.gather(cancel_watch, return_exceptions=True)
+            if executor_task is not None:
+                await asyncio.gather(executor_task, return_exceptions=True)
             stop.set()
             await asyncio.gather(heartbeat_task, return_exceptions=True)
             if context is not None:
@@ -166,6 +186,21 @@ class HarnessWorker:
                 role=spec.role.value,
             )
         return True
+
+    async def _watch_for_cancellation(
+        self,
+        task_id: str,
+        executor_task: asyncio.Task[Any],
+    ) -> None:
+        while not executor_task.done():
+            await asyncio.sleep(0.5)
+            try:
+                current = await self.service.store.get_task(task_id)
+            except Exception:
+                continue
+            if current.state == TaskState.CANCELLED:
+                executor_task.cancel()
+                return
 
     async def run_until_idle(self, *, max_tasks: int = 100) -> int:
         processed = 0

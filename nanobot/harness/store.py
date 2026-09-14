@@ -76,6 +76,7 @@ class HarnessStore(Protocol):
     async def save_checkpoint(self, checkpoint: Checkpoint) -> None: ...
     async def latest_checkpoint(self, agent_id: str) -> Checkpoint | None: ...
     async def acquire_lease(self, lease: WorkerLease, *, now: datetime) -> bool: ...
+    async def get_lease(self, task_id: str) -> WorkerLease | None: ...
     async def lease_active(self, task_id: str, *, now: datetime) -> bool: ...
     async def update_lease(self, lease: WorkerLease) -> None: ...
     async def acquire_resources(self, lease: WorkerLease, *, now: datetime) -> bool: ...
@@ -96,6 +97,10 @@ class HarnessStore(Protocol):
         trace_id: str | None = None,
         payload: dict[str, Any] | None = None,
     ) -> None: ...
+    async def latest_audit_event_id(self) -> int: ...
+    async def list_audit_events_after(
+        self, event_id: int, *, event_types: frozenset[str], limit: int = 100
+    ) -> list[dict[str, Any]]: ...
     async def close(self) -> None: ...
 
 
@@ -145,6 +150,7 @@ class InMemoryHarnessStore:
         async with self._lock:
             self.audit_events.append(
                 {
+                    "event_id": len(self.audit_events) + 1,
                     "event_type": event_type,
                     "component": component,
                     "tenant_id": tenant_id,
@@ -157,6 +163,21 @@ class InMemoryHarnessStore:
                     "payload_sha256": payload_digest(value),
                 }
             )
+
+    async def latest_audit_event_id(self) -> int:
+        async with self._lock:
+            return len(self.audit_events)
+
+    async def list_audit_events_after(
+        self, event_id: int, *, event_types: frozenset[str], limit: int = 100
+    ) -> list[dict[str, Any]]:
+        async with self._lock:
+            return [
+                dict(event)
+                for event in self.audit_events
+                if int(event.get("event_id", 0)) > event_id
+                and event.get("event_type") in event_types
+            ][:limit]
 
     async def put_agent(self, agent: AgentInstance) -> None:
         async with self._lock:
@@ -444,6 +465,10 @@ class InMemoryHarnessStore:
                 return False
             self.leases[lease.task_id] = lease
             return True
+
+    async def get_lease(self, task_id: str) -> WorkerLease | None:
+        async with self._lock:
+            return self.leases.get(task_id)
 
     async def update_lease(self, lease: WorkerLease) -> None:
         async with self._lock:

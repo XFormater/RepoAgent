@@ -1,24 +1,41 @@
-You are producing the final comparative report for GitHubResearchAgent's academic or
-technical open-source project research workflow. GitHub search supplied
-candidates, but it is not the conclusion: base the report on the combined
-selection metadata, download outcomes, and source-code analyses.
+你正在为 GitHubResearchAgent 生成最终研究报告。用户的研究方向、检索词、
+5n 候选、README 语义筛选结果、下载结果和源码分析记录都在下方的研究记录中。
+候选召回不是结论；最终判断必须优先依据源码分析中的可核验证据。
 
-Use only the supplied search metadata and source-analysis records. Do not
-invent repository properties, code evidence, experiments, or successful
-downloads.
+只使用研究记录中的信息。严禁补写不存在的代码、实验结果、依赖、性能数字、
+成功下载状态或仓库能力。README/ GitHub 元数据只能支持项目定位，不能冒充源码
+证据；若记录没有足够证据，明确写“记录未提供，无法判断”。
 
-Write a clear report in the user's language containing:
-- research scope and search queries;
-- selection method and any failed downloads/analyses;
-- a compact comparison table with repository link, relevance, stars, language,
-  license, implemented approach, reproducibility, strengths and limitations;
-- an evidence-based section for every analyzed repository, preserving cited
-  repository-relative paths and line numbers;
-- recommendations by use case rather than one unsupported universal winner;
-- common gaps and suggested next research steps;
-- research task id and every successfully downloaded local path.
-- a clear distinction between GitHub metadata, source-backed findings, and
-  remaining inference.
+请用用户的语言输出一份具体、可长期审计的 Markdown 报告，按以下结构组织：
 
-Research record:
+1. 研究任务概览
+   - 研究背景：用户想解决什么问题，为什么需要检索这类仓库；
+   - 研究目的和范围：本次比较要回答哪些工程/研究问题；
+   - 检索词、召回数量（5n）和 README 筛选规则；
+   - 任务 ID、候选数、最终入选数，以及下载/分析失败项。
+
+2. 项目横向比较表
+   每行一个最终入选仓库，包含链接、README/元数据相关性、实现语言、许可证、
+   核心方法、主要入口、可复现性、关键优势、明确局限和本地路径。不要只写星标数。
+
+3. 逐仓库深度分析（每个仓库必须单独成节）
+   对每个仓库严格回答：
+   - 研究背景与项目要解决的具体问题；
+   - 研究目的/工程目标，以及它为何通过 README 筛选；
+   - 核心算法或业务方法；
+   - 代码实现：目录/模块职责、调用链、训练/推理/服务入口、数据流、配置和依赖；
+   - 可复现实验或运行步骤（仅写记录明确支持的内容）；
+   - 关键代码证据：保留源码分析提供的仓库相对路径和行号，必要时说明证据如何支持结论；
+   - 优点、局限、风险和适用场景；
+   - 若下载或源码分析失败，单独说明失败原因，不要把缺失当成项目缺陷。
+
+4. 面向场景的结论
+   按研究原型、训练/实验、生产服务、二次开发等场景给出选择建议。只有在记录
+   有充分证据时才做优劣判断；不要给出脱离场景的“唯一最佳”项目。
+
+5. 证据边界与后续工作
+   分开列出 GitHub 元数据、README 证据、源码证据和仍属推断的内容，并提出下一步
+   应查看的文件、运行的实验或需要补充的资料。避免“大而空”的行业综述。
+
+研究记录：
 {{ research_json }}

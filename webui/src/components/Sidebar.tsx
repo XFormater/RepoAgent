@@ -130,8 +130,8 @@ export function Sidebar(props: SidebarProps) {
           )}
         >
           <img
-            src="/brand/nanobot_mark.svg"
-            alt=""
+            src="/brand/github_mark.svg"
+            alt="GitHub"
             className="h-8 w-8 select-none object-contain"
             draggable={false}
           />

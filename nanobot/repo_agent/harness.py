@@ -121,7 +121,7 @@ class RepositoryHarnessCoordinator:
         role: AgentRole,
         objective: str,
         tools: tuple[str, ...] = (),
-        max_iterations: int = 5,
+        max_iterations: int | None = 5,
     ) -> AgentSpec:
         capabilities = {
             AgentRole.PLANNER: frozenset({"plan"}),
@@ -144,7 +144,9 @@ class RepositoryHarnessCoordinator:
             resource_budget=ResourceBudget(
                 max_iterations=max_iterations,
                 max_runtime_seconds=900,
-                max_tool_calls=max(8, max_iterations * 3),
+                # An unlimited iteration stage is also allowed an unlimited
+                # tool-call budget; finite stages retain a proportional cap.
+                max_tool_calls=(None if max_iterations is None else max(8, max_iterations * 4)),
             ),
         )
 

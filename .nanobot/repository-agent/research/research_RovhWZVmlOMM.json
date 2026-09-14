@@ -1,0 +1,290 @@
+{
+  "research_id": "research_RovhWZVmlOMM",
+  "session_key": "websocket:f3fa078a-c7c6-4bed-85a8-5ea515b99da9",
+  "actor": "anon-9cd80ff4545b",
+  "direction": "下载并分析三个图像生成相关项目",
+  "workflow_id": "workflow_b2d4ed066bde4f0792aab5386bfd7f07",
+  "harness_task_id": "task_19c7a5015ab64062a7ff813890e827c6",
+  "trace_id": "b5717eaa295d418ab6390201d7b619ac",
+  "queries": [
+    "image generation",
+    "text to image generation",
+    "diffusion model image generation",
+    "generative adversarial network image generation"
+  ],
+  "candidates": [
+    {
+      "full_name": "abhi227070/Image-Generation-Using-GAN-Gen-AI-Project-",
+      "url": "https://github.com/abhi227070/Image-Generation-Using-GAN-Gen-AI-Project-",
+      "description": "Gen AI uses GANs to generate CIFAR-10-like images. The custom GAN model comprises a Generator and a Discriminator. Users can train the model and generate images using Jupyter Notebooks or Google Colab.",
+      "stars": 30,
+      "forks": 10,
+      "open_issues": 0,
+      "language": "Jupyter Notebook",
+      "license": null,
+      "topics": [
+        "deep-learning",
+        "deep-neural-networks",
+        "deeplearning",
+        "generative-adversarial-network",
+        "generative-ai",
+        "generative-ai-projects",
+        "generative-art",
+        "generative-model",
+        "image-generation",
+        "image-generation-ai"
+      ],
+      "default_branch": "main",
+      "updated_at": "2026-05-23T11:49:38Z",
+      "archived": false,
+      "relevance_score": 0.7,
+      "selection_reason": "匹配关键词：adversarial, generation, generative, image, model, network, to；stars=30；license=未声明"
+    },
+    {
+      "full_name": "codecrafters-io/build-your-own-x",
+      "url": "https://github.com/codecrafters-io/build-your-own-x",
+      "description": "Master programming by recreating your favorite technologies from scratch.",
+      "stars": 547195,
+      "forks": 51481,
+      "open_issues": 642,
+      "language": "Markdown",
+      "license": null,
+      "topics": [
+        "awesome-list",
+        "free",
+        "programming",
+        "tutorial-code",
+        "tutorial-exercises",
+        "tutorials"
+      ],
+      "default_branch": "master",
+      "updated_at": "2026-09-14T15:09:22Z",
+      "archived": false,
+      "relevance_score": 0.1,
+      "selection_reason": "匹配关键词：to；stars=547195；license=未声明"
+    },
+    {
+      "full_name": "floodsung/Deep-Learning-Papers-Reading-Roadmap",
+      "url": "https://github.com/floodsung/Deep-Learning-Papers-Reading-Roadmap",
+      "description": "Deep Learning papers reading roadmap for anyone who are eager to learn this amazing tech!",
+      "stars": 39556,
+      "forks": 7256,
+      "open_issues": 91,
+      "language": "Python",
+      "license": null,
+      "topics": [
+        "deep-learning"
+      ],
+      "default_branch": "master",
+      "updated_at": "2026-09-14T11:01:15Z",
+      "archived": false,
+      "relevance_score": 0.1,
+      "selection_reason": "匹配关键词：to；stars=39556；license=未声明"
+    }
+  ],
+  "selected": [
+    {
+      "full_name": "abhi227070/Image-Generation-Using-GAN-Gen-AI-Project-",
+      "url": "https://github.com/abhi227070/Image-Generation-Using-GAN-Gen-AI-Project-",
+      "description": "Gen AI uses GANs to generate CIFAR-10-like images. The custom GAN model comprises a Generator and a Discriminator. Users can train the model and generate images using Jupyter Notebooks or Google Colab.",
+      "stars": 30,
+      "forks": 10,
+      "open_issues": 0,
+      "language": "Jupyter Notebook",
+      "license": null,
+      "topics": [
+        "deep-learning",
+        "deep-neural-networks",
+        "deeplearning",
+        "generative-adversarial-network",
+        "generative-ai",
+        "generative-ai-projects",
+        "generative-art",
+        "generative-model",
+        "image-generation",
+        "image-generation-ai"
+      ],
+      "default_branch": "main",
+      "updated_at": "2026-05-23T11:49:38Z",
+      "archived": false,
+      "relevance_score": 0.7,
+      "selection_reason": "匹配关键词：adversarial, generation, generative, image, model, network, to；stars=30；license=未声明"
+    },
+    {
+      "full_name": "codecrafters-io/build-your-own-x",
+      "url": "https://github.com/codecrafters-io/build-your-own-x",
+      "description": "Master programming by recreating your favorite technologies from scratch.",
+      "stars": 547195,
+      "forks": 51481,
+      "open_issues": 642,
+      "language": "Markdown",
+      "license": null,
+      "topics": [
+        "awesome-list",
+        "free",
+        "programming",
+        "tutorial-code",
+        "tutorial-exercises",
+        "tutorials"
+      ],
+      "default_branch": "master",
+      "updated_at": "2026-09-14T15:09:22Z",
+      "archived": false,
+      "relevance_score": 0.1,
+      "selection_reason": "匹配关键词：to；stars=547195；license=未声明"
+    },
+    {
+      "full_name": "floodsung/Deep-Learning-Papers-Reading-Roadmap",
+      "url": "https://github.com/floodsung/Deep-Learning-Papers-Reading-Roadmap",
+      "description": "Deep Learning papers reading roadmap for anyone who are eager to learn this amazing tech!",
+      "stars": 39556,
+      "forks": 7256,
+      "open_issues": 91,
+      "language": "Python",
+      "license": null,
+      "topics": [
+        "deep-learning"
+      ],
+      "default_branch": "master",
+      "updated_at": "2026-09-14T11:01:15Z",
+      "archived": false,
+      "relevance_score": 0.1,
+      "selection_reason": "匹配关键词：to；stars=39556；license=未声明"
+    }
+  ],
+  "analyses": [
+    {
+      "candidate": {
+        "full_name": "abhi227070/Image-Generation-Using-GAN-Gen-AI-Project-",
+        "url": "https://github.com/abhi227070/Image-Generation-Using-GAN-Gen-AI-Project-",
+        "description": "Gen AI uses GANs to generate CIFAR-10-like images. The custom GAN model comprises a Generator and a Discriminator. Users can train the model and generate images using Jupyter Notebooks or Google Colab.",
+        "stars": 30,
+        "forks": 10,
+        "open_issues": 0,
+        "language": "Jupyter Notebook",
+        "license": null,
+        "topics": [
+          "deep-learning",
+          "deep-neural-networks",
+          "deeplearning",
+          "generative-adversarial-network",
+          "generative-ai",
+          "generative-ai-projects",
+          "generative-art",
+          "generative-model",
+          "image-generation",
+          "image-generation-ai"
+        ],
+        "default_branch": "main",
+        "updated_at": "2026-05-23T11:49:38Z",
+        "archived": false,
+        "relevance_score": 0.7,
+        "selection_reason": "匹配关键词：adversarial, generation, generative, image, model, network, to；stars=30；license=未声明"
+      },
+      "repository": {
+        "repository_id": "7ec138fed7711f5586c6",
+        "url": "https://github.com/abhi227070/Image-Generation-Using-GAN-Gen-AI-Project-",
+        "owner": "abhi227070",
+        "name": "Image-Generation-Using-GAN-Gen-AI-Project-",
+        "default_branch": "main",
+        "commit_sha": "934192c9bc699d9b6f634afc4b218c1d17c3e048",
+        "local_path": "/root/GitHubResearch_Agent/.nanobot/vfs/tenants/37a8eec1ce19687d132fe290/users/3818ef06fab4bdf23ca8ab55/projects/abhi227070/image-generation-using-gan-gen-ai-project-/source",
+        "file_count": 7,
+        "size_bytes": 9513007,
+        "loaded_at": "2026-09-14T15:11:56.587467Z"
+      },
+      "summary": "",
+      "tools_used": [],
+      "error": "Harness sandbox exited with code 1: 2026-09-14 15:11:59.440 | INFO     | nanobot.agent.loop:set_model_preset:784 - Runtime model switched for next turn: deepseek-v4-pro -> deepseek-v4-pro\n2026-09-14 15:11:59.460 | INFO     | nanobot.agent.loop:_register_default_tools:832 - Registered 20 tools: ['apply_patch', 'run_cli_app', 'create_goal', 'edit_file', 'exec', 'find_files', 'grep', 'list_dir', 'list_exec_sessions', 'message', 'read_file', 'read_session', 'search_sessions', 'spawn', 'update_goal', 'web_fetch', 'web_search', 'write_file', 'write_stdin', 'my']\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/root/GitHubResearch_Agent/nanobot/harness/sandbox_child.py\", line 47, in <module>\n    main()\n  File \"/root/GitHubResearch_Agent/nanobot/harness/sandbox_child.py\", line 43, in main\n    asyncio.run(_run(args.config))\n  File \"/usr/lib/python3.12/asyncio/runners.py\", line 194, in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/asyncio/runners.py\", line 118, in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/asyncio/base_events.py\", line 687, in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\n  File \"/root/GitHubResearch_Agent/nanobot/harness/sandbox_child.py\", line 28, in _run\n    result = await HarnessAgentExecutor(loop)(context, spec)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/GitHubResearch_Agent/nanobot/harness/agent_executor.py\", line 103, in __call__\n    raise RuntimeError(result.error or f\"Harness agent stopped: {result.stop_reason}\")\nRuntimeError: Error: RuntimeError: File is larger than the 2 MB repository-read limit.\n"
+    },
+    {
+      "candidate": {
+        "full_name": "codecrafters-io/build-your-own-x",
+        "url": "https://github.com/codecrafters-io/build-your-own-x",
+        "description": "Master programming by recreating your favorite technologies from scratch.",
+        "stars": 547195,
+        "forks": 51481,
+        "open_issues": 642,
+        "language": "Markdown",
+        "license": null,
+        "topics": [
+          "awesome-list",
+          "free",
+          "programming",
+          "tutorial-code",
+          "tutorial-exercises",
+          "tutorials"
+        ],
+        "default_branch": "master",
+        "updated_at": "2026-09-14T15:09:22Z",
+        "archived": false,
+        "relevance_score": 0.1,
+        "selection_reason": "匹配关键词：to；stars=547195；license=未声明"
+      },
+      "repository": {
+        "repository_id": "d5549494bcee1ca04524",
+        "url": "https://github.com/codecrafters-io/build-your-own-x",
+        "owner": "codecrafters-io",
+        "name": "build-your-own-x",
+        "default_branch": "master",
+        "commit_sha": "aa17439b62f384511a5561ce308e9598b94d8989",
+        "local_path": "/root/GitHubResearch_Agent/.nanobot/vfs/tenants/37a8eec1ce19687d132fe290/users/3818ef06fab4bdf23ca8ab55/projects/codecrafters-io/build-your-own-x/source",
+        "file_count": 4,
+        "size_bytes": 144102,
+        "loaded_at": "2026-09-14T15:11:55.843472Z"
+      },
+      "summary": "# Repository Research Report: `codecrafters-io/build-your-own-x`\n\n## 1. Nature of the repository (metadata vs. source evidence)\n\n**Metadata (untrusted, from search):** 547,195 stars, 51,481 forks, language \"Markdown\", no declared license, topics \"awesome-list / tutorials\", selection reason \"匹配关键词：to\" (a keyword-only match, relevance_score 0.1).\n\n**Source evidence:** This repository is **not a code project implementing image generation**. It is a curated link directory (\"awesome list\") whose entire substance is a single Markdown file of pointers to external tutorials. The full file inventory (via `repo_tree`, depth 2) is:\n\n- `README.md` (the entire content, ~505 lines)\n- `ISSUE_TEMPLATE.md` (contribution template)\n- `.gitattributes`\n- `codecrafters-banner.png` (a banner image)\n\nThe remaining tree entries (`.nanobot/`, `memory/`, `sessions/`) are workspace/agent infrastructure, not repository content.\n\n## 2. Relevance to the research direction (image generation)\n\nThe direction asks to analyze three image-generation-related projects. This repository is only tangentially relevant: it does not itself implement any image-generation method; it only *links* to a handful of external tutorials. Directly image-generation-related entries found by source search:\n\n| Line | Entry | Method | External target |\n|------|-------|--------|-----------------|\n| `README.md:63` | `Diffusion Models for Image Generation` (Python) | Diffusion models — the modern generative image method | Hugging Face diffusion course (`huggingface.co/learn/diffusion-course`) |\n| `README.md:486` | `Building a simple Generative Adversarial Network (GAN) using Tensorflow` (Python) | GAN — classical generative image method | Paperspace blog |\n| `README.md:49` | `Introduction to Ray Tracing: a Simple Method for Creating 3D Images` (C++) | Rendering (synthesizes images, but not generative ML) | scratchapixel.com |\n\nAdjacent but **not** generation (worth flagging to avoid overstating relevance):\n\n- `README.md:404-407` — \"Visual Recognition System\" section (license-plate + facial **recognition**, not generation).\n- `README.md:480` — \"Mobile Document Scanner\" (image **processing**, not generation).\n- `README.md:61-64` — \"AI Model\" section also lists an LLM and a RAG tutorial, which are not image generation.\n\n**Conclusion on relevance:** The only genuinely image-generation-relevant content is **two external links** (diffusion course at line 63, GAN tutorial at line 486). No generative model, code, or implementation lives in this repo.\n\n## 3. Concrete implemented method\n\n**None.** There is no implementation. The \"method\" information exists only as human-readable titles/links to external tutorials (diffusion models, GAN). No source code, no algorithm, no model weights, no training loop exists in-repo. The `ISSUE_TEMPLATE.md:2` submission guideline confirms the intended nature of entries: tutorials must \"build something interesting from scratch; no frameworks, libraries, ... or tutorials that glue just other libraries together.\"\n\n## 4. Architecture, modules, entry points\n\n- **Architecture:** Flat single-file link index. Sections are plain Markdown headings with bullet lists (`README.md:42-495`). No modules, packages, or directory structure.\n- **Modules:** N/A.\n- **Execution/training/inference entry points:** **None.** There is no runnable code, no CLI, no `main`, no training or inference script.\n- The repository self-describes as \"a compilation of well-written, step-by-step guides for re-creating our favorite technologies from scratch\" (`README.md:5`).\n\n## 5. Datasets, model artifacts, dependencies, reproducibility, documentation\n\n- **Datasets:** None in-repo. (The linked external diffusion course would reference datasets, but that evidence is outside this repository.)\n- **Model artifacts / weights:** None.\n- **Dependencies:** None declared; no `requirements.txt`, `pyproject.toml`, `package.json`, or similar.\n- **Reproducibility:** Not applicable as a code project. As a list, reproducibility is trivial (plain Markdown), but link targets are external and unverified from inside this repo.\n- **Documentation:** The `README.md` is itself the only documentation. It has a contribution section (`README.md:497-499`) and a license/origins section (`README.md:501-505`).\n\n## 6. License\n\n- Metadata says `license: null`, but **source evidence contradicts this**: `README.md:503` embeds a CC0 badge and `README.md:505` states the work is dedicated to the public domain under CC0 1.0 (\"CodeCrafters, Inc. has waived all copyright and related or neighboring rights\"). This is a content license for the list itself, not a software license for any code (there is no code).\n\n## 7. Maturity signals and practical strengths\n\n- **Very high community maturity as a list:** 547K stars / 51K forks (metadata) is consistent with its status as a widely known reference; git history confirms active maintenance into 2026 (latest commit `aa17439`, \"Merge pull request #1844 … fix-ai-model-anchor\", 2026-07-14).\n- **Strengths:** Comprehensive, actively maintained index; clearly categorized; includes modern generative-AI entries (the diffusion course link was added relatively recently, reflecting maintenance).\n- **Weakness for this task:** As a pure link directory it has **zero** directly reusable implementation value for an image-generation research workflow. Any code/weights/benchmarks must be obtained by following the outbound links to *other* repositories/courses.\n\n## 8. Limitations, missing evidence, suitability\n\n- **Missing evidence:** No source code to inspect; no training/inference entry points; no model checkpoints; no benchmark numbers; no dataset manifests; no tests; no build system. All technical claims about \"diffusion\" and \"GAN\" methods are inherited from external tutorial titles, not verifiable in-repo.\n- **Link rot / unverifiability:** Each entry is an unversioned external URL; correctness and continued availability of the two image-generation targets cannot be confirmed from this repo's contents.\n- **Suitability for reuse/further research:** Low as a *source-code* candidate. It is suitable only as a **discovery index** pointing to ~2 image-generation tutorials (diffusion at `README.md:63`, GAN at `README.md:486`). A downstream analysis of actual image-generation projects should target the linked external resources instead of this repository.\n\n**Bottom line:** This repository should be treated as a curated pointer list, not as one of the \"three image-generation projects.\" Its image-generation substance is limited to two external hyperlinks (`README.md:63` and `README.md:486`); it contains no implementable method, architecture, entry points, data, models, or dependencies of its own.",
+      "tools_used": [
+        "repo_git_history",
+        "repo_tree",
+        "repo_search",
+        "repo_read"
+      ],
+      "error": null
+    },
+    {
+      "candidate": {
+        "full_name": "floodsung/Deep-Learning-Papers-Reading-Roadmap",
+        "url": "https://github.com/floodsung/Deep-Learning-Papers-Reading-Roadmap",
+        "description": "Deep Learning papers reading roadmap for anyone who are eager to learn this amazing tech!",
+        "stars": 39556,
+        "forks": 7256,
+        "open_issues": 91,
+        "language": "Python",
+        "license": null,
+        "topics": [
+          "deep-learning"
+        ],
+        "default_branch": "master",
+        "updated_at": "2026-09-14T11:01:15Z",
+        "archived": false,
+        "relevance_score": 0.1,
+        "selection_reason": "匹配关键词：to；stars=39556；license=未声明"
+      },
+      "repository": {
+        "repository_id": "2ea1f654b7ed7d02f592",
+        "url": "https://github.com/floodsung/Deep-Learning-Papers-Reading-Roadmap",
+        "owner": "floodsung",
+        "name": "Deep-Learning-Papers-Reading-Roadmap",
+        "default_branch": "master",
+        "commit_sha": "a994642f82f071926fcb472bcf6cd63e4abba7ab",
+        "local_path": "/root/GitHubResearch_Agent/.nanobot/vfs/tenants/37a8eec1ce19687d132fe290/users/3818ef06fab4bdf23ca8ab55/projects/floodsung/deep-learning-papers-reading-roadmap/source",
+        "file_count": 3,
+        "size_bytes": 82142,
+        "loaded_at": "2026-09-14T15:11:55.799034Z"
+      },
+      "summary": "# 仓库分析报告：floodsung/Deep-Learning-Papers-Reading-Roadmap\n\n## 1. 结论摘要（与研究方向的相关性）\n\n该仓库**不是**一个图像生成项目，而是一份**深度学习论文阅读路线图（精选文献目录）**。它没有任何图像生成模型实现、训练/推理代码、数据集或模型权重。与\"图像生成\"研究方向的相关性仅体现在：README 中有一个\"深度生成模型\"小节和一个\"Art（艺术）\"小节，罗列了 GAN/VAE/自回归生成模型与风格迁移/纹理合成等图像生成相关论文的**文献链接**，可作为背景阅读书单，但不具备代码复用价值。\n\n- 直接相关性：低（无任何图像生成代码）\n- 文献参考价值：中（覆盖 2014–2018 年生成模型经典论文）\n\n---\n\n## 2. 仓库实际内容（源码证据）\n\n`repo_tree` 显示仓库源文件仅 3 个：\n\n- `README.md`（约 347 行）\n- `download.py`（约 135 行）\n- `requirements.txt`（3 行）\n\n其余 `.nanobot/`、`memory/`、`sessions/` 为本工作区的运行产物，不属于上游仓库源码。\n\n`repo_git_history` 仅返回 1 条浅层提交：\n\n```\na994642  2022-02-07  Flood Sung  Merge pull request #145 from candiceevemiller/master\n```\n\n说明本次下载的是浅克隆（depth 1），无法看到完整提交历史。\n\n---\n\n## 3. 方法（README 内容）\n\nREADME 开头明确了自身定位与方法论（`README.md:1-16`）：\n\n- 面向\"深度学习新手\"的阅读路线图（`README.md:3`）\n- 四条组织原则：由浅入深、由旧到 SOTA、由通用到专门、聚焦 SOTA（`README.md:7-12`）\n- 正文是一份带星级评分和 PDF/HTML 链接的文献列表\n\n### 目录结构（源码证据）\n\n| 章节 | 行号 |\n|---|---|\n| `# 1 Deep Learning History and Basics` | `README.md:21` |\n| `#2 Deep Learning Method` | `README.md:63` |\n| `# 3 Applications` | `README.md:189` |\n\n### 与\"图像生成\"最相关的两个小节\n\n**2.3 Unsupervised Learning / Deep Generative Model（`README.md:97`）**，共列出：\n\n- VAE（Kingma & Welling）— `README.md:102`\n- GAN（Goodfellow 2014）— `README.md:104`\n- DCGAN（Radford 2015）— `README.md:106`\n- DRAW: A recurrent neural network for image generation — `README.md:108`\n- PixelRNN — `README.md:110`\n- PixelCNN（Conditional image generation）— `README.md:112`\n- SampleRNN — `README.md:114`\n\n**3.7 Art（`README.md:312`）**，共列出：\n\n- Deep Dream — `README.md:314`\n- Neural Style Transfer（Gatys 2015）— `README.md:317`\n- iGAN（Generative Visual Manipulation）— `README.md:319`\n- Neural Doodle — `README.md:321`\n- Colorful Image Colorization — `README.md:323`\n- Perceptual Losses（实时风格迁移/超分）— `README.md:325`\n- Texture Networks（纹理生成与风格迁移）— `README.md:331`\n- 逼真图像风格化（NVIDIA）— `README.md:333`\n\n这些都是\"图像生成/图像合成\"方向的重要早期文献，但**仓库只提供标题、元数据和 PDF 链接，不提供任何实现**。\n\n---\n\n## 4. 代码架构与运行入口（唯一可执行代码 `download.py`）\n\n`download.py` 的功能是：解析 `README.md`，下载其中链接的所有 PDF/HTML 论文。主要模块/函数：\n\n| 函数 | 行号 | 作用 |\n|---|---|---|\n| `download_pdf()` | `download.py:24-35` | 用 `requests.get` 下载并写文件（未检查 HTTP 状态码） |\n| `clean_pdf_link()` | `download.py:37-44` | 将 arxiv `abs` 链接改写为 `pdf` |\n| `clean_text()` | `download.py:46-49` | 清洗标题为安全文件名 |\n| `print_title()` | `download.py:51-52` | 打印章节标题 |\n| `get_extension()` | `download.py:54-60` | 判断扩展名（默认 pdf） |\n| `shorten_title()` | `download.py:62-69` | 截断标题用于打印 |\n| `__main__` | `download.py:72-131` | CLI 入口 |\n\n**运行入口**：`download.py:72-87`\n\n- 命令行参数 `-d`（输出目录，默认 `pdfs`，`download.py:74,80`）、`--no-html`（`download.py:76`）、`--overwrite`（`download.py:77`）\n- 用 `mistune.markdown` 将 README 转为 HTML（`download.py:88`），再用 BeautifulSoup 解析（`download.py:89`）\n\n**一个重要行为细节**：脚本从 `readme_soup.find_all('h1')[1]` 开始遍历（`download.py:91`），即从第二个 `h1`（`#2 Deep Learning Method`）开始，**跳过了第 1 章\"Deep Learning History and Basics\"的所有论文**，只下载第 2、3 章。下载后的目录按 `h1`/`h2` 标题层级组织（`download.py:98-104`）。\n\n---\n\n## 5. 数据、依赖与可复现性\n\n**依赖声明**（`requirements.txt:1-3`）：\n\n```\nmistune>=0.7.2\nbeautifulsoup4>=4.4.1\nsix>=1.10.0\n```\n\n**发现的依赖缺口与兼容性问题：**\n\n1. `download.py:11` 使用了 `import requests`，但 `requests` **未列入 `requirements.txt`**（未声明依赖）。\n2. Python 2 时代遗留代码：`download.py:14-22` 调用 `reload(sys)` 与 `sys.setdefaultencoding('utf8')`（`download.py:15-20`），在 Python 3 下靠 `try/except` 静默跳过（`download.py:16-18,20-22`）。\n3. `mistune.markdown`（`download.py:88`）是 mistune 0.x 的 API，`requirements.txt` 写的是无上界的 `mistune>=0.7.2`，若安装 mistune 2.x/3.x 会因 API 移除而**直接报错**，可复现性差。\n4. 论文 PDF 链接多为 2015–2018 年的静态 URL，部分外链（个人主页、sci-hub 类链接）大概率已失效，下载成功率无法保证。\n\n**数据/模型产物**：无任何数据集、预训练权重或配置文件。\n\n---\n\n## 6. 成熟度信号与实用优势\n\n- **社区热度极高**（元数据）：39,556 stars、7,256 forks，是该领域知名度很高的学习资料；但 star 高主要体现\"资料受欢迎\"，不代表\"代码工程成熟\"。\n- **内容组织清晰**：从历史、方法到应用（NLP、检测、跟踪、字幕、翻译、机器人、艺术、分割）覆盖面广，适合初学者建立知识地图。\n- **实用价值**：作为\"文献索引\"可直接复用——快速定位生成模型/风格迁移方向的经典论文（见第 3 节）。\n\n---\n\n## 7. 局限性与缺失证据\n\n1. **无实现代码**：对\"图像生成项目分析\"这一研究目标而言，本仓库没有模型、没有训练/推理入口、没有评估指标，**无法直接用于复现或二次研究图像生成方法**。\n2. **内容冻结且偏旧**：README 文献集中在 2012–2018 年，最后提交（浅克隆可见）为 2022-02-07（`a994642`），缺少扩散模型（DDPM/Stable Diffusion）等 2020 年后的图像生成主流工作。\n3. **无许可证**：元数据 `license: null`，仓库树中也无 `LICENSE` 文件，存在使用/分发上的法律不确定性。\n4. **数据质量问题**：论文编号有重复——`[34]` 同时出现在 `README.md:112`（PixelCNN）和 `README.md:114`（SampleRNN）。\n5. **工具代码脆弱**：见第 5 节的 requests 未声明、mistune API 过时、Python 2 残留、跳过第 1 章等问题。\n6. **无 CI/测试/文档**：无测试代码，README 之外无额外文档。\n\n---\n\n## 8. 复用与进一步研究的适配性判断\n\n- **适合**：作为图像生成方向的**文献检索起点**（GAN/VAE/PixelCNN/风格迁移等经典论文清单），或作为\"如何组织论文阅读路线\"的参考。\n- **不适合**：作为可运行的图像生成代码库、实验基线或模型来源；`download.py` 仅是一个小型抓取脚本，且需修复依赖与兼容性后才能在新环境运行。\n\n> 说明：本报告严格区分了元数据（stars/forks/language/license 等来自任务提供的 GitHub metadata）与源码证据（均以 `repo_*` 工具读取的仓库文件路径+行号标注）。未发现本仓库包含任何可执行的图像生成算法代码。",
+      "tools_used": [
+        "repo_git_history",
+        "repo_tree",
+        "repo_search",
+        "repo_read"
+      ],
+      "error": null
+    }
+  ],
+  "status": "partial",
+  "report": "# 图像生成相关项目研究报告\n\n## 1. 研究范围与搜索查询\n\n- **研究方向**：下载并分析三个图像生成相关项目\n- **研究任务 ID**：`research_RovhWZVmlOMM`\n- **工作流 ID**：`workflow_b2d4ed066bde4f0792aab5386bfd7f07`\n- **搜索查询**：\n  1. `image generation`\n  2. `text to image generation`\n  3. `diffusion model image generation`\n  4. `generative adversarial network image generation`\n\n---\n\n## 2. 选择方法与下载/分析状态\n\n记录的候选仓库共有 3 个，`selected` 与 `candidates` 完全一致，因此 3 个候选均进入下载环节。\n\n| 仓库 | 选择理由摘要 | 下载 | 源码分析 |\n|---|---|---|---|\n| `abhi227070/Image-Generation-Using-GAN-Gen-AI-Project-` | 匹配多个图像生成关键词，relevance 0.7 | 成功 | **失败**：读取文件超过 2 MB 仓库读取限制 |\n| `codecrafters-io/build-your-own-x` | 仅匹配 `to`，relevance 0.1 | 成功 | 成功 |\n| `floodsung/Deep-Learning-Papers-Reading-Roadmap` | 仅匹配 `to`，relevance 0.1 | 成功 | 成功 |\n\n**失败详情**：\n\n- `abhi227070/Image-Generation-Using-GAN-Gen-AI-Project-` 仓库已成功下载到本地，但源码分析阶段报错：\n  - `Harness sandbox exited with code 1`\n  - 最终错误：`RuntimeError: File is larger than the 2 MB repository-read limit.`\n- 因此该仓库没有产生源码级证据，只有 GitHub 元数据和下载结果。\n\n---\n\n## 3. 紧凑比较表\n\n| 仓库 | 相关性 | Stars | 语言 | License | 已实现方法 | 可复现性 | 优势 | 局限 |\n|---|---|---|---|---|---|---|---|---|\n| [abhi227070/Image-Generation-Using-GAN-Gen-AI-Project-](https://github.com/abhi227070/Image-Generation-Using-GAN-Gen-AI-Project-) | 0.7 | 30 | Jupyter Notebook | 元数据未声明 | 元数据描述为 GAN：Generator + Discriminator，生成 CIFAR-10-like 图像；源码未验证 | 未能分析 | 唯一直接相关的候选；主题包含 GAN / image-generation | 源码分析失败；无 license；实现无法确认 |\n| [codecrafters-io/build-your-own-x](https://github.com/codecrafters-io/build-your-own-x) | 0.1 | 547,195 | Markdown | 元数据未声明；源码 README 声明 CC0 1.0 | 无图像生成实现；只是外链教程目录 | 不适用；纯 Markdown 列表 | 社区成熟、维护活跃；含扩散模型与 GAN 教程入口 | 不是图像生成代码库；指向外部链接 |\n| [floodsung/Deep-Learning-Papers-Reading-Roadmap](https://github.com/floodsung/Deep-Learning-Papers-Reading-Roadmap) | 0.1 | 39,556 | Python | 元数据未声明；源码无 LICENSE | 无生成模型实现；是论文阅读路线图，附带 `download.py` 下载论文 | 差：依赖脆弱，存在 Python 2 残留、缺失依赖 | 经典文献索引，覆盖 GAN / VAE / 风格迁移等内容 | 无执行代码；内容偏旧；下载脚本有兼容性问题 |\n\n---\n\n## 4. 逐仓库证据说明\n\n### 4.1 `abhi227070/Image-Generation-Using-GAN-Gen-AI-Project-`\n\n#### GitHub 元数据\n\n- 描述：`Gen AI uses GANs to generate CIFAR-10-like images. The custom GAN model comprises a Generator and a Discriminator.`\n- Stars：30\n- Forks：10\n- Open issues：0\n- Language：Jupyter Notebook\n- License：未声明\n- Topics：包含 `generative-adversarial-network`、`image-generation`、`generative-ai` 等\n- Default branch：`main`\n- 最近更新：`2026-05-23T11:49:38Z`\n\n#### 下载结果\n\n- 本地路径：\n  `.../projects/abhi227070/image-generation-using-gan-gen-ai-project-/source`\n- Commit SHA：`934192c9bc699d9b6f634afc4b218c1d17c3e048`\n- 文件数：7\n- 大小：9,513,007 bytes\n\n#### 分析状态\n\n- **源码分析失败**。\n- 错误：`File is larger than the 2 MB repository-read limit.`\n- 工具记录中 `summary` 为空，`tools_used` 为空。\n- 因此没有获得任何源码级证据。\n\n#### 可用的结论边界\n\n- **元数据层面**：该项目看起来是一个基于 GAN 的 CIFAR-10 图像生成项目。\n- **源码层面**：未能验证 Generator、Discriminator、训练循环、依赖或可复现性。\n- **推断但未证实**：它可能适合作为 GAN 入门实验，但当前记录无法支持任何实现质量的判断。\n\n---\n\n### 4.2 `codecrafters-io/build-your-own-x`\n\n#### GitHub 元数据\n\n- 描述：`Master programming by recreating your favorite technologies from scratch.`\n- Stars：547,195\n- Forks：51,481\n- Open issues：642\n- Language：Markdown\n- License：未声明\n- Relevance score：0.1\n- 选择理由：仅匹配 `to`\n\n#### 源码证据\n\n该仓库**不是图像生成项目**，而是一个手工精选教程链接目录。\n\n仓库实际文件：\n\n- `README.md`\n- `ISSUE_TEMPLATE.md`\n- `.gitattributes`\n- `codecrafters-banner.png`\n\n与图像生成直接相关的只有两条外部链接：\n\n| 行号 | 内容 |\n|---|---|\n| `README.md:63` | `Diffusion Models for Image Generation`，Python，指向 Hugging Face diffusion course |\n| `README.md:486` | `Building a simple Generative Adversarial Network (GAN) using Tensorflow`，Python，指向 Paperspace blog |\n\n相邻但不属于图像生成的内容：\n\n- `README.md:49`：光线追踪 3D 图像，属于渲染，不是生成式 ML\n- `README.md:404-407`：视觉识别，不是生成\n- `README.md:480`：移动文档扫描，属于图像处理\n\n许可证的源码证据：\n\n- `README.md:503`：嵌入 CC0 badge\n- `README.md:505`：声明将内容奉献给公共领域，采用 CC0 1.0\n\n仓库自述：\n\n- `README.md:5`：称这是一个“well-written, step-by-step guides for re-creating our favorite technologies from scratch”的合集\n\n#### 实现与可复现性\n\n- 没有实现任何图像生成代码。\n- 没有模型权重、训练/推理入口、依赖文件或测试。\n- 没有 `requirements.txt`、`pyproject.toml`、`package.json` 等依赖声明。\n- 关于扩散模型或 GAN 的技术内容都存在于外部链接中，不在本仓库内。\n\n#### 优势与局限\n\n- **优势**：社区热度极高，内容组织清晰，维护到 2026 年，且包含现代扩散模型入口。\n- **局限**：作为图像生成研究材料，只能当作“发现外部教程”的目录，不能直接复用实现代码。\n\n---\n\n### 4.3 `floodsung/Deep-Learning-Papers-Reading-Roadmap`\n\n#### GitHub 元数据\n\n- 描述：`Deep Learning papers reading roadmap for anyone who are eager to learn this amazing tech!`\n- Stars：39,556\n- Forks：7,256\n- Open issues：91\n- Language：Python\n- License：未声明\n- Relevance score：0.1\n- 选择理由：仅匹配 `to`\n\n#### 源码证据\n\n仓库实际源文件只有 3 个：\n\n- `README.md`，约 347 行\n- `download.py`，约 135 行\n- `requirements.txt`，3 行\n\n其余 `.nanobot/`、`memory/`、`sessions/` 属于工作区运行产物，不是上游仓库内容。\n\n可见提交历史为浅克隆：\n\n- Commit：`a994642`\n- 日期：`2022-02-07`\n- 说明：`Merge pull request #145 from candiceevemiller/master`\n\n与图像生成最相关的章节：\n\n| 章节 | 行号 |\n|---|---|\n| Unsupervised Learning / Deep Generative Model | `README.md:97` |\n| VAE | `README.md:102` |\n| GAN | `README.md:104` |\n| DCGAN | `README.md:106` |\n| DRAW | `README.md:108` |\n| PixelRNN | `README.md:110` |\n| PixelCNN | `README.md:112` |\n| SampleRNN | `README.md:114` |\n| Art 章节 | `README.md:312` |\n| Deep Dream | `README.md:314` |\n| Neural Style Transfer | `README.md:317` |\n| iGAN | `README.md:319` |\n| Neural Doodle | `README.md:321` |\n| Colorful Image Colorization | `README.md:323` |\n| Perceptual Losses | `README.md:325` |\n| Texture Networks | `README.md:331` |\n| 逼真图像风格化 | `README.md:333` |\n\n这些条目是文献链接，不是实现代码。\n\n#### `download.py` 的可执行功能\n\n- CLI 入口：`download.py:72-87`\n- `download_pdf()`：`download.py:24-35`\n- `clean_pdf_link()`：`download.py:37-44`\n- `clean_text()`：`download.py:46-49`\n- `get_extension()`：`download.py:54-60`\n- `shorten_title()`：`download.py:62-69`\n\n重要行为：\n\n- 从第二个 `h1` 开始解析：`download.py:91`\n- 这意味着会跳过第 1 章“Deep Learning History and Basics”，只下载第 2、3 章论文。\n\n#### 依赖与兼容性问题\n\n`requirements.txt:1-3` 声明：\n\n- `mistune>=0.7.2`\n- `beautifulsoup4>=4.4.1`\n- `six>=1.10.0`\n\n源码证据显示：\n\n- `download.py:11` 使用了 `import requests`，但 `requests` 未写入 `requirements.txt`\n- `download.py:14-22` 存在 Python 2 时代的 `reload(sys)` 与 `setdefaultencoding('utf8')`\n- `download.py:88` 使用 `mistune.markdown`，这是 mistune 0.x API；后续 mistune 2.x/3.x 会破坏兼容性\n- 论文链接多为 2015–2018 年静态 URL，部分外链可能已失效\n\n#### 优势与局限\n\n- **优势**：适合作为经典生成模型/风格迁移论文的检索起点，覆盖面广。\n- **局限**：没有实现代码；文献内容冻结在 2020 年前，缺少扩散模型等现代工作；无 LICENSE；下载脚本脆弱；论文编号存在重复，例如 `[34]` 同时出现在 `README.md:112` 与 `README.md:114`。\n\n---\n\n## 5. 按使用场景的建议\n\n### 场景 A：想要一个可直接训练或修改的图像生成项目\n\n- **不建议直接采用当前 3 个候选**。\n- `abhi227070/Image-Generation-Using-GAN-Gen-AI-Project-` 是唯一直接相关的候选，但本次源码分析失败，尚未验证其实现质量。\n- 建议下一步：重新分析该仓库，放宽 2 MB 读取限制，或按文件名定位 notebook 后分块读取；同时确认其 license 与训练配置。\n\n### 场景 B：想要系统学习如何从零构建图像生成模型\n\n- `codecrafters-io/build-your-own-x` 可作为**教程入口目录**，但实际学习需跳转到：\n  - `README.md:63` 指向的 Hugging Face diffusion course\n  - `README.md:486` 指向的 TensorFlow GAN 教程\n- 该仓库本身不提供可直接运行的代码。\n\n### 场景 C：想要建立 GAN / VAE / 风格迁移经典论文阅读清单\n\n- `floodsung/Deep-Learning-Papers-Reading-Roadmap` 是合适的文献索引起点，尤其是：\n  - `README.md:97` 起的深度生成模型章节\n  - `README.md:312` 起的 Art 章节\n- 但应补充 2020 年后的扩散模型论文，例如 DDPM、Stable Diffusion 等，因为它当前内容偏旧。\n\n### 场景 D：需要现代扩散模型实现\n\n- 当前三个候选均不满足。\n- 建议重新搜索更具体的关键词，例如 `stable diffusion`、`DDPM implementation`、`latent diffusion`，并优先筛选 Python、含 LICENSE、有 CI 或测试信号的仓库。\n\n---\n\n## 6. 共同差距与下一步建议\n\n### 共同差距\n\n1. **搜索精度不足**：3 个候选中 2 个仅匹配 `to`，相关性分数都是 0.1，说明 GitHub 搜索未能有效召回真正的图像生成实现项目。\n2. **许可证风险**：`abhi227070` 与 `floodsung` 均未声明 license；`codecrafters` 虽在 README 声明 CC0，但那是针对目录内容，不是软件代码许可。\n3. **实现缺失**：三个候选中没有一个在源码层面被证实为可直接运行的图像生成模型实现。\n4. **分析失败**：唯一高相关候选因文件大小超过读取限制而未能分析。\n5. **工程成熟度低**：可执行代码仓库 `floodsung/download.py` 存在依赖缺失、旧 API、Python 2 残留等问题。\n6. **内容时效性**：论文路线图缺少 2020 年后扩散模型工作。\n\n### 建议的下一步研究\n\n1. **改进搜索**：使用更明确的关键词，例如 `stable diffusion`、`diffusers`、`DDPM`、`GAN CIFAR-10 PyTorch`、`latent diffusion`，并过滤语言为 Python、要求存在 LICENSE 文件。\n2. **重新分析 abhi 仓库**：\n   - 提高单文件读取限制；\n   - 或只读取小型文件，例如先列出目录，再按名称定位 notebook 片段；\n   - 核实实际是否包含 Generator/Discriminator、训练和推理入口。\n3. **追加上游许可证检查**：优先选择 LICENSE 明确的仓库，避免使用未声明许可的代码。\n4. **对 codecrafters 目录进行链接验证**：检查 `README.md:63` 与 `README.md:486` 指向的教程是否仍有效，并将实际代码分析转移到目标仓库。\n5. **更新 floodsung 路线图**：如果用作文献研究基础，可结合现代扩散模型阅读清单，避免停留在 2018 年前的视角。\n\n---\n\n## 7. 已成功下载本地路径\n\n### 研究任务 ID\n\n- `research_RovhWZVmlOMM`\n\n### 成功下载的仓库路径\n\n1. `abhi227070/Image-Generation-Using-GAN-Gen-AI-Project-`\n   - `/root/GitHubResearch_Agent/.nanobot/vfs/tenants/37a8eec1ce19687d132fe290/users/3818ef06fab4bdf23ca8ab55/projects/abhi227070/image-generation-using-gan-gen-ai-project-/source`\n\n2. `codecrafters-io/build-your-own-x`\n   - `/root/GitHubResearch_Agent/.nanobot/vfs/tenants/37a8eec1ce19687d132fe290/users/3818ef06fab4bdf23ca8ab55/projects/codecrafters-io/build-your-own-x/source`\n\n3. `floodsung/Deep-Learning-Papers-Reading-Roadmap`\n   - `/root/GitHubResearch_Agent/.nanobot/vfs/tenants/37a8eec1ce19687d132fe290/users/3818ef06fab4bdf23ca8ab55/projects/floodsung/deep-learning-papers-reading-roadmap/source`\n\n---\n\n## 8. 证据类型说明\n\n本报告严格区分三类信息：\n\n- **GitHub 元数据**：stars、forks、open issues、language、topics、描述、更新时间、relevance score、选择理由，来自任务提供的搜索记录和选择记录。\n- **源码证据**：路径、行号、文件列表、错误信息、依赖和 license 信息，均来自已执行的仓库读取工具记录。\n- **推断**：仅在未能获取源码证据时明确标注为“推断但未证实”。例如，`abhi227070` 被推断为 GAN 项目，但本次没有源码证据支持其内部实现情况。",
+  "created_at": "2026-09-14T15:09:59.876417Z",
+  "updated_at": "2026-09-14T15:15:32.139781Z"
+}

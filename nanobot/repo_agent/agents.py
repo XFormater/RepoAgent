@@ -72,6 +72,8 @@ def extract_json_object(text: str | None) -> dict[str, Any]:
 class RepositoryControlClient:
     # These calls expose no tools. Four iterations allow all automatic
     # length-recovery continuations plus a terminal response.
+    # Control prompts have no tools and should terminate on their structured
+    # response; the unbounded setting applies to repository source analysis.
     _MAX_ITERATIONS = 4
 
     def __init__(self) -> None:

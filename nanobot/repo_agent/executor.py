@@ -41,7 +41,7 @@ class RepositoryAgentInvoker(Protocol):
         *,
         runtime: LLMRuntime,
         tools: ToolRegistry,
-        max_iterations: int,
+        max_iterations: int | None,
         ephemeral: bool,
         stream: bool,
         workspace: Path,

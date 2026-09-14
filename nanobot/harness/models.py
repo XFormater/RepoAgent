@@ -90,9 +90,9 @@ class ContextPolicy(BaseModel):
 
 
 class ResourceBudget(BaseModel):
-    max_iterations: int = Field(default=20, ge=1)
+    max_iterations: int | None = Field(default=20, ge=1)
     max_runtime_seconds: int = Field(default=900, ge=1)
-    max_tool_calls: int = Field(default=60, ge=0)
+    max_tool_calls: int | None = Field(default=60, ge=0)
 
 
 class PlannedWorkItem(BaseModel):

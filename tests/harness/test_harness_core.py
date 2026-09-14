@@ -1,3 +1,4 @@
+import asyncio
 from datetime import timedelta
 
 import pytest
@@ -415,6 +416,49 @@ async def test_worker_runtime_retries_then_completes_and_reports_result():
     assert task.attempt == 2
     messages = await service.store.inbox(main.instance_id, now=utcnow(), limit=10)
     assert [message.content for message in messages] == ["verified"]
+
+
+@pytest.mark.asyncio
+async def test_cancel_task_interrupts_a_running_worker_executor():
+    service = HarnessService()
+    workflow, main = await service.create_workflow("cancel running task")
+    task = await service.add_task(workflow, title="task", task_input="input")
+    agent = await service.spawn_worker(workflow, main)
+    started = asyncio.Event()
+
+    async def executor(context, spec):
+        del context, spec
+        started.set()
+        await asyncio.Event().wait()
+        return "must not complete"
+
+    worker = HarnessWorker(
+        service=service,
+        agent=agent,
+        worker_id="worker-cancel",
+        executor=executor,
+    )
+    run = asyncio.create_task(worker.run_once())
+    await asyncio.wait_for(started.wait(), timeout=1)
+
+    assert await service.cancel_task(task.task_id) is True
+    with pytest.raises(asyncio.CancelledError):
+        await asyncio.wait_for(run, timeout=2)
+
+    assert task.state is TaskState.CANCELLED
+    assert (await service.store.get_workflow(workflow.workflow_id)).state is WorkflowState.CANCELLED
+    assert any(event["event_type"] == "harness.task.cancelled" for event in service.store.audit_events)
+
+
+@pytest.mark.asyncio
+async def test_cancel_task_cancels_a_queued_task_without_a_lease():
+    service = HarnessService()
+    workflow, _ = await service.create_workflow("cancel queued task")
+    task = await service.add_task(workflow, title="task", task_input="input")
+
+    assert await service.cancel_task(task.task_id) is True
+    assert task.state is TaskState.CANCELLED
+    assert (await service.store.get_workflow(workflow.workflow_id)).state is WorkflowState.CANCELLED
 
 
 @pytest.mark.asyncio

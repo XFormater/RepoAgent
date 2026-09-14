@@ -714,7 +714,7 @@ class ChannelManager:
 
                 # Coalesce consecutive stream delta messages for the same (channel, chat_id)
                 # to reduce API calls and improve streaming latency
-                if isinstance(event, StreamDeltaEvent):
+                if isinstance(event, StreamDeltaEvent) and msg.metadata.get("stream_live") is not True:
                     msg, extra_pending = self._coalesce_stream_deltas(msg)
                     pending.extend(extra_pending)
                     event = outbound_event_from_message(msg)
