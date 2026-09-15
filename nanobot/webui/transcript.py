@@ -1660,6 +1660,21 @@ def replay_transcript_to_ui_messages(
     replay_turn_aliases: dict[str, str] = {}
     generated_id_occurrences: dict[str, int] = {}
 
+    def flush_buffer_message() -> None:
+        """Publish the accumulated streaming text without quadratic joins.
+
+        Transcript replay can contain thousands of token-level ``delta`` rows.
+        Keeping the chunks in a list and joining only at semantic boundaries
+        avoids rebuilding the complete answer for every token.
+        """
+        if buffer_message_id is None or not buffer_parts:
+            return
+        combined = "".join(buffer_parts)
+        for i, message in enumerate(messages):
+            if message.get("id") == buffer_message_id:
+                messages[i] = {**message, "content": combined, "isStreaming": True}
+                return
+
     def _new_id(prefix: str, idx: int) -> str:
         record = lines[idx] if 0 <= idx < len(lines) else {}
         identity = record.get(_WEBUI_REPLAY_IDENTITY_KEY)
@@ -1818,6 +1833,7 @@ def replay_transcript_to_ui_messages(
 
     def demote_interrupted_assistant(segment: str) -> None:
         nonlocal buffer_message_id, buffer_parts
+        flush_buffer_message()
         for i in range(len(messages) - 1, -1, -1):
             candidate = messages[i]
             if candidate.get("role") == "user":
@@ -2149,16 +2165,16 @@ def replay_transcript_to_ui_messages(
                             "isStreaming": True,
                             **turn_fields,
                             **source_fields,
-                            "createdAt": _created_at_ms(rec, idx),
-                        },
-                    )
+                        "createdAt": _created_at_ms(rec, idx),
+                    },
+                )
             buffer_parts.append(chunk)
-            combined = "".join(buffer_parts)
-            for i, m in enumerate(messages):
-                if m.get("id") == buffer_message_id:
+            # The chunks are published at stream/message/turn boundaries. This
+            # is the hot path during refresh for long streamed answers.
+            for i, message in enumerate(messages):
+                if message.get("id") == buffer_message_id:
                     messages[i] = {
-                        **m,
-                        "content": combined,
+                        **message,
                         "isStreaming": True,
                         **turn_fields,
                         **source_fields,
@@ -2190,11 +2206,12 @@ def replay_transcript_to_ui_messages(
                         },
                     )
                 else:
+                    combined = final_text
                     for i, m in enumerate(messages):
                         if m.get("id") == buffer_message_id:
                             messages[i] = {
                                 **m,
-                                "content": final_text,
+                                "content": combined,
                                 "isStreaming": True,
                                 **turn_fields,
                                 **source_fields,
@@ -2202,15 +2219,17 @@ def replay_transcript_to_ui_messages(
                             break
                 if merge_next:
                     buffer_parts = [final_text]
-            elif source_fields and buffer_message_id is not None:
-                for i, m in enumerate(messages):
-                    if m.get("id") == buffer_message_id:
-                        messages[i] = {
-                            **m,
-                            **turn_fields,
-                            **source_fields,
-                        }
-                        break
+            else:
+                flush_buffer_message()
+                if source_fields and buffer_message_id is not None:
+                    for i, m in enumerate(messages):
+                        if m.get("id") == buffer_message_id:
+                            messages[i] = {
+                                **m,
+                                **turn_fields,
+                                **source_fields,
+                            }
+                            break
             if not merge_next:
                 buffer_message_id = None
                 buffer_parts = []
@@ -2222,6 +2241,7 @@ def replay_transcript_to_ui_messages(
             chunk = rec.get("text")
             if not isinstance(chunk, str) or not chunk:
                 continue
+            flush_buffer_message()
             close_file_edit_phase_before_activity()
             attach_reasoning_chunk(
                 messages,
@@ -2284,17 +2304,25 @@ def replay_transcript_to_ui_messages(
                     and not last.get("isStreaming")
                     and (last.get("activitySegmentId") in (None, segment))
                 ):
-                    prev_traces = [
-                        trace
-                        for trace in cast(list[Any], last.get("traces") or [last.get("content")])
-                        if isinstance(trace, str)
-                    ]
+                    raw_prev_traces = last.get("traces")
+                    if isinstance(raw_prev_traces, list):
+                        # This is the hot path for long progress streams. Reuse
+                        # the message-owned list instead of copying an ever
+                        # growing trace list on every event (another O(n²) path).
+                        prev_traces = raw_prev_traces
+                    else:
+                        prev_traces = [
+                            trace
+                            for trace in [last.get("content")]
+                            if isinstance(trace, str)
+                        ]
                     if structured:
                         merged_traces, added = _merge_unique_tool_trace_lines(prev_traces, structured)
                         if not added and not visible_structured_events:
                             continue
                     else:
-                        merged_traces = prev_traces + trace_lines
+                        prev_traces.extend(trace_lines)
+                        merged_traces = prev_traces
                     merged = {
                         **last,
                         "traces": merged_traces,
@@ -2322,6 +2350,7 @@ def replay_transcript_to_ui_messages(
                     )
                 continue
 
+            flush_buffer_message()
             buffer_message_id = None
             buffer_parts = []
             text = rec.get("text")
@@ -2348,6 +2377,7 @@ def replay_transcript_to_ui_messages(
             continue
 
         if ev == "turn_end":
+            flush_buffer_message()
             suppress_until_turn_end = False
             active_activity_segment_id = None
             active_file_edit_segment_id = None
@@ -2368,6 +2398,7 @@ def replay_transcript_to_ui_messages(
             buffer_parts = []
             continue
 
+    flush_buffer_message()
     for i, m in enumerate(messages):
         if (
             augment_assistant_text is not None

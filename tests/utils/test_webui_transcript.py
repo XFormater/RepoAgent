@@ -393,6 +393,31 @@ def test_replay_delta_and_turn_end(tmp_path, monkeypatch) -> None:
     assert msgs[1]["latencyMs"] == 42
 
 
+def test_replay_long_delta_stream_keeps_text_and_metadata() -> None:
+    chunks = ["片", "段"] * 5_000
+    lines = [
+        {"event": "user", "chat_id": "long", "text": "q", "turn_id": "long-1"},
+        *(
+            {
+                "event": "delta",
+                "chat_id": "long",
+                "text": chunk,
+                "turn_id": "long-1",
+                "turn_phase": "answer",
+            }
+            for chunk in chunks
+        ),
+        {"event": "stream_end", "chat_id": "long", "turn_id": "long-1"},
+        {"event": "turn_end", "chat_id": "long", "turn_id": "long-1"},
+    ]
+
+    msgs = replay_transcript_to_ui_messages(lines)
+
+    assert [message["content"] for message in msgs] == ["q", "片段" * 5_000]
+    assert msgs[1]["turnId"] == "long-1"
+    assert msgs[1]["turnPhase"] == "answer"
+
+
 def test_replay_uses_persisted_created_at_ms() -> None:
     msgs = replay_transcript_to_ui_messages(
         [
