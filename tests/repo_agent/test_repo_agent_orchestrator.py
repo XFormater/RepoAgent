@@ -504,3 +504,19 @@ async def test_delete_approval_rejects_different_actor(tmp_path: Path) -> None:
     assert result.stop_reason == "policy_denied"
     assert "无权" in result.final_content
     assert record.path.exists()
+
+
+def test_read_request_with_negated_search_is_not_research(
+    tmp_path: Path,
+) -> None:
+    orchestrator = RepositoryOrchestrator(
+        config=RepositoryAgentConfig(enabled=True),
+        workspace=tmp_path,
+        tools=ToolRegistry(),
+    )
+    request = (
+        "请直接调用 repo_read，读取 app.py。"
+        "不要调用 repo_search，不要猜测名称。"
+    )
+
+    assert not orchestrator.is_research_request(request)

@@ -131,13 +131,16 @@ class RepositoryOrchestrator:
     )
     _RESEARCH_ACTION_RE = re.compile(
         r"(?:寻找|查找|搜索|检索|推荐|调研|研究|比较|对比|筛选|下载|克隆|整理|"
-        r"总结|汇总|盘点|评估|find|search|discover|recommend|survey|research|"
-        r"compare|download|clone|summari[sz]e|curate|shortlist|evaluate)",
+        r"总结|汇总|盘点|评估|"
+        r"(?<![A-Za-z0-9_])(?:find|search|discover|recommend|survey|research|"
+        r"compare|download|clone|summari[sz]e|curate|shortlist|evaluate)"
+        r"(?![A-Za-z0-9_]))",
         re.IGNORECASE,
     )
     _RESEARCH_TARGET_RE = re.compile(
-        r"(?:github|开源|开放源代码|项目|仓库|代码库|实现|"
-        r"open[\s-]*source|repositories|repository|repos?|projects?|implementations?)",
+        r"(?:开源|开放源代码|项目|仓库|代码库|实现|"
+        r"(?<![A-Za-z0-9_])(?:github|open[\s-]*source|repositories|repository|"
+        r"repos?|projects?|implementations?)(?![A-Za-z0-9_]))",
         re.IGNORECASE,
     )
 
